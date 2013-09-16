@@ -4,6 +4,9 @@
  */
 package com.nanosl.nbiz.gui;
 
+import java.util.Iterator;
+import java.util.List;
+import javax.swing.DefaultComboBoxModel;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
@@ -444,4 +447,34 @@ public final class EmployeeTopComponent extends TopComponent {
         String version = p.getProperty("version");
         // TODO read your settings according to their version
     }
+     private void clear() {
+        clearFields();
+        fillTable();
+        fillPositions();
+    }
+      private void clearFields() {
+        codeField.requestFocus();
+        codeField.setText("");
+        firstNameField.setText("");
+        lastNameField.setText("");
+        addressNumberField.setText("");
+        addressStreetField.setText("");
+        cityField.setText("");
+        mobileField.setText("");
+        fixedLineField.setText("");
+        notesField.setText("");
+    }
+      private void fillTable() {
+        List<Employee> employees = m.find(Employee.class);
+        tableModel.setRowCount(0);
+        int i = 0;
+        for (Iterator<Employee> it = employees.iterator(); it.hasNext();) {
+            Employee emp = it.next();
+            Object[] row = {++i, emp.getCode(), emp.getFirstName() + " " + emp.getLastName(), emp.getMobile()};
+            tableModel.addRow(row);
+        }
+         private void fillPositions() {
+        positionComboBox.setModel(new DefaultComboBoxModel(m.find(EmployeePosition.class).toArray()));
+    }
 }
+

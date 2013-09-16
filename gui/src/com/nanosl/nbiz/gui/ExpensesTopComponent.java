@@ -217,4 +217,8 @@ public final class ExpensesTopComponent extends TopComponent {
         String version = p.getProperty("version");
         // TODO read your settings according to their version
     }
+     private void clear() {
+        reasonTextField.setText("");
+        amountTextField.setText("");
+    }
 }

@@ -4,6 +4,13 @@
  */
 package com.nanosl.nbiz.gui;
 
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import javax.swing.DefaultComboBoxModel;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
@@ -361,4 +368,70 @@ public final class ItemTopComponent extends TopComponent {
         String version = p.getProperty("version");
         // TODO read your settings according to their version
     }
+    private void clear() {
+        fillTable();
+        fillSuppliers();
+        fillItemTypes();
+        clearFields();
+    }
+    private void fillTable() {
+        tableModel.setRowCount(0);
+        int i = 0;
+        List<Serializable> serializables = new ArrayList<Serializable>();
+        for (Iterator<Item> it = m.find(Item.class).iterator(); it.hasNext();) {
+            Item item = it.next();
+            Stock stock = item.getStock();
+            if (stock == null) {
+                stock = new Stock(item.getCode());
+                stock.setBundles(0.0);
+                stock.setItem(item);
+                stock.setQuantity(0.0);
+                item.setStock(stock);
+                serializables.add(stock);
+            }
+            PriceList priceList = item.getPriceList();
+
+            if (priceList == null) {
+                priceList = new PriceList(item.getCode());
+                priceList.setCostPack(0.0);
+                priceList.setCostUnit(0.0);
+                priceList.setSellingPack(0.0);
+                priceList.setSellingUnit(0.0);
+                priceList.setItem(item);
+                item.setPriceList(priceList);
+                serializables.add(priceList);
+            }
+            m.update(serializables);
+            double paymentAmount = Double.valueOf(priceList.getSellingPack() != null ? priceList.getSellingPack() : 0);
+            Object[] row = {++i, item.getCode(), item.getDescription(), stock.getQuantity(), nf2d.format(paymentAmount)};
+            tableModel.addRow(row);
+        }
+    }
+     private void fillSuppliers() {
+        supplierComboBox.setModel(new DefaultComboBoxModel(m.find(Supplier.class).toArray()));
+    }
+      private void fillItemTypes() {
+        List<ItemType> itemTypes = m.find(ItemType.class);
+        if (itemTypes.isEmpty()) {
+            m.update(new ItemType("ITEM"));
+            m.update(new ItemType("METERIAL"));
+        }
+        itemTypes = m.find(ItemType.class);
+        itemTypeComboBox.setModel(new DefaultComboBoxModel(itemTypes.toArray()));
+    }
+    KeyAdapter supplierComboBoxKeyAdapter = new java.awt.event.KeyAdapter() {
+        @Override
+        public void keyPressed(KeyEvent evt) {
+            supplierComboBoxKeyPressed(evt);
+        }
+    };
+    private void clearFields() {
+        codeField.requestFocus();
+        codeField.setText("");
+        descriptionField.setText("");
+        brandField.setText("");
+        minimumLimitTextField.setText("");
+        if (supplierComboBox.getItemCount() > 0) {
+            supplierComboBox.setSelectedIndex(0);
+        }
 }

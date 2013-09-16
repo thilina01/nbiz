@@ -4,6 +4,8 @@
  */
 package com.nanosl.nbiz.gui;
 
+import java.util.Iterator;
+import java.util.List;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
@@ -415,4 +417,33 @@ public final class CustomerTopComponent extends TopComponent {
         String version = p.getProperty("version");
         // TODO read your settings according to their version
     }
+     private void clear() {
+        clearFields();
+        fillTable();
+    }
+      private void clearFields() {
+        codeField.requestFocus();
+        codeField.setText("");
+        nameField.setText("");
+        addressNumberField.setText("");
+        addressStreetField.setText("");
+        cityField.setText("");
+        mobileField.setText("");
+        fixedLineField.setText("");
+        faxField.setText("");
+        notesField.setText("");
+    }
+      private void fillTable() {
+        List<Customer> customers = m.find(Customer.class);
+        tableModel.setRowCount(0);
+        int i = 0;
+        for (Iterator<Customer> it = customers.iterator(); it.hasNext();) {
+            Customer customer = it.next();
+            Object[] row = {++i, customer.getCode(), customer.getName(), customer.getMobile()};
+            tableModel.addRow(row);
+        }
+      
 }
+
+
+
