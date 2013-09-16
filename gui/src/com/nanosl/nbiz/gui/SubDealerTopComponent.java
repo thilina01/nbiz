@@ -4,6 +4,8 @@
  */
 package com.nanosl.nbiz.gui;
 
+import java.util.Iterator;
+import javax.swing.DefaultComboBoxModel;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
@@ -364,4 +366,28 @@ public final class SubDealerTopComponent extends TopComponent {
         String version = p.getProperty("version");
         // TODO read your settings according to their version
     }
+    private void clear() {
+        clearFields();
+        fillTable();
+        townComboBox.setModel(new DefaultComboBoxModel(m.find(Town.class).toArray()));
+    }
+    private void clearFields() {
+        codeField.requestFocus();
+        codeField.setText("");
+        nameField.setText("");
+        ownerField.setText("");
+        addressNumberField.setText("");
+        addressStreetField.setText("");
+        phoneField.setText("");
+    }
+    private void fillTable() {
+        int i = 0;
+        tableModel.setRowCount(i);
+        for (Iterator<SubDealer> it = m.find(SubDealer.class).iterator(); it.hasNext();) {
+            SubDealer subDealer = it.next();
+            Object[] row = {++i, subDealer.getCode(), subDealer.getName(), subDealer.getContact()};
+            tableModel.addRow(row);
+        }
+    }
 }
+

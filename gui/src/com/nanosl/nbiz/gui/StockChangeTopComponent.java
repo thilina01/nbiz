@@ -4,6 +4,8 @@
  */
 package com.nanosl.nbiz.gui;
 
+import java.util.Iterator;
+import javax.swing.DefaultComboBoxModel;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
@@ -283,5 +285,31 @@ public final class StockChangeTopComponent extends TopComponent {
     void readProperties(java.util.Properties p) {
         String version = p.getProperty("version");
         // TODO read your settings according to their version
+    }
+    private void reset() {
+        fillTable();
+        fillItems();
+        calcTotal();
+    }
+    private void fillTable() {
+        tableModel.setRowCount(0);
+        int i = tableModel.getRowCount();
+        for (Iterator<Stock> it = m.find(Stock.class).iterator(); it.hasNext();) {
+            Stock stock = it.next();
+            Item item = stock.getItem();
+            double quantity = stock.getQuantity() == null ? 0 : stock.getQuantity();
+            double cost = item.getPriceList() == null ? 0 : item.getPriceList().getCostPack();
+            Object[] row = {++i, item.getCode(), item.getDescription(), quantity, quantity, 0, cost, 0};
+            tableModel.addRow(row);
+        }
+        private void fillItems() {
+        itemComboBox.setModel(new DefaultComboBoxModel(m.find(Item.class).toArray()));
+    }
+         private void calcTotal() {
+        double total = 0;
+        for (int i = 0; i < tableModel.getRowCount(); i++) {
+            total += Double.valueOf(tableModel.getValueAt(i, 7).toString());
+        }
+        totalLabel.setText(total + "");
     }
 }

@@ -4,6 +4,9 @@
  */
 package com.nanosl.nbiz.gui;
 
+import java.util.Iterator;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.table.DefaultTableModel;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
@@ -523,6 +526,11 @@ public final class SaleInvoicePaymentTopComponent extends TopComponent {
     private javax.swing.JTextField receiptNumberTextField;
     private javax.swing.JTextField remainingAmountField;
     // End of variables declaration//GEN-END:variables
+    DefaultTableModel invoiceDtm;
+    DefaultTableModel paymentDtm;
+    
+     Customer customer;
+    
     @Override
     public void componentOpened() {
         // TODO add custom code on component opening
@@ -544,4 +552,37 @@ public final class SaleInvoicePaymentTopComponent extends TopComponent {
         String version = p.getProperty("version");
         // TODO read your settings according to their version
     }
+    private void clearPaymentFields() {
+        chequeNumbertField.setText("");
+        paymentAmountTextField.setText("");
+    }
+    
+     private void clearAll() {
+        invoiceNumberField.setText("");
+        invoiceDateField.setText("");
+        customerNameField.setText("");
+        amountField.setText("");
+        remainingAmountField.setText("");
+        paidTextField.setText("");
+        clearPaymentFields();
+        paymentDtm.setRowCount(0);
+        customer = null;
+        fillInvoiceTable();
+        fillBanks();
+    }
+      private void fillInvoiceTable() {
+        invoiceDtm.setRowCount(0);
+        paymentDtm.setRowCount(0);
+        for (Iterator<SaleInvoice> it = m.find(SaleInvoice.class).iterator(); it.hasNext();) {
+            SaleInvoice si = it.next();
+            double receivedAmount = si.getReceivedAmount() == null ? 0 : si.getReceivedAmount();
+            if (si.getAmount() > receivedAmount) {
+                Object[] rowData = {si.getInvNo()};
+                invoiceDtm.addRow(rowData);
+            }
+        }
+        private void fillBanks() {
+        bankComboBox.setModel(new DefaultComboBoxModel(m.find(Bank.class).toArray()));
+    }
 }
+
