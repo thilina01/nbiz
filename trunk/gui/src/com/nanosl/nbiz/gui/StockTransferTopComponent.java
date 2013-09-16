@@ -4,6 +4,8 @@
  */
 package com.nanosl.nbiz.gui;
 
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.table.DefaultTableModel;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
@@ -319,6 +321,7 @@ public final class StockTransferTopComponent extends TopComponent {
     private javax.swing.JComboBox repComboBox;
     private javax.swing.JButton transferButton;
     // End of variables declaration//GEN-END:variables
+      DefaultTableModel tableModel;
     @Override
     public void componentOpened() {
         // TODO add custom code on component opening
@@ -339,5 +342,18 @@ public final class StockTransferTopComponent extends TopComponent {
     void readProperties(java.util.Properties p) {
         String version = p.getProperty("version");
         // TODO read your settings according to their version
+    }
+    private void clear() {
+        fillItems();
+        fillReps();
+        tableModel.setRowCount(0);
+        quantityLabel.setText("0");
+    }
+private void fillItems() {
+        itemComboBox.setModel(new DefaultComboBoxModel(m.find(Item.class).toArray()));
+    }
+
+    private void fillReps() {
+        repComboBox.setModel(new DefaultComboBoxModel(m.find(Employee.class).toArray()));
     }
 }
