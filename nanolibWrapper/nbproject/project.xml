@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://www.netbeans.org/ns/project/1">
+    <type>org.netbeans.modules.apisupport.project</type>
+    <configuration>
+        <data xmlns="http://www.netbeans.org/ns/nb-module-project/3">
+            <code-name-base>com.nanosl.nbiz.nanolibWrapper</code-name-base>
+            <suite-component/>
+            <module-dependencies/>
+            <public-packages>
+                <package>com.nanosl.lib.act</package>
+                <package>com.nanosl.lib.date</package>
+                <package>com.nanosl.lib.db</package>
+                <package>com.nanosl.lib.er</package>
+                <package>com.nanosl.lib.log</package>
+                <package>com.nanosl.lib.mail</package>
+                <package>com.nanosl.lib.net</package>
+                <package>com.nanosl.lib.print</package>
+                <package>com.nanosl.lib.ui</package>
+                <package>lock</package>
+                <package>ud</package>
+                <package>ui</package>
+                <package>util</package>
+            </public-packages>
+            <class-path-extension>
+                <runtime-relative-path>ext/nanolib.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/nanolib.jar</binary-origin>
+            </class-path-extension>
+        </data>
+    </configuration>
+</project>

@@ -3,7 +3,7 @@
     <type>org.netbeans.modules.apisupport.project</type>
     <configuration>
         <data xmlns="http://www.netbeans.org/ns/nb-module-project/3">
-            <code-name-base>com.nanosl.nbiz.ctrl</code-name-base>
+            <code-name-base>com.nanosl.nbiz.utility</code-name-base>
             <suite-component/>
             <module-dependencies>
                 <dependency>
@@ -22,9 +22,25 @@
                         <specification-version>1.0</specification-version>
                     </run-dependency>
                 </dependency>
+                <dependency>
+                    <code-name-base>org.openide.dialogs</code-name-base>
+                    <build-prerequisite/>
+                    <compile-dependency/>
+                    <run-dependency>
+                        <specification-version>7.28.1</specification-version>
+                    </run-dependency>
+                </dependency>
+                <dependency>
+                    <code-name-base>org.openide.windows</code-name-base>
+                    <build-prerequisite/>
+                    <compile-dependency/>
+                    <run-dependency>
+                        <specification-version>6.60.1</specification-version>
+                    </run-dependency>
+                </dependency>
             </module-dependencies>
             <public-packages>
-                <package>com.nanosl.nbiz.ctrl</package>
+                <package>com.nanosl.nbiz.utility</package>
             </public-packages>
         </data>
     </configuration>
