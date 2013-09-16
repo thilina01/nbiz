@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+  <persistence-unit name="dbPU" transaction-type="RESOURCE_LOCAL">
+    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    <class>entity.General</class>
+    <class>entity.MenuItem</class>
+    <class>entity.PurchaseInvoiceHasItem</class>
+    <class>entity.StockChangeSummery</class>
+    <class>entity.SaleInvoice</class>
+    <class>entity.IssuedCash</class>
+    <class>entity.OperatorDeleted</class>
+    <class>entity.PriceType</class>
+    <class>entity.SaleInvoiceHasItem</class>
+    <class>entity.PriceList</class>
+    <class>entity.Find</class>
+    <class>entity.Menu</class>
+    <class>entity.Bank</class>
+    <class>entity.StockChange</class>
+    <class>entity.DamageNotes</class>
+    <class>entity.Operator</class>
+    <class>entity.StockTransfer</class>
+    <class>entity.SupplierHasBank</class>
+    <class>entity.OldPrice</class>
+    <class>entity.SrStock</class>
+    <class>entity.CanceledInvoiceHasItem</class>
+    <class>entity.SaleCash</class>
+    <class>entity.RepSale</class>
+    <class>entity.Supplier</class>
+    <class>entity.Town</class>
+    <class>entity.RepStockChange</class>
+    <class>entity.ExpensesType</class>
+    <class>entity.SaleCheque</class>
+    <class>entity.ViewPanel</class>
+    <class>entity.IssuedCheque</class>
+    <class>entity.EmployeePosition</class>
+    <class>entity.LastCode</class>
+    <class>entity.CollectionReceipt</class>
+    <class>entity.CanceledInvoice</class>
+    <class>entity.DamageStock</class>
+    <class>entity.Employee</class>
+    <class>entity.Expenses</class>
+    <class>entity.SrSalesPayments</class>
+    <class>entity.Item</class>
+    <class>entity.PurchaseInvoice</class>
+    <class>entity.ListTypes</class>
+    <class>entity.Customer</class>
+    <class>entity.Company</class>
+    <class>entity.ItemHasPrice</class>
+    <class>entity.RepSaleValue</class>
+    <class>entity.SubDealer</class>
+    <class>entity.ItemType</class>
+    <class>entity.Stock</class>
+    <class>entity.RootArea</class>
+    <properties>
+      <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/cbis?zeroDateTimeBehavior=convertToNull"/>
+      <property name="javax.persistence.jdbc.password" value="123"/>
+      <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
+      <property name="javax.persistence.jdbc.user" value="abc"/>
+    </properties>
+  </persistence-unit>
+</persistence>
