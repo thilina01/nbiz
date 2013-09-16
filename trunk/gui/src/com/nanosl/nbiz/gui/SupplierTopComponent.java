@@ -5,11 +5,14 @@
 package com.nanosl.nbiz.gui;
 
 import com.nanosl.nbiz.ctrl.SupplierCTRL;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
+import com.nanosl.nbiz.utility.Combo;
+import com.nanosl.nbiz.utility.NTopComponent;
+import entity.Supplier;
+import entity.Town;
 import javax.swing.table.DefaultTableModel;
 import org.netbeans.api.settings.ConvertAsProperties;
+import org.openide.DialogDisplayer;
+import org.openide.NotifyDescriptor;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.windows.TopComponent;
@@ -36,7 +39,7 @@ import org.openide.util.NbBundle.Messages;
     "CTL_SupplierTopComponent=Supplier Window",
     "HINT_SupplierTopComponent=This is a Supplier window"
 })
-public final class SupplierTopComponent extends TopComponent {
+public final class SupplierTopComponent extends NTopComponent {
 
     SupplierCTRL controller = new SupplierCTRL();
 
@@ -44,7 +47,6 @@ public final class SupplierTopComponent extends TopComponent {
         initComponents();
         setName(Bundle.CTL_SupplierTopComponent());
         setToolTipText(Bundle.HINT_SupplierTopComponent());
-
     }
 
     /**
@@ -456,7 +458,7 @@ public final class SupplierTopComponent extends TopComponent {
         clearFields();
         int row = masterTable.getSelectedRow();
         if (row > -1) {
-            Supplier supplier = m.find(Supplier.class, masterTable.getValueAt(row, 1));
+            Supplier supplier = controller.getSuppllier(masterTable.getValueAt(row, 1).toString());
             codeField.setText(supplier.getCode());
             nameField.setText(supplier.getName());
             addressNumberField.setText(supplier.getAddressNumber());
@@ -470,31 +472,10 @@ public final class SupplierTopComponent extends TopComponent {
     }
 
     private void clear() {
-        fillTable();
+        controller.fillTable(tableModel);
         Combo.fillTowns(townComboBox);
         clearFields();
         codeField.requestFocus();
-    }
-
-    private void fillTable() {
-        int i = 0;
-        tableModel.setRowCount(i);
-        List<Supplier> suppliers = m.find(Supplier.class);
-        Collections.sort(suppliers);
-        for (Iterator<Supplier> it = suppliers.iterator(); it.hasNext();) {
-            Supplier supplier = it.next();
-            if (supplier == null) {
-                return;
-            }
-            Town town = supplier.getTown();
-            String townName = "";
-
-            if (town != null) {
-                townName = town.getName() != null ? town.getName() : "";
-            }
-            Object[] row = {++i, supplier.getCode(), supplier.getName(), townName};
-            tableModel.addRow(row);
-        }
     }
 
     private void clearFields() {
@@ -510,5 +491,53 @@ public final class SupplierTopComponent extends TopComponent {
         if (townComboBox.getItemCount() > 0) {
             townComboBox.setSelectedIndex(0);
         }
+    }
+
+    private void update() {
+        String code = codeField.getText().trim();
+        String name = nameField.getText().trim();
+        if (code.equals("")) {
+            codeField.requestFocus();
+            return;
+        }
+        if (name.equals("")) {
+            nameField.requestFocus();
+            return;
+        }
+
+        String addressNumber = addressNumberField.getText().trim();
+        String addressStreet = addressStreetField.getText().trim();
+        String mobile = mobileField.getText().trim();
+        String fixedLine = fixedLineField.getText().trim();
+        String fax = faxField.getText().trim();
+        String notes = notesField.getText().trim();
+        Supplier supplier = new Supplier(code);
+        supplier.setName(name);
+        supplier.setAddressNumber(addressNumber);
+        supplier.setAddressStreet(addressStreet);
+        supplier.setFax(fax);
+        supplier.setFixedLine(fixedLine);
+        supplier.setMobile(mobile);
+        supplier.setNotes(notes);
+        supplier.setTown((Town) townComboBox.getSelectedItem());
+//        supplier.setBank((Bank) bankComboBox.getSelectedItem());
+        if (controller.update(supplier)) {
+            clear();
+            return;
+        }
+        showError("Unable to update " + code);
+    }
+
+    private void delete() {
+        String code = codeField.getText().trim();
+        if (code.equals("")) {
+            codeField.requestFocus();
+            return;
+        }
+        if (controller.delete(code)) {
+            clear();
+            return;
+        }
+        showError("Unable to delete " + code);
     }
 }
