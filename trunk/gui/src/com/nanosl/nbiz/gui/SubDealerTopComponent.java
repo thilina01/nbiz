@@ -4,8 +4,13 @@
  */
 package com.nanosl.nbiz.gui;
 
+import com.nanosl.nbiz.utility.NTopComponent;
+import entity.SubDealer;
+import entity.Town;
+import java.awt.Color;
 import java.util.Iterator;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.table.DefaultTableModel;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
@@ -33,10 +38,10 @@ import org.openide.util.NbBundle.Messages;
     "CTL_SubDealerTopComponent=SubDealer Window",
     "HINT_SubDealerTopComponent=This is a SubDealer window"
 })
-public final class SubDealerTopComponent extends TopComponent {
+public final class SubDealerTopComponent extends NTopComponent {
 
     public SubDealerTopComponent() {
-        initComponents();
+        onLoad();
         setName(Bundle.CTL_SubDealerTopComponent());
         setToolTipText(Bundle.HINT_SubDealerTopComponent());
 
@@ -318,11 +323,10 @@ public final class SubDealerTopComponent extends TopComponent {
     }//GEN-LAST:event_deleteButtonActionPerformed
 
     private void townComboBoxKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_townComboBoxKeyPressed
-        if(evt.getKeyCode()==10){
+        if (evt.getKeyCode() == 10) {
             phoneField.requestFocus();
         }
     }//GEN-LAST:event_townComboBoxKeyPressed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField addressNumberField;
     private javax.swing.JLabel addressNumberLabel;
@@ -345,6 +349,8 @@ public final class SubDealerTopComponent extends TopComponent {
     private javax.swing.JLabel townLabel;
     private javax.swing.JButton updateButton;
     // End of variables declaration//GEN-END:variables
+    DefaultTableModel tableModel;
+
     @Override
     public void componentOpened() {
         // TODO add custom code on component opening
@@ -366,11 +372,23 @@ public final class SubDealerTopComponent extends TopComponent {
         String version = p.getProperty("version");
         // TODO read your settings according to their version
     }
+
     private void clear() {
         clearFields();
         fillTable();
-        townComboBox.setModel(new DefaultComboBoxModel(m.find(Town.class).toArray()));
+        townComboBox.setModel(new DefaultComboBoxModel(manager.find(Town.class).toArray()));
     }
+
+    private void fillTable() {
+        int i = 0;
+        tableModel.setRowCount(i);
+        for (Iterator<SubDealer> it = manager.find(SubDealer.class).iterator(); it.hasNext();) {
+            SubDealer subDealer = it.next();
+            Object[] row = {++i, subDealer.getCode(), subDealer.getName(), subDealer.getContact()};
+            tableModel.addRow(row);
+        }
+    }
+
     private void clearFields() {
         codeField.requestFocus();
         codeField.setText("");
@@ -380,14 +398,78 @@ public final class SubDealerTopComponent extends TopComponent {
         addressStreetField.setText("");
         phoneField.setText("");
     }
-    private void fillTable() {
-        int i = 0;
-        tableModel.setRowCount(i);
-        for (Iterator<SubDealer> it = m.find(SubDealer.class).iterator(); it.hasNext();) {
-            SubDealer subDealer = it.next();
-            Object[] row = {++i, subDealer.getCode(), subDealer.getName(), subDealer.getContact()};
-            tableModel.addRow(row);
+
+    private void fill() {
+        clearFields();
+        int row = masterTable.getSelectedRow();
+        if (row > -1) {
+            SubDealer subDealer = manager.find(SubDealer.class, masterTable.getValueAt(row, 1));
+            codeField.setText(subDealer.getCode());
+            nameField.setText(subDealer.getName());
+            addressNumberField.setText(subDealer.getAddress());
+            addressStreetField.setText(subDealer.getStreet());
+            townComboBox.setSelectedItem(subDealer.getTown());
+            phoneField.setText(subDealer.getContact());
+            ownerField.setText(subDealer.getOwner());
         }
+    }
+
+    private void delete() {
+        String code = codeField.getText().trim();
+        if (code.equals("")) {
+            codeField.requestFocus();
+            return;
+        }
+        if (manager.delete(SubDealer.class, code)) {
+            clear();
+            return;
+        }
+        showError("Unable to delete " + code);
+    }
+
+    private void update() {
+        String code = codeField.getText().trim();
+        String name = nameField.getText().trim();
+        if (code.equals("")) {
+//            setStatusMessage("Code Required", Color.RED);
+            showError("Code Required");
+            codeField.requestFocus();
+
+            return;
+        }
+        if (name.equals("")) {
+            nameField.requestFocus();
+            showError("Name Required");
+            return;
+        }
+
+        String addressNumber = addressNumberField.getText().trim();
+        String addressStreet = addressStreetField.getText().trim();
+        String contact = phoneField.getText().trim();
+        String owner = ownerField.getText().trim();
+        Town town = (Town) townComboBox.getSelectedItem();
+        SubDealer subDealer = manager.find(SubDealer.class, code);
+        if (subDealer == null) {
+            subDealer = new SubDealer(code);
+        }
+        subDealer.setName(name);
+        subDealer.setAddress(addressNumber);
+        subDealer.setStreet(addressStreet);
+        subDealer.setContact(contact);
+        subDealer.setOwner(owner);
+        subDealer.setTown(town);
+        if (manager.update(subDealer)) {
+            clear();
+            return;
+        }
+        showError("Unable to update " + code);
+    }
+
+    protected void onLoad() {
+        initComponents();
+        tableModel = (DefaultTableModel) masterTable.getModel();
+        // AutoCompleteDecorator.decorate(townComboBox);
+        clear();
     }
 }
 

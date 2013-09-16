@@ -4,11 +4,21 @@
  */
 package com.nanosl.nbiz.gui;
 
+import com.nanosl.lib.date.JXDatePicker;
+import com.nanosl.nbiz.utility.NTopComponent;
+import entity.Item;
+import entity.PriceList;
+import java.awt.Color;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
+import static util.Format.nf2d;
 
 /**
  * Top component which displays something.
@@ -31,7 +41,7 @@ import org.openide.util.NbBundle.Messages;
     "CTL_CostPriceChangeTopComponent=CostPriceChange Window",
     "HINT_CostPriceChangeTopComponent=This is a CostPriceChange window"
 })
-public final class CostPriceChangeTopComponent extends TopComponent {
+public final class CostPriceChangeTopComponent extends NTopComponent {
 
     public CostPriceChangeTopComponent() {
         initComponents();
@@ -239,4 +249,61 @@ public final class CostPriceChangeTopComponent extends TopComponent {
         String version = p.getProperty("version");
         // TODO read your settings according to their version
     }
+    
+    
+    private void addToTable() {
+        try {
+            double newCostPrice = Double.valueOf(newPriceTextField.getText().trim());
+
+            Item item = (Item) itemComboBox.getSelectedItem();
+            PriceList priceList = item.getPriceList();
+            if (priceList == null) {
+                priceList = new PriceList(item.getCode());
+                priceList.setCostPack(0.0);
+                priceList.setCostUnit(0.0);
+                priceList.setSellingPack(0.0);
+                priceList.setSellingUnit(0.0);
+                priceList.setItem(item);
+                item.setPriceList(priceList);
+                m.update(priceList);
+                m.update(item);
+            }
+            int i = tableModel.getRowCount();
+
+            Object[] row = {++i, item.getCode(), item.getDescription(), nf2d.format(priceList.getCostPack()), nf2d.format(newCostPrice)};
+            tableModel.addRow(row);
+            newPriceTextField.setText("");
+            itemComboBox.requestFocus();
+        } catch (NumberFormatException numberFormatException) {
+            setStatusMessage("Invalid Price", Color.RED);
+        }
+    }
+
+    private void process() {
+        int rowCount = tableModel.getRowCount();
+        if (rowCount > 0) {
+            Date date = jXDatePicker1.getDate();
+            if (date == null) {
+                setStatusMessage("No date selected", Color.RED);
+                return;
+            }
+            List<Serializable> serializables = new ArrayList<Serializable>();
+            for (int i = 0; i < rowCount; i++) {
+                double newCost = Double.valueOf(masterTable.getValueAt(i, 4).toString());
+                Item item = m.find(Item.class, masterTable.getValueAt(i, 1).toString());
+                PriceList priceList = item.getPriceList();
+                priceList.setCostPack(newCost);
+                item.setPriceList(priceList);
+                serializables.add(priceList);
+                serializables.add(item);
+            }
+            if (m.update(serializables)) {
+                setStatusMessage("Update Success");
+                reset();
+            } else {
+                showError("Update Failed");
+            }
+        }
+    }
+
 }

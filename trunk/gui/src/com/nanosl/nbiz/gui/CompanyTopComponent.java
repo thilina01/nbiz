@@ -4,6 +4,8 @@
  */
 package com.nanosl.nbiz.gui;
 
+import com.nanosl.nbiz.utility.NTopComponent;
+import entity.Company;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
@@ -31,7 +33,7 @@ import org.openide.util.NbBundle.Messages;
     "CTL_CompanyTopComponent=Company Window",
     "HINT_CompanyTopComponent=This is a Company window"
 })
-public final class CompanyTopComponent extends TopComponent {
+public final class CompanyTopComponent extends NTopComponent {
 
     public CompanyTopComponent() {
         initComponents();
@@ -48,19 +50,349 @@ public final class CompanyTopComponent extends TopComponent {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanel1 = new javax.swing.JPanel();
+        codeLabel = new javax.swing.JLabel();
+        sloganTwoLabel = new javax.swing.JLabel();
+        addressNumberLabel = new javax.swing.JLabel();
+        nameLabel = new javax.swing.JLabel();
+        sloganOneLabel = new javax.swing.JLabel();
+        webField = new javax.swing.JTextField();
+        contactTwoField = new javax.swing.JTextField();
+        contactOneLabel = new javax.swing.JLabel();
+        emailField = new javax.swing.JTextField();
+        contactTwoLabel = new javax.swing.JLabel();
+        faxField = new javax.swing.JTextField();
+        addressStreetLabel = new javax.swing.JLabel();
+        addressCityLabel = new javax.swing.JLabel();
+        contactOneField = new javax.swing.JTextField();
+        addressCityField = new javax.swing.JTextField();
+        addressStreetField = new javax.swing.JTextField();
+        addressNumberField = new javax.swing.JTextField();
+        sloganTwoField = new javax.swing.JTextField();
+        sloganOneField = new javax.swing.JTextField();
+        nameField = new javax.swing.JTextField();
+        codeField = new javax.swing.JTextField();
+        webLabel = new javax.swing.JLabel();
+        faxLabel = new javax.swing.JLabel();
+        emailLabel = new javax.swing.JLabel();
+        updateButton = new javax.swing.JButton();
+        clearButton = new javax.swing.JButton();
+
+        org.openide.awt.Mnemonics.setLocalizedText(codeLabel, org.openide.util.NbBundle.getMessage(CompanyTopComponent.class, "CompanyTopComponent.codeLabel.text")); // NOI18N
+
+        org.openide.awt.Mnemonics.setLocalizedText(sloganTwoLabel, org.openide.util.NbBundle.getMessage(CompanyTopComponent.class, "CompanyTopComponent.sloganTwoLabel.text")); // NOI18N
+
+        org.openide.awt.Mnemonics.setLocalizedText(addressNumberLabel, org.openide.util.NbBundle.getMessage(CompanyTopComponent.class, "CompanyTopComponent.addressNumberLabel.text")); // NOI18N
+
+        org.openide.awt.Mnemonics.setLocalizedText(nameLabel, org.openide.util.NbBundle.getMessage(CompanyTopComponent.class, "CompanyTopComponent.nameLabel.text")); // NOI18N
+
+        org.openide.awt.Mnemonics.setLocalizedText(sloganOneLabel, org.openide.util.NbBundle.getMessage(CompanyTopComponent.class, "CompanyTopComponent.sloganOneLabel.text")); // NOI18N
+
+        webField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                webFieldActionPerformed(evt);
+            }
+        });
+
+        contactTwoField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                contactTwoFieldActionPerformed(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(contactOneLabel, org.openide.util.NbBundle.getMessage(CompanyTopComponent.class, "CompanyTopComponent.contactOneLabel.text")); // NOI18N
+
+        emailField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                emailFieldActionPerformed(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(contactTwoLabel, org.openide.util.NbBundle.getMessage(CompanyTopComponent.class, "CompanyTopComponent.contactTwoLabel.text")); // NOI18N
+
+        faxField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                faxFieldActionPerformed(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(addressStreetLabel, org.openide.util.NbBundle.getMessage(CompanyTopComponent.class, "CompanyTopComponent.addressStreetLabel.text")); // NOI18N
+
+        org.openide.awt.Mnemonics.setLocalizedText(addressCityLabel, org.openide.util.NbBundle.getMessage(CompanyTopComponent.class, "CompanyTopComponent.addressCityLabel.text")); // NOI18N
+
+        contactOneField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                contactOneFieldActionPerformed(evt);
+            }
+        });
+
+        addressCityField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addressCityFieldActionPerformed(evt);
+            }
+        });
+
+        addressStreetField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addressStreetFieldActionPerformed(evt);
+            }
+        });
+
+        addressNumberField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addressNumberFieldActionPerformed(evt);
+            }
+        });
+
+        sloganTwoField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sloganTwoFieldActionPerformed(evt);
+            }
+        });
+
+        sloganOneField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sloganOneFieldActionPerformed(evt);
+            }
+        });
+
+        nameField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                nameFieldActionPerformed(evt);
+            }
+        });
+
+        codeField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                codeFieldActionPerformed(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(webLabel, org.openide.util.NbBundle.getMessage(CompanyTopComponent.class, "CompanyTopComponent.webLabel.text")); // NOI18N
+
+        org.openide.awt.Mnemonics.setLocalizedText(faxLabel, org.openide.util.NbBundle.getMessage(CompanyTopComponent.class, "CompanyTopComponent.faxLabel.text")); // NOI18N
+
+        org.openide.awt.Mnemonics.setLocalizedText(emailLabel, org.openide.util.NbBundle.getMessage(CompanyTopComponent.class, "CompanyTopComponent.emailLabel.text")); // NOI18N
+
+        org.openide.awt.Mnemonics.setLocalizedText(updateButton, org.openide.util.NbBundle.getMessage(CompanyTopComponent.class, "CompanyTopComponent.updateButton.text")); // NOI18N
+        updateButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                updateButtonActionPerformed(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(clearButton, org.openide.util.NbBundle.getMessage(CompanyTopComponent.class, "CompanyTopComponent.clearButton.text")); // NOI18N
+        clearButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                clearButtonActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(codeLabel)
+                    .addComponent(nameLabel)
+                    .addComponent(sloganOneLabel)
+                    .addComponent(sloganTwoLabel)
+                    .addComponent(addressNumberLabel)
+                    .addComponent(addressStreetLabel)
+                    .addComponent(addressCityLabel)
+                    .addComponent(contactOneLabel)
+                    .addComponent(contactTwoLabel)
+                    .addComponent(faxLabel)
+                    .addComponent(emailLabel)
+                    .addComponent(webLabel))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(codeField, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(addressNumberField, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(faxField)
+                    .addComponent(contactTwoField)
+                    .addComponent(contactOneField, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(updateButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 176, Short.MAX_VALUE)
+                        .addComponent(clearButton))
+                    .addComponent(emailField)
+                    .addComponent(webField, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
+                    .addComponent(sloganOneField)
+                    .addComponent(sloganTwoField)
+                    .addComponent(addressStreetField)
+                    .addComponent(addressCityField, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
+                    .addComponent(nameField))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(codeLabel)
+                    .addComponent(codeField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(nameLabel)
+                    .addComponent(nameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(sloganOneLabel)
+                    .addComponent(sloganOneField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(sloganTwoLabel)
+                    .addComponent(sloganTwoField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(addressNumberLabel)
+                    .addComponent(addressNumberField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(addressStreetLabel)
+                    .addComponent(addressStreetField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(addressCityLabel)
+                    .addComponent(addressCityField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(contactOneLabel)
+                    .addComponent(contactOneField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(contactTwoLabel)
+                    .addComponent(contactTwoField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(faxLabel)
+                    .addComponent(faxField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(emailLabel)
+                    .addComponent(emailField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(webLabel)
+                    .addComponent(webField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(updateButton)
+                    .addComponent(clearButton))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void webFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_webFieldActionPerformed
+        updateButton.requestFocus();
+    }//GEN-LAST:event_webFieldActionPerformed
+
+    private void contactTwoFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_contactTwoFieldActionPerformed
+        faxField.requestFocus();
+    }//GEN-LAST:event_contactTwoFieldActionPerformed
+
+    private void emailFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_emailFieldActionPerformed
+        webField.requestFocus();
+    }//GEN-LAST:event_emailFieldActionPerformed
+
+    private void faxFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_faxFieldActionPerformed
+        emailField.requestFocus();
+    }//GEN-LAST:event_faxFieldActionPerformed
+
+    private void contactOneFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_contactOneFieldActionPerformed
+        contactTwoField.requestFocus();
+    }//GEN-LAST:event_contactOneFieldActionPerformed
+
+    private void addressCityFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addressCityFieldActionPerformed
+        contactOneField.requestFocus();
+    }//GEN-LAST:event_addressCityFieldActionPerformed
+
+    private void addressStreetFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addressStreetFieldActionPerformed
+        addressCityField.requestFocus();
+    }//GEN-LAST:event_addressStreetFieldActionPerformed
+
+    private void addressNumberFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addressNumberFieldActionPerformed
+        addressStreetField.requestFocus();
+    }//GEN-LAST:event_addressNumberFieldActionPerformed
+
+    private void sloganTwoFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sloganTwoFieldActionPerformed
+        addressNumberField.requestFocus();
+    }//GEN-LAST:event_sloganTwoFieldActionPerformed
+
+    private void sloganOneFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sloganOneFieldActionPerformed
+        sloganTwoField.requestFocus();
+    }//GEN-LAST:event_sloganOneFieldActionPerformed
+
+    private void nameFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nameFieldActionPerformed
+        if (nameField.getText().trim().length() > 0) {
+            sloganOneField.requestFocus();
+        }
+    }//GEN-LAST:event_nameFieldActionPerformed
+
+    private void codeFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_codeFieldActionPerformed
+        String code = codeField.getText().trim();
+        if (code.length() > 0) {
+            fill(code);
+            nameField.requestFocus();
+        }
+    }//GEN-LAST:event_codeFieldActionPerformed
+
+    private void updateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateButtonActionPerformed
+        update();
+    }//GEN-LAST:event_updateButtonActionPerformed
+
+    private void clearButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearButtonActionPerformed
+        clearFields();
+    }//GEN-LAST:event_clearButtonActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField addressCityField;
+    private javax.swing.JLabel addressCityLabel;
+    private javax.swing.JTextField addressNumberField;
+    private javax.swing.JLabel addressNumberLabel;
+    private javax.swing.JTextField addressStreetField;
+    private javax.swing.JLabel addressStreetLabel;
+    private javax.swing.JButton clearButton;
+    private javax.swing.JTextField codeField;
+    private javax.swing.JLabel codeLabel;
+    private javax.swing.JTextField contactOneField;
+    private javax.swing.JLabel contactOneLabel;
+    private javax.swing.JTextField contactTwoField;
+    private javax.swing.JLabel contactTwoLabel;
+    private javax.swing.JTextField emailField;
+    private javax.swing.JLabel emailLabel;
+    private javax.swing.JTextField faxField;
+    private javax.swing.JLabel faxLabel;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JTextField nameField;
+    private javax.swing.JLabel nameLabel;
+    private javax.swing.JTextField sloganOneField;
+    private javax.swing.JLabel sloganOneLabel;
+    private javax.swing.JTextField sloganTwoField;
+    private javax.swing.JLabel sloganTwoLabel;
+    private javax.swing.JButton updateButton;
+    private javax.swing.JTextField webField;
+    private javax.swing.JLabel webLabel;
     // End of variables declaration//GEN-END:variables
     @Override
     public void componentOpened() {
@@ -82,5 +414,91 @@ public final class CompanyTopComponent extends TopComponent {
     void readProperties(java.util.Properties p) {
         String version = p.getProperty("version");
         // TODO read your settings according to their version
+    }
+    
+    
+    private void fill(String code) {
+        Company company;
+        company = manager.find(Company.class, code);
+        if (company == null) {
+            return;
+        }
+        clearFields();
+        codeField.setText(company.getCode());
+        nameField.setText(company.getName());
+        sloganOneField.setText(company.getSloganOne());
+        sloganTwoField.setText(company.getSloganTwo());
+        addressNumberField.setText(company.getAddressNumber());
+        addressStreetField.setText(company.getAddressStreet());
+        addressCityField.setText(company.getAddressCity());
+        contactOneField.setText(company.getContactOne());
+        contactTwoField.setText(company.getContactTwo());
+        faxField.setText(company.getFax());
+        emailField.setText(company.getEmail());
+        webField.setText(company.getWeb());
+    }
+
+    private void update() {
+        String code = codeField.getText().trim();
+        String name = nameField.getText().trim();
+        if (code.equals("")) {
+            codeField.requestFocus();
+            return;
+        }
+        if (name.equals("")) {
+            nameField.requestFocus();
+            return;
+        }
+
+        String sloganOne = sloganOneField.getText().trim();
+        String sloganTwo = sloganTwoField.getText().trim();
+        String addressNumber = addressNumberField.getText().trim();
+        String addressStreet = addressStreetField.getText().trim();
+        String addressCity = addressCityField.getText().trim();
+        String contactOne = contactOneField.getText().trim();
+        String contactTwo = contactTwoField.getText().trim();
+        String fax = faxField.getText().trim();
+        String email = emailField.getText().trim();
+        String web = webField.getText().trim();
+        
+        Company company = manager.find(Company.class, code);
+        if (company == null) {
+            company = new Company(code);
+        }
+        company.setName(name);
+        company.setSloganOne(sloganOne);
+        company.setSloganTwo(sloganTwo);
+        company.setAddressNumber(addressNumber);
+        company.setAddressStreet(addressStreet);
+        company.setAddressCity(addressCity);
+        company.setContactOne(contactOne);
+        company.setContactTwo(contactTwo);
+        company.setFax(fax);
+        company.setEmail(email);
+        company.setWeb(web);
+        if (manager.update(company)) {
+            clearFields();
+            codeField.requestFocus();
+            return;
+        }
+        showError("Unable to update " + code);
+    }
+    
+    
+
+    private void clearFields() {
+        codeField.requestFocus();
+        codeField.setText("");
+        nameField.setText("");
+        sloganOneField.setText("");
+        sloganTwoField.setText("");
+        addressNumberField.setText("");
+        addressStreetField.setText("");
+        addressCityField.setText("");
+        contactOneField.setText("");
+        contactTwoField.setText("");
+        faxField.setText("");
+        emailField.setText("");
+        webField.setText("");
     }
 }

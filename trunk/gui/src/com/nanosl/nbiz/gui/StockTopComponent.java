@@ -4,11 +4,20 @@
  */
 package com.nanosl.nbiz.gui;
 
+import com.nanosl.nbiz.utility.Find;
+import com.nanosl.nbiz.utility.NTopComponent;
+import com.nanosl.nbiz.utility.Printer;
+import entity.Item;
+import entity.Stock;
+import java.util.Iterator;
+import java.util.List;
+import javax.swing.table.DefaultTableModel;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
+import static util.Format.nf2d;
 
 /**
  * Top component which displays something.
@@ -31,7 +40,7 @@ import org.openide.util.NbBundle.Messages;
     "CTL_StockTopComponent=Stock Window",
     "HINT_StockTopComponent=This is a Stock window"
 })
-public final class StockTopComponent extends TopComponent {
+public final class StockTopComponent extends NTopComponent {
 
     public StockTopComponent() {
         initComponents();
@@ -235,4 +244,33 @@ public final class StockTopComponent extends TopComponent {
         String version = p.getProperty("version");
         // TODO read your settings according to their version
     }
+    DefaultTableModel tableModel;
+
+    private void fillTable() {
+        tableModel.setRowCount(0);
+        int i = 0;
+        double total = 0;
+        manager.clearCache();
+        List<Stock> stocks = allRadioButton.isSelected() ? manager.find(Stock.class) : Find.stockLessMinLimit();
+        for (Iterator<Stock> it = stocks.iterator(); it.hasNext();) {
+            Stock stock = it.next();
+            Item item = stock.getItem();
+            if (item == null) {
+                showError("Item Not Found!");
+                return;
+            }
+            double quantity = stock.getQuantity();
+            double rate = item.getPriceList() != null ? item.getPriceList().getCostPack() != null ? item.getPriceList().getCostPack() : 0.0 : 0.0;
+            total += (quantity * rate);
+            Object[] row = {++i, item.getCode(), item.getDescription(), nf2d.format(quantity), nf2d.format(rate), nf2d.format(quantity * rate)};
+            tableModel.addRow(row);
+        }
+        totalLabel.setText(nf2d.format(total));
+    }
+
+    protected void onLoad() {
+        initComponents();
+        tableModel = (DefaultTableModel) masterTable.getModel();
+    }
+
 }
