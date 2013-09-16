@@ -4,8 +4,25 @@
  */
 package com.nanosl.nbiz.gui;
 
+import com.nanosl.nbiz.utility.NTopComponent;
+import entity.Item;
+import entity.Stock;
+import entity.StockChange;
+import entity.StockChangeSummery;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JComponent;
+import javax.swing.table.DefaultTableModel;
+import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
@@ -33,10 +50,10 @@ import org.openide.util.NbBundle.Messages;
     "CTL_StockChangeTopComponent=StockChange Window",
     "HINT_StockChangeTopComponent=This is a StockChange window"
 })
-public final class StockChangeTopComponent extends TopComponent {
+public final class StockChangeTopComponent extends NTopComponent {
 
     public StockChangeTopComponent() {
-        initComponents();
+        onLoad();
         setName(Bundle.CTL_StockChangeTopComponent());
         setToolTipText(Bundle.HINT_StockChangeTopComponent());
 
@@ -215,15 +232,12 @@ public final class StockChangeTopComponent extends TopComponent {
     }// </editor-fold>//GEN-END:initComponents
 
     private void masterTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_masterTableMouseClicked
-
     }//GEN-LAST:event_masterTableMouseClicked
 
     private void masterTableMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_masterTableMouseReleased
-
     }//GEN-LAST:event_masterTableMouseReleased
 
     private void masterTableKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_masterTableKeyReleased
-
     }//GEN-LAST:event_masterTableKeyReleased
 
     private void itemComboBoxKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_itemComboBoxKeyPressed
@@ -250,7 +264,6 @@ public final class StockChangeTopComponent extends TopComponent {
     private void resetButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetButtonActionPerformed
         reset();
     }//GEN-LAST:event_resetButtonActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField actualQuantityTextField;
     private org.jdesktop.swingx.JXDatePicker datePicker1;
@@ -265,6 +278,7 @@ public final class StockChangeTopComponent extends TopComponent {
     private javax.swing.JButton resetButton;
     private javax.swing.JLabel totalLabel;
     // End of variables declaration//GEN-END:variables
+
     @Override
     public void componentOpened() {
         // TODO add custom code on component opening
@@ -286,15 +300,124 @@ public final class StockChangeTopComponent extends TopComponent {
         String version = p.getProperty("version");
         // TODO read your settings according to their version
     }
+
     private void reset() {
         fillTable();
         fillItems();
         calcTotal();
     }
+
+    private void fillItems() {
+        itemComboBox.setModel(new DefaultComboBoxModel(manager.find(Item.class).toArray()));
+    }
+
+    private void editTable() {
+        double actualQuantity = 0;
+
+        try {
+            actualQuantity = Double.valueOf(actualQuantityTextField.getText().trim());
+        } catch (NumberFormatException numberFormatException) {
+            showError("Invalid number!");
+//            setStatusMessage("Invalid number!", Color.RED);
+            return;
+        }
+
+        Item item = (Item) itemComboBox.getSelectedItem();
+        for (int i = 0; i < tableModel.getRowCount(); i++) {
+            if (masterTable.getValueAt(i, 1).equals(item.getCode())) {
+                double oldQuantity = Double.valueOf(masterTable.getValueAt(i, 3).toString());
+                masterTable.setValueAt(actualQuantity, i, 4);
+                double deferent = oldQuantity - actualQuantity;
+                masterTable.setValueAt(deferent, i, 5);
+                double rate = Double.valueOf(masterTable.getValueAt(i, 6).toString());
+                masterTable.setValueAt(deferent * rate, i, 7);
+                calcTotal();
+                actualQuantityTextField.setText("");
+                itemComboBox.requestFocus();
+                return;
+            }
+        }
+    }
+
+    private void calcTotal() {
+        double total = 0;
+        for (int i = 0; i < tableModel.getRowCount(); i++) {
+            total += Double.valueOf(tableModel.getValueAt(i, 7).toString());
+        }
+        totalLabel.setText(total + "");
+    }
+
+    private void process() {
+        Date date = datePicker1.getDate();
+        if (date == null) {
+            showError("Select date");
+//            setStatusMessage("Select date", Color.RED);
+            return;
+        }
+        List<Serializable> serializables = new ArrayList<Serializable>();
+        StockChangeSummery stockChangeSummery = new StockChangeSummery(date);
+        stockChangeSummery.setDeferent(Double.valueOf(totalLabel.getText().trim()));
+        serializables.add(stockChangeSummery);
+        for (int i = 0; i < tableModel.getRowCount(); i++) {
+            Item item = manager.find(Item.class, masterTable.getValueAt(i, 1));
+            Stock stock = item.getStock();
+            double oldQuantity = stock.getQuantity();
+            double actualQuantity = Double.valueOf(masterTable.getValueAt(i, 4).toString());
+            double rate = Double.valueOf(masterTable.getValueAt(i, 6).toString());
+            stock.setQuantity(actualQuantity);
+            serializables.add(stock);
+
+            StockChange stockChange = new StockChange(item.getCode(), date);
+            stockChange.setActualQuantity(actualQuantity);
+            stockChange.setItem(item);
+            stockChange.setOldQuantity(oldQuantity);
+            stockChange.setRate(rate);
+            stockChange.setStockChangeSummery(stockChangeSummery);
+            serializables.add(stockChange);
+        }
+        if (manager.update(serializables)) {
+            showSuccess("Update success");
+//            setStatusMessage("Update success");
+            reset();
+        }
+    }
+
+    private void KeyAdapter() {
+        AutoCompleteDecorator.decorate(itemComboBox);
+        setComboBoxKeyAdapters(itemComboBox);
+        setComboBoxKeyAdapters(datePicker1);
+
+    }
+
+    private void setComboBoxKeyAdapters(JComponent comp) {
+        String compName = comp.getName();
+        Component component[] = comp.getComponents();
+        for (int i = 0; i < component.length; i++) {
+            if (compName.equals("itemComboBox")) {
+                component[i].addKeyListener(itemComboBoxKeyAdapter);
+            } else if (compName.equals("datePicker1")) {
+                component[i].addKeyListener(datePicker1KeyAdapter);
+            }
+        }
+    }
+    KeyAdapter itemComboBoxKeyAdapter = new java.awt.event.KeyAdapter() {
+        @Override
+        public void keyPressed(KeyEvent evt) {
+            itemComboBoxKeyPressed(evt);
+        }
+    };
+    private KeyListener datePicker1KeyAdapter = new java.awt.event.KeyAdapter() {
+        @Override
+        public void keyPressed(KeyEvent evt) {
+            datePicker1KeyPressed(evt);
+        }
+    };
+    DefaultTableModel tableModel;
+
     private void fillTable() {
         tableModel.setRowCount(0);
         int i = tableModel.getRowCount();
-        for (Iterator<Stock> it = m.find(Stock.class).iterator(); it.hasNext();) {
+        for (Iterator<Stock> it = manager.find(Stock.class).iterator(); it.hasNext();) {
             Stock stock = it.next();
             Item item = stock.getItem();
             double quantity = stock.getQuantity() == null ? 0 : stock.getQuantity();
@@ -302,14 +425,12 @@ public final class StockChangeTopComponent extends TopComponent {
             Object[] row = {++i, item.getCode(), item.getDescription(), quantity, quantity, 0, cost, 0};
             tableModel.addRow(row);
         }
-        private void fillItems() {
-        itemComboBox.setModel(new DefaultComboBoxModel(m.find(Item.class).toArray()));
     }
-         private void calcTotal() {
-        double total = 0;
-        for (int i = 0; i < tableModel.getRowCount(); i++) {
-            total += Double.valueOf(tableModel.getValueAt(i, 7).toString());
-        }
-        totalLabel.setText(total + "");
+
+    protected void onLoad() {
+        initComponents();
+        tableModel = (DefaultTableModel) masterTable.getModel();
+        KeyAdapter();
+        reset();
     }
 }

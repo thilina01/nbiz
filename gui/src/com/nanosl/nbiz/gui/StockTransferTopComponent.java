@@ -4,13 +4,34 @@
  */
 package com.nanosl.nbiz.gui;
 
+import com.nanosl.lib.date.JXDatePicker;
+import com.nanosl.nbiz.utility.NTopComponent;
+import entity.Employee;
+import entity.Item;
+import entity.PriceList;
+import entity.SrStock;
+import entity.SrStockPK;
+import entity.Stock;
+import entity.StockTransfer;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JComponent;
 import javax.swing.table.DefaultTableModel;
+import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
+import static util.Format.nf2d;
+import static util.Format.nf3d;
 
 /**
  * Top component which displays something.
@@ -33,10 +54,10 @@ import org.openide.util.NbBundle.Messages;
     "CTL_StockTransferTopComponent=StockTransfer Window",
     "HINT_StockTransferTopComponent=This is a StockTransfer window"
 })
-public final class StockTransferTopComponent extends TopComponent {
+public final class StockTransferTopComponent extends NTopComponent {
 
     public StockTransferTopComponent() {
-        initComponents();
+        onLoad();
         setName(Bundle.CTL_StockTransferTopComponent());
         setToolTipText(Bundle.HINT_StockTransferTopComponent());
 
@@ -240,11 +261,9 @@ public final class StockTransferTopComponent extends TopComponent {
     }// </editor-fold>//GEN-END:initComponents
 
     private void masterTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_masterTableMouseClicked
-
     }//GEN-LAST:event_masterTableMouseClicked
 
     private void masterTableMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_masterTableMouseReleased
-
     }//GEN-LAST:event_masterTableMouseReleased
 
     private void masterTableKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_masterTableKeyReleased
@@ -285,8 +304,8 @@ public final class StockTransferTopComponent extends TopComponent {
             stock.setItem(item);
             stock.setQuantity(0.0);
             item.setStock(stock);
-            m.update(stock);
-            m.update(item);
+            manager.update(stock);
+            manager.update(item);
         }
         quantityLabel.setText(nf3d.format(stock.getQuantity()));
     }//GEN-LAST:event_itemComboBoxActionPerformed
@@ -304,7 +323,6 @@ public final class StockTransferTopComponent extends TopComponent {
     private void clearButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearButtonActionPerformed
         clear();
     }//GEN-LAST:event_clearButtonActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton clearButton;
     private org.jdesktop.swingx.JXDatePicker datePicker;
@@ -321,7 +339,7 @@ public final class StockTransferTopComponent extends TopComponent {
     private javax.swing.JComboBox repComboBox;
     private javax.swing.JButton transferButton;
     // End of variables declaration//GEN-END:variables
-      DefaultTableModel tableModel;
+
     @Override
     public void componentOpened() {
         // TODO add custom code on component opening
@@ -343,17 +361,182 @@ public final class StockTransferTopComponent extends TopComponent {
         String version = p.getProperty("version");
         // TODO read your settings according to their version
     }
+
+    private void fillItems() {
+        itemComboBox.setModel(new DefaultComboBoxModel(manager.find(Item.class).toArray()));
+    }
+
+    private void fillReps() {
+        repComboBox.setModel(new DefaultComboBoxModel(manager.find(Employee.class).toArray()));
+    }
+
     private void clear() {
         fillItems();
         fillReps();
         tableModel.setRowCount(0);
         quantityLabel.setText("0");
     }
-private void fillItems() {
-        itemComboBox.setModel(new DefaultComboBoxModel(m.find(Item.class).toArray()));
+
+    private void transfer() {
+        Date date = datePicker.getDate();
+        if (date == null) {
+            showError("Date Required");
+//            setStatusMessage("Date Required", Color.RED);
+            return;
+        }
+        List<Serializable> serializables = new ArrayList<Serializable>();
+        Employee rep = (Employee) repComboBox.getSelectedItem();
+        for (int i = 0; i < tableModel.getRowCount(); i++) {
+            Item item = manager.find(Item.class, tableModel.getValueAt(i, 1).toString());
+            Stock stock = item.getStock();
+            double quantity = Double.valueOf(tableModel.getValueAt(i, 3).toString());
+            double rate = Double.valueOf(tableModel.getValueAt(i, 4).toString());
+            stock.setQuantity(stock.getQuantity() - quantity);
+            StockTransfer stockTransfer = new StockTransfer(rep.getCode(), item.getCode(), date);
+            stockTransfer.setQuantity(quantity);
+            stockTransfer.setEmployee(rep);
+            stockTransfer.setItem(item);
+            stockTransfer.setRate(rate);
+            PriceList priceList = item.getPriceList();
+            if (priceList == null) {
+                priceList = new PriceList(item.getCode());
+                priceList.setCostPack(0.0);
+                priceList.setCostUnit(0.0);
+                priceList.setItem(item);
+                priceList.setSellingPack(0.0);
+                priceList.setSellingUnit(0.0);
+                serializables.add(priceList);
+            }
+            SrStockPK srStockPK = new SrStockPK(rep.getCode(), item.getCode());
+            SrStock srStock = manager.find(SrStock.class, srStockPK);
+            if (srStock == null) {
+                srStock = new SrStock(srStockPK);
+                srStock.setItem(item);
+                srStock.setEmployee(rep);
+                srStock.setQuantity(quantity);
+                srStock.setPackPrice(priceList.getSellingPack());
+                srStock.setUnitPrice(priceList.getSellingUnit());
+            } else {
+                srStock.setQuantity(srStock.getQuantity() + quantity);
+            }
+            serializables.add(stock);
+            serializables.add(stockTransfer);
+            serializables.add(srStock);
+        }
+        if (manager.update(serializables)) {
+            showSuccess("Update Success");
+//            setStatusMessage("Update Success");
+            clear();
+            return;
+        }
+        showError("Update Failed");
     }
 
-    private void fillReps() {
-        repComboBox.setModel(new DefaultComboBoxModel(m.find(Employee.class).toArray()));
+    private void setQuantity() {
+        quantityLabel.setText("0");
+        Item item = (Item) itemComboBox.getSelectedItem();
+        Stock stock = item.getStock();
+        if (stock == null) {
+            stock = new Stock(item.getCode());
+            stock.setBundles(0.0);
+            stock.setItem(item);
+            stock.setQuantity(0.0);
+            item.setStock(stock);
+            manager.update(stock);
+            manager.update(item);
+        }
+        quantityLabel.setText(nf3d.format(stock.getQuantity()));
     }
+    DefaultTableModel tableModel;
+
+    private void fillTable() {
+        double quantity = 0;
+        try {
+            quantity = Double.valueOf(quantityTextField.getText().trim());
+            double availablaQuantity = Double.valueOf(quantityLabel.getText().trim());
+            if (quantity > availablaQuantity) {
+                showError("Quantity Not Enough");
+//                setStatusMessage("Quantity Not Enough", Color.RED);
+                return;
+            }
+        } catch (Exception e) {
+            showError("Invalid Quantity Value");
+//            setStatusMessage("Invalid Quantity Value", Color.RED);
+            return;
+        }
+        Item item = (Item) itemComboBox.getSelectedItem();
+        if (item == null) {
+            return;
+        }
+        Employee rep = (Employee) repComboBox.getSelectedItem();
+        SrStockPK srStockPK = new SrStockPK(rep.getCode(), item.getCode());
+        SrStock srStock = manager.find(SrStock.class, srStockPK);
+        if (srStock == null) {
+            srStock = new SrStock(srStockPK);
+            srStock.setBundles(0.0);
+            srStock.setEmployee(rep);
+            srStock.setItem(item);
+            srStock.setPackPrice(item.getPriceList().getSellingPack());
+            srStock.setQuantity(0.0);
+            srStock.setUnitPrice(item.getPriceList().getSellingUnit());
+            manager.update(srStock);
+            srStock = manager.find(SrStock.class, srStockPK);
+        }
+        int i = tableModel.getRowCount();
+        double rate = srStock.getPackPrice() == null ? 0.0 : srStock.getPackPrice();
+        Object[] row = {++i, item.getCode(), item.getDescription(), nf3d.format(quantity), nf2d.format(rate)};
+        tableModel.addRow(row);
+
+        quantityTextField.setText("");
+        itemComboBox.requestFocus();
+    }
+
+    protected void onLoad() {
+        initComponents();
+        tableModel = (DefaultTableModel) masterTable.getModel();
+        KeyAdapter();
+    }
+
+    private void KeyAdapter() {
+        AutoCompleteDecorator.decorate(repComboBox);
+        AutoCompleteDecorator.decorate(itemComboBox);
+        setComboBoxKeyAdapters(repComboBox);
+        setComboBoxKeyAdapters(itemComboBox);
+        setComboBoxKeyAdapters(datePicker);
+    }
+
+    private void setComboBoxKeyAdapters(JComponent comp) {
+        String compName = comp.getName();
+        if (compName == null) {
+            return;
+        }
+        Component component[] = comp.getComponents();
+        for (int i = 0; i < component.length; i++) {
+            if (compName.equals("repComboBox")) {
+                component[i].addKeyListener(repComboBoxKeyAdapter);
+            } else if (compName.equals("itemComboBox")) {
+                component[i].addKeyListener(itemComboBoxKeyAdapter);
+            } else if (compName.equals("datePicker")) {
+                component[i].addKeyListener(datePickerKeyAdapter);
+            }
+        }
+    }
+    KeyAdapter datePickerKeyAdapter = new java.awt.event.KeyAdapter() {
+        @Override
+        public void keyPressed(KeyEvent evt) {
+            datePickerKeyPressed(evt);
+        }
+    };
+    KeyAdapter itemComboBoxKeyAdapter = new java.awt.event.KeyAdapter() {
+        @Override
+        public void keyPressed(KeyEvent evt) {
+            itemComboBoxKeyPressed(evt);
+        }
+    };
+    KeyAdapter repComboBoxKeyAdapter = new java.awt.event.KeyAdapter() {
+        @Override
+        public void keyPressed(KeyEvent evt) {
+            repComboBoxKeyPressed(evt);
+        }
+    };
 }
