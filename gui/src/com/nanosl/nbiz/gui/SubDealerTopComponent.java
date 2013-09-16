@@ -48,19 +48,300 @@ public final class SubDealerTopComponent extends TopComponent {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanel1 = new javax.swing.JPanel();
+        masterScrollPane = new javax.swing.JScrollPane();
+        masterTable = new javax.swing.JTable();
+        codeLabel = new javax.swing.JLabel();
+        nameLabel = new javax.swing.JLabel();
+        addressNumberLabel = new javax.swing.JLabel();
+        addressStreetLabel = new javax.swing.JLabel();
+        mobileLabel = new javax.swing.JLabel();
+        notesLabel = new javax.swing.JLabel();
+        codeField = new javax.swing.JTextField();
+        nameField = new javax.swing.JTextField();
+        addressNumberField = new javax.swing.JTextField();
+        addressStreetField = new javax.swing.JTextField();
+        phoneField = new javax.swing.JTextField();
+        ownerField = new javax.swing.JTextField();
+        updateButton = new javax.swing.JButton();
+        clearButton = new javax.swing.JButton();
+        deleteButton = new javax.swing.JButton();
+        townLabel = new javax.swing.JLabel();
+        townComboBox = new javax.swing.JComboBox();
+
+        masterTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "#", "Code", "Name", "Mobile"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        masterTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                masterTableMouseReleased(evt);
+            }
+        });
+        masterTable.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                masterTableKeyReleased(evt);
+            }
+        });
+        masterScrollPane.setViewportView(masterTable);
+
+        org.openide.awt.Mnemonics.setLocalizedText(codeLabel, org.openide.util.NbBundle.getMessage(SubDealerTopComponent.class, "SubDealerTopComponent.codeLabel.text")); // NOI18N
+
+        org.openide.awt.Mnemonics.setLocalizedText(nameLabel, org.openide.util.NbBundle.getMessage(SubDealerTopComponent.class, "SubDealerTopComponent.nameLabel.text")); // NOI18N
+
+        org.openide.awt.Mnemonics.setLocalizedText(addressNumberLabel, org.openide.util.NbBundle.getMessage(SubDealerTopComponent.class, "SubDealerTopComponent.addressNumberLabel.text")); // NOI18N
+
+        org.openide.awt.Mnemonics.setLocalizedText(addressStreetLabel, org.openide.util.NbBundle.getMessage(SubDealerTopComponent.class, "SubDealerTopComponent.addressStreetLabel.text")); // NOI18N
+
+        org.openide.awt.Mnemonics.setLocalizedText(mobileLabel, org.openide.util.NbBundle.getMessage(SubDealerTopComponent.class, "SubDealerTopComponent.mobileLabel.text")); // NOI18N
+
+        org.openide.awt.Mnemonics.setLocalizedText(notesLabel, org.openide.util.NbBundle.getMessage(SubDealerTopComponent.class, "SubDealerTopComponent.notesLabel.text")); // NOI18N
+
+        codeField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                codeFieldActionPerformed(evt);
+            }
+        });
+
+        nameField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                nameFieldActionPerformed(evt);
+            }
+        });
+
+        addressNumberField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addressNumberFieldActionPerformed(evt);
+            }
+        });
+
+        addressStreetField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addressStreetFieldActionPerformed(evt);
+            }
+        });
+
+        phoneField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                phoneFieldActionPerformed(evt);
+            }
+        });
+
+        ownerField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ownerFieldActionPerformed(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(updateButton, org.openide.util.NbBundle.getMessage(SubDealerTopComponent.class, "SubDealerTopComponent.updateButton.text")); // NOI18N
+        updateButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                updateButtonActionPerformed(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(clearButton, org.openide.util.NbBundle.getMessage(SubDealerTopComponent.class, "SubDealerTopComponent.clearButton.text")); // NOI18N
+        clearButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                clearButtonActionPerformed(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(deleteButton, org.openide.util.NbBundle.getMessage(SubDealerTopComponent.class, "SubDealerTopComponent.deleteButton.text")); // NOI18N
+        deleteButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteButtonActionPerformed(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(townLabel, org.openide.util.NbBundle.getMessage(SubDealerTopComponent.class, "SubDealerTopComponent.townLabel.text")); // NOI18N
+
+        townComboBox.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                townComboBoxKeyPressed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(masterScrollPane, javax.swing.GroupLayout.Alignment.LEADING, 0, 427, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(notesLabel)
+                            .addComponent(mobileLabel)
+                            .addComponent(codeLabel)
+                            .addComponent(addressStreetLabel)
+                            .addComponent(addressNumberLabel)
+                            .addComponent(nameLabel)
+                            .addComponent(townLabel))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(phoneField)
+                            .addComponent(townComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(addressStreetField)
+                            .addComponent(addressNumberField)
+                            .addComponent(ownerField)
+                            .addComponent(nameField)
+                            .addComponent(codeField, javax.swing.GroupLayout.DEFAULT_SIZE, 340, Short.MAX_VALUE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(updateButton)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(deleteButton)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(clearButton)))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(masterScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE, false)
+                    .addComponent(codeLabel)
+                    .addComponent(codeField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE, false)
+                    .addComponent(nameLabel)
+                    .addComponent(nameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE, false)
+                    .addComponent(notesLabel)
+                    .addComponent(ownerField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(8, 8, 8)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE, false)
+                    .addComponent(addressNumberLabel)
+                    .addComponent(addressNumberField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE, false)
+                    .addComponent(addressStreetLabel)
+                    .addComponent(addressStreetField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE, false)
+                    .addComponent(townLabel)
+                    .addComponent(townComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE, false)
+                    .addComponent(mobileLabel)
+                    .addComponent(phoneField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(clearButton)
+                    .addComponent(deleteButton)
+                    .addComponent(updateButton))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void masterTableMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_masterTableMouseReleased
+        fill();
+    }//GEN-LAST:event_masterTableMouseReleased
+
+    private void masterTableKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_masterTableKeyReleased
+        fill();
+    }//GEN-LAST:event_masterTableKeyReleased
+
+    private void codeFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_codeFieldActionPerformed
+        if (!codeField.getText().trim().equals("")) {
+            nameField.requestFocus();
+        }
+    }//GEN-LAST:event_codeFieldActionPerformed
+
+    private void nameFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nameFieldActionPerformed
+        if (!nameField.getText().trim().equals("")) {
+            ownerField.requestFocus();
+        }
+    }//GEN-LAST:event_nameFieldActionPerformed
+
+    private void addressNumberFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addressNumberFieldActionPerformed
+        addressStreetField.requestFocus();
+    }//GEN-LAST:event_addressNumberFieldActionPerformed
+
+    private void addressStreetFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addressStreetFieldActionPerformed
+        townComboBox.requestFocus();
+    }//GEN-LAST:event_addressStreetFieldActionPerformed
+
+    private void phoneFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_phoneFieldActionPerformed
+        updateButton.requestFocus();
+    }//GEN-LAST:event_phoneFieldActionPerformed
+
+    private void ownerFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ownerFieldActionPerformed
+        addressNumberField.requestFocus();
+    }//GEN-LAST:event_ownerFieldActionPerformed
+
+    private void updateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateButtonActionPerformed
+        update();
+    }//GEN-LAST:event_updateButtonActionPerformed
+
+    private void clearButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearButtonActionPerformed
+        clear();
+    }//GEN-LAST:event_clearButtonActionPerformed
+
+    private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
+        delete();
+    }//GEN-LAST:event_deleteButtonActionPerformed
+
+    private void townComboBoxKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_townComboBoxKeyPressed
+        if(evt.getKeyCode()==10){
+            phoneField.requestFocus();
+        }
+    }//GEN-LAST:event_townComboBoxKeyPressed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField addressNumberField;
+    private javax.swing.JLabel addressNumberLabel;
+    private javax.swing.JTextField addressStreetField;
+    private javax.swing.JLabel addressStreetLabel;
+    private javax.swing.JButton clearButton;
+    private javax.swing.JTextField codeField;
+    private javax.swing.JLabel codeLabel;
+    private javax.swing.JButton deleteButton;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane masterScrollPane;
+    private javax.swing.JTable masterTable;
+    private javax.swing.JLabel mobileLabel;
+    private javax.swing.JTextField nameField;
+    private javax.swing.JLabel nameLabel;
+    private javax.swing.JLabel notesLabel;
+    private javax.swing.JTextField ownerField;
+    private javax.swing.JTextField phoneField;
+    private javax.swing.JComboBox townComboBox;
+    private javax.swing.JLabel townLabel;
+    private javax.swing.JButton updateButton;
     // End of variables declaration//GEN-END:variables
     @Override
     public void componentOpened() {

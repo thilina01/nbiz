@@ -4,8 +4,16 @@
     <configuration>
         <data xmlns="http://www.netbeans.org/ns/nb-module-project/3">
             <code-name-base>com.nanosl.nbiz.gui</code-name-base>
-            <standalone/>
+            <suite-component/>
             <module-dependencies>
+                <dependency>
+                    <code-name-base>com.nanosl.nbiz.ctrl</code-name-base>
+                    <build-prerequisite/>
+                    <compile-dependency/>
+                    <run-dependency>
+                        <specification-version>1.0</specification-version>
+                    </run-dependency>
+                </dependency>
                 <dependency>
                     <code-name-base>org.netbeans.modules.settings</code-name-base>
                     <build-prerequisite/>
@@ -48,7 +56,9 @@
                     </run-dependency>
                 </dependency>
             </module-dependencies>
-            <public-packages/>
+            <public-packages>
+                <package>com.nanosl.nbiz.gui</package>
+            </public-packages>
         </data>
     </configuration>
 </project>
