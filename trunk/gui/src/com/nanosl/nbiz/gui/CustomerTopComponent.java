@@ -4,8 +4,11 @@
  */
 package com.nanosl.nbiz.gui;
 
+import com.nanosl.nbiz.utility.NTopComponent;
+import entity.Customer;
 import java.util.Iterator;
 import java.util.List;
+import javax.swing.table.DefaultTableModel;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
@@ -33,10 +36,10 @@ import org.openide.util.NbBundle.Messages;
     "CTL_CustomerTopComponent=Customer Window",
     "HINT_CustomerTopComponent=This is a Customer window"
 })
-public final class CustomerTopComponent extends TopComponent {
+public final class CustomerTopComponent extends NTopComponent {
 
     public CustomerTopComponent() {
-        initComponents();
+        onLoad();
         setName(Bundle.CTL_CustomerTopComponent());
         setToolTipText(Bundle.HINT_CustomerTopComponent());
 
@@ -369,7 +372,6 @@ public final class CustomerTopComponent extends TopComponent {
             mobileField.requestFocus();
         }
     }//GEN-LAST:event_cityFieldActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField addressNumberField;
     private javax.swing.JLabel addressNumberLabel;
@@ -396,6 +398,116 @@ public final class CustomerTopComponent extends TopComponent {
     private javax.swing.JLabel townCodeLabel;
     private javax.swing.JButton updateButton;
     // End of variables declaration//GEN-END:variables
+    DefaultTableModel tableModel;
+
+    protected void onLoad() {
+        initComponents();
+        tableModel = (DefaultTableModel) masterTable.getModel();
+        clear();
+    }
+
+    private void clear() {
+        clearFields();
+        fillTable();
+    }
+
+    private void fillTable() {
+        List<Customer> customers = m.find(Customer.class);
+        tableModel.setRowCount(0);
+        int i = 0;
+        for (Iterator<Customer> it = customers.iterator(); it.hasNext();) {
+            Customer customer = it.next();
+            Object[] row = {++i, customer.getCode(), customer.getName(), customer.getMobile()};
+            tableModel.addRow(row);
+        }
+    }
+
+    private void clearFields() {
+        codeField.requestFocus();
+        codeField.setText("");
+        nameField.setText("");
+        addressNumberField.setText("");
+        addressStreetField.setText("");
+        cityField.setText("");
+        mobileField.setText("");
+        fixedLineField.setText("");
+        faxField.setText("");
+        notesField.setText("");
+    }
+
+    private void fillData(Customer customer) {
+        codeField.setText(customer.getCode());
+        nameField.setText(customer.getName());
+        addressNumberField.setText(customer.getAddressNumber());
+        addressStreetField.setText(customer.getAddressStreet());
+        cityField.setText(customer.getCity());
+        mobileField.setText(customer.getMobile());
+        fixedLineField.setText(customer.getFixedLine());
+        faxField.setText(customer.getFax());
+        notesField.setText(customer.getNotes());
+    }
+
+    private void fill() {
+        clearFields();
+        int row = masterTable.getSelectedRow();
+        if (row > -1) {
+            Customer customer = m.find(Customer.class, masterTable.getValueAt(row, 1));
+            fillData(customer);
+        }
+    }
+
+    private void delete() {
+        String code = codeField.getText().trim();
+        if (code.equals("")) {
+            codeField.requestFocus();
+            return;
+        }
+        if (m.delete(Customer.class, code)) {
+            clear();
+            return;
+        }
+        showError("Unable to delete " + code);
+    }
+
+    private void update() {
+        String code = codeField.getText().trim();
+        String name = nameField.getText().trim();
+        if (code.equals("")) {
+            codeField.requestFocus();
+            return;
+        }
+        if (name.equals("")) {
+            nameField.requestFocus();
+            return;
+        }
+
+        String addressNumber = addressNumberField.getText().trim();
+        String addressStreet = addressStreetField.getText().trim();
+        String mobile = mobileField.getText().trim();
+        String fixedLine = fixedLineField.getText().trim();
+        String fax = faxField.getText().trim();
+        String notes = notesField.getText().trim();
+        String city = cityField.getText().trim();
+        Customer customer = m.find(Customer.class, code);
+        if (customer == null) {
+            customer = new Customer(code);
+        }
+        customer.setName(name);
+        customer.setAddressNumber(addressNumber);
+        customer.setAddressStreet(addressStreet);
+        customer.setFax(fax);
+        customer.setFixedLine(fixedLine);
+        customer.setMobile(mobile);
+        customer.setNotes(notes);
+        customer.setCity(city);
+        if (m.update(customer)) {
+            clear();
+            codeField.requestFocus();
+            return;
+        }
+        showError("Unable to update " + code);
+    }
+
     @Override
     public void componentOpened() {
         // TODO add custom code on component opening
@@ -417,33 +529,4 @@ public final class CustomerTopComponent extends TopComponent {
         String version = p.getProperty("version");
         // TODO read your settings according to their version
     }
-     private void clear() {
-        clearFields();
-        fillTable();
-    }
-      private void clearFields() {
-        codeField.requestFocus();
-        codeField.setText("");
-        nameField.setText("");
-        addressNumberField.setText("");
-        addressStreetField.setText("");
-        cityField.setText("");
-        mobileField.setText("");
-        fixedLineField.setText("");
-        faxField.setText("");
-        notesField.setText("");
-    }
-      private void fillTable() {
-        List<Customer> customers = m.find(Customer.class);
-        tableModel.setRowCount(0);
-        int i = 0;
-        for (Iterator<Customer> it = customers.iterator(); it.hasNext();) {
-            Customer customer = it.next();
-            Object[] row = {++i, customer.getCode(), customer.getName(), customer.getMobile()};
-            tableModel.addRow(row);
-        }
-      
 }
-
-
-

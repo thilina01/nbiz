@@ -8,11 +8,12 @@ import com.nanosl.lib.date.JXDatePicker;
 import com.nanosl.nbiz.utility.NTopComponent;
 import entity.Item;
 import entity.PriceList;
-import java.awt.Color;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.table.DefaultTableModel;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
@@ -44,7 +45,7 @@ import static util.Format.nf2d;
 public final class CostPriceChangeTopComponent extends NTopComponent {
 
     public CostPriceChangeTopComponent() {
-        initComponents();
+        onLoad();
         setName(Bundle.CTL_CostPriceChangeTopComponent());
         setToolTipText(Bundle.HINT_CostPriceChangeTopComponent());
 
@@ -191,15 +192,12 @@ public final class CostPriceChangeTopComponent extends NTopComponent {
     }// </editor-fold>//GEN-END:initComponents
 
     private void masterTableMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_masterTableMouseReleased
-
     }//GEN-LAST:event_masterTableMouseReleased
 
     private void masterTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_masterTableMouseClicked
-
     }//GEN-LAST:event_masterTableMouseClicked
 
     private void masterTableKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_masterTableKeyReleased
-
     }//GEN-LAST:event_masterTableKeyReleased
 
     private void itemComboBoxKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_itemComboBoxKeyPressed
@@ -216,7 +214,6 @@ public final class CostPriceChangeTopComponent extends NTopComponent {
     private void processButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_processButtonActionPerformed
         process();
     }//GEN-LAST:event_processButtonActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox itemComboBox;
     private javax.swing.JLabel jLabel1;
@@ -228,6 +225,8 @@ public final class CostPriceChangeTopComponent extends NTopComponent {
     private javax.swing.JTextField newPriceTextField;
     private javax.swing.JButton processButton;
     // End of variables declaration//GEN-END:variables
+    DefaultTableModel tableModel;
+
     @Override
     public void componentOpened() {
         // TODO add custom code on component opening
@@ -249,8 +248,7 @@ public final class CostPriceChangeTopComponent extends NTopComponent {
         String version = p.getProperty("version");
         // TODO read your settings according to their version
     }
-    
-    
+
     private void addToTable() {
         try {
             double newCostPrice = Double.valueOf(newPriceTextField.getText().trim());
@@ -275,7 +273,7 @@ public final class CostPriceChangeTopComponent extends NTopComponent {
             newPriceTextField.setText("");
             itemComboBox.requestFocus();
         } catch (NumberFormatException numberFormatException) {
-            setStatusMessage("Invalid Price", Color.RED);
+            showError("Invalid Price");
         }
     }
 
@@ -284,7 +282,7 @@ public final class CostPriceChangeTopComponent extends NTopComponent {
         if (rowCount > 0) {
             Date date = jXDatePicker1.getDate();
             if (date == null) {
-                setStatusMessage("No date selected", Color.RED);
+                showError("No date selected");
                 return;
             }
             List<Serializable> serializables = new ArrayList<Serializable>();
@@ -298,7 +296,7 @@ public final class CostPriceChangeTopComponent extends NTopComponent {
                 serializables.add(item);
             }
             if (m.update(serializables)) {
-                setStatusMessage("Update Success");
+                showSuccess("Update Success");
                 reset();
             } else {
                 showError("Update Failed");
@@ -306,4 +304,15 @@ public final class CostPriceChangeTopComponent extends NTopComponent {
         }
     }
 
+    protected void onLoad() {
+        initComponents();
+        // AutoCompleteDecorator.decorate(itemComboBox);
+        tableModel = (DefaultTableModel) masterTable.getModel();
+    }
+
+    private void reset() {
+        tableModel.setRowCount(0);
+        itemComboBox.setModel(new DefaultComboBoxModel(m.find(Item.class).toArray()));
+        newPriceTextField.setText("");
+    }
 }

@@ -4,6 +4,11 @@
  */
 package com.nanosl.nbiz.gui;
 
+import com.nanosl.nbiz.utility.Data;
+import com.nanosl.nbiz.utility.NTopComponent;
+import com.nanosl.nbiz.utility.Printer;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
@@ -31,7 +36,7 @@ import org.openide.util.NbBundle.Messages;
     "CTL_FindInvoiceTopComponent=FindInvoice Window",
     "HINT_FindInvoiceTopComponent=This is a FindInvoice window"
 })
-public final class FindInvoiceTopComponent extends TopComponent {
+public final class FindInvoiceTopComponent extends NTopComponent {
 
     public FindInvoiceTopComponent() {
         initComponents();
@@ -127,14 +132,14 @@ public final class FindInvoiceTopComponent extends TopComponent {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(156, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(137, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -149,7 +154,6 @@ public final class FindInvoiceTopComponent extends TopComponent {
         params.put("receipt", receiptNumber);
         Printer.printReceipt(params);
     }//GEN-LAST:event_printReceiptButtonActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField invoiceNumberTextField;
     private javax.swing.JLabel jLabel1;
@@ -160,6 +164,14 @@ public final class FindInvoiceTopComponent extends TopComponent {
     private javax.swing.JButton printReceiptButton;
     private javax.swing.JTextField receiptNumberTextField;
     // End of variables declaration//GEN-END:variables
+
+    private void printInvoice() {
+        String invoiceNumber = invoiceNumberTextField.getText().trim();
+        Map<String, Object> params = Data.getParams();
+        params.put("invoice", invoiceNumber);
+        Printer.printInvoice(params);
+    }
+
     @Override
     public void componentOpened() {
         // TODO add custom code on component opening

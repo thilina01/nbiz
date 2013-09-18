@@ -250,8 +250,8 @@ public final class StockTopComponent extends NTopComponent {
         tableModel.setRowCount(0);
         int i = 0;
         double total = 0;
-        manager.clearCache();
-        List<Stock> stocks = allRadioButton.isSelected() ? manager.find(Stock.class) : Find.stockLessMinLimit();
+        m.clearCache();
+        List<Stock> stocks = allRadioButton.isSelected() ? m.find(Stock.class) : Find.stockLessMinLimit();
         for (Iterator<Stock> it = stocks.iterator(); it.hasNext();) {
             Stock stock = it.next();
             Item item = stock.getItem();

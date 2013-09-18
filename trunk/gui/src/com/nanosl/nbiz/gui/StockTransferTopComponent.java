@@ -304,8 +304,8 @@ public final class StockTransferTopComponent extends NTopComponent {
             stock.setItem(item);
             stock.setQuantity(0.0);
             item.setStock(stock);
-            manager.update(stock);
-            manager.update(item);
+            m.update(stock);
+            m.update(item);
         }
         quantityLabel.setText(nf3d.format(stock.getQuantity()));
     }//GEN-LAST:event_itemComboBoxActionPerformed
@@ -363,11 +363,11 @@ public final class StockTransferTopComponent extends NTopComponent {
     }
 
     private void fillItems() {
-        itemComboBox.setModel(new DefaultComboBoxModel(manager.find(Item.class).toArray()));
+        itemComboBox.setModel(new DefaultComboBoxModel(m.find(Item.class).toArray()));
     }
 
     private void fillReps() {
-        repComboBox.setModel(new DefaultComboBoxModel(manager.find(Employee.class).toArray()));
+        repComboBox.setModel(new DefaultComboBoxModel(m.find(Employee.class).toArray()));
     }
 
     private void clear() {
@@ -387,7 +387,7 @@ public final class StockTransferTopComponent extends NTopComponent {
         List<Serializable> serializables = new ArrayList<Serializable>();
         Employee rep = (Employee) repComboBox.getSelectedItem();
         for (int i = 0; i < tableModel.getRowCount(); i++) {
-            Item item = manager.find(Item.class, tableModel.getValueAt(i, 1).toString());
+            Item item = m.find(Item.class, tableModel.getValueAt(i, 1).toString());
             Stock stock = item.getStock();
             double quantity = Double.valueOf(tableModel.getValueAt(i, 3).toString());
             double rate = Double.valueOf(tableModel.getValueAt(i, 4).toString());
@@ -408,7 +408,7 @@ public final class StockTransferTopComponent extends NTopComponent {
                 serializables.add(priceList);
             }
             SrStockPK srStockPK = new SrStockPK(rep.getCode(), item.getCode());
-            SrStock srStock = manager.find(SrStock.class, srStockPK);
+            SrStock srStock = m.find(SrStock.class, srStockPK);
             if (srStock == null) {
                 srStock = new SrStock(srStockPK);
                 srStock.setItem(item);
@@ -423,7 +423,7 @@ public final class StockTransferTopComponent extends NTopComponent {
             serializables.add(stockTransfer);
             serializables.add(srStock);
         }
-        if (manager.update(serializables)) {
+        if (m.update(serializables)) {
             showSuccess("Update Success");
 //            setStatusMessage("Update Success");
             clear();
@@ -442,8 +442,8 @@ public final class StockTransferTopComponent extends NTopComponent {
             stock.setItem(item);
             stock.setQuantity(0.0);
             item.setStock(stock);
-            manager.update(stock);
-            manager.update(item);
+            m.update(stock);
+            m.update(item);
         }
         quantityLabel.setText(nf3d.format(stock.getQuantity()));
     }
@@ -470,7 +470,7 @@ public final class StockTransferTopComponent extends NTopComponent {
         }
         Employee rep = (Employee) repComboBox.getSelectedItem();
         SrStockPK srStockPK = new SrStockPK(rep.getCode(), item.getCode());
-        SrStock srStock = manager.find(SrStock.class, srStockPK);
+        SrStock srStock = m.find(SrStock.class, srStockPK);
         if (srStock == null) {
             srStock = new SrStock(srStockPK);
             srStock.setBundles(0.0);
@@ -479,8 +479,8 @@ public final class StockTransferTopComponent extends NTopComponent {
             srStock.setPackPrice(item.getPriceList().getSellingPack());
             srStock.setQuantity(0.0);
             srStock.setUnitPrice(item.getPriceList().getSellingUnit());
-            manager.update(srStock);
-            srStock = manager.find(SrStock.class, srStockPK);
+            m.update(srStock);
+            srStock = m.find(SrStock.class, srStockPK);
         }
         int i = tableModel.getRowCount();
         double rate = srStock.getPackPrice() == null ? 0.0 : srStock.getPackPrice();

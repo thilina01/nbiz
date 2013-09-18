@@ -4,14 +4,46 @@
  */
 package com.nanosl.nbiz.gui;
 
+import com.nanosl.lib.date.JXDatePicker;
+import com.nanosl.lib.log.Loggings;
+import com.nanosl.nbiz.utility.Data;
+import com.nanosl.nbiz.utility.NTopComponent;
+import com.nanosl.nbiz.utility.Printer;
+import entity.Bank;
+import entity.CanceledInvoice;
+import entity.CanceledInvoiceHasItem;
+import entity.CollectionReceipt;
+import entity.Customer;
+import entity.Item;
+import entity.SaleCash;
+import entity.SaleCheque;
+import entity.SaleChequePK;
+import entity.SaleInvoice;
+import entity.SaleInvoiceHasItem;
+import entity.Stock;
+import java.awt.Component;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JComponent;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
+import static util.Format.nf2d;
+import static util.Format.yyyy_MM_dd;
 
 /**
  * Top component which displays something.
@@ -34,10 +66,10 @@ import org.openide.util.NbBundle.Messages;
     "CTL_SaleInvoicePaymentTopComponent=SaleInvoicePayment Window",
     "HINT_SaleInvoicePaymentTopComponent=This is a SaleInvoicePayment window"
 })
-public final class SaleInvoicePaymentTopComponent extends TopComponent {
+public final class SaleInvoicePaymentTopComponent extends NTopComponent {
 
     public SaleInvoicePaymentTopComponent() {
-        initComponents();
+        onLoad();
         setName(Bundle.CTL_SaleInvoicePaymentTopComponent());
         setToolTipText(Bundle.HINT_SaleInvoicePaymentTopComponent());
 
@@ -442,7 +474,6 @@ public final class SaleInvoicePaymentTopComponent extends TopComponent {
     }//GEN-LAST:event_cancelButtonActionPerformed
 
     private void customerDetailsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_customerDetailsButtonActionPerformed
-        CustomerView.display(customer);
     }//GEN-LAST:event_customerDetailsButtonActionPerformed
 
     private void paymentAmountTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_paymentAmountTextFieldActionPerformed
@@ -488,7 +519,6 @@ public final class SaleInvoicePaymentTopComponent extends TopComponent {
             receiptNumberTextField.requestFocus();
         }
     }//GEN-LAST:event_receiptDatePickerKeyPressed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField amountField;
     private javax.swing.JComboBox bankComboBox;
@@ -528,9 +558,309 @@ public final class SaleInvoicePaymentTopComponent extends TopComponent {
     // End of variables declaration//GEN-END:variables
     DefaultTableModel invoiceDtm;
     DefaultTableModel paymentDtm;
-    
-     Customer customer;
-    
+    SaleInvoice saleInvoice;
+    Customer customer;
+
+    protected void onLoad() {
+        initComponents();
+        invoiceDtm = (DefaultTableModel) invoiceTable.getModel();
+        paymentDtm = (DefaultTableModel) paymentTable.getModel();
+        KeyAdapter();
+    }
+
+    @Override
+    public void setVisible(boolean b) {
+        super.setVisible(b);
+        clearAll();
+    }
+
+    private void fillInvoiceTable() {
+        invoiceDtm.setRowCount(0);
+        paymentDtm.setRowCount(0);
+        for (Iterator<SaleInvoice> it = m.find(SaleInvoice.class).iterator(); it.hasNext();) {
+            SaleInvoice si = it.next();
+            double receivedAmount = si.getReceivedAmount() == null ? 0 : si.getReceivedAmount();
+            if (si.getAmount() > receivedAmount) {
+                Object[] rowData = {si.getInvNo()};
+                invoiceDtm.addRow(rowData);
+            }
+        }
+    }
+
+    private void fill() {
+        saleInvoice = null;
+        int selectedRow = invoiceTable.getSelectedRow();
+        if (selectedRow > -1) {
+            saleInvoice = m.find(SaleInvoice.class, invoiceTable.getValueAt(selectedRow, 0));
+            fill(saleInvoice);
+        }
+    }
+
+    public void fill(SaleInvoice saleInvoice) {
+        clearAll();
+        customer = saleInvoice.getCustomer();
+        invoiceNumberField.setText(saleInvoice.getInvNo());
+        invoiceDateField.setText(yyyy_MM_dd.format(saleInvoice.getInvTime()));
+        customerNameField.setText(saleInvoice.getCustomer().getName());
+        amountField.setText(nf2d.format(saleInvoice.getAmount()));
+        double amount = saleInvoice.getAmount() == null ? 0 : saleInvoice.getAmount();
+        double receivedAmount = saleInvoice.getReceivedAmount() == null ? 0 : saleInvoice.getReceivedAmount();
+        remainingAmountField.setText(nf2d.format(amount - receivedAmount));
+    }
+
+    private void addPay() {
+        try {
+            double paymentAmount = Double.valueOf(paymentAmountTextField.getText().trim());
+            if (paymentAmount > 0) {
+                String chequeNumber = chequeNumbertField.getText().trim();
+                if (!chequeNumber.equals("")) {
+                    Date bankingDate = bankingDatePicker.getDate();
+                    if (bankingDate != null) {
+                        Object[] row = {nf2d.format(paymentAmount), chequeNumber, yyyy_MM_dd.format(bankingDate), ((Bank) bankComboBox.getSelectedItem()).getCode()};
+                        fillPaymentTable(row);
+                    }
+                } else {
+                    for (int i = 0; i < paymentTable.getRowCount(); i++) {
+                        if (paymentTable.getValueAt(i, 1) == null) {
+                            paymentAmount += Double.valueOf(paymentTable.getValueAt(i, 0).toString());
+                            paymentTable.setValueAt(nf2d.format(paymentAmount), i, 0);
+                            clearPaymentFields();
+                            calcRemaining();
+                            return;
+                        }
+                    }
+                    Object[] row = {nf2d.format(paymentAmount)};
+                    fillPaymentTable(row);
+                }
+            }
+        } catch (NumberFormatException e) {
+        } catch (Exception e) {
+            Loggings.logError(getName(), e);
+        }
+    }
+
+    private void fillPaymentTable(Object[] row) {
+        paymentDtm.addRow(row);
+        clearPaymentFields();
+        calcRemaining();
+        calcPaid();
+    }
+
+    private void deletePaymentRow(int selectedRow) {
+        if (selectedRow > -1) {
+            paymentDtm.removeRow(selectedRow);
+            calcRemaining();
+        }
+    }
+
+    private void calcRemaining() {
+        SaleInvoice saleInvoice = m.find(SaleInvoice.class, invoiceNumberField.getText().trim());
+        double remaining = saleInvoice.getAmount() - (saleInvoice.getReceivedAmount() == null ? 0 : saleInvoice.getReceivedAmount());
+        int rowCount = paymentTable.getRowCount();
+        for (int i = 0; i < rowCount; i++) {
+            remaining = remaining - Double.valueOf(paymentTable.getValueAt(i, 0).toString());
+        }
+        remainingAmountField.setText(nf2d.format(remaining));
+    }
+
+    private void clearPaymentFields() {
+        chequeNumbertField.setText("");
+        paymentAmountTextField.setText("");
+    }
+
+    private void clearAll() {
+        invoiceNumberField.setText("");
+        invoiceDateField.setText("");
+        customerNameField.setText("");
+        amountField.setText("");
+        remainingAmountField.setText("");
+        paidTextField.setText("");
+        clearPaymentFields();
+        paymentDtm.setRowCount(0);
+        customer = null;
+        fillInvoiceTable();
+        fillBanks();
+    }
+
+    private void process() {
+        int rowCount = paymentTable.getRowCount();
+        if (rowCount == 0) {
+            return;
+        }
+        try {
+            List<Serializable> serializables = new ArrayList<Serializable>();
+            String invoiceNumber = invoiceNumberField.getText().trim();
+            SaleInvoice saleInvoice = m.find(SaleInvoice.class, invoiceNumber);
+            String receiptNumber = receiptNumberTextField.getText().trim();
+            double paidAmount = Double.parseDouble(paidTextField.getText().trim());
+            if (receiptNumber.isEmpty()) {
+                showError("Receipt Number Required.");
+                return;
+            }
+            CollectionReceipt collectionReceipt = m.find(CollectionReceipt.class, receiptNumber);
+            if (collectionReceipt != null) {
+                showError("Receipt " + receiptNumber + " Already Updated.");
+                return;
+            }
+            collectionReceipt = new CollectionReceipt(receiptNumber);
+            Date collectedTime = receiptDatePicker.getDate();
+            double collectedAmount = Double.valueOf(paidTextField.getText().trim());
+            collectionReceipt.setCollectedTime(collectedTime);
+            collectionReceipt.setSaleInvoice(saleInvoice);
+            collectionReceipt.setCash(collectedAmount);
+
+            List<SaleCheque> saleCheques = new ArrayList<SaleCheque>();
+            for (int i = 0; i < rowCount; i++) {
+                Object o = paymentTable.getValueAt(i, 1);
+                String chequeNumber = o == null ? "" : o.toString().trim();
+                double amount = Double.valueOf(paymentTable.getValueAt(i, 0).toString());
+                if (chequeNumber.equals("")) {
+                    SaleCash saleCash = new SaleCash(receiptNumber);
+                    saleCash.setAmount(amount);
+                    saleCash.setCollectionReceipt(collectionReceipt);
+                    collectionReceipt.setSaleCash(saleCash);
+                    serializables.add(saleCash);
+                } else {
+                    Date bankingDate = yyyy_MM_dd.parse(paymentTable.getValueAt(i, 2).toString());
+                    String bankCode = paymentTable.getValueAt(i, 3).toString();
+                    Bank bank = m.find(Bank.class, bankCode);
+                    SaleChequePK saleChequePK = new SaleChequePK(chequeNumber, bankCode, receiptNumber);
+                    SaleCheque saleCheque = new SaleCheque(saleChequePK);
+                    saleCheque.setAmount(amount);
+                    saleCheque.setBank(bank);
+                    saleCheque.setBankingDate(bankingDate);
+                    saleCheque.setCollectionReceipt(collectionReceipt);
+                    saleCheque.setStatus(0);
+                    saleCheques.add(saleCheque);
+                    serializables.add(saleCheque);
+                }
+            }
+            collectionReceipt.setSaleChequeCollection(saleCheques);
+            serializables.add(collectionReceipt);
+            double remainingAmount = Double.valueOf(remainingAmountField.getText().trim());
+            saleInvoice.setCredit(remainingAmount);
+            saleInvoice.setReceivedAmount(saleInvoice.getAmount() - remainingAmount);
+            serializables.add(saleInvoice);
+            if (m.update(serializables)) {
+                Map<String, Object> params = new LinkedHashMap<String, Object>();
+                params.put("invoice", invoiceNumber);
+                params.put("receipt", receiptNumber);
+                params.put("paidAmount", paidAmount);
+                Printer.printReceipt(params);
+                showSuccess("Update Success.");
+                clearAll();
+                return;
+            }
+        } catch (Exception ex) {
+            Loggings.logError(getName(), ex);
+        }
+        showError("Unable to complete payment!");
+    }
+
+    private void fillBanks() {
+        bankComboBox.setModel(new DefaultComboBoxModel(m.find(Bank.class).toArray()));
+    }
+
+    private void KeyAdapter() {
+        AutoCompleteDecorator.decorate(bankComboBox);
+        setComboBoxKeyAdapters(bankComboBox);
+        setComboBoxKeyAdapters(bankingDatePicker);
+        setComboBoxKeyAdapters(receiptDatePicker);
+    }
+
+    private void setComboBoxKeyAdapters(JComponent comp) {
+        String compName = comp.getName();
+        Component component[] = comp.getComponents();
+        for (int i = 0; i < component.length; i++) {
+            if (compName.equals("bankCombo")) {
+                component[i].addKeyListener(bankComboBoxKeyAdapter);
+            } else if (compName.equals("bankingDatePicker")) {
+                component[i].addKeyListener(bankingDatePickerKeyAdapter);
+            } else if (compName.equals("receiptDatePicker")) {
+                component[i].addKeyListener(receiptDatePickerKeyAdapter);
+            }
+
+        }
+    }
+    KeyAdapter bankComboBoxKeyAdapter = new java.awt.event.KeyAdapter() {
+        @Override
+        public void keyPressed(KeyEvent evt) {
+            bankComboBoxKeyAdapter.keyPressed(evt);
+        }
+    };
+    KeyAdapter bankingDatePickerKeyAdapter = new java.awt.event.KeyAdapter() {
+        @Override
+        public void keyPressed(KeyEvent evt) {
+            bankingDatePickerKeyPressed(evt);
+        }
+    };
+    KeyAdapter receiptDatePickerKeyAdapter = new java.awt.event.KeyAdapter() {
+        @Override
+        public void keyPressed(KeyEvent evt) {
+            receiptDatePickerKeyPressed(evt);
+        }
+    };
+
+    private void cancelInvoice() {
+        String invoiceNumber = invoiceNumberField.getText().trim();
+        SaleInvoice saleInvoice = m.find(SaleInvoice.class, invoiceNumber);
+        if (saleInvoice == null) {
+            showError("No Invoice Selected.");
+            return;
+        }
+        if (saleInvoice.getReceivedAmount() > 0) {
+            showError("Allowed only non paid Invoices.");
+            return;
+        }
+        int c = JOptionPane.showConfirmDialog(this, "Are you sure to cancel the Invoice and Return the items to stock?", "Confirm", JOptionPane.YES_NO_OPTION);
+        if (c != JOptionPane.YES_OPTION) {
+            return;
+        }
+        CanceledInvoice canceledInvoice = new CanceledInvoice(invoiceNumber);
+        Collection<CanceledInvoiceHasItem> canceledInvoiceHasItems = new ArrayList<CanceledInvoiceHasItem>();
+
+        Collection<SaleInvoiceHasItem> saleInvoiceHasItems = saleInvoice.getSaleInvoiceHasItemCollection();
+        List<Serializable> serializables = new ArrayList<Serializable>();
+        for (Iterator<SaleInvoiceHasItem> it = saleInvoiceHasItems.iterator(); it.hasNext();) {
+            SaleInvoiceHasItem saleInvoiceHasItem = it.next();
+            Item item = m.find(Item.class, saleInvoiceHasItem.getItem().getCode());
+            CanceledInvoiceHasItem canceledInvoiceHasItem = new CanceledInvoiceHasItem(invoiceNumber, item.getCode());
+            canceledInvoiceHasItem.setCanceledInvoice(canceledInvoice);
+            canceledInvoiceHasItem.setItem(item);
+            canceledInvoiceHasItem.setDiscount(saleInvoiceHasItem.getDiscount());
+            canceledInvoiceHasItem.setQuantity(saleInvoiceHasItem.getQuantity());
+            canceledInvoiceHasItem.setRate(saleInvoiceHasItem.getRate());
+            canceledInvoiceHasItems.add(canceledInvoiceHasItem);
+            serializables.add(canceledInvoiceHasItem);
+            Stock stock = item.getStock();
+            double remainingQuantity = stock.getQuantity();
+            stock.setQuantity(remainingQuantity + saleInvoiceHasItem.getQuantity());
+            serializables.add(stock);
+        }
+        canceledInvoice.setAmount(saleInvoice.getAmount());
+        canceledInvoice.setCredit(saleInvoice.getCredit());
+        canceledInvoice.setCustomer(saleInvoice.getCustomer());
+        canceledInvoice.setDiscount(saleInvoice.getDiscount());
+        canceledInvoice.setInvTime(saleInvoice.getInvTime());
+        canceledInvoice.setOperator(Data.getOperator().getEmployee().getCode());
+        canceledInvoice.setReceivedAmount(saleInvoice.getReceivedAmount());
+        canceledInvoice.setCanceledInvoiceHasItemCollection(canceledInvoiceHasItems);
+        serializables.add(canceledInvoice);
+        if (m.update(serializables)) {
+            m.delete(SaleInvoice.class, saleInvoice.getInvNo());
+            showSuccess("Invoice Canceled");
+            clearAll();
+        }
+    }
+
+    private void calcPaid() {
+        double paid = 0;
+        for (int i = 0; i < paymentDtm.getRowCount(); i++) {
+            paid += Double.valueOf(paymentDtm.getValueAt(i, 0).toString());
+        }
+        paidTextField.setText(nf2d.format(paid));
+    }
+
     @Override
     public void componentOpened() {
         // TODO add custom code on component opening
@@ -552,37 +882,4 @@ public final class SaleInvoicePaymentTopComponent extends TopComponent {
         String version = p.getProperty("version");
         // TODO read your settings according to their version
     }
-    private void clearPaymentFields() {
-        chequeNumbertField.setText("");
-        paymentAmountTextField.setText("");
-    }
-    
-     private void clearAll() {
-        invoiceNumberField.setText("");
-        invoiceDateField.setText("");
-        customerNameField.setText("");
-        amountField.setText("");
-        remainingAmountField.setText("");
-        paidTextField.setText("");
-        clearPaymentFields();
-        paymentDtm.setRowCount(0);
-        customer = null;
-        fillInvoiceTable();
-        fillBanks();
-    }
-      private void fillInvoiceTable() {
-        invoiceDtm.setRowCount(0);
-        paymentDtm.setRowCount(0);
-        for (Iterator<SaleInvoice> it = m.find(SaleInvoice.class).iterator(); it.hasNext();) {
-            SaleInvoice si = it.next();
-            double receivedAmount = si.getReceivedAmount() == null ? 0 : si.getReceivedAmount();
-            if (si.getAmount() > receivedAmount) {
-                Object[] rowData = {si.getInvNo()};
-                invoiceDtm.addRow(rowData);
-            }
-        }
-        private void fillBanks() {
-        bankComboBox.setModel(new DefaultComboBoxModel(m.find(Bank.class).toArray()));
-    }
 }
-

@@ -4,9 +4,13 @@
  */
 package com.nanosl.nbiz.gui;
 
+import com.nanosl.nbiz.utility.NTopComponent;
+import entity.Employee;
+import entity.EmployeePosition;
 import java.util.Iterator;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.table.DefaultTableModel;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
@@ -34,7 +38,7 @@ import org.openide.util.NbBundle.Messages;
     "CTL_EmployeeTopComponent=Employee Window",
     "HINT_EmployeeTopComponent=This is a Employee window"
 })
-public final class EmployeeTopComponent extends TopComponent {
+public final class EmployeeTopComponent extends NTopComponent {
 
     public EmployeeTopComponent() {
         initComponents();
@@ -397,7 +401,6 @@ public final class EmployeeTopComponent extends TopComponent {
             addressNumberField.requestFocus();
         }
     }//GEN-LAST:event_positionComboBoxKeyPressed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField addressNumberField;
     private javax.swing.JLabel addressNumberLabel;
@@ -426,6 +429,119 @@ public final class EmployeeTopComponent extends TopComponent {
     private javax.swing.JComboBox positionComboBox;
     private javax.swing.JButton updateButton;
     // End of variables declaration//GEN-END:variables
+    DefaultTableModel tableModel;
+
+    protected void onLoad() {
+        initComponents();
+        tableModel = (DefaultTableModel) masterTable.getModel();
+        clear();
+    }
+
+    private void clear() {
+        clearFields();
+        fillTable();
+        fillPositions();
+    }
+
+    private void fillTable() {
+        List<Employee> employees = m.find(Employee.class);
+        tableModel.setRowCount(0);
+        int i = 0;
+        for (Iterator<Employee> it = employees.iterator(); it.hasNext();) {
+            Employee emp = it.next();
+            Object[] row = {++i, emp.getCode(), emp.getFirstName() + " " + emp.getLastName(), emp.getMobile()};
+            tableModel.addRow(row);
+        }
+    }
+
+    private void fillPositions() {
+        positionComboBox.setModel(new DefaultComboBoxModel(m.find(EmployeePosition.class).toArray()));
+    }
+
+    private void clearFields() {
+        codeField.requestFocus();
+        codeField.setText("");
+        firstNameField.setText("");
+        lastNameField.setText("");
+        addressNumberField.setText("");
+        addressStreetField.setText("");
+        cityField.setText("");
+        mobileField.setText("");
+        fixedLineField.setText("");
+        notesField.setText("");
+    }
+
+    private void fill() {
+        clearFields();
+        int row = masterTable.getSelectedRow();
+        if (row > -1) {
+            Employee employee = m.find(Employee.class, masterTable.getValueAt(row, 1));
+            codeField.setText(employee.getCode());
+            firstNameField.setText(employee.getFirstName());
+            lastNameField.setText(employee.getLastName());
+            addressNumberField.setText(employee.getAddressNumber());
+            addressStreetField.setText(employee.getAddressStreet());
+            cityField.setText(employee.getCity());
+            mobileField.setText(employee.getMobile());
+            fixedLineField.setText(employee.getFixedLine());
+            notesField.setText(employee.getNotes());
+            positionComboBox.setSelectedItem(employee.getEmployeePosition());
+        }
+    }
+
+    private void delete() {
+        String code = codeField.getText().trim();
+        if (code.equals("")) {
+            codeField.requestFocus();
+            return;
+        }
+        if (m.delete(Employee.class, code)) {
+            clear();
+            return;
+        }
+        showError("Unable to delete " + code);
+    }
+
+    private void update() {
+        String code = codeField.getText().trim();
+        String firstName = firstNameField.getText().trim();
+        String lastName = lastNameField.getText().trim();
+        if (code.equals("")) {
+            codeField.requestFocus();
+            return;
+        }
+        if (firstName.equals("")) {
+            firstNameField.requestFocus();
+            return;
+        }
+
+        String addressNumber = addressNumberField.getText().trim();
+        String addressStreet = addressStreetField.getText().trim();
+        String mobile = mobileField.getText().trim();
+        String fixedLine = fixedLineField.getText().trim();
+        String notes = notesField.getText().trim();
+        String city = cityField.getText().trim();
+        Employee employee = m.find(Employee.class, code);
+        if (employee == null) {
+            employee = new Employee(code);
+        }
+        employee.setFirstName(firstName);
+        employee.setLastName(lastName);
+        employee.setEmployeePosition((EmployeePosition) positionComboBox.getSelectedItem());
+        employee.setAddressNumber(addressNumber);
+        employee.setAddressStreet(addressStreet);
+        employee.setFixedLine(fixedLine);
+        employee.setMobile(mobile);
+        employee.setNotes(notes);
+        employee.setCity(city);
+        if (m.update(employee)) {
+            clear();
+            codeField.requestFocus();
+            return;
+        }
+        showError("Unable to update " + code);
+    }
+
     @Override
     public void componentOpened() {
         // TODO add custom code on component opening
@@ -447,34 +563,4 @@ public final class EmployeeTopComponent extends TopComponent {
         String version = p.getProperty("version");
         // TODO read your settings according to their version
     }
-     private void clear() {
-        clearFields();
-        fillTable();
-        fillPositions();
-    }
-      private void clearFields() {
-        codeField.requestFocus();
-        codeField.setText("");
-        firstNameField.setText("");
-        lastNameField.setText("");
-        addressNumberField.setText("");
-        addressStreetField.setText("");
-        cityField.setText("");
-        mobileField.setText("");
-        fixedLineField.setText("");
-        notesField.setText("");
-    }
-      private void fillTable() {
-        List<Employee> employees = m.find(Employee.class);
-        tableModel.setRowCount(0);
-        int i = 0;
-        for (Iterator<Employee> it = employees.iterator(); it.hasNext();) {
-            Employee emp = it.next();
-            Object[] row = {++i, emp.getCode(), emp.getFirstName() + " " + emp.getLastName(), emp.getMobile()};
-            tableModel.addRow(row);
-        }
-         private void fillPositions() {
-        positionComboBox.setModel(new DefaultComboBoxModel(m.find(EmployeePosition.class).toArray()));
-    }
 }
-

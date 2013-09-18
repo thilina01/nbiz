@@ -4,11 +4,41 @@
  */
 package com.nanosl.nbiz.gui;
 
+import com.nanosl.lib.date.JXDatePicker;
+import com.nanosl.nbiz.utility.Combo;
+import com.nanosl.nbiz.utility.Data;
+import com.nanosl.nbiz.utility.NTopComponent;
+import com.nanosl.nbiz.utility.Printer;
+import entity.CollectionReceipt;
+import entity.Customer;
+import entity.Item;
+import entity.PriceList;
+import entity.SaleCash;
+import entity.SaleInvoice;
+import entity.SaleInvoiceHasItem;
+import entity.SaleInvoiceHasItemPK;
+import entity.Stock;
+import java.awt.Component;
+import java.awt.GraphicsEnvironment;
+import java.awt.Rectangle;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import javax.swing.JComboBox;
+import javax.swing.table.DefaultTableModel;
+import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
+import static util.Format.nf2d;
+import static util.Format.nf3d;
+import static util.Format.yyyy_MM_dd;
 
 /**
  * Top component which displays something.
@@ -31,10 +61,10 @@ import org.openide.util.NbBundle.Messages;
     "CTL_POSTopComponent=POS Window",
     "HINT_POSTopComponent=This is a POS window"
 })
-public final class POSTopComponent extends TopComponent {
+public final class POSTopComponent extends NTopComponent {
 
     public POSTopComponent() {
-        initComponents();
+        onLoad();
         setName(Bundle.CTL_POSTopComponent());
         setToolTipText(Bundle.HINT_POSTopComponent());
 
@@ -443,7 +473,6 @@ public final class POSTopComponent extends TopComponent {
     }//GEN-LAST:event_invoiceNumberFieldActionPerformed
 
     private void customerComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_customerComboBoxActionPerformed
-
     }//GEN-LAST:event_customerComboBoxActionPerformed
 
     private void customerComboBoxKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_customerComboBoxKeyPressed
@@ -516,7 +545,7 @@ public final class POSTopComponent extends TopComponent {
     }//GEN-LAST:event_paidAmountFieldKeyReleased
 
     private void addCustomerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addCustomerButtonActionPerformed
-        CustomerView.display();
+        new NoSuchMethodException("Not implemented yet");
     }//GEN-LAST:event_addCustomerButtonActionPerformed
 
     private void receiptNumberFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_receiptNumberFieldActionPerformed
@@ -524,9 +553,7 @@ public final class POSTopComponent extends TopComponent {
     }//GEN-LAST:event_receiptNumberFieldActionPerformed
 
     private void receiptNumberFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_receiptNumberFieldKeyReleased
-
     }//GEN-LAST:event_receiptNumberFieldKeyReleased
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addCustomerButton;
     private javax.swing.JButton clearButton;
@@ -561,6 +588,266 @@ public final class POSTopComponent extends TopComponent {
     private javax.swing.JTextField totalAmountField;
     private javax.swing.JTextField totalDiscountField;
     // End of variables declaration//GEN-END:variables
+    DefaultTableModel dtm;
+
+    private void onLoad() {
+        initComponents();
+
+        AutoCompleteDecorator.decorate(itemComboBox);
+        setComboBoxKeyAdapters(itemComboBox);
+        datePicker.setFormats(yyyy_MM_dd);
+//        KeyAdapter();
+        dtm = (DefaultTableModel) table.getModel();
+        clear();
+    }
+
+    private void setComboBoxKeyAdapters(JComboBox supp) {
+        String compName = supp.getName();
+        Component component[] = supp.getComponents();
+        for (int i = 0; i < component.length; i++) {
+            if (compName.equals("itemComboBox")) {
+                component[i].addKeyListener(itemComboBoxKeyAdapter);
+            }
+        }
+    }
+    KeyAdapter itemComboBoxKeyAdapter = new java.awt.event.KeyAdapter() {
+        @Override
+        public void keyPressed(KeyEvent evt) {
+            itemComboBoxKeyPressed(evt);
+        }
+    };
+
+    private void clear() {
+        dtm.setRowCount(0);
+        Combo.fillCustomers(customerComboBox);
+        Combo.fillItems(itemComboBox);
+        clearFields();
+    }
+
+    private void clearFields() {
+        invoiceNumberField.setText(Data.getInvoiceNo());
+        quantityField.setText("");
+        priceField.setText("");
+        quantityLabel.setText("");
+        discountField.setText("");
+        totalAmountField.setText("");
+        totalDiscountField.setText("");
+        paidAmountField.setText("");
+        remainingAmountField.setText("");
+        itemComboBox.requestFocus();
+//        receiptNumberField.setText(Data.getReceiptNo());
+    }
+    double totalAmount = 0;
+
+    private void calcTotal() {
+        totalAmount = 0;
+        double totalDiscount = 0;
+        for (int i = 0; i < table.getRowCount(); i++) {
+            totalAmount += Double.valueOf(table.getValueAt(i, 8).toString());
+            totalDiscount += Double.valueOf(table.getValueAt(i, 6).toString());
+        }
+        totalAmountField.setText("" + totalAmount);
+        totalDiscountField.setText("" + totalDiscount);
+        String paidText = paidAmountField.getText();
+        if (paidText.equals("")) {
+            paidAmountField.setText("0");
+            remainingAmountField.setText("" + totalAmount);
+        }
+        calcRemaining();
+    }
+
+    private void calcRemaining() {
+        String totalAmountText = totalAmountField.getText().trim();
+        totalAmountText = totalAmountText.equals("") ? "0" : totalAmountText;
+        String paidAmountText = paidAmountField.getText().trim();
+        paidAmountText = paidAmountText.equals("") ? "0" : paidAmountText;
+        double totalAmount1 = 0, paidAmount = 0, remainingAmount = 0;
+        try {
+            totalAmount1 = Double.parseDouble(totalAmountText);
+        } catch (Exception e) {
+        }
+        if (totalAmount1 == 0) {
+            return;
+        }
+        try {
+            paidAmount = Double.parseDouble(paidAmountText);
+        } catch (Exception e) {
+        }
+        remainingAmount = totalAmount1 - paidAmount;
+        remainingAmountField.setText(nf2d.format(remainingAmount));
+    }
+
+    private void addToTable() {
+        double quantity = 0;
+        double price = 0;
+        double discount = 0;
+        double net = 0;
+        Item item = (Item) itemComboBox.getSelectedItem();
+        item = m.find(Item.class, item.getCode());
+        double availableQuantity = item.getStock().getQuantity();
+
+        try {
+            quantity = Double.valueOf(quantityField.getText());
+            price = Double.valueOf(priceField.getText().trim());
+            discount = Double.valueOf(discountField.getText().trim());
+        } catch (Exception e) {
+        }
+
+        if (quantity == 0) {
+            showError("Quantity Required");
+            return;
+        }
+
+        if (quantity > availableQuantity) {
+            showError("Quantity not applicable!");
+            return;
+        }
+
+//        if (price == 0) {
+//            setStatusMessage("Price Required", Color.RED);
+//            showError("Price Required");
+//            return;
+//        }
+        net = price * quantity;
+        double discountAmount = net * discount / 100;
+        double amount = net - discountAmount;
+        int i = dtm.getRowCount();
+        Object[] rowData = {++i,
+            item.getCode(),
+            item.getDescription(),
+            nf2d.format(price),
+            nf3d.format(quantity),
+            nf2d.format(net),
+            nf2d.format(discountAmount),
+            nf2d.format(discount),
+            nf2d.format(amount)};
+
+        dtm.addRow(rowData);
+        quantityField.setText("");
+        priceField.setText("");
+        quantityLabel.setText("");
+        discountField.setText("");
+        calcTotal();
+    }
+
+    @Override
+    public void setVisible(boolean b) {
+        super.setVisible(b);
+        Rectangle rectangle = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
+        setBounds(0, 50, rectangle.width, rectangle.height - 50);
+        Combo.fillCustomers(customerComboBox);
+        Combo.fillItems(itemComboBox);
+//        customerComboBox.requestFocus();
+        itemComboBox.requestFocus();
+    }
+
+    private void process() {
+        int rowCount = table.getRowCount();
+        if (rowCount == 0) {
+            return;
+        }
+
+        String invoiceNumber = Data.getInvoiceNo();
+        String ReceiptNumber = Data.getReceiptNo();
+        if (invoiceNumber.equals("")) {
+            invoiceNumberField.requestFocus();
+            return;
+        }
+        Date date = datePicker.getDate();
+        if (date == null) {
+            datePicker.requestFocus();
+            return;
+        }
+
+        Customer customer = (Customer) customerComboBox.getSelectedItem();
+        double amount = Double.valueOf(totalAmountField.getText());
+        double credit = Double.valueOf(remainingAmountField.getText());
+        double discount = Double.valueOf(totalDiscountField.getText());
+        SaleInvoice saleInvoice = new SaleInvoice(invoiceNumber);
+        saleInvoice.setCustomer(customer);
+        saleInvoice.setAmount(amount);
+        saleInvoice.setCredit(credit);
+        saleInvoice.setDiscount(discount);
+        saleInvoice.setInvTime(date);
+        saleInvoice.setReceivedAmount(0.0);
+        saleInvoice.setEmployee(Data.getOperator().getEmployee());
+        List<Serializable> serializables = new ArrayList<Serializable>();
+        for (int i = 0; i < rowCount; i++) {
+            Item item = m.find(Item.class, table.getValueAt(i, 1).toString());
+            double quantity = Double.valueOf(table.getValueAt(i, 4).toString());
+            double rate = Double.valueOf(table.getValueAt(i, 3).toString());
+            double itemDiscount = Double.valueOf(table.getValueAt(i, 6).toString());
+            SaleInvoiceHasItemPK saleInvoiceHasItemPK = new SaleInvoiceHasItemPK(invoiceNumber, item.getCode());
+            SaleInvoiceHasItem sihi = new SaleInvoiceHasItem(saleInvoiceHasItemPK);
+            sihi.setSaleInvoice(saleInvoice);
+            sihi.setQuantity(quantity);
+            sihi.setDiscount(itemDiscount);
+            if (item.getStock() == null) {
+                return;
+            }
+            Stock stock = item.getStock();
+            quantity = stock.getQuantity() - quantity;
+            stock.setQuantity(quantity);
+            sihi.setItem(item);
+            sihi.setCost(item.getPriceList().getCostPack());
+            sihi.setRate(rate);
+            serializables.add(sihi);
+            serializables.add(stock);
+        }
+        serializables.add(saleInvoice);
+        String paidAmountText = paidAmountField.getText().trim();
+        paidAmountText = paidAmountText.equals("") ? "0" : paidAmountText;
+        double paidAmount = 0;
+        try {
+            paidAmount = Double.parseDouble(paidAmountText);
+        } catch (Exception e) {
+        }
+        if (paidAmount > 0) {
+            if (ReceiptNumber.equals("")) {
+                showError("Recipt Number Required!");
+                return;
+            }
+            CollectionReceipt collectionReceipt = new CollectionReceipt(ReceiptNumber);
+            collectionReceipt.setCollectedTime(date);
+            collectionReceipt.setSaleInvoice(saleInvoice);
+            collectionReceipt.setCash(paidAmount);
+            SaleCash saleCash = new SaleCash(ReceiptNumber);
+            saleCash.setAmount(paidAmount);
+            saleCash.setCollectionReceipt(collectionReceipt);
+            collectionReceipt.setSaleCash(saleCash);
+            saleInvoice.setReceivedAmount(paidAmount);
+            serializables.add(saleCash);
+            serializables.add(collectionReceipt);
+        }
+
+        if (m.update(serializables)) {
+//            SaleInvoicePaymentView.getInstance().fill(saleInvoice);
+//            SaleInvoicePaymentView.display();
+            if (printCheckBox.isSelected()) {
+                Map<String, Object> params = Data.getParams();
+                params.put("invoice", invoiceNumber);
+                Printer.printPosInvoice(params);
+            }
+            showSuccess("Update success");
+            Data.setInvoiceNo(invoiceNumber);
+            Data.setReceiptNo(ReceiptNumber);
+            clear();
+        } else {
+            showError("Update failed");
+        }
+    }
+
+    private void substractDiscount() {
+        String totalDiscountText = totalDiscountField.getText().trim();
+        double totalDiscount = 0;
+        try {
+            totalDiscount = Double.parseDouble(totalDiscountText);
+        } catch (NumberFormatException numberFormatException) {
+            totalDiscount = 0;
+        }
+        totalAmountField.setText(nf2d.format(totalAmount - totalDiscount));
+    }
+
     @Override
     public void componentOpened() {
         // TODO add custom code on component opening
