@@ -4,11 +4,34 @@
  */
 package com.nanosl.nbiz.gui;
 
+import com.nanosl.lib.date.JXDatePicker;
+import com.nanosl.lib.log.Loggings;
+import com.nanosl.nbiz.utility.Combo;
+import com.nanosl.nbiz.utility.NTopComponent;
+import entity.Bank;
+import entity.IssuedCash;
+import entity.IssuedCheque;
+import entity.PurchaseInvoice;
+import java.awt.Component;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.io.Serializable;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+import javax.swing.JComponent;
+import javax.swing.table.DefaultTableModel;
+import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
+import static util.Format.nf2d;
+import static util.Format.yyyy_MM_dd;
 
 /**
  * Top component which displays something.
@@ -31,10 +54,10 @@ import org.openide.util.NbBundle.Messages;
     "CTL_PurchaseInvoicePaymentTopComponent=PurchaseInvoicePayment Window",
     "HINT_PurchaseInvoicePaymentTopComponent=This is a PurchaseInvoicePayment window"
 })
-public final class PurchaseInvoicePaymentTopComponent extends TopComponent {
+public final class PurchaseInvoicePaymentTopComponent extends NTopComponent {
 
     public PurchaseInvoicePaymentTopComponent() {
-        initComponents();
+        onLoad();
         setName(Bundle.CTL_PurchaseInvoicePaymentTopComponent());
         setToolTipText(Bundle.HINT_PurchaseInvoicePaymentTopComponent());
 
@@ -396,7 +419,6 @@ public final class PurchaseInvoicePaymentTopComponent extends TopComponent {
     private void clearButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearButtonActionPerformed
         clearAll();
     }//GEN-LAST:event_clearButtonActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField amountField;
     private javax.swing.JComboBox bankComboBox;
@@ -426,6 +448,201 @@ public final class PurchaseInvoicePaymentTopComponent extends TopComponent {
     private javax.swing.JTextField remainingAmountField;
     private javax.swing.JTextField supplierNameField;
     // End of variables declaration//GEN-END:variables
+    List<PurchaseInvoice> purchaseInvoices;
+    List<Bank> banks;
+    DefaultTableModel invoiceDtm;
+    DefaultTableModel paymentDtm;
+    PurchaseInvoice purchaseInvoice;
+
+    protected void onLoad() {
+        initComponents();
+        invoiceDtm = (DefaultTableModel) invoiceTable.getModel();
+        paymentDtm = (DefaultTableModel) paymentTable.getModel();
+        KeyAdapter();
+    }
+
+    @Override
+    public void setVisible(boolean b) {
+        super.setVisible(b);
+        clearAll();
+    }
+
+    private void fillInvoiceTable() {
+        invoiceDtm.setRowCount(0);
+        paymentDtm.setRowCount(0);
+        purchaseInvoices = m.find(PurchaseInvoice.class);
+        for (Iterator<PurchaseInvoice> it = purchaseInvoices.iterator(); it.hasNext();) {
+            PurchaseInvoice pi = it.next();
+            double credit = pi.getCredit() == null ? 0 : pi.getCredit();
+            if (credit > 0) {
+                Object[] rowData = {pi};
+                invoiceDtm.addRow(rowData);
+            }
+        }
+    }
+
+    private void fill() {
+        int selectedRow = invoiceTable.getSelectedRow();
+        if (selectedRow > -1) {
+            fill((PurchaseInvoice) invoiceDtm.getValueAt(selectedRow, 0));
+        }
+    }
+
+    public void fill(PurchaseInvoice pi) {
+        clearAll();
+        purchaseInvoice = m.find(PurchaseInvoice.class, pi.getPurchaseInvoicePK());
+        invoiceNumberField.setText(purchaseInvoice.getPurchaseInvoicePK().getInvNo());
+        invoiceDateField.setText(yyyy_MM_dd.format(purchaseInvoice.getInvDate()));
+        supplierNameField.setText(purchaseInvoice.getSupplier().getName());
+        amountField.setText(nf2d.format(purchaseInvoice.getAmount()));
+        remainingAmountField.setText(nf2d.format(purchaseInvoice.getCredit()));
+    }
+
+    private void addPay() {
+        if (purchaseInvoice == null) {
+            return;
+        }
+        try {
+            double paymentAmount = Double.valueOf(paymentAmountTextField.getText().trim());
+            if (paymentAmount > 0) {
+                String chequeNumber = chequeNumbertField.getText().trim();
+                Date bankingDate = bankingDatePicker.getDate();
+                Bank bank = (Bank) bankComboBox.getSelectedItem();
+
+                Object[] row = {nf2d.format(paymentAmount), chequeNumber, yyyy_MM_dd.format(bankingDate), bank.getCode()};
+                fillPaymentTable(row);
+                clearPaymentFields();
+                calcRemaining();
+            }
+        } catch (NumberFormatException e) {
+        } catch (Exception e) {
+            Loggings.logError(getName(), e);
+        }
+    }
+
+    private void fillPaymentTable(Object[] row) {
+        paymentDtm.addRow(row);
+        clearPaymentFields();
+        calcRemaining();
+    }
+
+    private void deletePaymentRow(int selectedRow) {
+        if (selectedRow > -1) {
+            paymentDtm.removeRow(selectedRow);
+            calcRemaining();
+        }
+    }
+
+    private void calcRemaining() {
+        double remaining = purchaseInvoice.getCredit();
+        int rowCount = paymentTable.getRowCount();
+        for (int i = 0; i < rowCount; i++) {
+            remaining = remaining - Double.valueOf(paymentTable.getValueAt(i, 0).toString());
+        }
+        remainingAmountField.setText(nf2d.format(remaining));
+    }
+
+    private void clearPaymentFields() {
+        chequeNumbertField.setText("");
+        paymentAmountTextField.setText("");
+    }
+
+    private void clearAll() {
+        purchaseInvoice = null;
+        invoiceNumberField.setText("");
+        invoiceDateField.setText("");
+        supplierNameField.setText("");
+        amountField.setText("");
+        remainingAmountField.setText("");
+        clearPaymentFields();
+        paymentDtm.setRowCount(0);
+        fillInvoiceTable();
+        Combo.fillBanks(bankComboBox);
+    }
+
+    private void process() {
+        int rowCount = paymentTable.getRowCount();
+        if (purchaseInvoice == null || rowCount == 0) {
+            return;
+        }
+        List<Serializable> serializables = new ArrayList<Serializable>();
+        try {
+            for (int i = 0; i < rowCount; i++) {
+                Object o = paymentTable.getValueAt(i, 1);
+                String chequeNumber = o == null ? "" : o.toString().trim();
+                Bank bank = m.find(Bank.class, paymentTable.getValueAt(i, 3).toString());
+                double amount = Double.valueOf(paymentTable.getValueAt(i, 0).toString());
+                Date date = yyyy_MM_dd.parse(paymentTable.getValueAt(i, 2).toString());
+                if (chequeNumber.equals("")) {
+                    Calendar calendar = Calendar.getInstance();
+                    Calendar calendar1 = Calendar.getInstance();
+                    calendar1.setTime(date);
+                    calendar.set(calendar1.get(Calendar.YEAR), calendar1.get(Calendar.MONTH), calendar1.get(Calendar.DATE));
+                    IssuedCash issuedCash = new IssuedCash(calendar.getTime());
+                    issuedCash.setAmount(amount);
+                    issuedCash.setPurchaseInvoice(purchaseInvoice);
+                    issuedCash.setBank(bank);
+                    serializables.add(issuedCash);
+                    purchaseInvoice.getIssuedCashCollection().add(issuedCash);
+                } else {
+                    IssuedCheque issuedCheque = new IssuedCheque(chequeNumber);
+                    issuedCheque.setAmount(amount);
+                    issuedCheque.setBank(bank);
+                    issuedCheque.setBankingDate(date);
+                    issuedCheque.setIssuedDate(new Date());
+                    issuedCheque.setPurchaseInvoice(purchaseInvoice);
+                    issuedCheque.setStatus(0);
+                    serializables.add(issuedCheque);
+                    purchaseInvoice.getIssuedChequeCollection().add(issuedCheque);
+                }
+            }
+        } catch (ParseException ex) {
+            showError("Problem with one of cheque banking date!");
+            return;
+        } catch (Exception ex) {
+            showError("Unable to complete payment");
+            return;
+        }
+        double remainingAmount = Double.valueOf(remainingAmountField.getText().trim());
+        purchaseInvoice.setCredit(remainingAmount);
+        serializables.add(purchaseInvoice);
+        if (m.update(serializables)) {
+            clearAll();
+        } else {
+            showError("Unable to complete payment!");
+        }
+    }
+
+    private void KeyAdapter() {
+        AutoCompleteDecorator.decorate(bankComboBox);
+        setComboBoxKeyAdapters(bankComboBox);
+        setComboBoxKeyAdapters(bankingDatePicker);
+    }
+
+    private void setComboBoxKeyAdapters(JComponent comp) {
+        String compName = comp.getName();
+        Component component[] = comp.getComponents();
+        for (int i = 0; i < component.length; i++) {
+            if (compName.equals("bankComboBox")) {
+                component[i].addKeyListener(bankComboBoxKeyAdapter);
+            } else if (compName.equals("bankingDatePicker")) {
+                component[i].addKeyListener(bankingDatePickerKeyAdapter);
+            }
+        }
+    }
+    KeyAdapter bankComboBoxKeyAdapter = new java.awt.event.KeyAdapter() {
+        @Override
+        public void keyPressed(KeyEvent evt) {
+            bankComboBoxKeyPressed(evt);
+        }
+    };
+    KeyAdapter bankingDatePickerKeyAdapter = new java.awt.event.KeyAdapter() {
+        @Override
+        public void keyPressed(KeyEvent evt) {
+            bankingDatePickerKeyPressed(evt);
+        }
+    };
+
     @Override
     public void componentOpened() {
         // TODO add custom code on component opening

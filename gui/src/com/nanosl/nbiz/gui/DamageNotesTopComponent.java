@@ -4,11 +4,26 @@
  */
 package com.nanosl.nbiz.gui;
 
+import com.nanosl.nbiz.utility.Find;
+import entity.DamageNotes;
+import entity.Employee;
+import entity.Item;
+import java.awt.Component;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.util.Collection;
+import java.util.Date;
+import java.util.Iterator;
+import javax.swing.JComponent;
+import javax.swing.table.DefaultTableModel;
+import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
+import static util.Format.nf2d;
+import static util.Format.yyyy_MM_dd;
 
 /**
  * Top component which displays something.
@@ -34,7 +49,7 @@ import org.openide.util.NbBundle.Messages;
 public final class DamageNotesTopComponent extends TopComponent {
 
     public DamageNotesTopComponent() {
-        initComponents();
+        onLoad();
         setName(Bundle.CTL_DamageNotesTopComponent());
         setToolTipText(Bundle.HINT_DamageNotesTopComponent());
 
@@ -188,15 +203,12 @@ public final class DamageNotesTopComponent extends TopComponent {
     }// </editor-fold>//GEN-END:initComponents
 
     private void masterTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_masterTableMouseClicked
-
     }//GEN-LAST:event_masterTableMouseClicked
 
     private void masterTableMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_masterTableMouseReleased
-
     }//GEN-LAST:event_masterTableMouseReleased
 
     private void masterTableKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_masterTableKeyReleased
-
     }//GEN-LAST:event_masterTableKeyReleased
 
     private void reloadButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reloadButtonActionPerformed
@@ -214,7 +226,6 @@ public final class DamageNotesTopComponent extends TopComponent {
     }//GEN-LAST:event_datePickerKeyPressed
 
     private void repComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_repComboBoxActionPerformed
-
     }//GEN-LAST:event_repComboBoxActionPerformed
 
     private void repComboBoxKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_repComboBoxKeyPressed
@@ -222,7 +233,6 @@ public final class DamageNotesTopComponent extends TopComponent {
             fillTable(datePicker.getDate());
         }
     }//GEN-LAST:event_repComboBoxKeyPressed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.jdesktop.swingx.JXDatePicker datePicker;
     private javax.swing.JLabel jLabel3;
@@ -234,6 +244,62 @@ public final class DamageNotesTopComponent extends TopComponent {
     private javax.swing.JComboBox repComboBox;
     private javax.swing.JLabel totalLabel;
     // End of variables declaration//GEN-END:variables
+    DefaultTableModel tableModel;
+
+    private void fillTable(Date date) {
+        Employee employee = (Employee) repComboBox.getSelectedItem();
+        tableModel.setRowCount(0);
+        int i = 0;
+        double total = 0;
+        Collection<DamageNotes> damageNoteses = Find.damageNotesByDateAndRef(date, employee);
+        for (Iterator<DamageNotes> it = damageNoteses.iterator(); it.hasNext();) {
+            DamageNotes damageNotes = it.next();
+            Item item = damageNotes.getItem();
+            double quantity = damageNotes.getQuantity();
+            double rate = damageNotes.getRate() != null ? damageNotes.getRate() : 0.0;
+            total += (quantity * rate);
+            Object[] row = {++i, yyyy_MM_dd.format(damageNotes.getDamageNotesPK().getDateTime()), item.getCode(), item.getDescription(), nf2d.format(quantity), nf2d.format(rate), nf2d.format(quantity * rate)};
+            tableModel.addRow(row);
+        }
+        totalLabel.setText(nf2d.format(total));
+    }
+
+    protected void onLoad() {
+        initComponents();
+        tableModel = (DefaultTableModel) masterTable.getModel();
+        KeyAdapter();
+    }
+
+    private void KeyAdapter() {
+        AutoCompleteDecorator.decorate(repComboBox);
+        setComboBoxKeyAdapters(repComboBox);
+        setComboBoxKeyAdapters(datePicker);
+    }
+
+    private void setComboBoxKeyAdapters(JComponent comp) {
+        String compName = comp.getName();
+        Component component[] = comp.getComponents();
+        for (int i = 0; i < component.length; i++) {
+            if (compName.equals("repComboBox")) {
+                component[i].addKeyListener(repComboBoxKeyAdapter);
+            } else if (compName.equals("datePicker")) {
+                component[i].addKeyListener(datePickerKeyAdapter);
+            }
+        }
+    }
+    KeyAdapter datePickerKeyAdapter = new java.awt.event.KeyAdapter() {
+        @Override
+        public void keyPressed(KeyEvent evt) {
+            datePickerKeyPressed(evt);
+        }
+    };
+    KeyAdapter repComboBoxKeyAdapter = new java.awt.event.KeyAdapter() {
+        @Override
+        public void keyPressed(KeyEvent evt) {
+            repComboBoxKeyPressed(evt);
+        }
+    };
+
     @Override
     public void componentOpened() {
         // TODO add custom code on component opening

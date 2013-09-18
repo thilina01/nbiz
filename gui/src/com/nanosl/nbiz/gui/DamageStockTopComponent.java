@@ -4,11 +4,17 @@
  */
 package com.nanosl.nbiz.gui;
 
+import com.nanosl.nbiz.utility.NTopComponent;
+import entity.DamageStock;
+import entity.Item;
+import java.util.Iterator;
+import javax.swing.table.DefaultTableModel;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
+import static util.Format.nf2d;
 
 /**
  * Top component which displays something.
@@ -31,7 +37,7 @@ import org.openide.util.NbBundle.Messages;
     "CTL_DamageStockTopComponent=DamageStock Window",
     "HINT_DamageStockTopComponent=This is a DamageStock window"
 })
-public final class DamageStockTopComponent extends TopComponent {
+public final class DamageStockTopComponent extends NTopComponent {
 
     public DamageStockTopComponent() {
         initComponents();
@@ -141,21 +147,17 @@ public final class DamageStockTopComponent extends TopComponent {
     }// </editor-fold>//GEN-END:initComponents
 
     private void masterTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_masterTableMouseClicked
-
     }//GEN-LAST:event_masterTableMouseClicked
 
     private void masterTableMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_masterTableMouseReleased
-
     }//GEN-LAST:event_masterTableMouseReleased
 
     private void masterTableKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_masterTableKeyReleased
-
     }//GEN-LAST:event_masterTableKeyReleased
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         fillTable();
     }//GEN-LAST:event_jButton1ActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JPanel jPanel1;
@@ -163,6 +165,29 @@ public final class DamageStockTopComponent extends TopComponent {
     private javax.swing.JTable masterTable;
     private javax.swing.JLabel totalLabel;
     // End of variables declaration//GEN-END:variables
+    DefaultTableModel tableModel;
+
+    private void fillTable() {
+        tableModel.setRowCount(0);
+        int i = 0;
+        double total = 0;
+        for (Iterator<DamageStock> it = m.find(DamageStock.class).iterator(); it.hasNext();) {
+            DamageStock damageStock = it.next();
+            Item item = damageStock.getItem();
+            double quantity = damageStock.getQuantity();
+            double rate = item.getPriceList() != null ? item.getPriceList().getCostPack() : 0.0;
+            total += (quantity * rate);
+            Object[] row = {++i, item.getCode(), item.getDescription(), nf2d.format(quantity), nf2d.format(rate), nf2d.format(quantity * rate)};
+            tableModel.addRow(row);
+        }
+        totalLabel.setText(nf2d.format(total));
+    }
+
+    protected void onLoad() {
+        initComponents();
+        tableModel = (DefaultTableModel) masterTable.getModel();
+    }
+
     @Override
     public void componentOpened() {
         // TODO add custom code on component opening

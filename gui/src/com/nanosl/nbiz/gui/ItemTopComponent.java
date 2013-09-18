@@ -4,18 +4,32 @@
  */
 package com.nanosl.nbiz.gui;
 
+import com.nanosl.lib.log.Loggings;
+import com.nanosl.nbiz.utility.NTopComponent;
+import entity.Item;
+import entity.ItemType;
+import entity.LastCode;
+import entity.PriceList;
+import entity.Stock;
+import entity.Supplier;
+import java.awt.Component;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JComboBox;
+import javax.swing.table.DefaultTableModel;
+import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
+import static util.Format.nf2d;
 
 /**
  * Top component which displays something.
@@ -38,10 +52,10 @@ import org.openide.util.NbBundle.Messages;
     "CTL_ItemTopComponent=Item Window",
     "HINT_ItemTopComponent=This is a Item window"
 })
-public final class ItemTopComponent extends TopComponent {
+public final class ItemTopComponent extends NTopComponent {
 
     public ItemTopComponent() {
-        initComponents();
+        onLoad();
         setName(Bundle.CTL_ItemTopComponent());
         setToolTipText(Bundle.HINT_ItemTopComponent());
 
@@ -293,7 +307,6 @@ public final class ItemTopComponent extends TopComponent {
     }//GEN-LAST:event_descriptionFieldActionPerformed
 
     private void supplierComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_supplierComboBoxActionPerformed
-
     }//GEN-LAST:event_supplierComboBoxActionPerformed
 
     private void supplierComboBoxKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_supplierComboBoxKeyPressed
@@ -325,7 +338,6 @@ public final class ItemTopComponent extends TopComponent {
     private void minimumLimitTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_minimumLimitTextFieldActionPerformed
         updateButton.requestFocus();
     }//GEN-LAST:event_minimumLimitTextFieldActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField brandField;
     private javax.swing.JLabel brandLabel;
@@ -347,38 +359,123 @@ public final class ItemTopComponent extends TopComponent {
     private javax.swing.JLabel supplierLabel;
     private javax.swing.JButton updateButton;
     // End of variables declaration//GEN-END:variables
-    @Override
-    public void componentOpened() {
-        // TODO add custom code on component opening
+    DefaultTableModel tableModel;
+
+    private void fill() {
+        clearFields();
+        int row = masterTable.getSelectedRow();
+        if (row > -1) {
+            Item item = m.find(Item.class, masterTable.getValueAt(row, 1));
+            fill(item);
+        }
     }
 
-    @Override
-    public void componentClosed() {
-        // TODO add custom code on component closing
+    private void update() {
+        String code = codeField.getText().trim();
+        String description = descriptionField.getText().trim();
+        if (code.equals("")) {
+            codeField.requestFocus();
+            return;
+        }
+        if (description.equals("")) {
+            descriptionField.requestFocus();
+            return;
+        }
+        String brand = brandField.getText().trim();
+
+        try {
+            String minLimText = minimumLimitTextField.getText().trim();
+            minLimText = minLimText.isEmpty() ? "0.0" : minLimText;
+            double minimumLimit = Double.parseDouble(minLimText);
+            Supplier supplier = (Supplier) supplierComboBox.getSelectedItem();
+            Item item = m.find(Item.class, code);
+            List<Serializable> serializables = new ArrayList<Serializable>();
+            if (item == null) {
+                item = new Item(code);
+                LastCode lastCode = m.find(LastCode.class, "Item");
+                lastCode = lastCode == null ? new LastCode("Item") : lastCode;
+                lastCode.setCode(code);
+                serializables.add(lastCode);
+            }
+            item.setDescription(description);
+            item.setBrand(brand);
+            item.setSupplier(supplier);
+            ItemType itemType = (ItemType) itemTypeComboBox.getSelectedItem();
+            item.setItemTypeType(itemType);
+            Stock stock = item.getStock();
+            if (stock == null) {
+                stock = new Stock(code);
+                stock.setBundles(0.0);
+                stock.setItem(item);
+                stock.setQuantity(0.0);
+                stock.setMinLimit(minimumLimit);
+                item.setStock(stock);
+                serializables.add(stock);
+            }
+            supplier.getItemCollection().add(item);
+            PriceList priceList = m.find(PriceList.class, code);
+            priceList = priceList == null ? new PriceList(code) : priceList;
+            priceList.setCostPack(0.0);
+            priceList.setItem(item);
+            priceList.setSellingPack(0.0);
+            priceList.setCostPack(0.0);
+            item.setPriceList(priceList);
+            serializables.add(supplier);
+            serializables.add(item);
+            serializables.add(priceList);
+
+            if (m.update(serializables)) {
+                clear();
+                codeField.requestFocus();
+                return;
+            }
+            showError("Unable to update " + code);
+        } catch (NumberFormatException e) {
+            showError("Check values again");
+        } catch (Exception e) {
+            Loggings.logError(getName(), e);
+        }
     }
 
-    void writeProperties(java.util.Properties p) {
-        // better to version settings since initial version as advocated at
-        // http://wiki.apidesign.org/wiki/PropertyFiles
-        p.setProperty("version", "1.0");
-        // TODO store your settings
+    private void delete() {
+        String code = codeField.getText().trim();
+        if (code.equals("")) {
+            codeField.requestFocus();
+            return;
+        }
+        if (m.delete(Item.class, code)) {
+            clear();
+            showSuccess("Item Deleted");
+            return;
+        }
+        showError("Unable to delete " + code);
     }
 
-    void readProperties(java.util.Properties p) {
-        String version = p.getProperty("version");
-        // TODO read your settings according to their version
-    }
     private void clear() {
         fillTable();
         fillSuppliers();
         fillItemTypes();
         clearFields();
+        codeField.requestFocus();
     }
+
+    private void clearFields() {
+        codeField.setText("");
+        descriptionField.setText("");
+        brandField.setText("");
+        minimumLimitTextField.setText("");
+        if (supplierComboBox.getItemCount() > 0) {
+            supplierComboBox.setSelectedIndex(0);
+        }
+    }
+
     private void fillTable() {
         tableModel.setRowCount(0);
         int i = 0;
         List<Serializable> serializables = new ArrayList<Serializable>();
-        for (Iterator<Item> it = m.find(Item.class).iterator(); it.hasNext();) {
+        List<Item> items = m.find(Item.class);
+        Collections.sort(items);
+        for (Iterator<Item> it = items.iterator(); it.hasNext();) {
             Item item = it.next();
             Stock stock = item.getStock();
             if (stock == null) {
@@ -407,10 +504,24 @@ public final class ItemTopComponent extends TopComponent {
             tableModel.addRow(row);
         }
     }
-     private void fillSuppliers() {
+
+    protected void onLoad() {
+        initComponents();
+        KeyAdapter();
+        tableModel = (DefaultTableModel) masterTable.getModel();
+        clear();
+    }
+
+    private void KeyAdapter() {
+        AutoCompleteDecorator.decorate(supplierComboBox);
+        setComboBoxKeyAdapters(supplierComboBox);
+    }
+
+    private void fillSuppliers() {
         supplierComboBox.setModel(new DefaultComboBoxModel(m.find(Supplier.class).toArray()));
     }
-      private void fillItemTypes() {
+
+    private void fillItemTypes() {
         List<ItemType> itemTypes = m.find(ItemType.class);
         if (itemTypes.isEmpty()) {
             m.update(new ItemType("ITEM"));
@@ -425,13 +536,49 @@ public final class ItemTopComponent extends TopComponent {
             supplierComboBoxKeyPressed(evt);
         }
     };
-    private void clearFields() {
-        codeField.requestFocus();
-        codeField.setText("");
-        descriptionField.setText("");
-        brandField.setText("");
-        minimumLimitTextField.setText("");
-        if (supplierComboBox.getItemCount() > 0) {
-            supplierComboBox.setSelectedIndex(0);
+
+    private void setComboBoxKeyAdapters(JComboBox supp) {
+        String compName = supp.getName();
+        Component component[] = supp.getComponents();
+        for (int i = 0; i < component.length; i++) {
+            if (compName.equals("supplierComboBox")) {
+                component[i].addKeyListener(supplierComboBoxKeyAdapter);
+            }
         }
+    }
+
+    private void fill(Item item) {
+        if (item == null) {
+            return;
+        }
+        codeField.setText(item.getCode());
+        descriptionField.setText(item.getDescription());
+        brandField.setText(item.getBrand());
+        supplierComboBox.setSelectedItem(item.getSupplier());
+        itemTypeComboBox.setSelectedItem(item.getItemTypeType());
+        Stock stock = item.getStock();
+        minimumLimitTextField.setText(stock != null ? stock.getMinLimit() != null ? stock.getMinLimit() + "" : "" : "0");
+    }
+
+    @Override
+    public void componentOpened() {
+        // TODO add custom code on component opening
+    }
+
+    @Override
+    public void componentClosed() {
+        // TODO add custom code on component closing
+    }
+
+    void writeProperties(java.util.Properties p) {
+        // better to version settings since initial version as advocated at
+        // http://wiki.apidesign.org/wiki/PropertyFiles
+        p.setProperty("version", "1.0");
+        // TODO store your settings
+    }
+
+    void readProperties(java.util.Properties p) {
+        String version = p.getProperty("version");
+        // TODO read your settings according to their version
+    }
 }

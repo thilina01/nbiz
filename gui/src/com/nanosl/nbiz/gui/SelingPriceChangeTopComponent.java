@@ -4,11 +4,29 @@
  */
 package com.nanosl.nbiz.gui;
 
+import com.nanosl.nbiz.utility.NTopComponent;
+import entity.Item;
+import entity.OldPrice;
+import entity.PriceList;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JComboBox;
+import javax.swing.table.DefaultTableModel;
+import org.jdesktop.swingx.JXDatePicker;
+import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
+import static util.Format.nf2d;
 
 /**
  * Top component which displays something.
@@ -31,7 +49,7 @@ import org.openide.util.NbBundle.Messages;
     "CTL_SelingPriceChangeTopComponent=SelingPriceChange Window",
     "HINT_SelingPriceChangeTopComponent=This is a SelingPriceChange window"
 })
-public final class SelingPriceChangeTopComponent extends TopComponent {
+public final class SelingPriceChangeTopComponent extends NTopComponent {
 
     public SelingPriceChangeTopComponent() {
         initComponents();
@@ -181,15 +199,12 @@ public final class SelingPriceChangeTopComponent extends TopComponent {
     }// </editor-fold>//GEN-END:initComponents
 
     private void masterTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_masterTableMouseClicked
-
     }//GEN-LAST:event_masterTableMouseClicked
 
     private void masterTableMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_masterTableMouseReleased
-
     }//GEN-LAST:event_masterTableMouseReleased
 
     private void masterTableKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_masterTableKeyReleased
-
     }//GEN-LAST:event_masterTableKeyReleased
 
     private void itemComboBoxKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_itemComboBoxKeyPressed
@@ -206,7 +221,6 @@ public final class SelingPriceChangeTopComponent extends TopComponent {
     private void processButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_processButtonActionPerformed
         process();
     }//GEN-LAST:event_processButtonActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox itemComboBox;
     private javax.swing.JLabel jLabel1;
@@ -218,6 +232,125 @@ public final class SelingPriceChangeTopComponent extends TopComponent {
     private javax.swing.JTextField newPriceTextField;
     private javax.swing.JButton processButton;
     // End of variables declaration//GEN-END:variables
+    DefaultTableModel tableModel;
+
+    protected void onLoad() {
+        initComponents();
+        // AutoCompleteDecorator.decorate(itemComboBox);
+        tableModel = (DefaultTableModel) masterTable.getModel();
+    }
+
+    @Override
+    public void setVisible(boolean b) {
+        super.setVisible(b);
+        reset();
+    }
+
+    private void reset() {
+        tableModel.setRowCount(0);
+        itemComboBox.setModel(new DefaultComboBoxModel(m.find(Item.class).toArray()));
+        newPriceTextField.setText("");
+    }
+
+    private void addToTable() {
+        try {
+            double newPrice = Double.valueOf(newPriceTextField.getText().trim());
+
+            Item item = (Item) itemComboBox.getSelectedItem();
+            PriceList priceList = item.getPriceList();
+            if (priceList == null) {
+                priceList = new PriceList(item.getCode());
+                priceList.setCostPack(0.0);
+                priceList.setCostUnit(0.0);
+                priceList.setSellingPack(0.0);
+                priceList.setSellingUnit(0.0);
+                priceList.setItem(item);
+                item.setPriceList(priceList);
+                m.update(priceList);
+                m.update(item);
+            }
+            int i = tableModel.getRowCount();
+
+            Object[] row = {++i, item.getCode(), item.getDescription(), nf2d.format(priceList.getSellingPack()), nf2d.format(newPrice)};
+            tableModel.addRow(row);
+            newPriceTextField.setText("");
+            itemComboBox.requestFocus();
+        } catch (NumberFormatException numberFormatException) {
+            showError("Invalid Price");
+        }
+    }
+
+    private void process() {
+        int rowCount = tableModel.getRowCount();
+        if (rowCount > 0) {
+            Date date = jXDatePicker1.getDate();
+            if (date == null) {
+                showError("No date selected");
+                return;
+            }
+            List<Serializable> serializables = new ArrayList<Serializable>();
+            for (int i = 0; i < rowCount; i++) {
+                double newPrice = Double.valueOf(masterTable.getValueAt(i, 4).toString());
+                Item item = m.find(Item.class, masterTable.getValueAt(i, 1).toString());
+                PriceList priceList = item.getPriceList();
+                OldPrice oldPrice = new OldPrice(date, item.getCode());
+                oldPrice.setItem(item);
+                oldPrice.setNewPrice(newPrice);
+                oldPrice.setOldPrice(priceList.getSellingPack());
+                priceList.setSellingPack(newPrice);
+                item.getOldPriceCollection().add(oldPrice);
+                item.setPriceList(priceList);
+                serializables.add(oldPrice);
+                serializables.add(priceList);
+                serializables.add(item);
+            }
+            if (m.update(serializables)) {
+                showSuccess("Update Success");
+                reset();
+            } else {
+                showError("Update Failed");
+            }
+        }
+    }
+
+    private void KeyAdapter() {
+        AutoCompleteDecorator.decorate(itemComboBox);
+        setComboBoxKeyAdapters(itemComboBox);
+        setjXDatePickerKeyAdapters(jXDatePicker1);
+    }
+
+    private void setComboBoxKeyAdapters(JComboBox comp) {
+        String compName = comp.getName();
+        Component component[] = comp.getComponents();
+        for (int i = 0; i < component.length; i++) {
+            if (comp.equals("itemComboBox")) {
+                component[i].addKeyListener(itemComboBoxKeyAdapter);
+            }
+        }
+    }
+    KeyAdapter itemComboBoxKeyAdapter = new java.awt.event.KeyAdapter() {
+        @Override
+        public void keyPressed(KeyEvent evt) {
+            itemComboBoxKeyAdapter.keyPressed(evt);
+        }
+    };
+
+    private void setjXDatePickerKeyAdapters(JXDatePicker jXDatePicker) {
+        String compName = jXDatePicker.getName();
+        Component component[] = jXDatePicker.getComponents();
+        for (int i = 0; i < component.length; i++) {
+            if (jXDatePicker.equals("jXDatePicker1")) {
+                component[i].addKeyListener(jXDatePickerKeyAdapter);
+            }
+        }
+    }
+    KeyAdapter jXDatePickerKeyAdapter = new java.awt.event.KeyAdapter() {
+        @Override
+        public void keyPressed(KeyEvent evt) {
+            jXDatePickerKeyAdapter.keyPressed(evt);
+        }
+    };
+
     @Override
     public void componentOpened() {
         // TODO add custom code on component opening

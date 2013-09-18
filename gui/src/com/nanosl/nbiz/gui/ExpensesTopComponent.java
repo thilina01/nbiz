@@ -4,6 +4,12 @@
  */
 package com.nanosl.nbiz.gui;
 
+import com.nanosl.lib.date.JXDatePicker;
+import com.nanosl.nbiz.utility.NTopComponent;
+import entity.Expenses;
+import entity.ExpensesType;
+import java.util.Calendar;
+import java.util.Date;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
@@ -31,7 +37,7 @@ import org.openide.util.NbBundle.Messages;
     "CTL_ExpensesTopComponent=Expenses Window",
     "HINT_ExpensesTopComponent=This is a Expenses window"
 })
-public final class ExpensesTopComponent extends TopComponent {
+public final class ExpensesTopComponent extends NTopComponent {
 
     public ExpensesTopComponent() {
         initComponents();
@@ -141,7 +147,7 @@ public final class ExpensesTopComponent extends TopComponent {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(updateButton)
                     .addComponent(clearButton))
-                .addContainerGap(149, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -184,7 +190,6 @@ public final class ExpensesTopComponent extends TopComponent {
     private void clearButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearButtonActionPerformed
         clear();
     }//GEN-LAST:event_clearButtonActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField amountTextField;
     private javax.swing.JButton clearButton;
@@ -196,6 +201,54 @@ public final class ExpensesTopComponent extends TopComponent {
     private javax.swing.JTextField reasonTextField;
     private javax.swing.JButton updateButton;
     // End of variables declaration//GEN-END:variables
+
+    private void onLoad() {
+        initComponents();
+    }
+
+    private void clear() {
+        reasonTextField.setText("");
+        amountTextField.setText("");
+    }
+
+    private void updateExpenses() {
+        String reason = reasonTextField.getText().trim();
+        String amountString = amountTextField.getText();
+
+        if (reason.equals("") || amountString.equals("")) {
+            showError("Incorrect Information");
+            return;
+        }
+        double amount = Double.parseDouble(amountString);
+        Date date = datePicker.getDate();
+        Calendar nowCalendar = Calendar.getInstance();
+        nowCalendar.setTime(new Date());
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.set(Calendar.HOUR_OF_DAY, nowCalendar.get(Calendar.HOUR_OF_DAY));
+        calendar.set(Calendar.MINUTE, nowCalendar.get(Calendar.MINUTE));
+        calendar.set(Calendar.SECOND, nowCalendar.get(Calendar.SECOND));
+        calendar.set(Calendar.MILLISECOND, nowCalendar.get(Calendar.MILLISECOND));
+        date = calendar.getTime();
+        ExpensesType expensesType = m.find(ExpensesType.class, "OTHER");
+        if (expensesType == null) {
+            expensesType = new ExpensesType("OTHER");
+            expensesType.setDescription("OTHER EXPENSES");
+            m.update(expensesType);
+            expensesType = m.find(ExpensesType.class, "OTHER");
+        }
+        Expenses expenses = new Expenses(date);
+        expenses.setExpensesType(expensesType);
+        expenses.setNotes(reason);
+        expenses.setAmount(amount);
+        expenses.setPaidTime(date);
+
+        if (m.update(expenses)) {
+            showSuccess("Update Success!");
+            clear();
+        }
+    }
+
     @Override
     public void componentOpened() {
         // TODO add custom code on component opening
@@ -216,9 +269,5 @@ public final class ExpensesTopComponent extends TopComponent {
     void readProperties(java.util.Properties p) {
         String version = p.getProperty("version");
         // TODO read your settings according to their version
-    }
-     private void clear() {
-        reasonTextField.setText("");
-        amountTextField.setText("");
     }
 }

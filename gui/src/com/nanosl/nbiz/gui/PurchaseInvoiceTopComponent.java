@@ -4,11 +4,37 @@
  */
 package com.nanosl.nbiz.gui;
 
+import com.nanosl.lib.date.JXDatePicker;
+import com.nanosl.nbiz.utility.Combo;
+import com.nanosl.nbiz.utility.NTopComponent;
+import entity.Item;
+import entity.LastCode;
+import entity.PriceList;
+import entity.PurchaseInvoice;
+import entity.PurchaseInvoiceHasItem;
+import entity.PurchaseInvoicePK;
+import entity.Stock;
+import entity.Supplier;
+import java.awt.Component;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JComponent;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
+import static util.Format.nf2d;
+import static util.Format.nf3d;
+import static util.Format.yyyy_MM_dd;
 
 /**
  * Top component which displays something.
@@ -31,10 +57,10 @@ import org.openide.util.NbBundle.Messages;
     "CTL_PurchaseInvoiceTopComponent=PurchaseInvoice Window",
     "HINT_PurchaseInvoiceTopComponent=This is a PurchaseInvoice window"
 })
-public final class PurchaseInvoiceTopComponent extends TopComponent {
+public final class PurchaseInvoiceTopComponent extends NTopComponent {
 
     public PurchaseInvoiceTopComponent() {
-        initComponents();
+        onLoad();
         setName(Bundle.CTL_PurchaseInvoiceTopComponent());
         setToolTipText(Bundle.HINT_PurchaseInvoiceTopComponent());
 
@@ -352,7 +378,6 @@ public final class PurchaseInvoiceTopComponent extends TopComponent {
     }//GEN-LAST:event_supplierComboBoxKeyPressed
 
     private void supplierComboBoxKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_supplierComboBoxKeyReleased
-
     }//GEN-LAST:event_supplierComboBoxKeyReleased
 
     private void itemComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemComboBoxActionPerformed
@@ -367,7 +392,6 @@ public final class PurchaseInvoiceTopComponent extends TopComponent {
     }//GEN-LAST:event_itemComboBoxKeyPressed
 
     private void itemComboBoxKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_itemComboBoxKeyReleased
-
     }//GEN-LAST:event_itemComboBoxKeyReleased
 
     private void quantityFieldMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_quantityFieldMouseClicked
@@ -388,7 +412,7 @@ public final class PurchaseInvoiceTopComponent extends TopComponent {
     }//GEN-LAST:event_quantityFieldActionPerformed
 
     private void quantityFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_quantityFieldFocusGained
-        setStatusMessage("Hint: F2 for DOZ");
+        showSuccess("Hint: F2 for DOZ");
     }//GEN-LAST:event_quantityFieldFocusGained
 
     private void quantityFieldKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_quantityFieldKeyPressed
@@ -409,7 +433,7 @@ public final class PurchaseInvoiceTopComponent extends TopComponent {
     }//GEN-LAST:event_valueFieldActionPerformed
 
     private void valueFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_valueFieldFocusGained
-        setStatusMessage("Hint: F2 for DOZ");
+        showSuccess("Hint: F2 for DOZ");
     }//GEN-LAST:event_valueFieldFocusGained
 
     private void valueFieldKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_valueFieldKeyPressed
@@ -437,7 +461,6 @@ public final class PurchaseInvoiceTopComponent extends TopComponent {
     private void discountFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_discountFieldActionPerformed
         addToTable();
     }//GEN-LAST:event_discountFieldActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton clearButton;
     private org.jdesktop.swingx.JXDatePicker datePicker;
@@ -463,6 +486,252 @@ public final class PurchaseInvoiceTopComponent extends TopComponent {
     private javax.swing.JLabel totalDiscountLabel;
     private javax.swing.JTextField valueField;
     // End of variables declaration//GEN-END:variables
+    DefaultTableModel dtm;
+
+    protected void onLoad() {
+        initComponents();
+        datePicker.setFormats(yyyy_MM_dd);
+        KeyAdapter();
+        dtm = (DefaultTableModel) table.getModel();
+        clear();
+    }
+
+    private void clear() {
+        dtm.setRowCount(0);
+        Combo.fillSuppliers(supplierComboBox);
+        clearFields();
+    }
+
+    private void fillItems() {
+        Supplier supplier = (Supplier) supplierComboBox.getSelectedItem();
+        supplier = m.find(Supplier.class, supplier.getCode());
+        if (supplier.getCode().equals("000")) {
+            LastCode lastCode = m.find(LastCode.class, "SUPPLIERINVOICE");
+            if (lastCode == null) {
+                lastCode = new LastCode("SUPPLIERINVOICE");
+                lastCode.setCode("000");
+                m.update(lastCode);
+            }
+            lastCode = m.find(LastCode.class, "SUPPLIERINVOICE");
+            invoiceNumberField.setText(lastCode.getCode());
+        }
+        itemComboBox.setModel(new DefaultComboBoxModel(supplier.getItemCollection().toArray()));
+    }
+
+    private void calcTotal() {
+        double totalDiscount = 0;
+        double totalAmount = 0;
+        for (int i = 0; i < table.getRowCount(); i++) {
+            totalDiscount += Double.valueOf(table.getValueAt(i, 6).toString());
+            totalAmount += Double.valueOf(table.getValueAt(i, 8).toString());
+        }
+        totalDiscountLabel.setText(nf2d.format(totalDiscount));
+        totalAmountLabel.setText(nf2d.format(totalAmount));
+    }
+
+    private void process() {
+        int rowCount = table.getRowCount();
+        if (rowCount == 0) {
+            return;
+        }
+        String invoiceNumber = invoiceNumberField.getText().trim();
+        if (invoiceNumber.equals("")) {
+            invoiceNumber = "000";
+        }
+        Date date = datePicker.getDate();
+        if (date == null) {
+            datePicker.requestFocus();
+            showError("Invoice Date Required");
+            return;
+        }
+        Supplier supplier = (Supplier) supplierComboBox.getSelectedItem();
+        PurchaseInvoice purchaseInvoice = m.find(PurchaseInvoice.class, new PurchaseInvoicePK(invoiceNumber, supplier.getCode()));//new PurchaseInvoice(invoiceNumber, supplier.getCode());
+        if (purchaseInvoice != null) {
+            showError("Invoice Already Updated!");
+            return;
+        }
+        double invoiveAmount = Double.valueOf(totalAmountLabel.getText());
+        double invoiceDiscount = Double.valueOf(totalDiscountLabel.getText());
+        purchaseInvoice = new PurchaseInvoice(invoiceNumber, supplier.getCode());
+        purchaseInvoice.setSupplier(supplier);
+        purchaseInvoice.setAmount(invoiveAmount);
+        purchaseInvoice.setCredit(invoiveAmount);
+        purchaseInvoice.setDiscount(invoiceDiscount);
+        purchaseInvoice.setInvDate(date);
+        purchaseInvoice.setPurchaseInvoiceHasItemCollection(new ArrayList<PurchaseInvoiceHasItem>());
+
+        List<Serializable> serializables = new ArrayList<Serializable>();
+        for (int i = 0; i < rowCount; i++) {
+            Item item = m.find(Item.class, table.getValueAt(i, 1).toString());
+            double value = Double.valueOf(table.getValueAt(i, 3).toString());
+            double quantity = Double.valueOf(table.getValueAt(i, 4).toString());
+            double discount = Double.valueOf(table.getValueAt(i, 7).toString());
+            double cost = value - (value * discount / 100);
+            PurchaseInvoiceHasItem pihi = new PurchaseInvoiceHasItem(invoiceNumber, supplier.getCode(), item.getCode());
+            pihi.setPurchaseInvoice(purchaseInvoice);
+            pihi.setItem(item);
+            pihi.setCost(cost);
+            pihi.setQuantity(quantity);
+            pihi.setDiscount(discount);
+            Stock stock = item.getStock();
+            if (stock == null) {
+                stock = new Stock(item.getCode());
+                stock.setQuantity(0.0);
+            }
+            quantity = stock.getQuantity() == 0 ? quantity : stock.getQuantity() + quantity;
+            stock.setQuantity(quantity);
+            item.setStock(stock);
+            pihi.setItem(item);
+            purchaseInvoice.getPurchaseInvoiceHasItemCollection().add(pihi);
+            PriceList priceList = item.getPriceList();
+            priceList = priceList == null ? new PriceList(item.getCode()) : priceList;
+            priceList.setCostPack(cost);
+            serializables.add(priceList);
+            serializables.add(item);
+            serializables.add(pihi);
+            serializables.add(stock);
+        }
+        if (supplier.getCode().equals("000")) {
+            LastCode lastCode = m.find(LastCode.class, "SUPPLIERINVOICE");
+            lastCode.setCode(invoiceNumber);
+            serializables.add(lastCode);
+        }
+        serializables.add(purchaseInvoice);
+        if (m.update(serializables)) {
+            clear();
+            showSuccess("Update Success");
+        }
+    }
+
+    private void clearFields() {
+        invoiceNumberField.setText("");
+        quantityField.setText("");
+        valueField.setText("");
+        totalAmountLabel.setText("");
+        totalDiscountLabel.setText("");
+    }
+
+    private void addToTable() {
+        double quantity = 0;
+        double value = 0;
+        double discount = 0;
+        Item item = (Item) itemComboBox.getSelectedItem();
+        try {
+            quantity = Double.valueOf(quantityField.getText());
+            value = Double.valueOf(valueField.getText().trim());
+            discount = Double.valueOf(discountField.getText().trim());
+        } catch (Exception e) {
+        }
+        if (quantity == 0) {
+            showError("Quantity Required");
+            return;
+        }
+        if (value == 0) {
+            showError("No cost value");
+            showError("No cost value");
+            return;
+        }
+        double net = value * quantity;
+        double discountAmount = net * discount / 100;
+        double amount = net - discountAmount;
+        int i = dtm.getRowCount();
+        Object[] rowData = {++i,
+            item.getCode(),
+            item.getDescription(),
+            nf2d.format(value),
+            nf3d.format(quantity),
+            nf2d.format(net),
+            nf2d.format(discountAmount),
+            nf2d.format(discount),
+            nf2d.format(amount)};
+        dtm.addRow(rowData);
+        quantityField.setText("");
+        valueField.setText("");
+        discountField.setText("");
+        itemComboBox.requestFocus();
+        calcTotal();
+    }
+
+    private void KeyAdapter() {
+        AutoCompleteDecorator.decorate(supplierComboBox);
+        AutoCompleteDecorator.decorate(itemComboBox);
+        setComboBoxKeyAdapters(supplierComboBox);
+        setComboBoxKeyAdapters(itemComboBox);
+        setComboBoxKeyAdapters(datePicker);
+    }
+
+    private void setComboBoxKeyAdapters(JComponent comp) {
+        String compName = comp.getName();
+        if (compName == null) {
+            return;
+        }
+        Component component[] = comp.getComponents();
+        for (int i = 0; i < component.length; i++) {
+            if (compName.equals("supplierComboBox")) {
+                component[i].addKeyListener(supplierComboBoxKeyAdapter);
+            } else if (compName.equals("itemComboBox")) {
+                component[i].addKeyListener(itemComboBoxKeyAdapter);
+            } else if (compName.equals("datePicker")) {
+                component[i].addKeyListener(datePickerKeyAdapter);
+            }
+        }
+    }
+    KeyAdapter datePickerKeyAdapter = new java.awt.event.KeyAdapter() {
+        @Override
+        public void keyPressed(KeyEvent evt) {
+            datePickerKeyPressed(evt);
+        }
+    };
+    KeyAdapter supplierComboBoxKeyAdapter = new java.awt.event.KeyAdapter() {
+        @Override
+        public void keyPressed(KeyEvent evt) {
+            supplierComboBoxKeyPressed(evt);
+        }
+    };
+    KeyAdapter itemComboBoxKeyAdapter = new java.awt.event.KeyAdapter() {
+        @Override
+        public void keyPressed(KeyEvent evt) {
+            itemComboBoxKeyPressed(evt);
+        }
+    };
+
+    private void fillCost() {
+        Object o = itemComboBox.getSelectedItem();
+        if (o != null && o instanceof Item) {
+            Item item = (Item) o;
+            PriceList priceList = item.getPriceList();
+            double cost = 0.0;
+            if (priceList != null && priceList.getCostPack() != null) {
+                cost = priceList.getCostPack();
+            }
+            valueField.setText(cost + "");
+        }
+    }
+
+    @Override
+    public void setVisible(boolean b) {
+        super.setVisible(b);
+        Combo.fillSuppliers(supplierComboBox);
+    }
+
+    private void dozPriceToItemPrice() {
+        String dozPriceText = JOptionPane.showInputDialog(this, "DOZ Price");
+        try {
+            double dozPrice = Double.parseDouble(dozPriceText);
+            valueField.setText((nf2d.format(dozPrice / 12)) + "");
+        } catch (Exception e) {
+        }
+    }
+
+    private void dozToItem() {
+        String dozText = JOptionPane.showInputDialog(this, "DOZ Count");
+        try {
+            double doz = Double.parseDouble(dozText);
+            quantityField.setText((nf2d.format(doz * 12)) + "");
+        } catch (Exception e) {
+        }
+    }
+
     @Override
     public void componentOpened() {
         // TODO add custom code on component opening
