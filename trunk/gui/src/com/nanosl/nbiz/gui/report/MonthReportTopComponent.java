@@ -48,19 +48,100 @@ public final class MonthReportTopComponent extends TopComponent {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jLabel1 = new javax.swing.JLabel();
+        datePicker = new JXDatePicker();
+        reportButton = new javax.swing.JButton();
+        halfCheckBox = new javax.swing.JCheckBox();
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(MonthReportTopComponent.class, "MonthReportTopComponent.jLabel1.text")); // NOI18N
+
+        datePicker.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                datePickerActionPerformed(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(reportButton, org.openide.util.NbBundle.getMessage(MonthReportTopComponent.class, "MonthReportTopComponent.reportButton.text")); // NOI18N
+        reportButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                reportButtonActionPerformed(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(halfCheckBox, org.openide.util.NbBundle.getMessage(MonthReportTopComponent.class, "MonthReportTopComponent.halfCheckBox.text")); // NOI18N
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(datePicker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(reportButton)
+                .addGap(18, 18, 18)
+                .addComponent(halfCheckBox)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(datePicker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(reportButton)
+                    .addComponent(halfCheckBox))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void datePickerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_datePickerActionPerformed
+
+    }//GEN-LAST:event_datePickerActionPerformed
+
+    private void reportButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reportButtonActionPerformed
+        final HashMap<String, Object> params = new HashMap<String, Object>();
+        Date date = datePicker.getDate();
+        Calendar c1 = Calendar.getInstance();
+        c1.setTime(date);
+        c1.set(Calendar.DATE, 1);
+        Calendar c2 = Calendar.getInstance();
+        c2.setTime(date);
+        c2.set(Calendar.DATE, c2.getActualMaximum(Calendar.DATE));
+        Calendar c3 = Calendar.getInstance();
+        c3.setTime(date);
+        c3.set(Calendar.DATE, 1);
+        c3.set(Calendar.MONTH, c2.get(Calendar.MONTH) + 1);
+
+        params.put("d1", yyyy_MM_dd.format(c1.getTime()));
+        params.put("d2", yyyy_MM_dd.format(c2.getTime()));
+        params.put("d3", yyyy_MM_dd.format(c3.getTime()));
+
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                try {
+                    String reportSource = "src/rpt/report1.jrxml";
+                    if (halfCheckBox.isSelected()) {
+                        reportSource = "src/rpt/monthReportA4.jrxml";
+                    }
+                    JasperReport jasperReport = JasperCompileManager.compileReport(reportSource);
+                    JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, params, m.getConnection());
+                    new JRViewer(jasperPrint, "Month");
+                } catch (Exception ex) {
+                    Loggings.logError(MonthReportView.class.getName(), ex);
+                }
+            }
+        });
+    }//GEN-LAST:event_reportButtonActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private org.jdesktop.swingx.JXDatePicker datePicker;
+    private javax.swing.JCheckBox halfCheckBox;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JButton reportButton;
     // End of variables declaration//GEN-END:variables
     @Override
     public void componentOpened() {
