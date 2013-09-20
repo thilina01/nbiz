@@ -4,11 +4,22 @@
  */
 package com.nanosl.nbiz.gui.report;
 
+import com.nanosl.nbiz.utility.Find;
+import com.nanosl.nbiz.utility.NTopComponent;
+import entity.IssuedCash;
+import entity.IssuedCheque;
+import java.awt.Color;
+import java.util.Collection;
+import java.util.Date;
+import java.util.Iterator;
+import javax.swing.table.DefaultTableModel;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
+import static util.Format.nf2d;
+import static util.Format.yyyy_MM_dd;
 
 /**
  * Top component which displays something.
@@ -31,10 +42,10 @@ import org.openide.util.NbBundle.Messages;
     "CTL_PaymentReportTopComponent=PaymentReport Window",
     "HINT_PaymentReportTopComponent=This is a PaymentReport window"
 })
-public final class PaymentReportTopComponent extends TopComponent {
+public final class PaymentReportTopComponent extends NTopComponent {
 
     public PaymentReportTopComponent() {
-        initComponents();
+        onLoad();
         setName(Bundle.CTL_PaymentReportTopComponent());
         setToolTipText(Bundle.HINT_PaymentReportTopComponent());
 
@@ -238,6 +249,85 @@ public final class PaymentReportTopComponent extends TopComponent {
     private javax.swing.JScrollPane masterScrollPane;
     private org.jdesktop.swingx.JXDatePicker startDatePicker;
     // End of variables declaration//GEN-END:variables
+      DefaultTableModel cashTableModel;
+    DefaultTableModel chequeTableModel;
+
+    private void fillTable() {
+        cashTableModel.setRowCount(0);
+        chequeTableModel.setRowCount(0);
+        Date startDate = startDatePicker.getDate();
+        Date endDate = endDatePicker.getDate();
+        endDate.setTime(endDate.getTime() + 1000 * 60 * 60 * 24 - 1);
+        Collection<IssuedCash> issuedCashs = Find.issuedCashByDates(startDate, endDate);
+        if (issuedCashs == null) {
+            showError("No Cash Record Found!");
+        }
+        int i = 0;
+        for (Iterator<IssuedCash> it = issuedCashs.iterator(); it.hasNext();) {
+            IssuedCash issuedCash = it.next();
+            Object[] row = {
+                ++i,
+                yyyy_MM_dd.format(issuedCash.getIssuedTime()),
+                issuedCash.getPurchaseInvoice().getSupplier().getCode(),
+                issuedCash.getPurchaseInvoice().getSupplier().getName(),
+                issuedCash.getPurchaseInvoice().getPurchaseInvoicePK().getInvNo(),
+                issuedCash.getBank().getName(),
+                nf2d.format(issuedCash.getAmount())
+            };
+            cashTableModel.addRow(row);
+        }
+
+        Collection<IssuedCheque> issuedCheques = Find.issuedChequeByDates(startDate, endDate);
+        if (issuedCheques == null) {
+            showError("No Cheque Record Found!");
+        }
+        i = 0;
+        for (Iterator<IssuedCheque> it = issuedCheques.iterator(); it.hasNext();) {
+            IssuedCheque issuedCheque = it.next();
+            Object[] row = {
+                ++i,
+                issuedCheque.getChequeNumber(),
+                issuedCheque.getBank().getName(),
+                yyyy_MM_dd.format(issuedCheque.getIssuedDate()),
+                yyyy_MM_dd.format(issuedCheque.getBankingDate()),
+                nf2d.format(issuedCheque.getAmount()),
+                issuedCheque.getPurchaseInvoice().getSupplier().getCode(),
+                issuedCheque.getPurchaseInvoice().getSupplier().getName(),
+                issuedCheque.getPurchaseInvoice().getPurchaseInvoicePK().getInvNo()
+            };
+            chequeTableModel.addRow(row);
+        }
+    }
+
+    protected void onLoad() {
+        initComponents();
+        cashTableModel = (DefaultTableModel) cashTable.getModel();
+        chequeTableModel = (DefaultTableModel) chequeTable.getModel();
+    }
+
+    @Override
+    public void setVisible(boolean b) {
+        super.setVisible(b);
+    }
+
+    private void fill() {
+        fillTable();
+        calcTotal();
+    }
+
+    private void calcTotal() {
+        double total = 0;
+        for (int i = 0; i < cashTableModel.getRowCount(); i++) {
+            total += Double.valueOf(cashTableModel.getValueAt(i, 6).toString());
+        }
+        cashTotalLabel.setText(nf2d.format(total));
+        total = 0;
+        for (int i = 0; i < chequeTableModel.getRowCount(); i++) {
+            total += Double.valueOf(chequeTableModel.getValueAt(i, 5).toString());
+        }
+        chequeTableLabel.setText(nf2d.format(total));
+    }
+    
     @Override
     public void componentOpened() {
         // TODO add custom code on component opening

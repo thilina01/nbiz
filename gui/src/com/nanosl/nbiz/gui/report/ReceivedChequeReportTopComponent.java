@@ -4,11 +4,25 @@
  */
 package com.nanosl.nbiz.gui.report;
 
+import com.nanosl.lib.date.JXDatePicker;
+import com.nanosl.nbiz.utility.Find;
+import com.nanosl.nbiz.utility.NTopComponent;
+import entity.CollectionReceipt;
+import entity.SaleCheque;
+import entity.SaleChequePK;
+import entity.SaleInvoice;
+import java.awt.Color;
+import java.util.Collection;
+import java.util.Date;
+import java.util.Iterator;
+import javax.swing.table.DefaultTableModel;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
+import static util.Format.nf2d;
+import static util.Format.yyyy_MM_dd;
 
 /**
  * Top component which displays something.
@@ -31,10 +45,10 @@ import org.openide.util.NbBundle.Messages;
     "CTL_ReceivedChequeReportTopComponent=ReceivedChequeReport Window",
     "HINT_ReceivedChequeReportTopComponent=This is a ReceivedChequeReport window"
 })
-public final class ReceivedChequeReportTopComponent extends TopComponent {
+public final class ReceivedChequeReportTopComponent extends NTopComponent {
 
     public ReceivedChequeReportTopComponent() {
-        initComponents();
+        onLoad();
         setName(Bundle.CTL_ReceivedChequeReportTopComponent());
         setToolTipText(Bundle.HINT_ReceivedChequeReportTopComponent());
 
@@ -254,6 +268,100 @@ public final class ReceivedChequeReportTopComponent extends TopComponent {
     private javax.swing.JLabel totalLabel;
     private javax.swing.JButton updateButton;
     // End of variables declaration//GEN-END:variables
+    DefaultTableModel tableModel;
+    SaleCheque saleCheque;
+
+    private void fillTable() {
+        tableModel.setRowCount(0);
+        Date startDate = startDatePicker.getDate();
+        Date endDate = endDatePicker.getDate();
+        int fillStatus = fillStatusComboBox.getSelectedIndex();
+        //ALTER TABLE `sgm`.`purchase_invoice` CHANGE COLUMN `inv_time` `inv_date` DATE NULL DEFAULT NULL  ;
+
+        Collection<SaleCheque> saleCheques = Find.saleChequeByBankingDates(startDate, endDate);
+        if (saleCheques == null) {
+            setStatusMessage("No Record Found!", Color.red);
+            return;
+        }
+        int i = 0;
+        for (Iterator<SaleCheque> it = saleCheques.iterator(); it.hasNext();) {
+            SaleCheque localSaleCheque = it.next();
+            int chequeStatus = localSaleCheque.getStatus();
+            if (fillStatus == 3 | chequeStatus == fillStatus) {
+                CollectionReceipt collectionReceipt = localSaleCheque.getCollectionReceipt();
+                SaleInvoice saleInvoice = collectionReceipt.getSaleInvoice();
+                Object[] row = {++i,
+                    localSaleCheque.getSaleChequePK().getChequeNumber(),
+                    nf2d.format(localSaleCheque.getAmount()),
+                    yyyy_MM_dd.format(collectionReceipt.getCollectedTime()),
+                    yyyy_MM_dd.format(localSaleCheque.getBankingDate()),
+                    localSaleCheque.getBank().getCode(),
+                    saleInvoice.getInvNo(),
+                    collectionReceipt.getReceiptNumber(),
+                    saleInvoice.getCustomer().getName()};
+                tableModel.addRow(row);
+            }
+        }
+        calcTotal();
+    }
+
+    protected void onLoad() {
+        initComponents();
+        tableModel = (DefaultTableModel) masterTable.getModel();
+    }
+
+    @Override
+    public void setVisible(boolean b) {
+        super.setVisible(b);
+        fill();
+        clear();
+    }
+
+    private void fill() {
+        fillTable();
+        calcTotal();
+    }
+
+    private void calcTotal() {
+        double total = 0;
+        for (int i = 0; i < tableModel.getRowCount(); i++) {
+            total += Double.valueOf(tableModel.getValueAt(i, 2).toString());
+        }
+        totalLabel.setText(nf2d.format(total));
+    }
+
+    private void loadCheque() {
+        clear();
+        if (tableModel.getRowCount() > 0) {
+            int row = masterTable.getSelectedRow();
+            String chequeNumber = tableModel.getValueAt(row, 1).toString();
+            String bankCode = tableModel.getValueAt(row, 5).toString();
+            String ReceiptNumber = tableModel.getValueAt(row, 7).toString();
+            saleCheque = m.find(SaleCheque.class, new SaleChequePK(chequeNumber, bankCode, ReceiptNumber));
+            if (saleCheque != null) {
+                chequeNumberTextField.setText(chequeNumber);
+            }
+        }
+    }
+
+    private void updat() {
+        if (saleCheque == null) {
+            showError("No Cheque Selected.");
+            return;
+        }
+        saleCheque.setStatus(setStatusComboBox.getSelectedIndex());
+        if (m.update(saleCheque)) {
+            setStatusMessage("Cheque " + saleCheque.getSaleChequePK().getChequeNumber() + " Updated.");
+            clear();
+            fill();
+        }
+    }
+
+    private void clear() {
+        saleCheque = null;
+        chequeNumberTextField.setText("");
+    }
+    
     @Override
     public void componentOpened() {
         // TODO add custom code on component opening

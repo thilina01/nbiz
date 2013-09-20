@@ -4,11 +4,23 @@
  */
 package com.nanosl.nbiz.gui.report;
 
+import com.nanosl.nbiz.utility.NTopComponent;
+import entity.Employee;
+import entity.Item;
+import entity.RepSale;
+import java.util.Date;
+import java.util.Iterator;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.table.DefaultTableModel;
+import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
+import static util.Format.nf2d;
+import static util.Format.nf3d;
+import static util.Format.yyyy_MM_dd;
 
 /**
  * Top component which displays something.
@@ -31,10 +43,10 @@ import org.openide.util.NbBundle.Messages;
     "CTL_RepSaleReportTopComponent=RepSaleReport Window",
     "HINT_RepSaleReportTopComponent=This is a RepSaleReport window"
 })
-public final class RepSaleReportTopComponent extends TopComponent {
+public final class RepSaleReportTopComponent extends NTopComponent {
 
     public RepSaleReportTopComponent() {
-        initComponents();
+        onLoad();
         setName(Bundle.CTL_RepSaleReportTopComponent());
         setToolTipText(Bundle.HINT_RepSaleReportTopComponent());
 
@@ -201,7 +213,59 @@ public final class RepSaleReportTopComponent extends TopComponent {
     private javax.swing.JComboBox repComboBox;
     private javax.swing.JTextField totalTextField;
     // End of variables declaration//GEN-END:variables
+    DefaultTableModel tableModel;
+
+    private void fillTable() {
+        tableModel.setRowCount(0);
+        Employee employee = (Employee) repComboBox.getSelectedItem();
+        Date date = datePicker.getDate();
+        if (date == null) {
+            return;
+        }
+        int i = tableModel.getRowCount();
+        for (Iterator<RepSale> it = employee.getRepSaleCollection().iterator(); it.hasNext();) {
+            RepSale repSale = it.next();
+            Item item = repSale.getItem();
+            if (yyyy_MM_dd.format(date).equals(yyyy_MM_dd.format(repSale.getRepSalePK().getSaleDate()))) {
+                double loaded = repSale.getLoaded();
+                double remaining = repSale.getRemaining();
+                double rate = repSale.getRate();
+                double sale = loaded - remaining;
+
+                Object[] row = {++i, item.getCode(), item.getDescription(), nf3d.format(loaded), nf3d.format(remaining), nf3d.format(sale), nf2d.format(rate), nf2d.format(sale * rate)};
+                tableModel.addRow(row);
+            }
+        }
+        calcTotal();
+    }
+
+    protected void onLoad() {
+        initComponents();
+        tableModel = (DefaultTableModel) masterTable.getModel();
+        AutoCompleteDecorator.decorate(repComboBox);
+    }
+
     @Override
+    public void setVisible(boolean b) {
+        super.setVisible(b);
+        fillRep();
+    }
+
+    private void fillRep() {
+        tableModel.setRowCount(0);
+        repComboBox.setModel(new DefaultComboBoxModel(m.find(Employee.class).toArray()));
+    }
+
+    private void calcTotal() {
+        double total = 0;
+        for (int i = 0; i < tableModel.getRowCount(); i++) {
+            total += Double.valueOf(tableModel.getValueAt(i, 7).toString());
+        }
+        totalTextField.setText(nf2d.format(total));
+    }
+
+    
+   @Override
     public void componentOpened() {
         // TODO add custom code on component opening
     }

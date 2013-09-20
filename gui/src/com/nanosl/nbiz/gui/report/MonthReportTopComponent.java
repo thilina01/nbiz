@@ -4,6 +4,13 @@
  */
 package com.nanosl.nbiz.gui.report;
 
+import com.nanosl.lib.date.JXDatePicker;
+import com.nanosl.lib.log.Loggings;
+import com.nanosl.lib.print.JRViewer;
+import com.nanosl.nbiz.utility.NTopComponent;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
@@ -31,10 +38,10 @@ import org.openide.util.NbBundle.Messages;
     "CTL_MonthReportTopComponent=MonthReport Window",
     "HINT_MonthReportTopComponent=This is a MonthReport window"
 })
-public final class MonthReportTopComponent extends TopComponent {
+public final class MonthReportTopComponent extends NTopComponent {
 
     public MonthReportTopComponent() {
-        initComponents();
+        onLoad();
         setName(Bundle.CTL_MonthReportTopComponent());
         setToolTipText(Bundle.HINT_MonthReportTopComponent());
 

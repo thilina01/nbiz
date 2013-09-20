@@ -4,11 +4,22 @@
  */
 package com.nanosl.nbiz.gui.report;
 
+import com.nanosl.lib.date.JXDatePicker;
+import com.nanosl.nbiz.utility.Find;
+import com.nanosl.nbiz.utility.NTopComponent;
+import entity.IssuedCheque;
+import java.awt.Color;
+import java.util.Collection;
+import java.util.Date;
+import java.util.Iterator;
+import javax.swing.table.DefaultTableModel;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
+import static util.Format.nf2d;
+import static util.Format.yyyy_MM_dd;
 
 /**
  * Top component which displays something.
@@ -31,10 +42,10 @@ import org.openide.util.NbBundle.Messages;
     "CTL_IssuedChequeReportTopComponent=IssuedChequeReport Window",
     "HINT_IssuedChequeReportTopComponent=This is a IssuedChequeReport window"
 })
-public final class IssuedChequeReportTopComponent extends TopComponent {
+public final class IssuedChequeReportTopComponent extends NTopComponent {
 
     public IssuedChequeReportTopComponent() {
-        initComponents();
+        onLoad();
         setName(Bundle.CTL_IssuedChequeReportTopComponent());
         setToolTipText(Bundle.HINT_IssuedChequeReportTopComponent());
 
@@ -186,6 +197,54 @@ public final class IssuedChequeReportTopComponent extends TopComponent {
     private org.jdesktop.swingx.JXDatePicker startDatePicker;
     private javax.swing.JLabel totalLabel;
     // End of variables declaration//GEN-END:variables
+        DefaultTableModel tableModel;
+
+    private void fillTable() {
+        tableModel.setRowCount(0);
+        Date startDate = startDatePicker.getDate();
+        Date endDate = endDatePicker.getDate();
+        //ALTER TABLE `sgm`.`purchase_invoice` CHANGE COLUMN `inv_time` `inv_date` DATE NULL DEFAULT NULL  ;
+
+        Collection<IssuedCheque> issuedCheques = Find.issuedChequeByDates(startDate, endDate);
+        if (issuedCheques == null) {
+            showSuccess("No Record Found!");
+            return;
+        }
+        int i = 0;
+        for (Iterator<IssuedCheque> it = issuedCheques.iterator(); it.hasNext();) {
+            IssuedCheque issuedCheque = it.next();
+            Object[] row = {++i, issuedCheque.getChequeNumber(),nf2d.format(issuedCheque.getAmount()),yyyy_MM_dd.format(issuedCheque.getIssuedDate()),yyyy_MM_dd.format(issuedCheque.getBankingDate()), issuedCheque.getBank().getName(), issuedCheque.getPurchaseInvoice().getPurchaseInvoicePK().getInvNo(), issuedCheque.getPurchaseInvoice().getPurchaseInvoicePK().getSupplierCode()};
+            tableModel.addRow(row);
+        }
+        calcTotal();
+    }
+
+    protected void onLoad() {
+        initComponents();
+        tableModel = (DefaultTableModel) masterTable.getModel();
+    }
+
+    @Override
+    public void setVisible(boolean b) {
+        super.setVisible(b);
+        fill();
+    }
+
+    private void fill() {
+        fillTable();
+        calcTotal();
+    }
+
+    private void calcTotal() {
+        double total = 0;
+        for (int i = 0; i < tableModel.getRowCount(); i++) {
+            total += Double.valueOf(tableModel.getValueAt(i, 2).toString());
+        }
+        totalLabel.setText(nf2d.format(total));
+    }
+
+
+    
     @Override
     public void componentOpened() {
         // TODO add custom code on component opening

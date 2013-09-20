@@ -4,11 +4,19 @@
  */
 package com.nanosl.nbiz.gui.report;
 
+import com.nanosl.nbiz.utility.NTopComponent;
+import entity.Item;
+import entity.StockChange;
+import entity.StockChangeSummery;
+import java.util.Date;
+import java.util.Iterator;
+import javax.swing.table.DefaultTableModel;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
+import static util.Format.nf2d;
 
 /**
  * Top component which displays something.
@@ -31,10 +39,10 @@ import org.openide.util.NbBundle.Messages;
     "CTL_StockChangeReportTopComponent=StockChangeReport Window",
     "HINT_StockChangeReportTopComponent=This is a StockChangeReport window"
 })
-public final class StockChangeReportTopComponent extends TopComponent {
+public final class StockChangeReportTopComponent extends NTopComponent {
 
     public StockChangeReportTopComponent() {
-        initComponents();
+        onLoad();
         setName(Bundle.CTL_StockChangeReportTopComponent());
         setToolTipText(Bundle.HINT_StockChangeReportTopComponent());
 
@@ -179,6 +187,53 @@ public final class StockChangeReportTopComponent extends TopComponent {
     private javax.swing.JTable masterTable;
     private javax.swing.JLabel totalLabel;
     // End of variables declaration//GEN-END:variables
+  
+    DefaultTableModel tableModel;
+
+    private void fillTable() {
+        tableModel.setRowCount(0);
+        Date date = jXDatePicker1.getDate();
+        StockChangeSummery stockChangeSummery = m.find(StockChangeSummery.class, date);
+        if (stockChangeSummery == null) {
+            return;
+
+        }
+        int i = 0;
+        for (Iterator<StockChange> it = stockChangeSummery.getStockChangeCollection().iterator(); it.hasNext();) {
+            StockChange stockChange = it.next();
+            Item item = stockChange.getItem();
+            double oldQuantity = stockChange.getOldQuantity() == null ? 0 : stockChange.getOldQuantity();
+            double actualQuantity = stockChange.getActualQuantity() == null ? 0 : stockChange.getActualQuantity();
+            double rate = stockChange.getRate() == null ? 0 : stockChange.getRate();
+            double deferent = oldQuantity - actualQuantity;
+            Object[] row = {++i, item.getCode(), item.getDescription(), oldQuantity, actualQuantity, deferent, rate, nf2d.format(deferent * rate)};
+            tableModel.addRow(row);
+        }
+        calcTotal();
+    }
+
+    protected void onLoad() {
+        initComponents();
+        tableModel = (DefaultTableModel) masterTable.getModel();
+    }
+
+    @Override
+    public void setVisible(boolean b) {
+        super.setVisible(b);
+    }
+
+    private void fill() {
+        fillTable();
+        calcTotal();
+    }
+
+    private void calcTotal() {
+        double total = 0;
+        for (int i = 0; i < tableModel.getRowCount(); i++) {
+            total += Double.valueOf(tableModel.getValueAt(i, 7).toString());
+        }
+        totalLabel.setText(total + "");
+    }
     @Override
     public void componentOpened() {
         // TODO add custom code on component opening

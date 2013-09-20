@@ -4,15 +4,28 @@
  */
 package com.nanosl.nbiz.gui.report;
 
+import com.nanosl.nbiz.utility.FindMySql;
+import com.nanosl.nbiz.utility.NTopComponent;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.table.DefaultTableModel;
+import org.jdesktop.swingx.JXDatePicker;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
+import static util.Format.nf2d;
 
 /**
  * Top component which displays something.
  */
+
+
+
 @ConvertAsProperties(
         dtd = "-//com.nanosl.nbiz.gui.report//PartPaymentCollectionReport//EN",
         autostore = false)
@@ -31,10 +44,10 @@ import org.openide.util.NbBundle.Messages;
     "CTL_PartPaymentCollectionReportTopComponent=PartPaymentCollectionReport Window",
     "HINT_PartPaymentCollectionReportTopComponent=This is a PartPaymentCollectionReport window"
 })
-public final class PartPaymentCollectionReportTopComponent extends TopComponent {
+public final class PartPaymentCollectionReportTopComponent extends NTopComponent {
 
     public PartPaymentCollectionReportTopComponent() {
-        initComponents();
+        onLoad();
         setName(Bundle.CTL_PartPaymentCollectionReportTopComponent());
         setToolTipText(Bundle.HINT_PartPaymentCollectionReportTopComponent());
 
@@ -186,6 +199,88 @@ public final class PartPaymentCollectionReportTopComponent extends TopComponent 
     private org.jdesktop.swingx.JXDatePicker startDatePicker;
     private javax.swing.JLabel totalLabel;
     // End of variables declaration//GEN-END:variables
+     DefaultTableModel tableModel;
+
+    private void fillTable() {
+        try {
+            tableModel.setRowCount(0);
+            Date startDate = startDatePicker.getDate();
+            Date endDate = endDatePicker.getDate();
+            int rowNumber = 1;
+            //ALTER TABLE `sgm`.`purchase_invoice` CHANGE COLUMN `inv_time` `inv_date` DATE NULL DEFAULT NULL  ;
+
+            ResultSet res = FindMySql.partPaymentCollectionsByDates(startDate, endDate);
+            while (res.next()) {
+
+                String collectedOn = res.getString("Collected Time");
+                String invoiceNumber = res.getString("Invoice Number");
+                String customerCode = res.getString("Customer Code");
+                String customerName = res.getString("Customer Name");
+                String receiptNumber = res.getString("Receipt Number");
+
+                double receiptAmount = res.getDouble("Receipt Amount");
+                double invoiceAmount = res.getDouble("Invoice Amount");
+                double totalReceived = res.getDouble("Total Received");
+                double remainingCredit = res.getDouble("Remaining Credit");
+
+                Object[] row = {
+                    rowNumber++,
+                    collectedOn,
+                    invoiceNumber,
+                    customerCode + " " + customerName,
+                    receiptNumber,
+                    nf2d.format(receiptAmount),
+                    nf2d.format(invoiceAmount),
+                    nf2d.format(totalReceived),
+                    nf2d.format(remainingCredit)
+                };
+                tableModel.addRow(row);
+            }
+            FindMySql.close();
+
+//                //////////////////////////////
+//            if (saleInvoices == null) {
+//                setStatusMessage("No Record Found!", Color.red);
+//                return;
+//            }
+//            int i = 0;
+//            for (Iterator<SaleInvoice> it = saleInvoices.iterator(); it.hasNext();) {
+//                SaleInvoice saleInvoice = it.next();
+//                Object[] row = {++i, yyyy_MM_dd.format(saleInvoice.getInvTime()), saleInvoice.getCustomer().getCode(), saleInvoice.getCustomer().getName(), saleInvoice.getInvNo(), nf2d.format(saleInvoice.getAmount()),nf2d.format(saleInvoice.getReceivedAmount())};
+//                tableModel.addRow(row);
+//            }
+            
+
+            calcTotal();
+        } catch (SQLException ex) {
+            Logger.getLogger(PartPaymentCollectionReportView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    protected void onLoad() {
+        initComponents();
+        tableModel = (DefaultTableModel) masterTable.getModel();
+    }
+
+    @Override
+    public void setVisible(boolean b) {
+        super.setVisible(b);
+        fill();
+    }
+
+    private void fill() {
+        fillTable();
+        calcTotal();
+    }
+
+    private void calcTotal() {
+        double total = 0;
+        for (int i = 0; i < tableModel.getRowCount(); i++) {
+            total += Double.valueOf(tableModel.getValueAt(i, 5).toString());
+        }
+        totalLabel.setText(nf2d.format(total));
+    }
+    
     @Override
     public void componentOpened() {
         // TODO add custom code on component opening
