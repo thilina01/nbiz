@@ -15,7 +15,7 @@ import org.openide.windows.TopComponent;
  */
 public class NTopComponent extends TopComponent {
 
-    public Manager manager = Manager.getInstance();
+    public Manager m = Manager.getInstance();
 
     protected void showError(String string) {
         NotifyDescriptor d =
