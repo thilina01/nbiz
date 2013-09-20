@@ -4,11 +4,24 @@
  */
 package com.nanosl.nbiz.gui.report;
 
+import com.nanosl.lib.date.JXDatePicker;
+import com.nanosl.nbiz.utility.Find;
+import com.nanosl.nbiz.utility.NTopComponent;
+import entity.CollectionReceipt;
+import entity.SaleCheque;
+import entity.SaleInvoice;
+import java.awt.Color;
+import java.util.Collection;
+import java.util.Date;
+import java.util.Iterator;
+import javax.swing.table.DefaultTableModel;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
+import static util.Format.nf2d;
+import static util.Format.yyyy_MM_dd;
 
 /**
  * Top component which displays something.
@@ -31,10 +44,10 @@ import org.openide.util.NbBundle.Messages;
     "CTL_CollectionReportTopComponent=CollectionReport Window",
     "HINT_CollectionReportTopComponent=This is a CollectionReport window"
 })
-public final class CollectionReportTopComponent extends TopComponent {
+public final class CollectionReportTopComponent extends NTopComponent {
 
     public CollectionReportTopComponent() {
-        initComponents();
+        onLoad();
         setName(Bundle.CTL_CollectionReportTopComponent());
         setToolTipText(Bundle.HINT_CollectionReportTopComponent());
 
@@ -238,6 +251,102 @@ public final class CollectionReportTopComponent extends TopComponent {
     private javax.swing.JScrollPane masterScrollPane;
     private org.jdesktop.swingx.JXDatePicker startDatePicker;
     // End of variables declaration//GEN-END:variables
+     DefaultTableModel cashTableModel;
+    DefaultTableModel chequeTableModel;
+
+    private void fillTable() {
+        cashTableModel.setRowCount(0);
+        chequeTableModel.setRowCount(0);
+        Date startDate = startDatePicker.getDate();
+        Date endDate = endDatePicker.getDate();
+        endDate.setTime(endDate.getTime() + 1000 * 60 * 60 * 24 - 1);
+        Collection<CollectionReceipt> collectionReceipts = Find.collectionReceiptsByDates(startDate, endDate);
+        if (collectionReceipts == null) {
+            showError("No Collection Record Found!");
+        }
+        int i1 = 0, i2 = 0;
+        for (Iterator<CollectionReceipt> it = collectionReceipts.iterator(); it.hasNext();) {
+            CollectionReceipt collectionReceipt = it.next();
+            SaleInvoice saleInvoice = collectionReceipt.getSaleInvoice();
+            Object[] row = {
+                ++i1,
+                yyyy_MM_dd.format(collectionReceipt.getCollectedTime()),
+                saleInvoice.getCustomer().getCode(),
+                saleInvoice.getCustomer().getName(),
+                saleInvoice.getInvNo(),
+                nf2d.format(collectionReceipt.getSaleCash().getAmount()),
+                collectionReceipt.getReceiptNumber()
+            };
+            cashTableModel.addRow(row);
+            Collection<SaleCheque> saleCheques = collectionReceipt.getSaleChequeCollection();
+            for (Iterator<SaleCheque> it1 = saleCheques.iterator(); it1.hasNext();) {
+                SaleCheque saleCheque = it1.next();
+                Object[] row1 = {
+                    ++i2,
+                    saleCheque.getSaleChequePK().getChequeNumber(),
+                    saleCheque.getBank().getName(),
+                    yyyy_MM_dd.format(saleCheque.getBankingDate()),
+                    nf2d.format(saleCheque.getAmount()),
+                    saleInvoice.getCustomer().getCode(),
+                    saleInvoice.getCustomer().getName(),
+                    saleInvoice.getInvNo()
+                };
+                chequeTableModel.addRow(row1);
+            }
+        }
+//
+//        Collection<SaleCheque> saleCheques = Find.saleChequeByDates(startDate, endDate);
+//        if (saleCheques == null) {
+//            setStatusMessage("No Cheque Record Found!", Color.red);
+//        }
+//        i = 0;
+//        for (Iterator<SaleCheque> it = saleCheques.iterator(); it.hasNext();) {
+//            SaleCheque saleCheque = it.next();
+//            CollectionReceipt collectionReceipt = saleCheque.getCollectionReceipt();
+//            SaleInvoice saleInvoice = collectionReceipt.getSaleInvoice();
+//            Object[] row = {
+//                ++i,
+//                saleCheque.getSaleChequePK().getChequeNumber(),
+//                saleCheque.getBank().getName(),
+//                yyyy_MM_dd.format(saleCheque.getBankingDate()),
+//                nf2d.format(saleCheque.getAmount()),
+//                saleInvoice.getCustomer().getCode(),
+//                saleInvoice.getCustomer().getName(),
+//                saleInvoice.getInvNo()
+//            };
+//            chequeTableModel.addRow(row);
+//        }
+    }
+
+    protected void onLoad() {
+        initComponents();
+        cashTableModel = (DefaultTableModel) cashTable.getModel();
+        chequeTableModel = (DefaultTableModel) chequeTable.getModel();
+    }
+
+    @Override
+    public void setVisible(boolean b) {
+        super.setVisible(b);
+        fill();
+    }
+
+    private void fill() {
+        fillTable();
+        calcTotal();
+    }
+
+    private void calcTotal() {
+        double total = 0;
+        for (int i = 0; i < cashTableModel.getRowCount(); i++) {
+            total += Double.valueOf(cashTableModel.getValueAt(i, 5).toString());
+        }
+        cashTotalLabel.setText(nf2d.format(total));
+        total = 0;
+        for (int i = 0; i < chequeTableModel.getRowCount(); i++) {
+            total += Double.valueOf(chequeTableModel.getValueAt(i, 4).toString());
+        }
+        chequeTableLabel.setText(nf2d.format(total));
+    }
     @Override
     public void componentOpened() {
         // TODO add custom code on component opening
