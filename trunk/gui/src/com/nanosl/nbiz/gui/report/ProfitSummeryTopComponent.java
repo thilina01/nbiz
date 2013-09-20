@@ -4,11 +4,16 @@
  */
 package com.nanosl.nbiz.gui.report;
 
+import com.nanosl.lib.date.JXDatePicker;
+import com.nanosl.nbiz.utility.FindMySql;
+import com.nanosl.nbiz.utility.NTopComponent;
+import java.util.Date;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
+import static util.Format.nf2d;
 
 /**
  * Top component which displays something.
@@ -31,10 +36,10 @@ import org.openide.util.NbBundle.Messages;
     "CTL_ProfitSummeryTopComponent=ProfitSummery Window",
     "HINT_ProfitSummeryTopComponent=This is a ProfitSummery window"
 })
-public final class ProfitSummeryTopComponent extends TopComponent {
+public final class ProfitSummeryTopComponent extends NTopComponent {
 
     public ProfitSummeryTopComponent() {
-        initComponents();
+        onLoad();
         setName(Bundle.CTL_ProfitSummeryTopComponent());
         setToolTipText(Bundle.HINT_ProfitSummeryTopComponent());
 
@@ -236,6 +241,51 @@ public final class ProfitSummeryTopComponent extends TopComponent {
     private javax.swing.JTextField totalSaleIncomeTextField;
     private javax.swing.JTextField totalSaleProfitTextField;
     // End of variables declaration//GEN-END:variables
+     private void onLoad() {
+
+        initComponents();
+    }
+
+    @Override
+    public void setVisible(boolean b) {
+        super.setVisible(b);
+        clear();
+    }
+
+    private void clear() {
+        totalSaleIncomeTextField.setText(nf2d.format(0));
+        totalSaleCostTextField.setText(nf2d.format(0));
+        totalSaleProfitTextField.setText(nf2d.format(0));
+        totalPaidExpensesTextField.setText(nf2d.format(0));
+        totalPaymentsTextField.setText(nf2d.format(0));
+        totalChequesTextField.setText(nf2d.format(0));
+
+    }
+
+    private void fill() {
+        clear();
+        Date startDate = startDatePicker.getDate();
+        Date endDate = endDatePicker.getDate();
+        double[] res = FindMySql.totalSaleSummeryBetweenDates(startDate, endDate);
+
+        double totalSaleIncome = res[0];
+        double totalSaleCost = res[1];
+        double totalSaleProfit = res[2];
+
+        double totalPaidExpenses = FindMySql.totalExpensesBetweenDates(startDate, endDate);
+        double totalPayments = FindMySql.totalPaymentsBetweenDates(startDate, endDate);
+        double totalCheques = FindMySql.totalChequesBetweenDates(startDate, endDate);
+
+        totalSaleIncomeTextField.setText(nf2d.format(totalSaleIncome));
+        totalSaleCostTextField.setText(nf2d.format(totalSaleCost));
+        totalSaleProfitTextField.setText(nf2d.format(totalSaleProfit));
+        totalPaidExpensesTextField.setText(nf2d.format(totalPaidExpenses));
+        totalPaymentsTextField.setText(nf2d.format(totalPayments));
+        totalChequesTextField.setText(nf2d.format(totalCheques));
+
+
+    }
+    
     @Override
     public void componentOpened() {
         // TODO add custom code on component opening

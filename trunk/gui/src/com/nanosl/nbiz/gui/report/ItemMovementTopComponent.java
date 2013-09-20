@@ -4,11 +4,24 @@
  */
 package com.nanosl.nbiz.gui.report;
 
+import com.nanosl.lib.date.JXDatePicker;
+import com.nanosl.nbiz.utility.Combo;
+import com.nanosl.nbiz.utility.Find;
+import com.nanosl.nbiz.utility.NTopComponent;
+import entity.Item;
+import entity.PurchaseInvoiceHasItem;
+import entity.SaleInvoiceHasItem;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+import javax.swing.table.DefaultTableModel;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
+import static util.Format.nf2d;
+import static util.Format.yyyy_MM_dd;
 
 /**
  * Top component which displays something.
@@ -31,10 +44,10 @@ import org.openide.util.NbBundle.Messages;
     "CTL_ItemMovementTopComponent=ItemMovement Window",
     "HINT_ItemMovementTopComponent=This is a ItemMovement window"
 })
-public final class ItemMovementTopComponent extends TopComponent {
+public final class ItemMovementTopComponent extends NTopComponent {
 
     public ItemMovementTopComponent() {
-        initComponents();
+        onLoad();
         setName(Bundle.CTL_ItemMovementTopComponent());
         setToolTipText(Bundle.HINT_ItemMovementTopComponent());
 
@@ -219,6 +232,72 @@ public final class ItemMovementTopComponent extends TopComponent {
     private javax.swing.JLabel totalIssueLabel;
     private javax.swing.JLabel totalReceiveLabel;
     // End of variables declaration//GEN-END:variables
+     DefaultTableModel issueTableModel;
+    DefaultTableModel receiveTableModel;
+
+    private void onLoad() {
+
+        initComponents();
+        issueTableModel = (DefaultTableModel) issueTable.getModel();
+        receiveTableModel = (DefaultTableModel) receiveTable.getModel();
+    }
+
+    @Override
+    public void setVisible(boolean b) {
+        super.setVisible(b);
+        clear();
+    }
+
+    private void clear() {
+        Combo.fillItems(itemComboBox);
+        issueTableModel.setRowCount(0);
+        receiveTableModel.setRowCount(0);
+        
+        totalReceiveLabel.setText(nf2d.format(0));
+        totalIssueLabel.setText(nf2d.format(0));
+
+    }
+
+    private void fill() {
+        issueTableModel.setRowCount(0);
+        receiveTableModel.setRowCount(0);
+        totalReceiveLabel.setText(nf2d.format(0));
+        totalIssueLabel.setText(nf2d.format(0));
+        Object o = itemComboBox.getSelectedItem();
+        Item item = o == null ? null : (Item) o;
+        Date startDate = startDatePicker.getDate();
+        Date endDate = endDatePicker.getDate();
+
+        List<SaleInvoiceHasItem> saleInvoiceHasItems = Find.saleInvoiceItemsByItemAndDates(item, startDate, endDate);
+        double totIssues = 0;
+        for (Iterator<SaleInvoiceHasItem> it = saleInvoiceHasItems.iterator(); it.hasNext();) {
+            SaleInvoiceHasItem saleInvoiceHasItem = it.next();
+            double qty = saleInvoiceHasItem.getQuantity();
+            totIssues += qty;
+            Object[] row = {
+                yyyy_MM_dd.format(saleInvoiceHasItem.getSaleInvoice().getInvTime()),
+                nf2d.format(qty)
+            };
+            issueTableModel.addRow(row);
+        }
+        totalIssueLabel.setText(nf2d.format(totIssues));
+        ///////////////////////////////////////
+        List<PurchaseInvoiceHasItem> purchaseInvoiceHasItems = Find.PurchaseInvoiceHasItemByItemAndDates(item, startDate, endDate);
+        double totReceive = 0;
+        for (Iterator<PurchaseInvoiceHasItem> it = purchaseInvoiceHasItems.iterator(); it.hasNext();) {
+            PurchaseInvoiceHasItem purchaseInvoiceHasItem = it.next();
+            double qty = purchaseInvoiceHasItem.getQuantity();
+            totReceive += qty;
+            Object[] row = {
+                yyyy_MM_dd.format(purchaseInvoiceHasItem.getPurchaseInvoice().getInvDate()),
+                nf2d.format(qty)
+            };
+            receiveTableModel.addRow(row);
+        }
+        totalReceiveLabel.setText(nf2d.format(totReceive));
+
+    }
+    
     @Override
     public void componentOpened() {
         // TODO add custom code on component opening

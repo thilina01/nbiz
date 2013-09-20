@@ -4,11 +4,21 @@
  */
 package com.nanosl.nbiz.gui.report;
 
+import com.nanosl.nbiz.utility.Find;
+import com.nanosl.nbiz.utility.NTopComponent;
+import entity.PurchaseInvoice;
+import java.awt.Color;
+import java.util.Collection;
+import java.util.Date;
+import java.util.Iterator;
+import javax.swing.table.DefaultTableModel;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
+import static util.Format.nf2d;
+import static util.Format.yyyy_MM_dd;
 
 /**
  * Top component which displays something.
@@ -31,10 +41,10 @@ import org.openide.util.NbBundle.Messages;
     "CTL_PurchaseReportTopComponent=PurchaseReport Window",
     "HINT_PurchaseReportTopComponent=This is a PurchaseReport window"
 })
-public final class PurchaseReportTopComponent extends TopComponent {
+public final class PurchaseReportTopComponent extends NTopComponent {
 
     public PurchaseReportTopComponent() {
-        initComponents();
+        onLoad();
         setName(Bundle.CTL_PurchaseReportTopComponent());
         setToolTipText(Bundle.HINT_PurchaseReportTopComponent());
 
@@ -191,6 +201,52 @@ public final class PurchaseReportTopComponent extends TopComponent {
     private org.jdesktop.swingx.JXDatePicker startDatePicker;
     private javax.swing.JLabel totalLabel;
     // End of variables declaration//GEN-END:variables
+     DefaultTableModel tableModel;
+
+    private void fillTable() {
+        tableModel.setRowCount(0);
+        Date startDate = startDatePicker.getDate();
+        Date endDate = endDatePicker.getDate();
+        //ALTER TABLE `sgm`.`purchase_invoice` CHANGE COLUMN `inv_time` `inv_date` DATE NULL DEFAULT NULL  ;
+
+        Collection<PurchaseInvoice> purchaseInvoices = Find.purchaseInvoicesByDates(startDate, endDate);
+        if (purchaseInvoices == null) {
+           showError("No Record Found!");
+            return;
+        }
+        int i = 0;
+        for (Iterator<PurchaseInvoice> it = purchaseInvoices.iterator(); it.hasNext();) {
+            PurchaseInvoice purchaseInvoice = it.next();
+            Object[] row = {++i, yyyy_MM_dd.format(purchaseInvoice.getInvDate()), purchaseInvoice.getSupplier().getCode(), purchaseInvoice.getSupplier().getName(), purchaseInvoice.getPurchaseInvoicePK().getInvNo(), nf2d.format(purchaseInvoice.getAmount())};
+            tableModel.addRow(row);
+        }
+        calcTotal();
+    }
+
+    protected void onLoad() {
+        initComponents();
+        tableModel = (DefaultTableModel) masterTable.getModel();
+    }
+
+    @Override
+    public void setVisible(boolean b) {
+        super.setVisible(b);
+    }
+
+    private void fill() {
+        fillTable();
+        calcTotal();
+    }
+
+    private void calcTotal() {
+        double total = 0;
+        for (int i = 0; i < tableModel.getRowCount(); i++) {
+            total += Double.valueOf(tableModel.getValueAt(i, 5).toString());
+        }
+        totalLabel.setText(nf2d.format(total));
+    }
+
+    
     @Override
     public void componentOpened() {
         // TODO add custom code on component opening

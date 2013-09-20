@@ -4,11 +4,22 @@
  */
 package com.nanosl.nbiz.gui.report;
 
+import com.nanosl.lib.date.JXDatePicker;
+import com.nanosl.nbiz.utility.Find;
+import com.nanosl.nbiz.utility.NTopComponent;
+import entity.Expenses;
+import java.awt.Color;
+import java.util.Collection;
+import java.util.Date;
+import java.util.Iterator;
+import javax.swing.table.DefaultTableModel;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
+import static util.Format.nf2d;
+import static util.Format.yyyy_MM_dd;
 
 /**
  * Top component which displays something.
@@ -31,10 +42,10 @@ import org.openide.util.NbBundle.Messages;
     "CTL_ExpensesReportTopComponent=ExpensesReport Window",
     "HINT_ExpensesReportTopComponent=This is a ExpensesReport window"
 })
-public final class ExpensesReportTopComponent extends TopComponent {
+public final class ExpensesReportTopComponent extends NTopComponent {
 
     public ExpensesReportTopComponent() {
-        initComponents();
+        onLoad();
         setName(Bundle.CTL_ExpensesReportTopComponent());
         setToolTipText(Bundle.HINT_ExpensesReportTopComponent());
 
@@ -188,6 +199,50 @@ public final class ExpensesReportTopComponent extends TopComponent {
     private org.jdesktop.swingx.JXDatePicker startDatePicker;
     private javax.swing.JLabel totalLabel;
     // End of variables declaration//GEN-END:variables
+    
+    // End of variables declaration                   
+    DefaultTableModel tableModel;
+    
+    private void fillTable() {
+        tableModel.setRowCount(0);
+        totalLabel.setText("0.00");
+        Date startDate = startDatePicker.getDate();
+        Date endDate = endDatePicker.getDate();
+        //ALTER TABLE `sgm`.`purchase_invoice` CHANGE COLUMN `inv_time` `inv_date` DATE NULL DEFAULT NULL  ;
+
+        Collection<Expenses> expenseses = Find.expensesByDates(startDate, endDate);
+        if (expenseses == null) {
+            showSuccess("No Record Found!");
+            return;
+        }
+        int i = 0;
+        double total = 0;
+        for (Iterator<Expenses> it = expenseses.iterator(); it.hasNext();) {
+            Expenses expenses = it.next();
+            double amount = expenses.getAmount();
+            Object[] row = {++i, yyyy_MM_dd.format(expenses.getPaidTime()), expenses.getExpensesType(), expenses.getNotes(), nf2d.format(amount)};
+            tableModel.addRow(row);
+            total += amount;
+        }
+        
+        totalLabel.setText(nf2d.format(total));
+    }
+    
+    protected void onLoad() {
+        initComponents();
+        tableModel = (DefaultTableModel) masterTable.getModel();
+    }
+    
+    @Override
+    public void setVisible(boolean b) {
+        super.setVisible(b);
+        fill();
+    }
+    
+    private void fill() {
+        fillTable();
+    }
+
     @Override
     public void componentOpened() {
         // TODO add custom code on component opening
@@ -209,4 +264,5 @@ public final class ExpensesReportTopComponent extends TopComponent {
         String version = p.getProperty("version");
         // TODO read your settings according to their version
     }
+
 }

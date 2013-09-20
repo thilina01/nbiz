@@ -4,11 +4,28 @@
  */
 package com.nanosl.nbiz.gui.rep;
 
+import com.nanosl.lib.date.JXDatePicker;
+import com.nanosl.lib.log.Loggings;
+import com.nanosl.nbiz.utility.NTopComponent;
+import entity.Bank;
+import entity.IssuedCash;
+import entity.IssuedCheque;
+import entity.PurchaseInvoice;
+import java.io.Serializable;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.table.DefaultTableModel;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
+import static util.Format.nf2d;
+import static util.Format.yyyy_MM_dd;
 
 /**
  * Top component which displays something.
@@ -31,10 +48,10 @@ import org.openide.util.NbBundle.Messages;
     "CTL_RepPaymentTopComponent=RepPayment Window",
     "HINT_RepPaymentTopComponent=This is a RepPayment window"
 })
-public final class RepPaymentTopComponent extends TopComponent {
+public final class RepPaymentTopComponent extends NTopComponent {
 
     public RepPaymentTopComponent() {
-        initComponents();
+        onLoad();
         setName(Bundle.CTL_RepPaymentTopComponent());
         setToolTipText(Bundle.HINT_RepPaymentTopComponent());
 
@@ -48,20 +65,511 @@ public final class RepPaymentTopComponent extends TopComponent {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanel1 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        dateTable = new javax.swing.JTable();
+        jPanel2 = new javax.swing.JPanel();
+        remainingAmountField = new javax.swing.JTextField();
+        invoiceNumberField = new javax.swing.JTextField();
+        supplierNameField = new javax.swing.JTextField();
+        amountField = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        invoiceDateField = new javax.swing.JTextField();
+        jPanel3 = new javax.swing.JPanel();
+        paymentAmountTextField = new javax.swing.JTextField();
+        chequeNumbertField = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        bankingDatePicker = new JXDatePicker();
+        jLabel5 = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        paymentTable = new javax.swing.JTable();
+        bankComboBox = new javax.swing.JComboBox();
+        jLabel9 = new javax.swing.JLabel();
+        processButton = new javax.swing.JButton();
+        clearButton = new javax.swing.JButton();
+        jLabel10 = new javax.swing.JLabel();
+        repComboBox = new javax.swing.JComboBox();
+
+        dateTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Date"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        dateTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                dateTableMouseReleased(evt);
+            }
+        });
+        dateTable.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                dateTableKeyReleased(evt);
+            }
+        });
+        jScrollPane1.setViewportView(dateTable);
+
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(org.openide.util.NbBundle.getMessage(RepPaymentTopComponent.class, "RepPaymentTopComponent.jPanel2.border.title"))); // NOI18N
+
+        remainingAmountField.setEditable(false);
+        remainingAmountField.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
+
+        invoiceNumberField.setEnabled(false);
+
+        supplierNameField.setEnabled(false);
+
+        amountField.setEditable(false);
+        amountField.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel3, org.openide.util.NbBundle.getMessage(RepPaymentTopComponent.class, "RepPaymentTopComponent.jLabel3.text")); // NOI18N
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(RepPaymentTopComponent.class, "RepPaymentTopComponent.jLabel1.text")); // NOI18N
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel4, org.openide.util.NbBundle.getMessage(RepPaymentTopComponent.class, "RepPaymentTopComponent.jLabel4.text")); // NOI18N
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel2, org.openide.util.NbBundle.getMessage(RepPaymentTopComponent.class, "RepPaymentTopComponent.jLabel2.text")); // NOI18N
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel8, org.openide.util.NbBundle.getMessage(RepPaymentTopComponent.class, "RepPaymentTopComponent.jLabel8.text")); // NOI18N
+
+        invoiceDateField.setEnabled(false);
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel3))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(invoiceNumberField, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(amountField, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 118, Short.MAX_VALUE)
+                                .addComponent(jLabel4)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(remainingAmountField, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel8)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(invoiceDateField, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addComponent(supplierNameField, javax.swing.GroupLayout.DEFAULT_SIZE, 354, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(invoiceNumberField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel8)
+                    .addComponent(invoiceDateField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(supplierNameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(amountField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4)
+                    .addComponent(remainingAmountField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
+        );
+
+        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(org.openide.util.NbBundle.getMessage(RepPaymentTopComponent.class, "RepPaymentTopComponent.jPanel3.border.title"))); // NOI18N
+
+        paymentAmountTextField.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
+        paymentAmountTextField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                paymentAmountTextFieldActionPerformed(evt);
+            }
+        });
+
+        chequeNumbertField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chequeNumbertFieldActionPerformed(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel7, org.openide.util.NbBundle.getMessage(RepPaymentTopComponent.class, "RepPaymentTopComponent.jLabel7.text")); // NOI18N
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel6, org.openide.util.NbBundle.getMessage(RepPaymentTopComponent.class, "RepPaymentTopComponent.jLabel6.text")); // NOI18N
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel5, org.openide.util.NbBundle.getMessage(RepPaymentTopComponent.class, "RepPaymentTopComponent.jLabel5.text")); // NOI18N
+
+        paymentTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Amount", "Cheque Number", "Banking Date", "Bank"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        paymentTable.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                paymentTableKeyReleased(evt);
+            }
+        });
+        jScrollPane2.setViewportView(paymentTable);
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel9, org.openide.util.NbBundle.getMessage(RepPaymentTopComponent.class, "RepPaymentTopComponent.jLabel9.text")); // NOI18N
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 406, Short.MAX_VALUE)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel6)
+                            .addComponent(jLabel5))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(paymentAmountTextField)
+                            .addComponent(chequeNumbertField, javax.swing.GroupLayout.DEFAULT_SIZE, 109, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addComponent(jLabel7)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(bankingDatePicker, javax.swing.GroupLayout.DEFAULT_SIZE, 137, Short.MAX_VALUE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                                .addComponent(jLabel9)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(bankComboBox, 0, 177, Short.MAX_VALUE)))))
+                .addContainerGap())
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6)
+                    .addComponent(chequeNumbertField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel7)
+                    .addComponent(bankingDatePicker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(paymentAmountTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(bankComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel9))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        org.openide.awt.Mnemonics.setLocalizedText(processButton, org.openide.util.NbBundle.getMessage(RepPaymentTopComponent.class, "RepPaymentTopComponent.processButton.text")); // NOI18N
+        processButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                processButtonActionPerformed(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(clearButton, org.openide.util.NbBundle.getMessage(RepPaymentTopComponent.class, "RepPaymentTopComponent.clearButton.text")); // NOI18N
+        clearButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                clearButtonActionPerformed(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel10, org.openide.util.NbBundle.getMessage(RepPaymentTopComponent.class, "RepPaymentTopComponent.jLabel10.text")); // NOI18N
+
+        repComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                repComboBoxActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel10)
+                        .addGap(18, 18, 18)
+                        .addComponent(repComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(clearButton)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(processButton))
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel10)
+                    .addComponent(repComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(13, 13, 13)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, 0, 0, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(processButton)
+                    .addComponent(clearButton))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void dateTableMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_dateTableMouseReleased
+        fill();
+    }//GEN-LAST:event_dateTableMouseReleased
+
+    private void dateTableKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_dateTableKeyReleased
+        fill();
+    }//GEN-LAST:event_dateTableKeyReleased
+
+    private void paymentAmountTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_paymentAmountTextFieldActionPerformed
+        addPay();
+    }//GEN-LAST:event_paymentAmountTextFieldActionPerformed
+
+    private void chequeNumbertFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chequeNumbertFieldActionPerformed
+        if (!chequeNumbertField.getText().trim().equals(""));
+        {
+            bankingDatePicker.requestFocus();
+        }
+    }//GEN-LAST:event_chequeNumbertFieldActionPerformed
+
+    private void paymentTableKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_paymentTableKeyReleased
+        if (evt.getKeyCode() == 127) {
+            deletePaymentRow(paymentTable.getSelectedRow());
+        }
+    }//GEN-LAST:event_paymentTableKeyReleased
+
+    private void processButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_processButtonActionPerformed
+        process();
+    }//GEN-LAST:event_processButtonActionPerformed
+
+    private void clearButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearButtonActionPerformed
+        clearAll();
+    }//GEN-LAST:event_clearButtonActionPerformed
+
+    private void repComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_repComboBoxActionPerformed
+        fillDates();
+    }//GEN-LAST:event_repComboBoxActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField amountField;
+    private javax.swing.JComboBox bankComboBox;
+    private org.jdesktop.swingx.JXDatePicker bankingDatePicker;
+    private javax.swing.JTextField chequeNumbertField;
+    private javax.swing.JButton clearButton;
+    private javax.swing.JTable dateTable;
+    private javax.swing.JTextField invoiceDateField;
+    private javax.swing.JTextField invoiceNumberField;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTextField paymentAmountTextField;
+    private javax.swing.JTable paymentTable;
+    private javax.swing.JButton processButton;
+    private javax.swing.JTextField remainingAmountField;
+    private javax.swing.JComboBox repComboBox;
+    private javax.swing.JTextField supplierNameField;
     // End of variables declaration//GEN-END:variables
+    List<PurchaseInvoice> purchaseInvoices;
+    List<Bank> banks;
+    DefaultTableModel dateDtm;
+    DefaultTableModel paymentDtm;
+    PurchaseInvoice purchaseInvoice;
+
+    protected void onLoad() {
+        initComponents();
+        dateDtm = (DefaultTableModel) dateTable.getModel();
+        paymentDtm = (DefaultTableModel) paymentTable.getModel();
+    }
+
+    @Override
+    public void setVisible(boolean b) {
+        super.setVisible(b);
+        clearAll();
+    }
+
+    private void fillInvoiceTable() {
+        dateDtm.setRowCount(0);
+        paymentDtm.setRowCount(0);
+        purchaseInvoices = m.find(PurchaseInvoice.class);
+        for (Iterator<PurchaseInvoice> it = purchaseInvoices.iterator(); it.hasNext();) {
+            PurchaseInvoice pi = it.next();
+            double credit = pi.getCredit() == null ? 0 : pi.getCredit();
+            if (credit > 0) {
+                Object[] rowData = {pi.getPurchaseInvoicePK().getInvNo()};
+                dateDtm.addRow(rowData);
+            }
+        }
+    }
+
+    private void fill() {
+        int selectedRow = dateTable.getSelectedRow();
+        if (selectedRow > -1) {
+            fill(purchaseInvoices.get(selectedRow));
+        }
+    }
+
+    public void fill(PurchaseInvoice pi) {
+        clearAll();
+        purchaseInvoice = pi;
+        invoiceNumberField.setText(purchaseInvoice.getPurchaseInvoicePK().getInvNo());
+        invoiceDateField.setText(yyyy_MM_dd.format(purchaseInvoice.getInvDate()));
+        supplierNameField.setText(purchaseInvoice.getSupplier().getName());
+        amountField.setText(nf2d.format(purchaseInvoice.getAmount()));
+        remainingAmountField.setText(nf2d.format(purchaseInvoice.getCredit()));
+    }
+
+    private void addPay() {
+        if (purchaseInvoice == null) {
+            return;
+        }
+        try {
+            double paymentAmount = Double.valueOf(paymentAmountTextField.getText().trim());
+            if (paymentAmount > 0) {
+                String chequeNumber = chequeNumbertField.getText().trim();
+                if (!chequeNumber.equals("")) {
+                    Date bankingDate = bankingDatePicker.getDate();
+                    if (bankingDate != null) {
+                        Object[] row = {nf2d.format(paymentAmount), chequeNumber, yyyy_MM_dd.format(bankingDate), banks.get(bankComboBox.getSelectedIndex()).getCode()};
+                        fillPaymentTable(row);
+                    }
+                } else {
+                    for (int i = 0; i < paymentTable.getRowCount(); i++) {
+                        if (paymentTable.getValueAt(i, 1) == null) {
+                            paymentAmount += Double.valueOf(paymentTable.getValueAt(i, 0).toString());
+                            paymentTable.setValueAt(nf2d.format(paymentAmount), i, 0);
+                            clearPaymentFields();
+                            calcRemaining();
+                            return;
+                        }
+                    }
+                    Object[] row = {nf2d.format(paymentAmount)};
+                    fillPaymentTable(row);
+                }
+            }
+        } catch (NumberFormatException e) {
+        } catch (Exception e) {
+            Loggings.logError(getName(), e);
+        }
+    }
+
+    private void fillPaymentTable(Object[] row) {
+        paymentDtm.addRow(row);
+        clearPaymentFields();
+        calcRemaining();
+    }
+
+    private void deletePaymentRow(int selectedRow) {
+        if (selectedRow > -1) {
+            paymentDtm.removeRow(selectedRow);
+            calcRemaining();
+        }
+    }
+
+    private void calcRemaining() {
+        double remaining = purchaseInvoice.getCredit();
+        int rowCount = paymentTable.getRowCount();
+        for (int i = 0; i < rowCount; i++) {
+            remaining = remaining - Double.valueOf(paymentTable.getValueAt(i, 0).toString());
+        }
+        remainingAmountField.setText(nf2d.format(remaining));
+    }
+
+    private void clearPaymentFields() {
+        chequeNumbertField.setText("");
+        paymentAmountTextField.setText("");
+    }
+
+    private void clearAll() {
+        purchaseInvoice = null;
+        invoiceNumberField.setText("");
+        invoiceDateField.setText("");
+        supplierNameField.setText("");
+        amountField.setText("");
+        remainingAmountField.setText("");
+        clearPaymentFields();
+        paymentDtm.setRowCount(0);
+        fillInvoiceTable();
+        fillBanks();
+    }
+     private void fillBanks() {
+        bankComboBox.setModel(new DefaultComboBoxModel(m.find(Bank.class).toArray()));
+    }
     @Override
     public void componentOpened() {
         // TODO add custom code on component opening
@@ -83,4 +591,55 @@ public final class RepPaymentTopComponent extends TopComponent {
         String version = p.getProperty("version");
         // TODO read your settings according to their version
     }
+    private void process() {
+        int rowCount = paymentTable.getRowCount();
+        if (purchaseInvoice == null || rowCount == 0) {
+            return;
+        }
+        List<Serializable> serializables = new ArrayList<Serializable>();
+        try {
+            for (int i = 0; i < rowCount; i++) {
+                Object o = paymentTable.getValueAt(i, 1);
+                String chequeNumber = o == null ? "" : o.toString().trim();
+                double amount = Double.valueOf(paymentTable.getValueAt(i, 0).toString());
+                if (chequeNumber.equals("")) {
+                    IssuedCash issuedCash = new IssuedCash(new Date());
+                    issuedCash.setAmount(amount);
+                    issuedCash.setPurchaseInvoice(purchaseInvoice);
+                    serializables.add(issuedCash);
+                    purchaseInvoice.getIssuedCashCollection().add(issuedCash);
+                } else {
+                    Date bankingDate = yyyy_MM_dd.parse(paymentTable.getValueAt(i, 2).toString());
+                    IssuedCheque issuedCheque = new IssuedCheque(chequeNumber);
+                    issuedCheque.setAmount(amount);
+                    issuedCheque.setBank(new Bank(paymentTable.getValueAt(i, 3).toString()));
+                    issuedCheque.setBankingDate(bankingDate);
+                    issuedCheque.setIssuedDate(new Date());
+                    issuedCheque.setPurchaseInvoice(purchaseInvoice);
+                    issuedCheque.setStatus(0);
+                    serializables.add(issuedCheque);
+                    purchaseInvoice.getIssuedChequeCollection().add(issuedCheque);
+                }
+            }
+        } catch (ParseException ex) {
+            showError("Problem with one of cheque banking date!");
+            return;
+        } catch (Exception ex) {
+            showError("Unable to complete payment");
+            return;
+        }
+        double remainingAmount = Double.valueOf(remainingAmountField.getText().trim());
+        purchaseInvoice.setCredit(remainingAmount);
+        serializables.add(purchaseInvoice);
+        if (m.update(serializables)) {
+            clearAll();
+        } else {
+            showError("Unable to complete payment!");
+        }
+    }
+      private void fillDates() {
+        dateDtm.setRowCount(0);
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
+
 }

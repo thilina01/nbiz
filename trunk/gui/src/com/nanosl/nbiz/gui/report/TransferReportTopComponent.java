@@ -4,11 +4,25 @@
  */
 package com.nanosl.nbiz.gui.report;
 
+import com.nanosl.nbiz.utility.NTopComponent;
+import entity.Employee;
+import entity.Item;
+import entity.PriceList;
+import entity.StockTransfer;
+import java.util.Collection;
+import java.util.Date;
+import java.util.Iterator;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.table.DefaultTableModel;
+import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
+import static util.Format.nf2d;
+import static util.Format.nf3d;
+import static util.Format.yyyy_MM_dd;
 
 /**
  * Top component which displays something.
@@ -31,10 +45,10 @@ import org.openide.util.NbBundle.Messages;
     "CTL_TransferReportTopComponent=TransferReport Window",
     "HINT_TransferReportTopComponent=This is a TransferReport window"
 })
-public final class TransferReportTopComponent extends TopComponent {
+public final class TransferReportTopComponent extends NTopComponent {
 
     public TransferReportTopComponent() {
-        initComponents();
+        onLoad();
         setName(Bundle.CTL_TransferReportTopComponent());
         setToolTipText(Bundle.HINT_TransferReportTopComponent());
 
@@ -197,6 +211,54 @@ public final class TransferReportTopComponent extends TopComponent {
     private javax.swing.JComboBox repComboBox;
     private javax.swing.JLabel totalLabel;
     // End of variables declaration//GEN-END:variables
+     DefaultTableModel tableModel;
+
+    private void fillTable() {
+        Employee employee = (Employee) repComboBox.getSelectedItem();
+        if (employee == null) {
+            return;
+        }
+        employee = m.find(Employee.class, employee.getCode());
+        Date date = datePicker.getDate();
+        Collection<StockTransfer> stockTransfers = employee.getStockTransferCollection();
+        tableModel.setRowCount(0);
+        totalLabel.setText(nf2d.format(0));
+        int i = 0;
+        double tot = 0;
+        for (Iterator<StockTransfer> it = stockTransfers.iterator(); it.hasNext();) {
+            StockTransfer stockTransfer = it.next();
+            if (yyyy_MM_dd.format(stockTransfer.getStockTransferPK().getTransferDate()).equals(yyyy_MM_dd.format(date))) {
+                Item item = stockTransfer.getItem();
+                PriceList priceList = item.getPriceList();
+                double rate = stockTransfer.getRate() == null ? 0.0 : stockTransfer.getRate();
+                double qty = stockTransfer.getQuantity();
+                double amount = qty * rate;
+                tot += amount;
+                Object[] row = {++i, item.getCode(), stockTransfer.getItem().getDescription(), nf3d.format(qty), nf2d.format(rate), nf2d.format(amount)};
+                tableModel.addRow(row);
+            }
+        }
+        totalLabel.setText(nf2d.format(tot));
+    }
+
+    protected void onLoad() {
+        initComponents();
+        tableModel = (DefaultTableModel) masterTable.getModel();
+        AutoCompleteDecorator.decorate(repComboBox);
+    }
+
+    @Override
+    public void setVisible(boolean b) {
+        super.setVisible(b);
+        fillReps();
+
+    }
+
+    private void fillReps() {
+        tableModel.setRowCount(0);
+        repComboBox.setModel(new DefaultComboBoxModel(m.find(Employee.class).toArray()));
+    }
+    
     @Override
     public void componentOpened() {
         // TODO add custom code on component opening

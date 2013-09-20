@@ -4,11 +4,22 @@
  */
 package com.nanosl.nbiz.gui.report;
 
+import com.nanosl.lib.date.JXDatePicker;
+import com.nanosl.nbiz.utility.Find;
+import com.nanosl.nbiz.utility.NTopComponent;
+import entity.SaleInvoice;
+import java.awt.Color;
+import java.util.Collection;
+import java.util.Date;
+import java.util.Iterator;
+import javax.swing.table.DefaultTableModel;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
+import static util.Format.nf2d;
+import static util.Format.yyyy_MM_dd;
 
 /**
  * Top component which displays something.
@@ -31,10 +42,10 @@ import org.openide.util.NbBundle.Messages;
     "CTL_SalesReportTopComponent=SalesReport Window",
     "HINT_SalesReportTopComponent=This is a SalesReport window"
 })
-public final class SalesReportTopComponent extends TopComponent {
+public final class SalesReportTopComponent extends NTopComponent {
 
     public SalesReportTopComponent() {
-        initComponents();
+        onLoad();
         setName(Bundle.CTL_SalesReportTopComponent());
         setToolTipText(Bundle.HINT_SalesReportTopComponent());
 
@@ -168,6 +179,53 @@ public final class SalesReportTopComponent extends TopComponent {
     private javax.swing.JTable table;
     private javax.swing.JLabel totalProfitLabel;
     // End of variables declaration//GEN-END:variables
+    private javax.swing.JLabel totalLabel;
+    DefaultTableModel tableModel;
+    
+    private void fillTable() {
+        tableModel.setRowCount(0);
+        Date startDate = startDatePicker.getDate();
+        Date endDate = endDatePicker.getDate();
+        //ALTER TABLE `sgm`.`purchase_invoice` CHANGE COLUMN `inv_time` `inv_date` DATE NULL DEFAULT NULL  ;
+
+        Collection<SaleInvoice> saleInvoices = Find.saleInvoicesByDates(startDate, endDate);
+        if (saleInvoices == null) {
+            showError("No Record Found!");
+            return;
+        }
+        int i = 0;
+        for (Iterator<SaleInvoice> it = saleInvoices.iterator(); it.hasNext();) {
+            SaleInvoice saleInvoice = it.next();
+            Object[] row = {++i, yyyy_MM_dd.format(saleInvoice.getInvTime()), saleInvoice.getCustomer().getCode(), saleInvoice.getCustomer().getName(), saleInvoice.getInvNo(), nf2d.format(saleInvoice.getAmount()), nf2d.format(saleInvoice.getReceivedAmount())};
+            tableModel.addRow(row);
+        }
+        calcTotal();
+    }
+
+    protected void onLoad() {
+        initComponents();
+        tableModel = (DefaultTableModel) masterTable.getModel();
+    }
+
+    @Override
+    public void setVisible(boolean b) {
+        super.setVisible(b);
+        fill();
+    }
+
+    private void fill() {
+        fillTable();
+        calcTotal();
+    }
+
+    private void calcTotal() {
+        double total = 0;
+        for (int i = 0; i < tableModel.getRowCount(); i++) {
+            total += Double.valueOf(tableModel.getValueAt(i, 6).toString());
+        }
+        totalLabel.setText(nf2d.format(total));
+    }
+    
     @Override
     public void componentOpened() {
         // TODO add custom code on component opening
