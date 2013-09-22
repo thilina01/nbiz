@@ -229,7 +229,6 @@ public final class ReceivedChequeReportTopComponent extends NTopComponent {
     }//GEN-LAST:event_masterTableMouseClicked
 
     private void masterTableMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_masterTableMouseReleased
-
     }//GEN-LAST:event_masterTableMouseReleased
 
     private void masterTableKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_masterTableKeyReleased
@@ -251,7 +250,6 @@ public final class ReceivedChequeReportTopComponent extends NTopComponent {
     private void fillStatusComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fillStatusComboBoxActionPerformed
         fill();
     }//GEN-LAST:event_fillStatusComboBoxActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField chequeNumberTextField;
     private org.jdesktop.swingx.JXDatePicker endDatePicker;
@@ -280,7 +278,7 @@ public final class ReceivedChequeReportTopComponent extends NTopComponent {
 
         Collection<SaleCheque> saleCheques = Find.saleChequeByBankingDates(startDate, endDate);
         if (saleCheques == null) {
-            setStatusMessage("No Record Found!", Color.red);
+            showError("No Record Found!");
             return;
         }
         int i = 0;
@@ -351,7 +349,7 @@ public final class ReceivedChequeReportTopComponent extends NTopComponent {
         }
         saleCheque.setStatus(setStatusComboBox.getSelectedIndex());
         if (m.update(saleCheque)) {
-            setStatusMessage("Cheque " + saleCheque.getSaleChequePK().getChequeNumber() + " Updated.");
+            showSuccess("Cheque " + saleCheque.getSaleChequePK().getChequeNumber() + " Updated.");
             clear();
             fill();
         }
@@ -361,7 +359,7 @@ public final class ReceivedChequeReportTopComponent extends NTopComponent {
         saleCheque = null;
         chequeNumberTextField.setText("");
     }
-    
+
     @Override
     public void componentOpened() {
         // TODO add custom code on component opening

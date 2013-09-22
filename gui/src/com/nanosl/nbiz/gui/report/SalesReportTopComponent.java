@@ -8,7 +8,6 @@ import com.nanosl.lib.date.JXDatePicker;
 import com.nanosl.nbiz.utility.Find;
 import com.nanosl.nbiz.utility.NTopComponent;
 import entity.SaleInvoice;
-import java.awt.Color;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
@@ -158,17 +157,14 @@ public final class SalesReportTopComponent extends NTopComponent {
     }// </editor-fold>//GEN-END:initComponents
 
     private void startDatePickerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startDatePickerActionPerformed
-
     }//GEN-LAST:event_startDatePickerActionPerformed
 
     private void endDatePickerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_endDatePickerActionPerformed
-
     }//GEN-LAST:event_endDatePickerActionPerformed
 
     private void fillButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fillButtonActionPerformed
         fill();
     }//GEN-LAST:event_fillButtonActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.jdesktop.swingx.JXDatePicker endDatePicker;
     private javax.swing.JButton fillButton;
@@ -181,7 +177,7 @@ public final class SalesReportTopComponent extends NTopComponent {
     // End of variables declaration//GEN-END:variables
     private javax.swing.JLabel totalLabel;
     DefaultTableModel tableModel;
-    
+
     private void fillTable() {
         tableModel.setRowCount(0);
         Date startDate = startDatePicker.getDate();
@@ -204,7 +200,7 @@ public final class SalesReportTopComponent extends NTopComponent {
 
     protected void onLoad() {
         initComponents();
-        tableModel = (DefaultTableModel) masterTable.getModel();
+        tableModel = (DefaultTableModel) table.getModel();
     }
 
     @Override
@@ -225,7 +221,7 @@ public final class SalesReportTopComponent extends NTopComponent {
         }
         totalLabel.setText(nf2d.format(total));
     }
-    
+
     @Override
     public void componentOpened() {
         // TODO add custom code on component opening

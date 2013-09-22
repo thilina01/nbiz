@@ -11,6 +11,10 @@ import com.nanosl.nbiz.utility.NTopComponent;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
@@ -41,7 +45,7 @@ import org.openide.util.NbBundle.Messages;
 public final class MonthReportTopComponent extends NTopComponent {
 
     public MonthReportTopComponent() {
-        onLoad();
+        initComponents();
         setName(Bundle.CTL_MonthReportTopComponent());
         setToolTipText(Bundle.HINT_MonthReportTopComponent());
 
@@ -106,7 +110,6 @@ public final class MonthReportTopComponent extends NTopComponent {
     }// </editor-fold>//GEN-END:initComponents
 
     private void datePickerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_datePickerActionPerformed
-
     }//GEN-LAST:event_datePickerActionPerformed
 
     private void reportButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reportButtonActionPerformed
@@ -138,18 +141,18 @@ public final class MonthReportTopComponent extends NTopComponent {
                     JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, params, m.getConnection());
                     new JRViewer(jasperPrint, "Month");
                 } catch (Exception ex) {
-                    Loggings.logError(MonthReportView.class.getName(), ex);
+                    ex.printStackTrace();
                 }
             }
         });
     }//GEN-LAST:event_reportButtonActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.jdesktop.swingx.JXDatePicker datePicker;
     private javax.swing.JCheckBox halfCheckBox;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JButton reportButton;
     // End of variables declaration//GEN-END:variables
+
     @Override
     public void componentOpened() {
         // TODO add custom code on component opening

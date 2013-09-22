@@ -4,6 +4,7 @@
  */
 package com.nanosl.nbiz.gui.report;
 
+import com.nanosl.lib.log.Loggings;
 import com.nanosl.nbiz.utility.FindMySql;
 import com.nanosl.nbiz.utility.NTopComponent;
 import java.sql.ResultSet;
@@ -23,9 +24,6 @@ import static util.Format.nf2d;
 /**
  * Top component which displays something.
  */
-
-
-
 @ConvertAsProperties(
         dtd = "-//com.nanosl.nbiz.gui.report//PartPaymentCollectionReport//EN",
         autostore = false)
@@ -171,15 +169,12 @@ public final class PartPaymentCollectionReportTopComponent extends NTopComponent
     }// </editor-fold>//GEN-END:initComponents
 
     private void masterTableMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_masterTableMouseReleased
-
     }//GEN-LAST:event_masterTableMouseReleased
 
     private void masterTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_masterTableMouseClicked
-
     }//GEN-LAST:event_masterTableMouseClicked
 
     private void masterTableKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_masterTableKeyReleased
-
     }//GEN-LAST:event_masterTableKeyReleased
 
     private void startDatePickerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startDatePickerActionPerformed
@@ -189,7 +184,6 @@ public final class PartPaymentCollectionReportTopComponent extends NTopComponent
     private void endDatePickerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_endDatePickerActionPerformed
         fill();
     }//GEN-LAST:event_endDatePickerActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.jdesktop.swingx.JXDatePicker endDatePicker;
     private javax.swing.JLabel jLabel3;
@@ -199,7 +193,7 @@ public final class PartPaymentCollectionReportTopComponent extends NTopComponent
     private org.jdesktop.swingx.JXDatePicker startDatePicker;
     private javax.swing.JLabel totalLabel;
     // End of variables declaration//GEN-END:variables
-     DefaultTableModel tableModel;
+    DefaultTableModel tableModel;
 
     private void fillTable() {
         try {
@@ -249,11 +243,11 @@ public final class PartPaymentCollectionReportTopComponent extends NTopComponent
 //                Object[] row = {++i, yyyy_MM_dd.format(saleInvoice.getInvTime()), saleInvoice.getCustomer().getCode(), saleInvoice.getCustomer().getName(), saleInvoice.getInvNo(), nf2d.format(saleInvoice.getAmount()),nf2d.format(saleInvoice.getReceivedAmount())};
 //                tableModel.addRow(row);
 //            }
-            
+
 
             calcTotal();
         } catch (SQLException ex) {
-            Logger.getLogger(PartPaymentCollectionReportView.class.getName()).log(Level.SEVERE, null, ex);
+            Loggings.logError(this.getDisplayName(), ex);
         }
     }
 
@@ -280,7 +274,7 @@ public final class PartPaymentCollectionReportTopComponent extends NTopComponent
         }
         totalLabel.setText(nf2d.format(total));
     }
-    
+
     @Override
     public void componentOpened() {
         // TODO add custom code on component opening
