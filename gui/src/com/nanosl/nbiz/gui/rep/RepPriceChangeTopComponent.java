@@ -9,7 +9,6 @@ import entity.Employee;
 import entity.Item;
 import entity.SrStock;
 import entity.SrStockPK;
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -215,15 +214,12 @@ public final class RepPriceChangeTopComponent extends NTopComponent {
     }// </editor-fold>//GEN-END:initComponents
 
     private void masterTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_masterTableMouseClicked
-
     }//GEN-LAST:event_masterTableMouseClicked
 
     private void masterTableMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_masterTableMouseReleased
-
     }//GEN-LAST:event_masterTableMouseReleased
 
     private void masterTableKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_masterTableKeyReleased
-
     }//GEN-LAST:event_masterTableKeyReleased
 
     private void itemComboBoxKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_itemComboBoxKeyPressed
@@ -250,7 +246,6 @@ public final class RepPriceChangeTopComponent extends NTopComponent {
             itemComboBox.requestFocus();
         }
     }//GEN-LAST:event_repComboBoxKeyPressed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox itemComboBox;
     private javax.swing.JLabel jLabel1;
@@ -263,7 +258,6 @@ public final class RepPriceChangeTopComponent extends NTopComponent {
     private javax.swing.JButton processButton;
     private javax.swing.JComboBox repComboBox;
     // End of variables declaration//GEN-END:variables
-               
     DefaultTableModel tableModel;
 
     protected void onLoad() {
@@ -303,12 +297,12 @@ public final class RepPriceChangeTopComponent extends NTopComponent {
                 m.update(srStock);
             }
             int i = tableModel.getRowCount();
-            Object[] row = {++i, item.getCode(), item.getDescription(),nf2d.format(srStock.getPackPrice()),nf2d.format(newPrice)};
+            Object[] row = {++i, item.getCode(), item.getDescription(), nf2d.format(srStock.getPackPrice()), nf2d.format(newPrice)};
             tableModel.addRow(row);
             newPriceTextField.setText("");
             itemComboBox.requestFocus();
         } catch (NumberFormatException numberFormatException) {
-            setStatusMessage("Invalid Price", Color.RED);
+            showError("Invalid Price");
         }
     }
 
@@ -325,7 +319,7 @@ public final class RepPriceChangeTopComponent extends NTopComponent {
                 serializables.add(srStock);
             }
             if (m.update(serializables)) {
-                setStatusMessage("Update Success");
+                showSuccess("Update Success");
                 reset();
             } else {
                 showError("Update Failed");
@@ -360,20 +354,19 @@ public final class RepPriceChangeTopComponent extends NTopComponent {
         }
 
     }
-
     KeyAdapter itemComboBoxKeyAdapter = new java.awt.event.KeyAdapter() {
-
         @Override
         public void keyPressed(KeyEvent evt) {
             itemComboBoxKeyAdapter.keyPressed(evt);
         }
     };
     KeyAdapter repComboBoxKeyAdapter = new java.awt.event.KeyAdapter() {
-
         @Override
         public void keyPressed(KeyEvent evt) {
             repComboBoxKeyAdapter.keyPressed(evt);
         }
+    };
+
     @Override
     public void componentOpened() {
         // TODO add custom code on component opening

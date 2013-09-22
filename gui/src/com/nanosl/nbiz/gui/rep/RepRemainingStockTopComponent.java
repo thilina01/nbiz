@@ -240,15 +240,12 @@ public final class RepRemainingStockTopComponent extends NTopComponent {
     }// </editor-fold>//GEN-END:initComponents
 
     private void masterTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_masterTableMouseClicked
-
     }//GEN-LAST:event_masterTableMouseClicked
 
     private void masterTableMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_masterTableMouseReleased
-
     }//GEN-LAST:event_masterTableMouseReleased
 
     private void masterTableKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_masterTableKeyReleased
-
     }//GEN-LAST:event_masterTableKeyReleased
 
     private void repComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_repComboBoxActionPerformed
@@ -274,7 +271,6 @@ public final class RepRemainingStockTopComponent extends NTopComponent {
     private void processButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_processButtonActionPerformed
         process();
     }//GEN-LAST:event_processButtonActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox itemComboBox;
     private javax.swing.JLabel jLabel1;
@@ -290,7 +286,7 @@ public final class RepRemainingStockTopComponent extends NTopComponent {
     private javax.swing.JComboBox repComboBox;
     private javax.swing.JTextField totalTextField;
     // End of variables declaration//GEN-END:variables
-     DefaultTableModel tableModel;
+    DefaultTableModel tableModel;
 
     private void fillTable() {
         Employee employee = (Employee) repComboBox.getSelectedItem();
@@ -411,7 +407,7 @@ public final class RepRemainingStockTopComponent extends NTopComponent {
         repSaleValue.setEmployee(employee);
         serializables.add(repSaleValue);
         if (m.update(serializables)) {
-            setStatusMessage("Update success");
+            showSuccess("Update success");
             fillRep();
             fillItems();
             calcTotal();
@@ -445,18 +441,18 @@ public final class RepRemainingStockTopComponent extends NTopComponent {
         }
     }
     KeyAdapter itemComboBoxKeyAdapter = new java.awt.event.KeyAdapter() {
-
         @Override
         public void keyPressed(KeyEvent evt) {
             itemComboBoxKeyPressed(evt);
         }
-    
+    };
     KeyAdapter repComboBoxKeyAdapter = new java.awt.event.KeyAdapter() {
-
         @Override
         public void keyPressed(KeyEvent evt) {
             repComboBoxKeyPressed(evt);
         }
+    };
+
     @Override
     public void componentOpened() {
         // TODO add custom code on component opening

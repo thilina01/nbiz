@@ -4,11 +4,31 @@
  */
 package com.nanosl.nbiz.gui.rep;
 
+import com.nanosl.lib.date.JXDatePicker;
+import com.nanosl.nbiz.utility.NTopComponent;
+import entity.DamageNotes;
+import entity.DamageStock;
+import entity.Employee;
+import entity.Item;
+import entity.SrStock;
+import entity.SrStockPK;
+import java.awt.Component;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JComponent;
+import javax.swing.table.DefaultTableModel;
+import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
+import static util.Format.nf2d;
 
 /**
  * Top component which displays something.
@@ -31,7 +51,7 @@ import org.openide.util.NbBundle.Messages;
     "CTL_RepReturnTopComponent=RepReturn Window",
     "HINT_RepReturnTopComponent=This is a RepReturn window"
 })
-public final class RepReturnTopComponent extends TopComponent {
+public final class RepReturnTopComponent extends NTopComponent {
 
     public RepReturnTopComponent() {
         initComponents();
@@ -225,15 +245,12 @@ public final class RepReturnTopComponent extends TopComponent {
     }// </editor-fold>//GEN-END:initComponents
 
     private void masterTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_masterTableMouseClicked
-
     }//GEN-LAST:event_masterTableMouseClicked
 
     private void masterTableMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_masterTableMouseReleased
-
     }//GEN-LAST:event_masterTableMouseReleased
 
     private void masterTableKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_masterTableKeyReleased
-
     }//GEN-LAST:event_masterTableKeyReleased
 
     private void repComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_repComboBoxActionPerformed
@@ -265,7 +282,6 @@ public final class RepReturnTopComponent extends TopComponent {
             processButton.requestFocus();
         }
     }//GEN-LAST:event_datePickerKeyPressed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.jdesktop.swingx.JXDatePicker datePicker;
     private javax.swing.JComboBox itemComboBox;
@@ -281,6 +297,142 @@ public final class RepReturnTopComponent extends TopComponent {
     private javax.swing.JTextField returnTextField;
     private javax.swing.JTextField totalTextField;
     // End of variables declaration//GEN-END:variables
+    DefaultTableModel tableModel;
+
+    private void fillTable() {
+        Employee employee = (Employee) repComboBox.getSelectedItem();
+        Item item = (Item) itemComboBox.getSelectedItem();
+        int i = tableModel.getRowCount();
+        SrStock srStock = m.find(SrStock.class, new SrStockPK(employee.getCode(), item.getCode()));
+        double returnQuantity = Double.parseDouble(returnTextField.getText().trim());
+        double price = item.getPriceList().getSellingPack() == null ? 0.0 : item.getPriceList().getSellingPack();
+        if (srStock != null) {
+            if (srStock.getPackPrice() == null) {
+                srStock.setPackPrice(price);
+                m.update(srStock);
+            }
+            price = srStock.getPackPrice();
+        }
+        double amount = returnQuantity * price;
+        Object[] row = {++i, item.getCode(), item.getDescription(), returnQuantity, price, nf2d.format(amount)};
+        tableModel.addRow(row);
+        fillItems();
+        calcTotal();
+    }
+
+    protected void onLoad() {
+        initComponents();
+        tableModel = (DefaultTableModel) masterTable.getModel();
+        KeyAdapter();
+    }
+
+    @Override
+    public void setVisible(boolean b) {
+        super.setVisible(b);
+        fillRep();
+    }
+
+    private void fillRep() {
+        tableModel.setRowCount(0);
+        repComboBox.setModel(new DefaultComboBoxModel(m.find(Employee.class).toArray()));
+        fillItems();
+    }
+
+    private void fillItems() {
+        itemComboBox.setModel(new DefaultComboBoxModel(m.find(Item.class).toArray()));
+    }
+
+    private void calcTotal() {
+        double total = 0;
+        for (int i = 0; i < tableModel.getRowCount(); i++) {
+            total += Double.valueOf(tableModel.getValueAt(i, 5).toString());
+        }
+        totalTextField.setText(nf2d.format(total));
+    }
+
+    private void process() {
+        Date date = datePicker.getDate();
+        Employee employee = (Employee) repComboBox.getSelectedItem();
+        if (tableModel.getRowCount() == 0 || date == null) {
+            return;
+        }
+        List<Serializable> serializables = new ArrayList<Serializable>();
+        for (int i = 0; i < tableModel.getRowCount(); i++) {
+            Item item = m.find(Item.class, tableModel.getValueAt(i, 1).toString());
+            double returnQuantity = Double.parseDouble(tableModel.getValueAt(i, 3).toString());
+            SrStock srStock = m.find(SrStock.class, new SrStockPK(employee.getCode(), item.getCode()));
+            DamageStock damageStock = item.getDamageStock();
+            if (damageStock == null) {
+                damageStock = new DamageStock(item.getCode());
+                damageStock.setItem(item);
+                damageStock.setQuantity(0.0);
+            }
+            damageStock.setQuantity(damageStock.getQuantity() + returnQuantity);
+            serializables.add(damageStock);
+            if (srStock != null && srStock.getQuantity() >= returnQuantity) {
+                srStock.setQuantity(srStock.getQuantity() - returnQuantity);
+                serializables.add(srStock);
+            }
+            DamageNotes damageNotes = new DamageNotes(date, item.getCode(), employee.getCode());
+            damageNotes.setEmployee(employee);
+            damageNotes.setItem(item);
+            damageNotes.setQuantity(returnQuantity);
+            damageNotes.setRate(srStock.getPackPrice());
+            damageNotes.setReason(employee.getCode() + " " + employee.getFirstName());
+            serializables.add(damageNotes);
+        }
+        if (m.update(serializables)) {
+            showSuccess("Update success");
+            fillRep();
+            fillItems();
+            calcTotal();
+            returnTextField.setText("");
+            return;
+        }
+        showError("Update Failed");
+    }
+
+    private void KeyAdapter() {
+
+        AutoCompleteDecorator.decorate(itemComboBox);
+        AutoCompleteDecorator.decorate(repComboBox);
+        setComboBoxKeyAdapters(itemComboBox);
+        setComboBoxKeyAdapters(repComboBox);
+        setComboBoxKeyAdapters(datePicker);
+    }
+
+    private void setComboBoxKeyAdapters(JComponent comp) {
+        String compName = comp.getName();
+        Component component[] = comp.getComponents();
+        for (int i = 0; i < component.length; i++) {
+            if (compName.equals("repComboBox")) {
+                component[i].addKeyListener(repComboBoxKeyAdapter);
+            } else if (compName.equals("itemComboBox")) {
+                component[i].addKeyListener(itemComboBoxKeyAdapter);
+            } else if (compName.equals("datePicker")) {
+                component[i].addKeyListener(datePickerKeyAdapter);
+            }
+        }
+    }
+    KeyAdapter datePickerKeyAdapter = new java.awt.event.KeyAdapter() {
+        @Override
+        public void keyPressed(KeyEvent evt) {
+            datePickerKeyPressed(evt);
+        }
+    };
+    KeyAdapter itemComboBoxKeyAdapter = new java.awt.event.KeyAdapter() {
+        @Override
+        public void keyPressed(KeyEvent evt) {
+            itemComboBoxKeyPressed(evt);
+        }
+    };
+    KeyAdapter repComboBoxKeyAdapter = new java.awt.event.KeyAdapter() {
+        @Override
+        public void keyPressed(KeyEvent evt) {
+            repComboBoxKeyPressed(evt);
+        }
+    };
+
     @Override
     public void componentOpened() {
         // TODO add custom code on component opening

@@ -4,6 +4,14 @@
  */
 package com.nanosl.nbiz.gui.operator;
 
+import com.nanosl.nbiz.utility.NTopComponent;
+import entity.Operator;
+import entity.ViewPanel;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
@@ -31,10 +39,10 @@ import org.openide.util.NbBundle.Messages;
     "CTL_PermissionTopComponent=Permission Window",
     "HINT_PermissionTopComponent=This is a Permission window"
 })
-public final class PermissionTopComponent extends TopComponent {
+public final class PermissionTopComponent extends NTopComponent {
 
     public PermissionTopComponent() {
-        initComponents();
+        onLoad();
         setName(Bundle.CTL_PermissionTopComponent());
         setToolTipText(Bundle.HINT_PermissionTopComponent());
 
@@ -204,7 +212,6 @@ public final class PermissionTopComponent extends TopComponent {
     private void removeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeButtonActionPerformed
         removePermission();
     }//GEN-LAST:event_removeButtonActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton assignButton;
     private javax.swing.JList availableViewList;
@@ -219,6 +226,80 @@ public final class PermissionTopComponent extends TopComponent {
     private javax.swing.JList permitedViewList;
     private javax.swing.JButton removeButton;
     // End of variables declaration//GEN-END:variables
+
+    private void loadAvaliableViews() {
+        Object o = operatorList.getSelectedValue();
+        if (o == null) {
+            return;
+        }
+        Operator operator = (Operator) o;
+        operator = m.find(Operator.class, operator.getUsername());
+        List<ViewPanel> viewPanels = m.exNamedQueryResult("ViewPanel.findAll");
+        List<ViewPanel> blankViewPanels = new ArrayList<ViewPanel>();
+
+        if (operator == null || viewPanels == null) {
+            availableViewList.setListData(blankViewPanels.toArray());
+            return;
+        }
+
+        for (Iterator<ViewPanel> it = viewPanels.iterator(); it.hasNext();) {
+            ViewPanel viewPanel = it.next();
+            Collection<Operator> operators = viewPanel.getOperatorCollection();
+            if (operators.isEmpty()) {
+                blankViewPanels.add(viewPanel);
+            } else if (!operators.contains(operator)) {
+                blankViewPanels.add(viewPanel);
+            }
+        }
+        availableViewList.setListData(blankViewPanels.toArray());
+    }
+
+    private void loadOperatorViews() {
+        Object o = operatorList.getSelectedValue();
+        if (o == null) {
+            return;
+        }
+        Operator operator = (Operator) o;
+        operator = m.find(Operator.class, operator.getUsername());
+        permitedViewList.setListData(operator.getViewPanelCollection().toArray());
+    }
+
+    public void removePermission() {
+        Object o = operatorList.getSelectedValue();
+        if (o == null) {
+            return;
+        }
+        Operator operator = (Operator) o;
+        o = permitedViewList.getSelectedValue();
+        if (o == null) {
+            return;
+        }
+        ViewPanel viewPanel = (ViewPanel) o;
+        viewPanel.getOperatorCollection().remove(operator);
+        operator.getViewPanelCollection().remove(viewPanel);
+        m.update(viewPanel);
+        m.update(operator);
+
+        loadAvaliableViews();
+        loadOperatorViews();
+    }
+
+    protected void onLoad() {
+        initComponents();
+        refresh();
+    }
+
+    private void refresh() {
+        loadOperators();
+        loadAvaliableViews();
+        loadOperatorViews();
+    }
+
+    private void loadOperators() {
+        List<Operator> operators = m.find(Operator.class);
+        operatorList.setListData(operators.toArray());
+    }
+
     @Override
     public void componentOpened() {
         // TODO add custom code on component opening

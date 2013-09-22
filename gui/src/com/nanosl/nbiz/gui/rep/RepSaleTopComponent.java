@@ -4,11 +4,32 @@
  */
 package com.nanosl.nbiz.gui.rep;
 
+import com.nanosl.nbiz.utility.NTopComponent;
+import entity.Employee;
+import entity.Item;
+import entity.RepSale;
+import entity.RepSalePK;
+import entity.RepSaleValue;
+import entity.SrStock;
+import entity.SrStockPK;
+import java.awt.Component;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JComboBox;
+import javax.swing.table.DefaultTableModel;
+import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
+import static util.Format.nf2d;
 
 /**
  * Top component which displays something.
@@ -31,10 +52,10 @@ import org.openide.util.NbBundle.Messages;
     "CTL_RepSaleTopComponent=RepSale Window",
     "HINT_RepSaleTopComponent=This is a RepSale window"
 })
-public final class RepSaleTopComponent extends TopComponent {
+public final class RepSaleTopComponent extends NTopComponent {
 
     public RepSaleTopComponent() {
-        initComponents();
+        onLoad();
         setName(Bundle.CTL_RepSaleTopComponent());
         setToolTipText(Bundle.HINT_RepSaleTopComponent());
 
@@ -208,15 +229,12 @@ public final class RepSaleTopComponent extends TopComponent {
     }// </editor-fold>//GEN-END:initComponents
 
     private void masterTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_masterTableMouseClicked
-
     }//GEN-LAST:event_masterTableMouseClicked
 
     private void masterTableMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_masterTableMouseReleased
-
     }//GEN-LAST:event_masterTableMouseReleased
 
     private void masterTableKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_masterTableKeyReleased
-
     }//GEN-LAST:event_masterTableKeyReleased
 
     private void repComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_repComboBoxActionPerformed
@@ -230,7 +248,6 @@ public final class RepSaleTopComponent extends TopComponent {
     private void processButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_processButtonActionPerformed
         process();
     }//GEN-LAST:event_processButtonActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox itemComboBox;
     private javax.swing.JLabel jLabel1;
@@ -246,6 +263,169 @@ public final class RepSaleTopComponent extends TopComponent {
     private javax.swing.JTextField soldTextField;
     private javax.swing.JTextField totalTextField;
     // End of variables declaration//GEN-END:variables
+    DefaultTableModel tableModel;
+
+    private void fillTable() {
+        Employee employee = (Employee) repComboBox.getSelectedItem();
+        int i = 0;
+        tableModel.setRowCount(i);
+        for (Iterator<SrStock> it = employee.getSrStockCollection().iterator(); it.hasNext();) {
+            SrStock srStock = it.next();
+            Item item = srStock.getItem();
+            double quantity = srStock.getQuantity();
+            if (srStock.getPackPrice() == null) {
+                srStock.setPackPrice(item.getPriceList().getSellingPack() == null ? 0.0 : item.getPriceList().getSellingPack());
+                m.update(srStock);
+            }
+            double price = srStock.getPackPrice();
+            Object[] row = {++i, item.getCode(), item.getDescription(), quantity, quantity, 0.0, price, quantity * price};
+            tableModel.addRow(row);
+        }
+        fillItems();
+        calcTotal();
+    }
+
+    protected void onLoad() {
+        initComponents();
+        tableModel = (DefaultTableModel) masterTable.getModel();
+        setKeyAdapter();
+    }
+
+    @Override
+    public void setVisible(boolean b) {
+        super.setVisible(b);
+        fillRep();
+    }
+
+    private void fillRep() {
+        tableModel.setRowCount(0);
+        repComboBox.setModel(new DefaultComboBoxModel(m.find(Employee.class).toArray()));
+        fillItems();
+        fillTable();
+    }
+
+    private void fillItems() {
+        itemComboBox.setModel(new DefaultComboBoxModel(m.find(Item.class).toArray()));
+    }
+
+    private void editTable() {
+        Item item = (Item) itemComboBox.getSelectedItem();
+        double sold = 0;
+        try {
+            sold = Double.valueOf(soldTextField.getText().trim());
+        } catch (NumberFormatException numberFormatException) {
+            showError("Invalid Value");
+            soldTextField.requestFocus();
+            return;
+        }
+        for (int i = 0; i < tableModel.getRowCount(); i++) {
+            if (tableModel.getValueAt(i, 1).toString().equals(item.getCode())) {
+                double previusSold = 0;
+                try {
+                    previusSold = Double.valueOf(tableModel.getValueAt(i, 5).toString());
+                } catch (NumberFormatException numberFormatException) {
+                }
+                sold = sold + previusSold;
+                tableModel.setValueAt(sold, i, 5);
+                double loaded = Double.valueOf(tableModel.getValueAt(i, 3).toString());
+                double remaining = loaded - sold;
+                tableModel.setValueAt(remaining, i, 4);
+                double rate = Double.valueOf(tableModel.getValueAt(i, 6).toString());
+                tableModel.setValueAt(sold * rate, i, 7);
+                calcTotal();
+                soldTextField.setText("");
+                itemComboBox.requestFocus();
+                return;
+            }
+        }
+        showError("Item not forund");
+    }
+
+    private void calcTotal() {
+        double total = 0;
+        for (int i = 0; i < tableModel.getRowCount(); i++) {
+            total += Double.valueOf(tableModel.getValueAt(i, 7).toString());
+        }
+        totalTextField.setText(nf2d.format(total));
+    }
+
+    private void process() {
+        Date date = jXDatePicker1.getDate();
+        Employee employee = (Employee) repComboBox.getSelectedItem();
+        if (tableModel.getRowCount() == 0 || date == null) {
+            return;
+        }
+        List<Serializable> serializables = new ArrayList<Serializable>();
+        for (int i = 0; i < tableModel.getRowCount(); i++) {
+            Item item = m.find(Item.class, tableModel.getValueAt(i, 1).toString());
+            RepSalePK repSalePK = new RepSalePK(date, item.getCode(), employee.getCode());
+            RepSale repSale = m.find(RepSale.class, repSalePK);
+            if (repSale != null) {
+                showError("Can't update same item twice a day!" + repSalePK);
+                return;
+            }
+            double loaded = Double.valueOf(tableModel.getValueAt(i, 3).toString());
+            double remaining = Double.valueOf(tableModel.getValueAt(i, 4).toString());
+            double rate = Double.valueOf(tableModel.getValueAt(i, 6).toString());
+            repSale = new RepSale(repSalePK);
+            repSale.setEmployee(employee);
+            repSale.setItem(item);
+            repSale.setLoaded(loaded);
+            repSale.setRemaining(remaining);
+            repSale.setRate(rate);
+            serializables.add(repSale);
+
+            SrStock srStock = m.find(SrStock.class, new SrStockPK(employee.getCode(), item.getCode()));
+            srStock.setQuantity(remaining);
+            serializables.add(srStock);
+        }
+        RepSaleValue repSaleValue = new RepSaleValue(date, employee.getCode());
+        repSaleValue.setAmount(Double.valueOf(totalTextField.getText().trim()));
+        repSaleValue.setEmployee(employee);
+        serializables.add(repSaleValue);
+        if (m.update(serializables)) {
+            showSuccess("Update success");
+            fillRep();
+            fillItems();
+            calcTotal();
+            return;
+        }
+        showError("Update Failed");
+    }
+
+    private void setKeyAdapter() {
+        AutoCompleteDecorator.decorate(itemComboBox);
+        setComboBoxKeyAdapters(itemComboBox);
+        AutoCompleteDecorator.decorate(repComboBox);
+        setComboBoxKeyAdapters(repComboBox);
+    }
+
+    private void setComboBoxKeyAdapters(JComboBox comp) {
+        String compName = comp.getName();
+        Component component[] = comp.getComponents();
+        for (int i = 0; i < component.length; i++) {
+            if (compName.equals("itemComboBox")) {
+                component[i].addKeyListener(itemComboBoxKeyAdapter);
+            }
+            if (compName.equals("repComboBox")) {
+                component[i].addKeyListener(repComboBoxKeyAdapter);
+            }
+        }
+
+    }
+    KeyAdapter itemComboBoxKeyAdapter = new java.awt.event.KeyAdapter() {
+        @Override
+        public void keyPressed(KeyEvent evt) {
+            itemComboBoxKeyAdapter.keyPressed(evt);
+        }
+    };
+    KeyAdapter repComboBoxKeyAdapter = new java.awt.event.KeyAdapter() {
+        @Override
+        public void keyPressed(KeyEvent evt) {
+            repComboBoxKeyAdapter.keyPressed(evt);
+        }
+    };
+
     @Override
     public void componentOpened() {
         // TODO add custom code on component opening

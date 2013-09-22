@@ -4,11 +4,20 @@
  */
 package com.nanosl.nbiz.gui.rep;
 
+import com.nanosl.nbiz.utility.NTopComponent;
+import entity.Employee;
+import entity.Item;
+import entity.SrStock;
+import java.util.Iterator;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.table.DefaultTableModel;
+import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
+import static util.Format.nf2d;
 
 /**
  * Top component which displays something.
@@ -31,10 +40,10 @@ import org.openide.util.NbBundle.Messages;
     "CTL_RepStockTopComponent=RepStock Window",
     "HINT_RepStockTopComponent=This is a RepStock window"
 })
-public final class RepStockTopComponent extends TopComponent {
+public final class RepStockTopComponent extends NTopComponent {
 
     public RepStockTopComponent() {
-        initComponents();
+        onLoad();
         setName(Bundle.CTL_RepStockTopComponent());
         setToolTipText(Bundle.HINT_RepStockTopComponent());
 
@@ -157,15 +166,12 @@ public final class RepStockTopComponent extends TopComponent {
     }// </editor-fold>//GEN-END:initComponents
 
     private void masterTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_masterTableMouseClicked
-
     }//GEN-LAST:event_masterTableMouseClicked
 
     private void masterTableMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_masterTableMouseReleased
-
     }//GEN-LAST:event_masterTableMouseReleased
 
     private void masterTableKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_masterTableKeyReleased
-
     }//GEN-LAST:event_masterTableKeyReleased
 
     private void repComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_repComboBoxActionPerformed
@@ -175,7 +181,6 @@ public final class RepStockTopComponent extends TopComponent {
     private void reloadButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reloadButtonActionPerformed
         fillRep();
     }//GEN-LAST:event_reloadButtonActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
@@ -184,6 +189,44 @@ public final class RepStockTopComponent extends TopComponent {
     private javax.swing.JButton reloadButton;
     private javax.swing.JComboBox repComboBox;
     // End of variables declaration//GEN-END:variables
+    DefaultTableModel tableModel;
+
+    private void fillTable() {
+        tableModel.setRowCount(0);
+        int i = tableModel.getRowCount();
+        Employee rep = (Employee) repComboBox.getSelectedItem();
+
+        for (Iterator<SrStock> it = rep.getSrStockCollection().iterator(); it.hasNext();) {
+            SrStock srStock = it.next();
+            Item item = srStock.getItem();
+            if (srStock.getPackPrice() == null) {
+                srStock.setPackPrice(item.getPriceList().getSellingPack() == null ? 0.0 : item.getPriceList().getSellingPack());
+                m.update(srStock);
+            }
+            double price = srStock.getPackPrice();
+            Object[] row = {++i, item.getCode(), item.getDescription(), srStock.getQuantity(), nf2d.format(price)};
+            tableModel.addRow(row);
+        }
+    }
+
+    protected void onLoad() {
+        initComponents();
+        tableModel = (DefaultTableModel) masterTable.getModel();
+        AutoCompleteDecorator.decorate(repComboBox);
+    }
+
+    @Override
+    public void setVisible(boolean b) {
+        super.setVisible(b);
+        fillRep();
+    }
+
+    private void fillRep() {
+        tableModel.setRowCount(0);
+        repComboBox.setModel(new DefaultComboBoxModel(m.find(Employee.class).toArray()));
+        fillTable();
+    }
+
     @Override
     public void componentOpened() {
         // TODO add custom code on component opening
