@@ -4,6 +4,7 @@
  */
 package com.nanosl.nbiz.gui.tool;
 
+import com.nanosl.nbiz.utility.NTopComponent;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
@@ -31,7 +32,7 @@ import org.openide.util.NbBundle.Messages;
     "CTL_BankTopComponent=Bank Window",
     "HINT_BankTopComponent=This is a Bank window"
 })
-public final class BankTopComponent extends TopComponent {
+public final class BankTopComponent extends NTopComponent {
 
     public BankTopComponent() {
         initComponents();

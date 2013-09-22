@@ -172,7 +172,7 @@ public final class PurchaseReportTopComponent extends NTopComponent {
             int row = masterTable.getSelectedRow();
             String invoiceNumber = masterTable.getValueAt(row, 4).toString();
             String supperCode = masterTable.getValueAt(row, 2).toString();
-            new PurchaseInvoiceView(invoiceNumber, supperCode);
+//            new PurchaseInvoiceView(invoiceNumber, supperCode);
         }
     }//GEN-LAST:event_masterTableMouseClicked
 

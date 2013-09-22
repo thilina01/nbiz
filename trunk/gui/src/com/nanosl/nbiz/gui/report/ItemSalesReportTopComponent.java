@@ -6,6 +6,7 @@ package com.nanosl.nbiz.gui.report;
 
 import com.nanosl.lib.date.JXDatePicker;
 import com.nanosl.nbiz.utility.Find;
+import com.nanosl.nbiz.utility.NTopComponent;
 import entity.SaleInvoice;
 import java.util.Collection;
 import java.util.Date;
@@ -40,10 +41,10 @@ import static util.Format.yyyy_MM_dd;
     "CTL_ItemSalesReportTopComponent=ItemSalesReport Window",
     "HINT_ItemSalesReportTopComponent=This is a ItemSalesReport window"
 })
-public final class ItemSalesReportTopComponent extends TopComponent {
+public final class ItemSalesReportTopComponent extends NTopComponent {
 
     public ItemSalesReportTopComponent() {
-        initComponents();
+        onLoad();
         setName(Bundle.CTL_ItemSalesReportTopComponent());
         setToolTipText(Bundle.HINT_ItemSalesReportTopComponent());
 
@@ -167,15 +168,12 @@ public final class ItemSalesReportTopComponent extends TopComponent {
     }// </editor-fold>//GEN-END:initComponents
 
     private void masterTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_masterTableMouseClicked
-
     }//GEN-LAST:event_masterTableMouseClicked
 
     private void masterTableMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_masterTableMouseReleased
-
     }//GEN-LAST:event_masterTableMouseReleased
 
     private void masterTableKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_masterTableKeyReleased
-
     }//GEN-LAST:event_masterTableKeyReleased
 
     private void startDatePickerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startDatePickerActionPerformed
@@ -185,7 +183,6 @@ public final class ItemSalesReportTopComponent extends TopComponent {
     private void endDatePickerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_endDatePickerActionPerformed
         fill();
     }//GEN-LAST:event_endDatePickerActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.jdesktop.swingx.JXDatePicker endDatePicker;
     private javax.swing.JLabel jLabel3;
@@ -205,7 +202,7 @@ public final class ItemSalesReportTopComponent extends TopComponent {
 
         Collection<SaleInvoice> saleInvoices = Find.saleInvoicesByDates(startDate, endDate);
         if (saleInvoices == null) {
-            show("No Record Found!");
+            showError("No Record Found!");
             return;
         }
         int i = 0;
@@ -240,6 +237,7 @@ public final class ItemSalesReportTopComponent extends TopComponent {
         }
         totalLabel.setText(nf2d.format(total));
     }
+
     @Override
     public void componentOpened() {
         // TODO add custom code on component opening
