@@ -4,11 +4,22 @@
  */
 package com.nanosl.nbiz.gui.operator;
 
+import com.nanosl.nbiz.utility.Combo;
+import com.nanosl.nbiz.utility.Data;
+import com.nanosl.nbiz.utility.NTopComponent;
+import entity.Employee;
+import entity.Operator;
+import java.util.Collection;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+import javax.swing.table.DefaultTableModel;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
+import static util.Format.yyyy_MM_dd;
 
 /**
  * Top component which displays something.
@@ -31,10 +42,10 @@ import org.openide.util.NbBundle.Messages;
     "CTL_OperatorTopComponent=Operator Window",
     "HINT_OperatorTopComponent=This is a Operator window"
 })
-public final class OperatorTopComponent extends TopComponent {
+public final class OperatorTopComponent extends NTopComponent {
 
     public OperatorTopComponent() {
-        initComponents();
+        onLoad();
         setName(Bundle.CTL_OperatorTopComponent());
         setToolTipText(Bundle.HINT_OperatorTopComponent());
 
@@ -164,10 +175,10 @@ public final class OperatorTopComponent extends TopComponent {
 
     private void employeeComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_employeeComboBoxActionPerformed
         //        if (entities.Employee.isDescription()) {
-            //            setDataLable(employeeComboBox, ((entities.Employee) employeeComboBox.getSelectedItem()).getCode());
-            //        } else {
-            //            setDataLable(employeeComboBox, ((entities.Employee) employeeComboBox.getSelectedItem()).getName());
-            //        }
+        //            setDataLable(employeeComboBox, ((entities.Employee) employeeComboBox.getSelectedItem()).getCode());
+        //        } else {
+        //            setDataLable(employeeComboBox, ((entities.Employee) employeeComboBox.getSelectedItem()).getName());
+        //        }
     }//GEN-LAST:event_employeeComboBoxActionPerformed
 
     private void employeeComboBoxKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_employeeComboBoxKeyPressed
@@ -189,7 +200,6 @@ public final class OperatorTopComponent extends TopComponent {
             removeRows();
         }
     }//GEN-LAST:event_tempTableKeyReleased
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPasswordField PasswordField;
     public static javax.swing.JComboBox employeeComboBox;
@@ -201,6 +211,74 @@ public final class OperatorTopComponent extends TopComponent {
     private javax.swing.JTable tempTable;
     private javax.swing.JTextField usernameTextField;
     // End of variables declaration//GEN-END:variables
+    DefaultTableModel tempTableModel;
+
+    @Override
+    public void setVisible(boolean b) {
+        super.setVisible(b);
+        Combo.fillEmployees(employeeComboBox);
+        fillTempTable();
+    }
+
+    protected void onLoad() {
+        initComponents();
+        tempTableModel = (DefaultTableModel) tempTable.getModel();
+    }
+
+    private void removeRows() {
+        int[] selected = tempTable.getSelectedRows();
+        if (selected.length == tempTable.getRowCount()) {
+            showError("You can't delete all operators");
+            return;
+        }
+        for (int idx = 0; idx < selected.length; idx++) {
+            if (!m.delete(Operator.class, tempTable.getValueAt(selected[idx], 1).toString())) {
+                continue;
+            }
+        }
+        fillTempTable();
+    }
+
+    private void createOperator() {
+        Object o = employeeComboBox.getSelectedItem();
+        if (o instanceof Employee) {
+            Employee employee = (Employee) o;
+            Collection<Operator> operators = employee.getOperatorCollection();
+            if (operators.isEmpty()) {
+                String username = usernameTextField.getText().trim();
+                String password = new String(PasswordField.getPassword()).trim();
+                if (password.equals("") || username.equals("")) {
+                    return;
+                }
+                Operator operator = new Operator(username);
+                operator.setCreatedBy(Data.getOperator().getUsername());
+                operator.setEmployee(employee);
+                operator.setUsername(username);
+                operator.setPassword(password);
+                operator.setPower(0);
+                operator.setCreatedDate(new Date());
+                m.update(operator);
+                fillTempTable();
+                usernameTextField.setText("");
+                PasswordField.setText("");
+                employeeComboBox.requestFocus();
+            } else {
+                showError("This Employee Is Already an Operator");
+            }
+        }
+    }
+
+    void fillTempTable() {
+        tempTableModel.setRowCount(0);
+        List<Operator> operators = m.find(Operator.class);
+        for (Iterator<Operator> it = operators.iterator(); it.hasNext();) {
+            Operator operator = it.next();
+            Date cDat = operator.getCreatedDate() == null ? new Date() : operator.getCreatedDate();
+            Object[] row = {operator.getEmployee().getFirstName(), operator.getUsername(), yyyy_MM_dd.format(cDat), operator.getCreatedBy()};
+            tempTableModel.addRow(row);
+        }
+    }
+
     @Override
     public void componentOpened() {
         // TODO add custom code on component opening

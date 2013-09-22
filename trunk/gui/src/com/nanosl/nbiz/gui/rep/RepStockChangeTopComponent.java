@@ -4,6 +4,26 @@
  */
 package com.nanosl.nbiz.gui.rep;
 
+import com.nanosl.nbiz.utility.NTopComponent;
+import entity.Employee;
+import entity.Item;
+import entity.RepStockChange;
+import entity.SrStock;
+import entity.SrStockPK;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JComboBox;
+import javax.swing.table.DefaultTableModel;
+import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
@@ -31,10 +51,10 @@ import org.openide.util.NbBundle.Messages;
     "CTL_RepStockChangeTopComponent=RepStockChange Window",
     "HINT_RepStockChangeTopComponent=This is a RepStockChange window"
 })
-public final class RepStockChangeTopComponent extends TopComponent {
+public final class RepStockChangeTopComponent extends NTopComponent {
 
     public RepStockChangeTopComponent() {
-        initComponents();
+        onLoad();
         setName(Bundle.CTL_RepStockChangeTopComponent());
         setToolTipText(Bundle.HINT_RepStockChangeTopComponent());
 
@@ -217,15 +237,12 @@ public final class RepStockChangeTopComponent extends TopComponent {
     }// </editor-fold>//GEN-END:initComponents
 
     private void masterTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_masterTableMouseClicked
-
     }//GEN-LAST:event_masterTableMouseClicked
 
     private void masterTableMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_masterTableMouseReleased
-
     }//GEN-LAST:event_masterTableMouseReleased
 
     private void masterTableKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_masterTableKeyReleased
-
     }//GEN-LAST:event_masterTableKeyReleased
 
     private void actualQuantityTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_actualQuantityTextFieldActionPerformed
@@ -243,7 +260,6 @@ public final class RepStockChangeTopComponent extends TopComponent {
     private void repComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_repComboBoxActionPerformed
         reLoad();
     }//GEN-LAST:event_repComboBoxActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField actualQuantityTextField;
     private javax.swing.JComboBox itemComboBox;
@@ -260,6 +276,158 @@ public final class RepStockChangeTopComponent extends TopComponent {
     private javax.swing.JButton resetButton;
     private javax.swing.JLabel totalLabel;
     // End of variables declaration//GEN-END:variables
+    DefaultTableModel tableModel;
+
+    private void fillTable(Collection<SrStock> srStocks) {
+        tableModel.setRowCount(0);
+        int i = tableModel.getRowCount();
+        for (Iterator<SrStock> it = srStocks.iterator(); it.hasNext();) {
+            SrStock srStock = it.next();
+            Item item = srStock.getItem();
+            double quantity = srStock.getQuantity() == null ? 0 : srStock.getQuantity();
+            double cost = item.getPriceList() == null ? 0 : item.getPriceList().getCostPack();
+            Object[] row = {++i, item.getCode(), item.getDescription(), quantity, quantity, 0, cost, 0};
+            tableModel.addRow(row);
+        }
+    }
+
+    protected void onLoad() {
+        initComponents();
+        tableModel = (DefaultTableModel) masterTable.getModel();
+//        AutoCompleteDecorator.decorate(itemComboBox);
+//        AutoCompleteDecorator.decorate(repComboBox);
+        reset();
+    }
+
+    @Override
+    public void setVisible(boolean b) {
+        super.setVisible(b);
+        fillReps();
+    }
+
+    private void reset() {
+//        fillTable();
+        fillItems();
+        calcTotal();
+    }
+
+    private void fillItems() {
+        itemComboBox.setModel(new DefaultComboBoxModel(m.find(Item.class).toArray()));
+    }
+
+    private void editTable() {
+        double actualQuantity = 0;
+
+        try {
+            actualQuantity = Double.valueOf(actualQuantityTextField.getText().trim());
+        } catch (NumberFormatException numberFormatException) {
+            showError("Invalid number!");
+            return;
+        }
+
+        Item item = (Item) itemComboBox.getSelectedItem();
+        for (int i = 0; i < tableModel.getRowCount(); i++) {
+            if (masterTable.getValueAt(i, 1).equals(item.getCode())) {
+                double oldQuantity = Double.valueOf(masterTable.getValueAt(i, 3).toString());
+                masterTable.setValueAt(actualQuantity, i, 4);
+                double deferent = oldQuantity - actualQuantity;
+                masterTable.setValueAt(deferent, i, 5);
+                double rate = Double.valueOf(masterTable.getValueAt(i, 6).toString());
+                masterTable.setValueAt(deferent * rate, i, 7);
+                calcTotal();
+                actualQuantityTextField.setText("");
+                itemComboBox.requestFocus();
+                return;
+            }
+        }
+    }
+
+    private void calcTotal() {
+        double total = 0;
+        for (int i = 0; i < tableModel.getRowCount(); i++) {
+            total += Double.valueOf(tableModel.getValueAt(i, 7).toString());
+        }
+        totalLabel.setText(total + "");
+    }
+
+    private void process() {
+        Date date = jXDatePicker1.getDate();
+        if (date == null) {
+            showError("Select date");
+            return;
+        }
+        List<Serializable> serializables = new ArrayList<Serializable>();
+        for (int i = 0; i < tableModel.getRowCount(); i++) {
+            Employee employee = (Employee) repComboBox.getSelectedItem();
+            SrStock srStock = m.find(SrStock.class, new SrStockPK(employee.getCode(), masterTable.getValueAt(i, 1).toString()));
+            Item item = m.find(Item.class, masterTable.getValueAt(i, 1));
+            double oldQuantity = srStock.getQuantity();
+            double actualQuantity = Double.valueOf(masterTable.getValueAt(i, 4).toString());
+            double rate = Double.valueOf(masterTable.getValueAt(i, 6).toString());
+            srStock.setQuantity(actualQuantity);
+            serializables.add(srStock);
+
+            RepStockChange repStockChange = new RepStockChange(item.getCode(), date, employee.getCode());
+            repStockChange.setActualQuantity(actualQuantity);
+            repStockChange.setItem(item);
+            repStockChange.setOldQuantity(oldQuantity);
+            repStockChange.setRate(rate);
+            serializables.add(repStockChange);
+        }
+        if (m.update(serializables)) {
+            showSuccess("Update success");
+            reset();
+        }
+    }
+
+    private void reLoad() {
+        reset();
+        Employee employee = (Employee) repComboBox.getSelectedItem();
+        Collection<SrStock> stocks = employee.getSrStockCollection();
+        fillTable(stocks);
+
+    }
+
+    private void fillReps() {
+        repComboBox.setModel(new DefaultComboBoxModel(m.find(Employee.class).toArray()));
+    }
+
+    private void KeyAdapter() {
+
+        AutoCompleteDecorator.decorate(itemComboBox);
+        setComboBoxKeyAdapters(itemComboBox);
+        AutoCompleteDecorator.decorate(repComboBox);
+        setComboBoxKeyAdapters(repComboBox);
+
+
+    }
+
+    private void setComboBoxKeyAdapters(JComboBox comp) {
+        String compName = comp.getName();
+        Component component[] = comp.getComponents();
+        for (int i = 0; i < component.length; i++) {
+            if (comp.equals("itemComboBox")) {
+                component[i].addKeyListener(itemComboBoxKeyAdapter);
+            }
+            if (comp.equals("repComboBox")) {
+                component[i].addKeyListener(repComboBoxKeyAdapter);
+            }
+        }
+
+    }
+    KeyAdapter itemComboBoxKeyAdapter = new java.awt.event.KeyAdapter() {
+        @Override
+        public void keyPressed(KeyEvent evt) {
+            itemComboBoxKeyAdapter.keyPressed(evt);
+        }
+    };
+    KeyAdapter repComboBoxKeyAdapter = new java.awt.event.KeyAdapter() {
+        @Override
+        public void keyPressed(KeyEvent evt) {
+            repComboBoxKeyAdapter.keyPressed(evt);
+        }
+    };
+
     @Override
     public void componentOpened() {
         // TODO add custom code on component opening
