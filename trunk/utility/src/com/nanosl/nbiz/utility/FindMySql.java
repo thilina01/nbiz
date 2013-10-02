@@ -6,6 +6,7 @@ package com.nanosl.nbiz.utility;
 
 import com.nanosl.lib.db.Manager;
 import com.nanosl.lib.er.Errors;
+import com.nanosl.lib.util.Format;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -19,7 +20,7 @@ import java.util.logging.Logger;
  *
  * @author T
  */
-public class FindMySql implements util.Format {
+public class FindMySql implements Format {
 
     private static String partPaymentCollectionsByDates = "SELECT "
             + "DATE_FORMAT(collection_receipt.collected_time,'%d-%m-%Y') AS 'Collected Time', "

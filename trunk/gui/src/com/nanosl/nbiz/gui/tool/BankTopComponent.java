@@ -5,6 +5,10 @@
 package com.nanosl.nbiz.gui.tool;
 
 import com.nanosl.nbiz.utility.NTopComponent;
+import entity.Bank;
+import java.util.Iterator;
+import java.util.List;
+import javax.swing.table.DefaultTableModel;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
@@ -35,7 +39,7 @@ import org.openide.util.NbBundle.Messages;
 public final class BankTopComponent extends NTopComponent {
 
     public BankTopComponent() {
-        initComponents();
+        onLoad();
         setName(Bundle.CTL_BankTopComponent());
         setToolTipText(Bundle.HINT_BankTopComponent());
 
@@ -233,7 +237,6 @@ public final class BankTopComponent extends NTopComponent {
     private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
         delete();
     }//GEN-LAST:event_deleteButtonActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton clearButton;
     private javax.swing.JTextField codeField;
@@ -246,6 +249,82 @@ public final class BankTopComponent extends NTopComponent {
     private javax.swing.JLabel nameLabel;
     private javax.swing.JButton updateButton;
     // End of variables declaration//GEN-END:variables
+    List<Bank> banks;
+    DefaultTableModel tableModel;
+
+    private void clear() {
+        clearFields();
+        fillTable();
+    }
+
+    private void fillTable() {
+        banks = m.find(Bank.class);
+        tableModel.setRowCount(0);
+        int i = 0;
+        for (Iterator<Bank> it = banks.iterator(); it.hasNext();) {
+            Bank bank = it.next();
+
+            Object[] row = {++i, bank.getCode(), bank.getName()};
+            tableModel.addRow(row);
+        }
+    }
+
+    protected void onLoad() {
+        initComponents();
+        tableModel = (DefaultTableModel) masterTable.getModel();
+        clear();
+    }
+
+    private void update() {
+        String code = codeField.getText().trim();
+        String name = nameField.getText().trim();
+        if (code.equals("")) {
+            codeField.requestFocus();
+            return;
+        }
+        if (name.equals("")) {
+            nameField.requestFocus();
+            return;
+        }
+
+        Bank bank = new Bank(code);
+        int index = banks.indexOf(bank);
+        bank = index == -1 ? bank : banks.get(index);
+        bank.setName(name);
+        if (m.update(bank)) {
+            clear();
+            codeField.requestFocus();
+            return;
+        }
+        showError("Unable To Update!");
+    }
+
+    private void delete() {
+        String code = codeField.getText().trim();
+        if (code.equals("")) {
+            codeField.requestFocus();
+            return;
+        }
+        if (m.delete(Bank.class, code)) {
+            clear();
+        }
+        showError("Unable to delete " + code);
+    }
+
+    private void fill() {
+        int row = masterTable.getSelectedRow();
+        if (row > -1) {
+            codeField.setText("" + masterTable.getValueAt(row, 1));
+            nameField.setText("" + masterTable.getValueAt(row, 2));
+        }
+    }
+
+    private void clearFields() {
+        codeField.requestFocus();
+        codeField.setText("");
+        nameField.setText("");
+    }
+
     @Override
     public void componentOpened() {
         // TODO add custom code on component opening

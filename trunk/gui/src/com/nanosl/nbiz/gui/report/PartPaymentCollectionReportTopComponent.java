@@ -10,8 +10,6 @@ import com.nanosl.nbiz.utility.NTopComponent;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
 import org.jdesktop.swingx.JXDatePicker;
 import org.netbeans.api.settings.ConvertAsProperties;
@@ -19,7 +17,6 @@ import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
-import static util.Format.nf2d;
 
 /**
  * Top component which displays something.

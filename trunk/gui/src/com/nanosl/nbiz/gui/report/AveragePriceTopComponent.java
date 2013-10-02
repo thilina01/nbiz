@@ -18,7 +18,6 @@ import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
-import static util.Format.nf2d;
 
 /**
  * Top component which displays something.
