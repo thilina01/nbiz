@@ -4,6 +4,16 @@
  */
 package com.nanosl.nbiz.gui.tool;
 
+import com.nanosl.nbiz.utility.NTopComponent;
+import entity.RootArea;
+import entity.Town;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.table.DefaultTableModel;
+import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
@@ -31,10 +41,10 @@ import org.openide.util.NbBundle.Messages;
     "CTL_TownTopComponent=Town Window",
     "HINT_TownTopComponent=This is a Town window"
 })
-public final class TownTopComponent extends TopComponent {
+public final class TownTopComponent extends NTopComponent {
 
     public TownTopComponent() {
-        initComponents();
+        onLoad();
         setName(Bundle.CTL_TownTopComponent());
         setToolTipText(Bundle.HINT_TownTopComponent());
 
@@ -244,7 +254,6 @@ public final class TownTopComponent extends TopComponent {
     private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
         delete();
     }//GEN-LAST:event_deleteButtonActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton clearButton;
     private javax.swing.JTextField codeField;
@@ -259,6 +268,93 @@ public final class TownTopComponent extends TopComponent {
     private javax.swing.JComboBox rootAreaComboBox;
     private javax.swing.JButton updateButton;
     // End of variables declaration//GEN-END:variables
+    List<Town> towns;
+    DefaultTableModel tableModel;
+
+    private void clear() {
+        clearFields();
+        fillTable();
+        fillRootAreas();
+    }
+
+    private void fillTable() {
+        towns = m.find(Town.class);
+        int i = 0;
+        tableModel.setRowCount(i);
+        for (Iterator<Town> it = towns.iterator(); it.hasNext();) {
+            Town town = it.next();
+            Object[] row = {++i, town.getCode(), town.getName()};
+            tableModel.addRow(row);
+        }
+    }
+
+    private void onLoad() {
+        initComponents();
+        tableModel = (DefaultTableModel) masterTable.getModel();
+        clear();
+        AutoCompleteDecorator.decorate(rootAreaComboBox);
+    }
+
+    private void update() {
+        String code = codeField.getText().trim();
+        String name = nameField.getText().trim();
+        if (code.equals("")) {
+            codeField.requestFocus();
+            return;
+        }
+        if (name.equals("")) {
+            nameField.requestFocus();
+            return;
+        }
+
+        Town town = new Town(code);
+        int index = towns.indexOf(town);
+        town = index == -1 ? town : towns.get(index);
+        town.setName(name);
+        RootArea rootArea = (RootArea) rootAreaComboBox.getSelectedItem();
+        town.setRootArea(rootArea);
+        rootArea.getTownCollection().add(town);
+        List<Serializable> serializables = new ArrayList<Serializable>();
+        serializables.add(rootArea);
+        serializables.add(town);
+        if (m.update(serializables)) {
+            clear();
+            return;
+        }
+        showError("Unable to Update " + code);
+    }
+
+    private void delete() {
+        String code = codeField.getText().trim();
+        if (code.equals("")) {
+            codeField.requestFocus();
+            return;
+        }
+        if (m.delete(Town.class, code)) {
+            clear();
+        }
+    }
+
+    private void fill() {
+        int row = masterTable.getSelectedRow();
+        if (row > -1) {
+            Town town = m.find(Town.class, "" + masterTable.getValueAt(row, 1));
+            codeField.setText(town.getCode());
+            nameField.setText(town.getName());
+            rootAreaComboBox.setSelectedItem(town.getRootArea());
+        }
+    }
+
+    private void clearFields() {
+        codeField.requestFocus();
+        codeField.setText("");
+        nameField.setText("");
+    }
+
+    private void fillRootAreas() {
+        rootAreaComboBox.setModel(new DefaultComboBoxModel(m.find(RootArea.class).toArray()));
+    }
+
     @Override
     public void componentOpened() {
         // TODO add custom code on component opening

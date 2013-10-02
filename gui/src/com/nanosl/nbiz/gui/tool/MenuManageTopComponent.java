@@ -4,6 +4,10 @@
  */
 package com.nanosl.nbiz.gui.tool;
 
+import com.nanosl.nbiz.utility.Find;
+import com.nanosl.nbiz.utility.NTopComponent;
+import entity.Menu;
+import entity.MenuItem;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
@@ -31,7 +35,7 @@ import org.openide.util.NbBundle.Messages;
     "CTL_MenuManageTopComponent=MenuManage Window",
     "HINT_MenuManageTopComponent=This is a MenuManage window"
 })
-public final class MenuManageTopComponent extends TopComponent {
+public final class MenuManageTopComponent extends NTopComponent {
 
     public MenuManageTopComponent() {
         initComponents();
@@ -276,7 +280,6 @@ public final class MenuManageTopComponent extends TopComponent {
     private void menuItemassignButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemassignButtonActionPerformed
         menuItemOperation(1);
     }//GEN-LAST:event_menuItemassignButtonActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JList activeMenuItemList;
     private javax.swing.JList activeMenuList;
@@ -298,6 +301,62 @@ public final class MenuManageTopComponent extends TopComponent {
     private javax.swing.JButton menuItemassignButton;
     private javax.swing.JButton menuRemoveButton;
     // End of variables declaration//GEN-END:variables
+
+    protected void onLoad() {
+        initComponents();
+        refresh();
+    }
+
+    private void refresh() {
+        fillMenuList();
+        fillMenuItemList();
+//        mainView.menuRegister();
+    }
+
+    private void fillMenuList() {
+        activeMenuList.setListData(Find.menuByStatus(1).toArray());
+        inactiveMenuList.setListData(Find.menuByStatus(0).toArray());
+    }
+
+    private void fillMenuItemList() {
+        Object o = activeMenuList.getSelectedValue();
+        if (o == null) {
+            activeMenuItemList.setListData(new Object[]{});
+            inactiveMenuItemList.setListData(new Object[]{});
+            return;
+        }
+        Menu menu = (Menu) o;
+        menu = m.find(Menu.class, menu.getMenu());
+
+        activeMenuItemList.setListData(Find.menuItemByMenuAndStatus(menu, 1).toArray());
+        inactiveMenuItemList.setListData(Find.menuItemByMenuAndStatus(menu, 0).toArray());
+    }
+
+    private void menuOperation(int i) {
+        Object o = i == 0 ? activeMenuList.getSelectedValue() : inactiveMenuList.getSelectedValue();
+        if (o == null) {
+            return;
+        }
+        Menu menu = (Menu) o;
+        menu = m.find(Menu.class, menu.getMenu());
+        menu.setStatus(i);
+        m.update(menu);
+        refresh();
+    }
+
+    private void menuItemOperation(int i) {
+        Object o = i == 0 ? activeMenuItemList.getSelectedValue() : inactiveMenuItemList.getSelectedValue();
+        if (o == null) {
+            return;
+        }
+        MenuItem menuItem = (MenuItem) o;
+        menuItem = m.find(MenuItem.class, menuItem.getMenuItemPK());
+        menuItem.setStatus(i);
+        m.update(menuItem);
+        fillMenuItemList();
+//        mainView.menuRegister();
+    }
+
     @Override
     public void componentOpened() {
         // TODO add custom code on component opening

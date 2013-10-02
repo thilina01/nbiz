@@ -4,6 +4,11 @@
  */
 package com.nanosl.nbiz.gui.tool;
 
+import com.nanosl.nbiz.utility.NTopComponent;
+import entity.RootArea;
+import java.util.Iterator;
+import java.util.List;
+import javax.swing.table.DefaultTableModel;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
@@ -31,10 +36,10 @@ import org.openide.util.NbBundle.Messages;
     "CTL_RootAreaTopComponent=RootArea Window",
     "HINT_RootAreaTopComponent=This is a RootArea window"
 })
-public final class RootAreaTopComponent extends TopComponent {
+public final class RootAreaTopComponent extends NTopComponent {
 
     public RootAreaTopComponent() {
-        initComponents();
+        onLoad();
         setName(Bundle.CTL_RootAreaTopComponent());
         setToolTipText(Bundle.HINT_RootAreaTopComponent());
 
@@ -246,7 +251,6 @@ public final class RootAreaTopComponent extends TopComponent {
     private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
         delete();
     }//GEN-LAST:event_deleteButtonActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton clearButton;
     private javax.swing.JTextField codeField;
@@ -259,6 +263,77 @@ public final class RootAreaTopComponent extends TopComponent {
     private javax.swing.JLabel nameLabel;
     private javax.swing.JButton updateButton;
     // End of variables declaration//GEN-END:variables
+    DefaultTableModel tableModel;
+
+    private void clear() {
+        clearFields();
+        fillTable();
+    }
+
+    private void fillTable() {
+        List<RootArea> rootAreas = m.find(RootArea.class);
+        tableModel.setRowCount(0);
+        int i = 0;
+        for (Iterator<RootArea> it = rootAreas.iterator(); it.hasNext();) {
+            RootArea rootArea = it.next();
+            Object[] row = {++i, rootArea.getCode(), rootArea.getName()};
+            tableModel.addRow(row);
+        }
+    }
+
+    protected void onLoad() {
+        initComponents();
+        tableModel = (DefaultTableModel) masterTable.getModel();
+        clear();
+    }
+
+    private void update() {
+        String code = codeField.getText().trim();
+        String name = nameField.getText().trim();
+        if (code.equals("")) {
+            codeField.requestFocus();
+            return;
+        }
+        if (name.equals("")) {
+            nameField.requestFocus();
+            return;
+        }
+
+        RootArea rootArea = new RootArea(code);
+        rootArea.setName(name);
+        if (m.update(rootArea)) {
+            clear();
+            return;
+        }
+        showError("Unable To Update!");
+    }
+
+    private void delete() {
+        String code = codeField.getText().trim();
+        if (code.equals("")) {
+            codeField.requestFocus();
+            return;
+        }
+        if (m.delete(RootArea.class, code)) {
+            clear();
+        }
+        showError("Unable to delete " + code);
+    }
+
+    private void fill() {
+        int row = masterTable.getSelectedRow();
+        if (row > -1) {
+            codeField.setText("" + masterTable.getValueAt(row, 1));
+            nameField.setText("" + masterTable.getValueAt(row, 2));
+        }
+    }
+
+    private void clearFields() {
+        codeField.requestFocus();
+        codeField.setText("");
+        nameField.setText("");
+    }
+
     @Override
     public void componentOpened() {
         // TODO add custom code on component opening

@@ -18,7 +18,6 @@ import entity.SaleInvoice;
 import entity.SaleInvoiceHasItem;
 import entity.SaleInvoiceHasItemPK;
 import entity.Stock;
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -35,9 +34,6 @@ import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
-import static util.Format.nf2d;
-import static util.Format.nf3d;
-import static util.Format.yyyy_MM_dd;
 
 /**
  * Top component which displays something.

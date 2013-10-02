@@ -17,8 +17,6 @@ import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
-import static util.Format.nf2d;
-import static util.Format.yyyy_MM_dd;
 
 /**
  * Top component which displays something.
