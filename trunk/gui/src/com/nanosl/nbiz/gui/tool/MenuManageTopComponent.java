@@ -4,8 +4,8 @@
  */
 package com.nanosl.nbiz.gui.tool;
 
-import com.nanosl.nbiz.utility.Find;
-import com.nanosl.nbiz.utility.NTopComponent;
+import com.nanosl.nbiz.util.Find;
+import com.nanosl.nbiz.util.NTopComponent;
 import entity.Menu;
 import entity.MenuItem;
 import org.netbeans.api.settings.ConvertAsProperties;

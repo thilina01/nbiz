@@ -4,7 +4,7 @@
  */
 package com.nanosl.nbiz.gui.operator;
 
-import com.nanosl.nbiz.utility.NTopComponent;
+import com.nanosl.nbiz.util.NTopComponent;
 import entity.Operator;
 import entity.ViewPanel;
 import java.io.Serializable;

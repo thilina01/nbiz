@@ -4,9 +4,9 @@
  */
 package com.nanosl.nbiz.gui;
 
-import com.nanosl.nbiz.utility.Data;
-import com.nanosl.nbiz.utility.NTopComponent;
-import com.nanosl.nbiz.utility.Printer;
+import com.nanosl.nbiz.util.Data;
+import com.nanosl.nbiz.util.NTopComponent;
+import com.nanosl.nbiz.util.Printer;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import org.netbeans.api.settings.ConvertAsProperties;

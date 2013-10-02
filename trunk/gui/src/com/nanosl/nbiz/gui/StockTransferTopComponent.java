@@ -5,7 +5,7 @@
 package com.nanosl.nbiz.gui;
 
 import com.nanosl.lib.date.JXDatePicker;
-import com.nanosl.nbiz.utility.NTopComponent;
+import com.nanosl.nbiz.util.NTopComponent;
 import entity.Employee;
 import entity.Item;
 import entity.PriceList;

@@ -5,8 +5,8 @@
 package com.nanosl.nbiz.gui.report;
 
 import com.nanosl.lib.date.JXDatePicker;
-import com.nanosl.nbiz.utility.FindMySql;
-import com.nanosl.nbiz.utility.NTopComponent;
+import com.nanosl.nbiz.util.FindMySql;
+import com.nanosl.nbiz.util.NTopComponent;
 import java.util.Date;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;

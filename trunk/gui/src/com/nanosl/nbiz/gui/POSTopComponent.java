@@ -4,11 +4,7 @@
  */
 package com.nanosl.nbiz.gui;
 
-import com.nanosl.lib.date.JXDatePicker;
-import com.nanosl.nbiz.utility.Combo;
-import com.nanosl.nbiz.utility.Data;
-import com.nanosl.nbiz.utility.NTopComponent;
-import com.nanosl.nbiz.utility.Printer;
+import com.nanosl.nbiz.util.NTopComponent;
 import entity.CollectionReceipt;
 import entity.Customer;
 import entity.Item;
@@ -36,9 +32,10 @@ import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
-import static com.nanosl.lib.util.Format.nf2d;
-import static com.nanosl.lib.util.Format.nf3d;
-import static com.nanosl.lib.util.Format.yyyy_MM_dd;
+import com.nanosl.nbiz.util.Combo;
+import com.nanosl.nbiz.util.Data;
+import com.nanosl.nbiz.util.Printer;
+import org.jdesktop.swingx.JXDatePicker;
 
 /**
  * Top component which displays something.

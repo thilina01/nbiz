@@ -4,7 +4,7 @@
  */
 package com.nanosl.nbiz.gui.rep;
 
-import com.nanosl.nbiz.utility.NTopComponent;
+import com.nanosl.nbiz.util.NTopComponent;
 import entity.Employee;
 import entity.Item;
 import entity.RepSale;

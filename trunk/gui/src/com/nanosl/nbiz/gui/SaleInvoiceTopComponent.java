@@ -5,10 +5,10 @@
 package com.nanosl.nbiz.gui;
 
 import com.nanosl.lib.date.JXDatePicker;
-import com.nanosl.nbiz.utility.Combo;
-import com.nanosl.nbiz.utility.Data;
-import com.nanosl.nbiz.utility.NTopComponent;
-import com.nanosl.nbiz.utility.Printer;
+import com.nanosl.nbiz.util.Combo;
+import com.nanosl.nbiz.util.Data;
+import com.nanosl.nbiz.util.NTopComponent;
+import com.nanosl.nbiz.util.Printer;
 import entity.CollectionReceipt;
 import entity.Customer;
 import entity.Item;

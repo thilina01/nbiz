@@ -6,8 +6,7 @@ package com.nanosl.nbiz.gui;
 
 import com.nanosl.lib.date.JXDatePicker;
 import com.nanosl.lib.log.Loggings;
-import com.nanosl.nbiz.utility.Combo;
-import com.nanosl.nbiz.utility.NTopComponent;
+import com.nanosl.nbiz.util.NTopComponent;
 import entity.Bank;
 import entity.IssuedCash;
 import entity.IssuedCheque;
@@ -30,8 +29,7 @@ import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
-import static com.nanosl.lib.util.Format.nf2d;
-import static com.nanosl.lib.util.Format.yyyy_MM_dd;
+import com.nanosl.nbiz.util.Combo;
 
 /**
  * Top component which displays something.

@@ -4,7 +4,7 @@
  */
 package com.nanosl.nbiz.gui;
 
-import com.nanosl.nbiz.utility.Find;
+
 import entity.DamageNotes;
 import entity.Employee;
 import entity.Item;
@@ -22,8 +22,9 @@ import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
-import static com.nanosl.lib.util.Format.nf2d;
-import static com.nanosl.lib.util.Format.yyyy_MM_dd;
+import com.nanosl.nbiz.util.Find;
+import com.nanosl.nbiz.util.NTopComponent;
+
 
 /**
  * Top component which displays something.
@@ -46,7 +47,7 @@ import static com.nanosl.lib.util.Format.yyyy_MM_dd;
     "CTL_DamageNotesTopComponent=DamageNotes Window",
     "HINT_DamageNotesTopComponent=This is a DamageNotes window"
 })
-public final class DamageNotesTopComponent extends TopComponent {
+public final class DamageNotesTopComponent extends NTopComponent {
 
     public DamageNotesTopComponent() {
         onLoad();

@@ -4,9 +4,9 @@
  */
 package com.nanosl.nbiz.gui.operator;
 
-import com.nanosl.nbiz.utility.Combo;
-import com.nanosl.nbiz.utility.Data;
-import com.nanosl.nbiz.utility.NTopComponent;
+import com.nanosl.nbiz.util.Combo;
+import com.nanosl.nbiz.util.Data;
+import com.nanosl.nbiz.util.NTopComponent;
 import entity.Employee;
 import entity.Operator;
 import java.util.Collection;

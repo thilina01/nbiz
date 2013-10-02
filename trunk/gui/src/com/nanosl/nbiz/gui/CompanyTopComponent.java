@@ -4,7 +4,7 @@
  */
 package com.nanosl.nbiz.gui;
 
-import com.nanosl.nbiz.utility.NTopComponent;
+import com.nanosl.nbiz.util.NTopComponent;
 import entity.Company;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
