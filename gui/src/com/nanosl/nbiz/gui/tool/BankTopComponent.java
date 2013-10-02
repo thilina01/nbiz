@@ -4,7 +4,7 @@
  */
 package com.nanosl.nbiz.gui.tool;
 
-import com.nanosl.nbiz.utility.NTopComponent;
+import com.nanosl.nbiz.util.NTopComponent;
 import entity.Bank;
 import java.util.Iterator;
 import java.util.List;

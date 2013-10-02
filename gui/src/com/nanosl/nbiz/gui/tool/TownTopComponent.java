@@ -4,7 +4,7 @@
  */
 package com.nanosl.nbiz.gui.tool;
 
-import com.nanosl.nbiz.utility.NTopComponent;
+import com.nanosl.nbiz.util.NTopComponent;
 import entity.RootArea;
 import entity.Town;
 import java.io.Serializable;

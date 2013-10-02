@@ -6,7 +6,7 @@ package com.nanosl.nbiz.gui.rep;
 
 import com.nanosl.lib.date.JXDatePicker;
 import com.nanosl.lib.log.Loggings;
-import com.nanosl.nbiz.utility.NTopComponent;
+import com.nanosl.nbiz.util.NTopComponent;
 import entity.Bank;
 import entity.IssuedCash;
 import entity.IssuedCheque;

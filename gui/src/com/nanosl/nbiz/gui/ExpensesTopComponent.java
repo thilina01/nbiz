@@ -5,7 +5,7 @@
 package com.nanosl.nbiz.gui;
 
 import com.nanosl.lib.date.JXDatePicker;
-import com.nanosl.nbiz.utility.NTopComponent;
+import com.nanosl.nbiz.util.NTopComponent;
 import entity.Expenses;
 import entity.ExpensesType;
 import java.util.Calendar;

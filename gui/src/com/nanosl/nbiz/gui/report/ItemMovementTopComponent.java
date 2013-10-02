@@ -5,9 +5,9 @@
 package com.nanosl.nbiz.gui.report;
 
 import com.nanosl.lib.date.JXDatePicker;
-import com.nanosl.nbiz.utility.Combo;
-import com.nanosl.nbiz.utility.Find;
-import com.nanosl.nbiz.utility.NTopComponent;
+import com.nanosl.nbiz.util.Combo;
+import com.nanosl.nbiz.util.Find;
+import com.nanosl.nbiz.util.NTopComponent;
 import entity.Item;
 import entity.PurchaseInvoiceHasItem;
 import entity.SaleInvoiceHasItem;

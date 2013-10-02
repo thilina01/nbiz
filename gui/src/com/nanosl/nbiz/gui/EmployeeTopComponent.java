@@ -4,7 +4,7 @@
  */
 package com.nanosl.nbiz.gui;
 
-import com.nanosl.nbiz.utility.NTopComponent;
+import com.nanosl.nbiz.util.NTopComponent;
 import entity.Employee;
 import entity.EmployeePosition;
 import java.util.Iterator;

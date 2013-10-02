@@ -4,7 +4,7 @@
  */
 package com.nanosl.nbiz.gui;
 
-import com.nanosl.nbiz.utility.NTopComponent;
+import com.nanosl.nbiz.util.NTopComponent;
 import entity.DamageStock;
 import entity.Item;
 import java.util.Iterator;
@@ -14,7 +14,6 @@ import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
-import static com.nanosl.lib.util.Format.nf2d;
 
 /**
  * Top component which displays something.

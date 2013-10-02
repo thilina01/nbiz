@@ -5,8 +5,8 @@
 package com.nanosl.nbiz.gui.report;
 
 import com.nanosl.lib.log.Loggings;
-import com.nanosl.nbiz.utility.FindMySql;
-import com.nanosl.nbiz.utility.NTopComponent;
+import com.nanosl.nbiz.util.FindMySql;
+import com.nanosl.nbiz.util.NTopComponent;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;

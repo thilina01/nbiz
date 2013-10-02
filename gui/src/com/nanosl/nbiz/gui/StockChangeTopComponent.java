@@ -4,7 +4,7 @@
  */
 package com.nanosl.nbiz.gui;
 
-import com.nanosl.nbiz.utility.NTopComponent;
+import com.nanosl.nbiz.util.NTopComponent;
 import entity.Item;
 import entity.Stock;
 import entity.StockChange;

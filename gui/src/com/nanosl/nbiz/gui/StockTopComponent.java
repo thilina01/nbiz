@@ -4,9 +4,9 @@
  */
 package com.nanosl.nbiz.gui;
 
-import com.nanosl.nbiz.utility.Find;
-import com.nanosl.nbiz.utility.NTopComponent;
-import com.nanosl.nbiz.utility.Printer;
+import com.nanosl.nbiz.util.Find;
+import com.nanosl.nbiz.util.NTopComponent;
+import com.nanosl.nbiz.util.Printer;
 import entity.Item;
 import entity.Stock;
 import java.util.Iterator;

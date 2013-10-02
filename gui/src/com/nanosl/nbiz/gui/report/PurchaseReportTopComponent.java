@@ -4,8 +4,8 @@
  */
 package com.nanosl.nbiz.gui.report;
 
-import com.nanosl.nbiz.utility.Find;
-import com.nanosl.nbiz.utility.NTopComponent;
+import com.nanosl.nbiz.util.Find;
+import com.nanosl.nbiz.util.NTopComponent;
 import entity.PurchaseInvoice;
 import java.util.Collection;
 import java.util.Date;

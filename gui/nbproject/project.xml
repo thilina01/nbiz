@@ -47,7 +47,7 @@
                     </run-dependency>
                 </dependency>
                 <dependency>
-                    <code-name-base>com.nanosl.nbiz.utility</code-name-base>
+                    <code-name-base>com.nanosl.nbiz.util</code-name-base>
                     <build-prerequisite/>
                     <compile-dependency/>
                     <run-dependency>

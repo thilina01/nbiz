@@ -5,9 +5,8 @@
 package com.nanosl.nbiz.gui.report;
 
 import com.nanosl.lib.date.JXDatePicker;
-import com.nanosl.lib.log.Loggings;
 import com.nanosl.lib.print.JRViewer;
-import com.nanosl.nbiz.utility.NTopComponent;
+import com.nanosl.nbiz.util.NTopComponent;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;

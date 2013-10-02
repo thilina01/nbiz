@@ -5,14 +5,12 @@
 package com.nanosl.nbiz.gui;
 
 import com.nanosl.nbiz.ctrl.SupplierCTRL;
-import com.nanosl.nbiz.utility.Combo;
-import com.nanosl.nbiz.utility.NTopComponent;
+import com.nanosl.nbiz.util.Combo;
+import com.nanosl.nbiz.util.NTopComponent;
 import entity.Supplier;
 import entity.Town;
 import javax.swing.table.DefaultTableModel;
 import org.netbeans.api.settings.ConvertAsProperties;
-import org.openide.DialogDisplayer;
-import org.openide.NotifyDescriptor;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.windows.TopComponent;
