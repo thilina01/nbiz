@@ -81,6 +81,8 @@ public final class RepReturnTopComponent extends NTopComponent {
         datePicker = new JXDatePicker();
         jLabel4 = new javax.swing.JLabel();
 
+        jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
         masterTable.setAutoCreateRowSorter(true);
         masterTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {

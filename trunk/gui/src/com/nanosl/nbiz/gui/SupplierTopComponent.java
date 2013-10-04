@@ -81,6 +81,8 @@ public final class SupplierTopComponent extends NTopComponent {
         townComboBox = new javax.swing.JComboBox();
         addTownButton = new javax.swing.JButton();
 
+        jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
         masterTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
