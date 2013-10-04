@@ -38,7 +38,7 @@ import org.openide.util.NbBundle.Messages;
         persistenceType = TopComponent.PERSISTENCE_ALWAYS)
 @TopComponent.Registration(mode = "editor", openAtStartup = false)
 @ActionID(category = "Window", id = "com.nanosl.nbiz.gui.SelingPriceChangeTopComponent")
-@ActionReference(path = "Menu/Window" /*, position = 333 */)
+@ActionReference(path = "Menu/Sales" /*, position = 333 */)
 @TopComponent.OpenActionRegistration(
         displayName = "#CTL_SelingPriceChangeAction",
         preferredID = "SelingPriceChangeTopComponent")

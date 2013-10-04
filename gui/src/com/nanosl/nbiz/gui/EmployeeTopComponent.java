@@ -29,7 +29,7 @@ import org.openide.util.NbBundle.Messages;
         persistenceType = TopComponent.PERSISTENCE_ALWAYS)
 @TopComponent.Registration(mode = "editor", openAtStartup = false)
 @ActionID(category = "Window", id = "com.nanosl.nbiz.gui.EmployeeTopComponent")
-@ActionReference(path = "Menu/Window" /*, position = 333 */)
+@ActionReference(path = "Menu/General" /*, position = 333 */)
 @TopComponent.OpenActionRegistration(
         displayName = "#CTL_EmployeeAction",
         preferredID = "EmployeeTopComponent")

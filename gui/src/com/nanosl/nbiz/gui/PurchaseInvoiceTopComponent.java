@@ -45,7 +45,7 @@ import com.nanosl.nbiz.util.Combo;
         persistenceType = TopComponent.PERSISTENCE_ALWAYS)
 @TopComponent.Registration(mode = "editor", openAtStartup = false)
 @ActionID(category = "Window", id = "com.nanosl.nbiz.gui.PurchaseInvoiceTopComponent")
-@ActionReference(path = "Menu/Window" /*, position = 333 */)
+@ActionReference(path = "Menu/Purchase" /*, position = 333 */)
 @TopComponent.OpenActionRegistration(
         displayName = "#CTL_PurchaseInvoiceAction",
         preferredID = "PurchaseInvoiceTopComponent")
