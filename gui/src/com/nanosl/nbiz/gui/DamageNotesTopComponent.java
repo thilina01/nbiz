@@ -22,7 +22,7 @@ import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
-import com.nanosl.nbiz.util.Find;
+import query.Find;
 import com.nanosl.nbiz.util.NTopComponent;
 
 

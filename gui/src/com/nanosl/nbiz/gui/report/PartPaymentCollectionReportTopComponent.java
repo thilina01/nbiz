@@ -250,6 +250,8 @@ public final class PartPaymentCollectionReportTopComponent extends NTopComponent
 
     protected void onLoad() {
         initComponents();
+        startDatePicker.setDate(new Date());
+        endDatePicker.setDate(new Date());
         tableModel = (DefaultTableModel) masterTable.getModel();
     }
 

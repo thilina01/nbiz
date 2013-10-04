@@ -50,7 +50,7 @@ import org.openide.util.NbBundle.Messages;
 public final class SelingPriceChangeTopComponent extends NTopComponent {
 
     public SelingPriceChangeTopComponent() {
-        initComponents();
+        onLoad();
         setName(Bundle.CTL_SelingPriceChangeTopComponent());
         setToolTipText(Bundle.HINT_SelingPriceChangeTopComponent());
 

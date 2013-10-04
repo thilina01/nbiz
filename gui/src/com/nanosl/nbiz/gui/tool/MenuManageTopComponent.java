@@ -4,7 +4,7 @@
  */
 package com.nanosl.nbiz.gui.tool;
 
-import com.nanosl.nbiz.util.Find;
+import query.Find;
 import com.nanosl.nbiz.util.NTopComponent;
 import entity.Menu;
 import entity.MenuItem;
