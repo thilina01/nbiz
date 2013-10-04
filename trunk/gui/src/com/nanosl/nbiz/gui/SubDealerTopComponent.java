@@ -7,7 +7,6 @@ package com.nanosl.nbiz.gui;
 import com.nanosl.nbiz.util.NTopComponent;
 import entity.SubDealer;
 import entity.Town;
-import java.awt.Color;
 import java.util.Iterator;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.table.DefaultTableModel;
@@ -29,7 +28,7 @@ import org.openide.util.NbBundle.Messages;
         persistenceType = TopComponent.PERSISTENCE_ALWAYS)
 @TopComponent.Registration(mode = "editor", openAtStartup = false)
 @ActionID(category = "Window", id = "com.nanosl.nbiz.gui.SubDealerTopComponent")
-@ActionReference(path = "Menu/Window" /*, position = 333 */)
+@ActionReference(path = "Menu/Distribution" /*, position = 333 */)
 @TopComponent.OpenActionRegistration(
         displayName = "#CTL_SubDealerAction",
         preferredID = "SubDealerTopComponent")

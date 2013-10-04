@@ -26,7 +26,7 @@ import org.openide.util.NbBundle.Messages;
         persistenceType = TopComponent.PERSISTENCE_ALWAYS)
 @TopComponent.Registration(mode = "editor", openAtStartup = false)
 @ActionID(category = "Window", id = "com.nanosl.nbiz.gui.tool.MenuManageTopComponent")
-@ActionReference(path = "Menu/Window" /*, position = 333 */)
+@ActionReference(path = "Menu/Tools" /*, position = 333 */)
 @TopComponent.OpenActionRegistration(
         displayName = "#CTL_MenuManageAction",
         preferredID = "MenuManageTopComponent")

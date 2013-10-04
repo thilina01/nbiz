@@ -24,7 +24,7 @@ import org.openide.util.NbBundle.Messages;
         persistenceType = TopComponent.PERSISTENCE_ALWAYS)
 @TopComponent.Registration(mode = "editor", openAtStartup = false)
 @ActionID(category = "Window", id = "com.nanosl.nbiz.gui.CompanyTopComponent")
-@ActionReference(path = "Menu/Window" /*, position = 333 */)
+@ActionReference(path = "Menu/General" /*, position = 333 */)
 @TopComponent.OpenActionRegistration(
         displayName = "#CTL_CompanyAction",
         preferredID = "CompanyTopComponent")
@@ -77,6 +77,8 @@ public final class CompanyTopComponent extends NTopComponent {
         emailLabel = new javax.swing.JLabel();
         updateButton = new javax.swing.JButton();
         clearButton = new javax.swing.JButton();
+
+        jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         org.openide.awt.Mnemonics.setLocalizedText(codeLabel, org.openide.util.NbBundle.getMessage(CompanyTopComponent.class, "CompanyTopComponent.codeLabel.text")); // NOI18N
 
