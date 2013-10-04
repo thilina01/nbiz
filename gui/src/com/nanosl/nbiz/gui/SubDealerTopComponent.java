@@ -75,6 +75,8 @@ public final class SubDealerTopComponent extends NTopComponent {
         townLabel = new javax.swing.JLabel();
         townComboBox = new javax.swing.JComboBox();
 
+        jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
         masterTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 

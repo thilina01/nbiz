@@ -88,6 +88,8 @@ public final class ItemTopComponent extends NTopComponent {
         jLabel2 = new javax.swing.JLabel();
         itemTypeComboBox = new javax.swing.JComboBox();
 
+        jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
         masterTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
