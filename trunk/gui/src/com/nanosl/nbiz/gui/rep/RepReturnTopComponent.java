@@ -53,7 +53,7 @@ import org.openide.util.NbBundle.Messages;
 public final class RepReturnTopComponent extends NTopComponent {
 
     public RepReturnTopComponent() {
-        initComponents();
+        onLoad();
         setName(Bundle.CTL_RepReturnTopComponent());
         setToolTipText(Bundle.HINT_RepReturnTopComponent());
 

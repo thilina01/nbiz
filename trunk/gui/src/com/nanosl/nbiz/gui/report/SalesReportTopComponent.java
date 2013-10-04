@@ -5,7 +5,7 @@
 package com.nanosl.nbiz.gui.report;
 
 import com.nanosl.lib.date.JXDatePicker;
-import com.nanosl.nbiz.util.Find;
+import query.Find;
 import com.nanosl.nbiz.util.NTopComponent;
 import entity.SaleInvoice;
 import java.util.Collection;
@@ -173,7 +173,6 @@ public final class SalesReportTopComponent extends NTopComponent {
     private javax.swing.JTable table;
     private javax.swing.JLabel totalProfitLabel;
     // End of variables declaration//GEN-END:variables
-    private javax.swing.JLabel totalLabel;
     DefaultTableModel tableModel;
 
     private void fillTable() {
@@ -217,7 +216,7 @@ public final class SalesReportTopComponent extends NTopComponent {
         for (int i = 0; i < tableModel.getRowCount(); i++) {
             total += Double.valueOf(tableModel.getValueAt(i, 6).toString());
         }
-        totalLabel.setText(nf2d.format(total));
+        totalProfitLabel.setText(nf2d.format(total));
     }
 
     @Override

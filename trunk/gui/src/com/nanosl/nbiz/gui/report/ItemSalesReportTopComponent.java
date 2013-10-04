@@ -5,7 +5,7 @@
 package com.nanosl.nbiz.gui.report;
 
 import com.nanosl.lib.date.JXDatePicker;
-import com.nanosl.nbiz.util.Find;
+import query.Find;
 import com.nanosl.nbiz.util.NTopComponent;
 import entity.SaleInvoice;
 import java.util.Collection;
