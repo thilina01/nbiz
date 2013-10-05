@@ -63,6 +63,8 @@ public final class MonthReportTopComponent extends NTopComponent {
         reportButton = new javax.swing.JButton();
         halfCheckBox = new javax.swing.JCheckBox();
 
+        setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
         org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(MonthReportTopComponent.class, "MonthReportTopComponent.jLabel1.text")); // NOI18N
 
         datePicker.addActionListener(new java.awt.event.ActionListener() {

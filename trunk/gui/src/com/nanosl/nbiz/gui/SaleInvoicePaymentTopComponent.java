@@ -117,6 +117,8 @@ public final class SaleInvoicePaymentTopComponent extends NTopComponent {
         receiptDatePicker = new JXDatePicker();
         jLabel11 = new javax.swing.JLabel();
 
+        jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
         invoiceTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
