@@ -62,6 +62,8 @@ public final class FindInvoiceTopComponent extends NTopComponent {
         receiptNumberTextField = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
 
+        jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(FindInvoiceTopComponent.class, "FindInvoiceTopComponent.jLabel1.text")); // NOI18N

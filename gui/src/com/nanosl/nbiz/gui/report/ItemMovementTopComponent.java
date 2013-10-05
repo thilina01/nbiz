@@ -74,6 +74,8 @@ public final class ItemMovementTopComponent extends NTopComponent {
         startDatePicker = new JXDatePicker();
         endDatePicker = new JXDatePicker();
 
+        jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
         org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(ItemMovementTopComponent.class, "ItemMovementTopComponent.jLabel1.text")); // NOI18N
 
         itemComboBox.addActionListener(new java.awt.event.ActionListener() {

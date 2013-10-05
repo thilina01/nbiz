@@ -105,6 +105,8 @@ public final class SaleInvoiceTopComponent extends NTopComponent {
         receiptNumberField = new javax.swing.JTextField();
         addCustomerButton = new javax.swing.JButton();
 
+        jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
         datePicker.setName("datePicker"); // NOI18N
         datePicker.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {

@@ -78,6 +78,8 @@ public final class CustomerTopComponent extends NTopComponent {
         deleteButton = new javax.swing.JButton();
         cityField = new javax.swing.JTextField();
 
+        jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
         masterTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
