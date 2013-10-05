@@ -41,7 +41,7 @@ import org.openide.util.NbBundle.Messages;
 public final class EmployeeTopComponent extends NTopComponent {
 
     public EmployeeTopComponent() {
-        initComponents();
+        onLoad();
         setName(Bundle.CTL_EmployeeTopComponent());
         setToolTipText(Bundle.HINT_EmployeeTopComponent());
 
@@ -377,7 +377,9 @@ public final class EmployeeTopComponent extends NTopComponent {
     }//GEN-LAST:event_addressStreetFieldActionPerformed
 
     private void codeFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_codeFieldActionPerformed
-        if (!codeField.getText().trim().equals("")) {
+        String code = codeField.getText().trim();
+        if (!code.equals("")) {
+            fill(code);
             firstNameField.requestFocus();
         }
     }//GEN-LAST:event_codeFieldActionPerformed
@@ -477,17 +479,7 @@ public final class EmployeeTopComponent extends NTopComponent {
         clearFields();
         int row = masterTable.getSelectedRow();
         if (row > -1) {
-            Employee employee = m.find(Employee.class, masterTable.getValueAt(row, 1));
-            codeField.setText(employee.getCode());
-            firstNameField.setText(employee.getFirstName());
-            lastNameField.setText(employee.getLastName());
-            addressNumberField.setText(employee.getAddressNumber());
-            addressStreetField.setText(employee.getAddressStreet());
-            cityField.setText(employee.getCity());
-            mobileField.setText(employee.getMobile());
-            fixedLineField.setText(employee.getFixedLine());
-            notesField.setText(employee.getNotes());
-            positionComboBox.setSelectedItem(employee.getEmployeePosition());
+            fill(masterTable.getValueAt(row, 1).toString());
         }
     }
 
@@ -564,5 +556,23 @@ public final class EmployeeTopComponent extends NTopComponent {
     void readProperties(java.util.Properties p) {
         String version = p.getProperty("version");
         // TODO read your settings according to their version
+    }
+
+    private void fill(Employee employee) {
+        codeField.setText(employee.getCode());
+        firstNameField.setText(employee.getFirstName());
+        lastNameField.setText(employee.getLastName());
+        addressNumberField.setText(employee.getAddressNumber());
+        addressStreetField.setText(employee.getAddressStreet());
+        cityField.setText(employee.getCity());
+        mobileField.setText(employee.getMobile());
+        fixedLineField.setText(employee.getFixedLine());
+        notesField.setText(employee.getNotes());
+        positionComboBox.setSelectedItem(employee.getEmployeePosition());
+    }
+
+    private void fill(String code) {
+        Employee employee = m.find(Employee.class, code);
+        fill(employee);
     }
 }
