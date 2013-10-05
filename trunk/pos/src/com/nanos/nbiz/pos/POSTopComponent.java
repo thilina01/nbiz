@@ -81,7 +81,7 @@ public final class POSTopComponent extends NTopComponent {
         jLabel2 = new javax.swing.JLabel();
         invoiceNumberField = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        customerComboBox = new javax.swing.JComboBox();
+        customerComboBox = new javax.swing.JComboBox<Customer>();
         jLabel4 = new javax.swing.JLabel();
         itemComboBox = new javax.swing.JComboBox();
         jLabel5 = new javax.swing.JLabel();
@@ -439,12 +439,12 @@ public final class POSTopComponent extends NTopComponent {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 947, Short.MAX_VALUE)
+            .addGap(0, 951, Short.MAX_VALUE)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addGap(0, 5, Short.MAX_VALUE)
                     .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
+                    .addGap(0, 5, Short.MAX_VALUE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -470,7 +470,6 @@ public final class POSTopComponent extends NTopComponent {
     }//GEN-LAST:event_invoiceNumberFieldActionPerformed
 
     private void customerComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_customerComboBoxActionPerformed
-
     }//GEN-LAST:event_customerComboBoxActionPerformed
 
     private void customerComboBoxKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_customerComboBoxKeyPressed
@@ -551,13 +550,11 @@ public final class POSTopComponent extends NTopComponent {
     }//GEN-LAST:event_receiptNumberFieldActionPerformed
 
     private void receiptNumberFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_receiptNumberFieldKeyReleased
-
     }//GEN-LAST:event_receiptNumberFieldKeyReleased
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addCustomerButton;
     private javax.swing.JButton clearButton;
-    private javax.swing.JComboBox customerComboBox;
+    private javax.swing.JComboBox<Customer> customerComboBox;
     private org.jdesktop.swingx.JXDatePicker datePicker;
     private javax.swing.JTextField discountField;
     private javax.swing.JTextField invoiceNumberField;
