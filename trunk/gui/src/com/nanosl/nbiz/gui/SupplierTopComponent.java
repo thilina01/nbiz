@@ -9,7 +9,12 @@ import com.nanosl.nbiz.util.Combo;
 import com.nanosl.nbiz.util.NTopComponent;
 import entity.Supplier;
 import entity.Town;
+import java.awt.Component;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import javax.swing.JComponent;
 import javax.swing.table.DefaultTableModel;
+import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
@@ -42,7 +47,7 @@ public final class SupplierTopComponent extends NTopComponent {
     SupplierCTRL controller = new SupplierCTRL();
 
     public SupplierTopComponent() {
-        initComponents();
+        onLoad();
         setName(Bundle.CTL_SupplierTopComponent());
         setToolTipText(Bundle.HINT_SupplierTopComponent());
     }
@@ -453,6 +458,35 @@ public final class SupplierTopComponent extends NTopComponent {
         String version = p.getProperty("version");
         // TODO read your settings according to their version
     }
+
+    protected void onLoad() {
+        initComponents();
+        KeyAdapter();
+        tableModel = (DefaultTableModel) masterTable.getModel();
+        clear();
+    }
+
+    private void KeyAdapter() {
+
+        AutoCompleteDecorator.decorate(townComboBox);
+        setComboBoxKeyAdapters(townComboBox);
+    }
+
+    private void setComboBoxKeyAdapters(JComponent comp) {
+        String compName = comp.getName();
+        Component component[] = comp.getComponents();
+        for (int i = 0; i < component.length; i++) {
+            if (compName.equals("townComboBox")) {
+                component[i].addKeyListener(townComboBoxKeyAdapter);
+            }
+        }
+    }
+    KeyAdapter townComboBoxKeyAdapter = new java.awt.event.KeyAdapter() {
+        @Override
+        public void keyPressed(KeyEvent evt) {
+            townComboBoxKeyPressed(evt);
+        }
+    };
 
     private void fill() {
         clearFields();

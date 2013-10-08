@@ -5,6 +5,7 @@
 package com.nanosl.nbiz.gui;
 
 import com.nanosl.lib.date.JXDatePicker;
+import com.nanosl.nbiz.quicklaunch.SideBarPanel;
 import com.nanosl.nbiz.util.NTopComponent;
 import entity.Item;
 import entity.LastCode;
@@ -32,6 +33,7 @@ import org.openide.awt.ActionReference;
 import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
 import com.nanosl.nbiz.util.Combo;
+import javax.swing.JButton;
 
 /**
  * Top component which displays something.
@@ -56,11 +58,19 @@ import com.nanosl.nbiz.util.Combo;
 })
 public final class PurchaseInvoiceTopComponent extends NTopComponent {
 
-    public PurchaseInvoiceTopComponent() {
-        onLoad();
-        setName(Bundle.CTL_PurchaseInvoiceTopComponent());
-        setToolTipText(Bundle.HINT_PurchaseInvoiceTopComponent());
+    static PurchaseInvoiceTopComponent instance;
 
+    static void display() {
+        instance.setVisible(true);
+    }
+
+    public PurchaseInvoiceTopComponent() {
+        if (instance == null) {
+            onLoad();
+            setName(Bundle.CTL_PurchaseInvoiceTopComponent());
+            setToolTipText(Bundle.HINT_PurchaseInvoiceTopComponent());
+            instance = this;
+        }
     }
 
     /**
@@ -334,9 +344,9 @@ public final class PurchaseInvoiceTopComponent extends NTopComponent {
                     .addComponent(jLabel8)
                     .addComponent(totalDiscountLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel9)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(clearButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(processButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(processButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(clearButton)))
                 .addContainerGap())
         );
 
@@ -737,7 +747,6 @@ public final class PurchaseInvoiceTopComponent extends NTopComponent {
 
     @Override
     public void componentOpened() {
-        // TODO add custom code on component opening
     }
 
     @Override
