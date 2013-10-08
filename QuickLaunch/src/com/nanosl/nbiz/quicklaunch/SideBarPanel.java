@@ -15,6 +15,15 @@ import org.openide.util.Exceptions;
  */
 public class SideBarPanel extends javax.swing.JPanel {
 
+    private static SideBarPanel instance;
+
+    static SideBarPanel getInstance() {
+        if (instance == null) {
+            instance = new SideBarPanel();
+        }
+        return instance;
+    }
+
     /**
      * Creates new form SideBarPanel
      */
@@ -104,6 +113,13 @@ public class SideBarPanel extends javax.swing.JPanel {
     private javax.swing.JScrollPane jScrollPane1;
     private static javax.swing.JToolBar jToolBar1;
     // End of variables declaration//GEN-END:variables
+
+    public static void addButton(JButton jButton) {
+        if (instance == null) {
+            instance = new SideBarPanel();
+        }
+        jToolBar1.add(jButton);
+    }
 
     public static JToolBar getjToolBar1() {
         return jToolBar1;

@@ -23,7 +23,7 @@ public class Installer extends ModuleInstall {
                 Frame mainWindow = WindowManager.getDefault().getMainWindow();
                 Container contentPane
                         = ((JRootPane) mainWindow.getComponents()[0]).getContentPane();
-                SideBarPanel banner = new SideBarPanel();
+                SideBarPanel banner = SideBarPanel.getInstance();
                 contentPane.add(BorderLayout.WEST, banner);
                 ((BorderLayout) contentPane.getLayout()).
                         invalidateLayout(contentPane);
