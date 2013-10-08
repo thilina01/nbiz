@@ -47,7 +47,7 @@ import org.openide.util.NbBundle.Messages;
         preferredID = "POSTopComponent",
         //iconBase="SET/PATH/TO/ICON/HERE", 
         persistenceType = TopComponent.PERSISTENCE_ALWAYS)
-@TopComponent.Registration(mode = "editor", openAtStartup = true)
+@TopComponent.Registration(mode = "editor", openAtStartup = false)
 @ActionID(category = "Window", id = "com.nanos.nbiz.pos.POSTopComponent")
 @ActionReference(path = "Menu/Sales" /*, position = 333 */)
 @TopComponent.OpenActionRegistration(
