@@ -38,7 +38,8 @@ import org.openide.util.NbBundle.Messages;
 public final class MenuManageTopComponent extends NTopComponent {
 
     public MenuManageTopComponent() {
-        initComponents();
+          onLoad();
+       // initComponents();
         setName(Bundle.CTL_MenuManageTopComponent());
         setToolTipText(Bundle.HINT_MenuManageTopComponent());
 
