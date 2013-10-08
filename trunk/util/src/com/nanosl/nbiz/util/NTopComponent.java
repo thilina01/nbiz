@@ -5,6 +5,7 @@
 package com.nanosl.nbiz.util;
 
 import com.nanosl.lib.db.Manager;
+import javax.swing.table.DefaultTableCellRenderer;
 import org.openide.DialogDisplayer;
 import org.openide.NotifyDescriptor;
 import org.openide.windows.TopComponent;
@@ -15,7 +16,13 @@ import org.openide.windows.TopComponent;
  */
 public class NTopComponent extends TopComponent implements Format {
 
+    public DefaultTableCellRenderer rightAlignCell = new DefaultTableCellRenderer();
     public Manager m = Manager.getInstance();
+
+    public NTopComponent() {
+        rightAlignCell.setHorizontalAlignment(javax.swing.JLabel.RIGHT);
+    }
+
     /*
      public static final DateFormat dd_MMMM_yyyy = new SimpleDateFormat("dd - MMMM - yyyy");
      public static final DateFormat dd_MM_yyyy = new SimpleDateFormat("dd-MM-yyyy");
@@ -27,7 +34,6 @@ public class NTopComponent extends TopComponent implements Format {
      public static final NumberFormat nf2d = new DecimalFormat("#0.00");
      public static final NumberFormat nf3d = new DecimalFormat("#0.000");
      */
-
     protected void showError(String string) {
         NotifyDescriptor d =
                 new NotifyDescriptor.Message(string, NotifyDescriptor.ERROR_MESSAGE);

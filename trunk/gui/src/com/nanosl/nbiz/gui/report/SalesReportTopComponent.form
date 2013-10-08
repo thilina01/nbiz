@@ -53,7 +53,7 @@
                           <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                           <Component id="totalProfitLabel" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <Component id="jScrollPane1" pref="801" max="32767" attributes="0"/>
+                      <Component id="jScrollPane1" pref="922" max="32767" attributes="0"/>
                       <Group type="102" attributes="0">
                           <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
@@ -80,7 +80,7 @@
                       <Component id="fillButton" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
-                  <Component id="jScrollPane1" pref="381" max="32767" attributes="1"/>
+                  <Component id="jScrollPane1" pref="437" max="32767" attributes="1"/>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Component id="totalProfitLabel" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>

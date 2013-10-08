@@ -504,6 +504,7 @@ public final class StockTransferTopComponent extends NTopComponent {
         initComponents();
         tableModel = (DefaultTableModel) masterTable.getModel();
         KeyAdapter();
+        clear();
     }
 
     private void KeyAdapter() {
