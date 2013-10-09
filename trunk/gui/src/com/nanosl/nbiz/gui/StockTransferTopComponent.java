@@ -70,7 +70,7 @@ public final class StockTransferTopComponent extends NTopComponent {
 
         jPanel1 = new javax.swing.JPanel();
         masterScrollPane = new javax.swing.JScrollPane();
-        masterTable = new javax.swing.JTable();
+        table = new javax.swing.JTable();
         repComboBox = new javax.swing.JComboBox();
         jLabel1 = new javax.swing.JLabel();
         transferButton = new javax.swing.JButton();
@@ -85,8 +85,8 @@ public final class StockTransferTopComponent extends NTopComponent {
 
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        masterTable.setAutoCreateRowSorter(true);
-        masterTable.setModel(new javax.swing.table.DefaultTableModel(
+        table.setAutoCreateRowSorter(true);
+        table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -95,7 +95,7 @@ public final class StockTransferTopComponent extends NTopComponent {
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.String.class, java.lang.String.class, java.lang.Double.class, java.lang.Object.class
+                java.lang.Object.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
                 false, false, false, false, false
@@ -109,20 +109,25 @@ public final class StockTransferTopComponent extends NTopComponent {
                 return canEdit [columnIndex];
             }
         });
-        masterTable.addMouseListener(new java.awt.event.MouseAdapter() {
+        table.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
-                masterTableMouseReleased(evt);
+                tableMouseReleased(evt);
             }
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                masterTableMouseClicked(evt);
+                tableMouseClicked(evt);
             }
         });
-        masterTable.addKeyListener(new java.awt.event.KeyAdapter() {
+        table.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                masterTableKeyReleased(evt);
+                tableKeyReleased(evt);
             }
         });
-        masterScrollPane.setViewportView(masterTable);
+        masterScrollPane.setViewportView(table);
+        table.getColumnModel().getColumn(0).setHeaderValue(org.openide.util.NbBundle.getMessage(StockTransferTopComponent.class, "StockTransferTopComponent.table.columnModel.title0")); // NOI18N
+        table.getColumnModel().getColumn(1).setHeaderValue(org.openide.util.NbBundle.getMessage(StockTransferTopComponent.class, "StockTransferTopComponent.table.columnModel.title1")); // NOI18N
+        table.getColumnModel().getColumn(2).setHeaderValue(org.openide.util.NbBundle.getMessage(StockTransferTopComponent.class, "StockTransferTopComponent.table.columnModel.title2")); // NOI18N
+        table.getColumnModel().getColumn(3).setHeaderValue(org.openide.util.NbBundle.getMessage(StockTransferTopComponent.class, "StockTransferTopComponent.table.columnModel.title3")); // NOI18N
+        table.getColumnModel().getColumn(4).setHeaderValue(org.openide.util.NbBundle.getMessage(StockTransferTopComponent.class, "StockTransferTopComponent.table.columnModel.title4")); // NOI18N
 
         repComboBox.setName("repComboBox"); // NOI18N
         repComboBox.addActionListener(new java.awt.event.ActionListener() {
@@ -269,17 +274,17 @@ public final class StockTransferTopComponent extends NTopComponent {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void masterTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_masterTableMouseClicked
-    }//GEN-LAST:event_masterTableMouseClicked
+    private void tableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableMouseClicked
+    }//GEN-LAST:event_tableMouseClicked
 
-    private void masterTableMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_masterTableMouseReleased
-    }//GEN-LAST:event_masterTableMouseReleased
+    private void tableMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableMouseReleased
+    }//GEN-LAST:event_tableMouseReleased
 
-    private void masterTableKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_masterTableKeyReleased
+    private void tableKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tableKeyReleased
         if (evt.getKeyCode() == 127) {
-            tableModel.removeRow(masterTable.getSelectedRow());
+            tableModel.removeRow(table.getSelectedRow());
         }
-    }//GEN-LAST:event_masterTableKeyReleased
+    }//GEN-LAST:event_tableKeyReleased
 
     private void repComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_repComboBoxActionPerformed
         datePicker.requestFocus();
@@ -342,10 +347,10 @@ public final class StockTransferTopComponent extends NTopComponent {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane masterScrollPane;
-    private javax.swing.JTable masterTable;
     private javax.swing.JLabel quantityLabel;
     private javax.swing.JTextField quantityTextField;
     private javax.swing.JComboBox repComboBox;
+    private javax.swing.JTable table;
     private javax.swing.JButton transferButton;
     // End of variables declaration//GEN-END:variables
 
@@ -459,7 +464,19 @@ public final class StockTransferTopComponent extends NTopComponent {
     DefaultTableModel tableModel;
 
     private void fillTable() {
+        Item item = (Item) itemComboBox.getSelectedItem();
+        if (item == null) {
+            return;
+        }
+        String itemCode = item.getCode();
         double quantity = 0;
+        for (int i = 0; i < table.getRowCount(); i++) {
+            String code = table.getValueAt(i, 1).toString();
+            if (code.equals(itemCode)) {
+                showError("Item already added");
+                return;
+            }
+        }
         try {
             quantity = Double.valueOf(quantityTextField.getText().trim());
             double availablaQuantity = Double.valueOf(quantityLabel.getText().trim());
@@ -471,10 +488,6 @@ public final class StockTransferTopComponent extends NTopComponent {
         } catch (Exception e) {
             showError("Invalid Quantity Value");
 //            setStatusMessage("Invalid Quantity Value", Color.RED);
-            return;
-        }
-        Item item = (Item) itemComboBox.getSelectedItem();
-        if (item == null) {
             return;
         }
         Employee rep = (Employee) repComboBox.getSelectedItem();
@@ -493,7 +506,7 @@ public final class StockTransferTopComponent extends NTopComponent {
         }
         int i = tableModel.getRowCount();
         double rate = srStock.getPackPrice() == null ? 0.0 : srStock.getPackPrice();
-        Object[] row = {++i, item.getCode(), item.getDescription(), nf3d.format(quantity), nf2d.format(rate)};
+        Object[] row = {++i, itemCode, item.getDescription(), nf3d.format(quantity), nf2d.format(rate)};
         tableModel.addRow(row);
 
         quantityTextField.setText("");
@@ -502,7 +515,7 @@ public final class StockTransferTopComponent extends NTopComponent {
 
     protected void onLoad() {
         initComponents();
-        tableModel = (DefaultTableModel) masterTable.getModel();
+        tableModel = (DefaultTableModel) table.getModel();
         KeyAdapter();
         clear();
     }

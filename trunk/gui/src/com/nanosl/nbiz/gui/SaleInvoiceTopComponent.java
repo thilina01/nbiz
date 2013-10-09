@@ -18,6 +18,7 @@ import entity.SaleInvoice;
 import entity.SaleInvoiceHasItem;
 import entity.SaleInvoiceHasItemPK;
 import entity.Stock;
+import entity.Supplier;
 import java.awt.Component;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -26,14 +27,17 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComponent;
 import javax.swing.table.DefaultTableModel;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
+import org.openide.util.AsyncGUIJob;
 import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
+import org.openide.util.Utilities;
 
 /**
  * Top component which displays something.
@@ -522,6 +526,8 @@ public final class SaleInvoiceTopComponent extends NTopComponent {
     private javax.swing.JTextField totalDiscountField;
     // End of variables declaration//GEN-END:variables
     DefaultTableModel dtm;
+    DefaultComboBoxModel<Customer> customerComboBoxModel;
+    DefaultComboBoxModel<Item> itemComboBoxModel;
 
     private void clear() {
         dtm.setRowCount(0);
@@ -565,7 +571,32 @@ public final class SaleInvoiceTopComponent extends NTopComponent {
         datePicker.setFormats(yyyy_MM_dd);
         KeyAdapter();
         dtm = (DefaultTableModel) table.getModel();
-        clear();
+//        clear();
+        Utilities.attachInitJob(customerComboBox, new AsyncGUIJob() {
+            @Override
+            public void construct() {
+                customerComboBoxModel = Combo.getCustomerComboBoxModel();
+            }
+
+            @Override
+            public void finished() {
+                customerComboBox.setModel(customerComboBoxModel);
+            }
+        });
+        Utilities.attachInitJob(itemComboBox, new AsyncGUIJob() {
+            @Override
+            public void construct() {
+                itemComboBoxModel = Combo.getItemComboBoxModel();
+            }
+
+            @Override
+            public void finished() {
+                itemComboBox.setModel(itemComboBoxModel);
+            }
+        });
+
+        receiptNumberField.setText(Data.getReceiptNo());
+        dtm.setRowCount(0);
     }
 
     private void process() {

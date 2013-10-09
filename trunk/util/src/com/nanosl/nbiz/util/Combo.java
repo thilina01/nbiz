@@ -26,21 +26,11 @@ public class Combo {
     private static Manager m = Manager.getInstance();
 
     public static void fillSuppliers(JComboBox jcb) {
-        List<Supplier> suppliers = m.find(Supplier.class);
-        if (suppliers != null) {
-            Supplier[] ses = suppliers.toArray(new Supplier[0]);
-            Arrays.sort(ses);
-            jcb.setModel(new DefaultComboBoxModel(ses));
-        }
+        jcb.setModel(getSupplierComboBoxModel());
     }
 
     public static void fillCustomers(JComboBox jcb) {
-        List<Customer> customers = m.find(Customer.class);
-        if (customers != null) {
-            Customer[] cs = customers.toArray(new Customer[0]);
-            Arrays.sort(cs);
-            jcb.setModel(new DefaultComboBoxModel(cs));
-        }
+        jcb.setModel(getCustomerComboBoxModel());
     }
 
     public static void fillEmployees(JComboBox jcb) {
@@ -78,5 +68,36 @@ public class Combo {
             Arrays.sort(bs);
             jcb.setModel(new DefaultComboBoxModel(bs));
         }
+    }
+
+    public static DefaultComboBoxModel<Supplier> getSupplierComboBoxModel() {
+        List<Supplier> suppliers = m.find(Supplier.class);
+        if (suppliers != null) {
+            Supplier[] ses = suppliers.toArray(new Supplier[0]);
+            Arrays.sort(ses);
+            return new DefaultComboBoxModel(ses);
+        }
+        return new DefaultComboBoxModel();
+    }
+
+    public static DefaultComboBoxModel<Customer> getCustomerComboBoxModel() {
+        List<Customer> customers = m.find(Customer.class);
+        if (customers != null) {
+            Customer[] ses = customers.toArray(new Customer[0]);
+            Arrays.sort(ses);
+            return new DefaultComboBoxModel(ses);
+        }
+        return new DefaultComboBoxModel();
+    }
+
+    public static DefaultComboBoxModel<Item> getItemComboBoxModel() {
+        List<Item> items = m.find(Item.class);
+        if (items != null) {
+            Item[] ses = items.toArray(new Item[0]);
+            Arrays.sort(ses);
+            return new DefaultComboBoxModel<Item>(ses);
+        }
+        return new DefaultComboBoxModel();
+
     }
 }

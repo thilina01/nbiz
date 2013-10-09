@@ -194,6 +194,12 @@ public final class ItemTopComponent extends NTopComponent {
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel2, org.openide.util.NbBundle.getMessage(ItemTopComponent.class, "ItemTopComponent.jLabel2.text")); // NOI18N
 
+        itemTypeComboBox.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                itemTypeComboBoxKeyPressed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -329,7 +335,7 @@ public final class ItemTopComponent extends NTopComponent {
         String code = codeField.getText().trim();
         if (!code.equals("")) {
             fill(m.find(Item.class, code));
-            descriptionField.requestFocus();
+            itemTypeComboBox.requestFocus();
         }
     }//GEN-LAST:event_codeFieldActionPerformed
 
@@ -348,6 +354,12 @@ public final class ItemTopComponent extends NTopComponent {
     private void minimumLimitTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_minimumLimitTextFieldActionPerformed
         updateButton.requestFocus();
     }//GEN-LAST:event_minimumLimitTextFieldActionPerformed
+
+    private void itemTypeComboBoxKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_itemTypeComboBoxKeyPressed
+        if (evt.getKeyCode() == 10) {
+            descriptionField.requestFocus();
+        }
+    }//GEN-LAST:event_itemTypeComboBoxKeyPressed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField brandField;
     private javax.swing.JLabel brandLabel;
