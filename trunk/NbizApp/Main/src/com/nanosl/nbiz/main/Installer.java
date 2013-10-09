@@ -12,7 +12,9 @@ public class Installer extends ModuleInstall {
 
     @Override
     public void restored() {
-        Manager.setPu("dbPU");
+//        Manager.setPu("dbPU");
+        Manager.init("dbPU", "localhost", "cbis_fsw");
+//        Manager.setDatabase("cbis_fsw");
         com.nanosl.nbiz.util.Data.setOperator(Manager.getInstance().find(Operator.class, "admin"));
     }
 }
