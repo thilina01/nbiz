@@ -92,6 +92,15 @@ public final class DamageStockTopComponent extends NTopComponent {
             }
         });
         masterScrollPane.setViewportView(masterTable);
+        masterTable.getColumnModel().getColumn(0).setHeaderValue(org.openide.util.NbBundle.getMessage(DamageStockTopComponent.class, "DamageStockTopComponent.masterTable.columnModel.title0")); // NOI18N
+        masterTable.getColumnModel().getColumn(1).setHeaderValue(org.openide.util.NbBundle.getMessage(DamageStockTopComponent.class, "DamageStockTopComponent.masterTable.columnModel.title1")); // NOI18N
+        masterTable.getColumnModel().getColumn(2).setHeaderValue(org.openide.util.NbBundle.getMessage(DamageStockTopComponent.class, "DamageStockTopComponent.masterTable.columnModel.title2")); // NOI18N
+        masterTable.getColumnModel().getColumn(3).setHeaderValue(org.openide.util.NbBundle.getMessage(DamageStockTopComponent.class, "DamageStockTopComponent.masterTable.columnModel.title3")); // NOI18N
+        masterTable.getColumnModel().getColumn(3).setCellRenderer(rightAlignCell);
+        masterTable.getColumnModel().getColumn(4).setHeaderValue(org.openide.util.NbBundle.getMessage(DamageStockTopComponent.class, "DamageStockTopComponent.masterTable.columnModel.title4")); // NOI18N
+        masterTable.getColumnModel().getColumn(4).setCellRenderer(rightAlignCell);
+        masterTable.getColumnModel().getColumn(5).setHeaderValue(org.openide.util.NbBundle.getMessage(DamageStockTopComponent.class, "DamageStockTopComponent.masterTable.columnModel.title5")); // NOI18N
+        masterTable.getColumnModel().getColumn(5).setCellRenderer(rightAlignCell);
 
         org.openide.awt.Mnemonics.setLocalizedText(jButton1, org.openide.util.NbBundle.getMessage(DamageStockTopComponent.class, "DamageStockTopComponent.jButton1.text")); // NOI18N
         jButton1.addActionListener(new java.awt.event.ActionListener() {
