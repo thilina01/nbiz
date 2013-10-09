@@ -95,6 +95,9 @@ public final class ItemMovementTopComponent extends NTopComponent {
             }
         ));
         jScrollPane1.setViewportView(receiveTable);
+        receiveTable.getColumnModel().getColumn(0).setHeaderValue(org.openide.util.NbBundle.getMessage(ItemMovementTopComponent.class, "ItemMovementTopComponent.receiveTable.columnModel.title0")); // NOI18N
+        receiveTable.getColumnModel().getColumn(1).setHeaderValue(org.openide.util.NbBundle.getMessage(ItemMovementTopComponent.class, "ItemMovementTopComponent.receiveTable.columnModel.title1")); // NOI18N
+        receiveTable.getColumnModel().getColumn(1).setCellRenderer(rightAlignCell);
 
         issueTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -105,6 +108,9 @@ public final class ItemMovementTopComponent extends NTopComponent {
             }
         ));
         jScrollPane2.setViewportView(issueTable);
+        issueTable.getColumnModel().getColumn(0).setHeaderValue(org.openide.util.NbBundle.getMessage(ItemMovementTopComponent.class, "ItemMovementTopComponent.issueTable.columnModel.title0")); // NOI18N
+        issueTable.getColumnModel().getColumn(1).setHeaderValue(org.openide.util.NbBundle.getMessage(ItemMovementTopComponent.class, "ItemMovementTopComponent.issueTable.columnModel.title1")); // NOI18N
+        issueTable.getColumnModel().getColumn(1).setCellRenderer(rightAlignCell);
 
         org.openide.awt.Mnemonics.setLocalizedText(totalReceiveLabel, org.openide.util.NbBundle.getMessage(ItemMovementTopComponent.class, "ItemMovementTopComponent.totalReceiveLabel.text")); // NOI18N
 
