@@ -127,7 +127,9 @@ public final class StockTransferTopComponent extends NTopComponent {
         table.getColumnModel().getColumn(1).setHeaderValue(org.openide.util.NbBundle.getMessage(StockTransferTopComponent.class, "StockTransferTopComponent.table.columnModel.title1")); // NOI18N
         table.getColumnModel().getColumn(2).setHeaderValue(org.openide.util.NbBundle.getMessage(StockTransferTopComponent.class, "StockTransferTopComponent.table.columnModel.title2")); // NOI18N
         table.getColumnModel().getColumn(3).setHeaderValue(org.openide.util.NbBundle.getMessage(StockTransferTopComponent.class, "StockTransferTopComponent.table.columnModel.title3")); // NOI18N
+        table.getColumnModel().getColumn(3).setCellRenderer(rightAlignCell);
         table.getColumnModel().getColumn(4).setHeaderValue(org.openide.util.NbBundle.getMessage(StockTransferTopComponent.class, "StockTransferTopComponent.table.columnModel.title4")); // NOI18N
+        table.getColumnModel().getColumn(4).setCellRenderer(rightAlignCell);
 
         repComboBox.setName("repComboBox"); // NOI18N
         repComboBox.addActionListener(new java.awt.event.ActionListener() {

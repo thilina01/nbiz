@@ -242,6 +242,11 @@ public final class RepPaymentTopComponent extends NTopComponent {
             }
         });
         jScrollPane2.setViewportView(paymentTable);
+        paymentTable.getColumnModel().getColumn(0).setHeaderValue(org.openide.util.NbBundle.getMessage(RepPaymentTopComponent.class, "RepPaymentTopComponent.paymentTable.columnModel.title0")); // NOI18N
+        paymentTable.getColumnModel().getColumn(0).setCellRenderer(rightAlignCell);
+        paymentTable.getColumnModel().getColumn(1).setHeaderValue(org.openide.util.NbBundle.getMessage(RepPaymentTopComponent.class, "RepPaymentTopComponent.paymentTable.columnModel.title1")); // NOI18N
+        paymentTable.getColumnModel().getColumn(2).setHeaderValue(org.openide.util.NbBundle.getMessage(RepPaymentTopComponent.class, "RepPaymentTopComponent.paymentTable.columnModel.title2")); // NOI18N
+        paymentTable.getColumnModel().getColumn(3).setHeaderValue(org.openide.util.NbBundle.getMessage(RepPaymentTopComponent.class, "RepPaymentTopComponent.paymentTable.columnModel.title3")); // NOI18N
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel9, org.openide.util.NbBundle.getMessage(RepPaymentTopComponent.class, "RepPaymentTopComponent.jLabel9.text")); // NOI18N
 
@@ -322,7 +327,6 @@ public final class RepPaymentTopComponent extends NTopComponent {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(clearButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(processButton))

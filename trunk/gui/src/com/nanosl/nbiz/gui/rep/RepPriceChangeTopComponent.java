@@ -114,6 +114,13 @@ public final class RepPriceChangeTopComponent extends NTopComponent {
             }
         });
         masterScrollPane.setViewportView(masterTable);
+        masterTable.getColumnModel().getColumn(0).setHeaderValue(org.openide.util.NbBundle.getMessage(RepPriceChangeTopComponent.class, "RepPriceChangeTopComponent.masterTable.columnModel.title0")); // NOI18N
+        masterTable.getColumnModel().getColumn(1).setHeaderValue(org.openide.util.NbBundle.getMessage(RepPriceChangeTopComponent.class, "RepPriceChangeTopComponent.masterTable.columnModel.title1")); // NOI18N
+        masterTable.getColumnModel().getColumn(2).setHeaderValue(org.openide.util.NbBundle.getMessage(RepPriceChangeTopComponent.class, "RepPriceChangeTopComponent.masterTable.columnModel.title2")); // NOI18N
+        masterTable.getColumnModel().getColumn(3).setHeaderValue(org.openide.util.NbBundle.getMessage(RepPriceChangeTopComponent.class, "RepPriceChangeTopComponent.masterTable.columnModel.title3")); // NOI18N
+        masterTable.getColumnModel().getColumn(3).setCellRenderer(rightAlignCell);
+        masterTable.getColumnModel().getColumn(4).setHeaderValue(org.openide.util.NbBundle.getMessage(RepPriceChangeTopComponent.class, "RepPriceChangeTopComponent.masterTable.columnModel.title4")); // NOI18N
+        masterTable.getColumnModel().getColumn(4).setCellRenderer(rightAlignCell);
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(RepPriceChangeTopComponent.class, "RepPriceChangeTopComponent.jLabel1.text")); // NOI18N
 
