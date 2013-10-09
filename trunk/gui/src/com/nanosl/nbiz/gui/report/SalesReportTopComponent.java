@@ -78,6 +78,19 @@ public final class SalesReportTopComponent extends NTopComponent {
             }
         ));
         jScrollPane1.setViewportView(table);
+        table.getColumnModel().getColumn(0).setHeaderValue(org.openide.util.NbBundle.getMessage(SalesReportTopComponent.class, "SalesReportTopComponent.table.columnModel.title0")); // NOI18N
+        table.getColumnModel().getColumn(1).setHeaderValue(org.openide.util.NbBundle.getMessage(SalesReportTopComponent.class, "SalesReportTopComponent.table.columnModel.title1")); // NOI18N
+        table.getColumnModel().getColumn(1).setCellRenderer(rightAlignCell);
+        table.getColumnModel().getColumn(2).setHeaderValue(org.openide.util.NbBundle.getMessage(SalesReportTopComponent.class, "SalesReportTopComponent.table.columnModel.title2")); // NOI18N
+        table.getColumnModel().getColumn(2).setCellRenderer(rightAlignCell);
+        table.getColumnModel().getColumn(3).setHeaderValue(org.openide.util.NbBundle.getMessage(SalesReportTopComponent.class, "SalesReportTopComponent.table.columnModel.title3")); // NOI18N
+        table.getColumnModel().getColumn(3).setCellRenderer(rightAlignCell);
+        table.getColumnModel().getColumn(4).setHeaderValue(org.openide.util.NbBundle.getMessage(SalesReportTopComponent.class, "SalesReportTopComponent.table.columnModel.title4")); // NOI18N
+        table.getColumnModel().getColumn(4).setCellRenderer(rightAlignCell);
+        table.getColumnModel().getColumn(5).setHeaderValue(org.openide.util.NbBundle.getMessage(SalesReportTopComponent.class, "SalesReportTopComponent.table.columnModel.title5")); // NOI18N
+        table.getColumnModel().getColumn(5).setCellRenderer(rightAlignCell);
+        table.getColumnModel().getColumn(6).setHeaderValue(org.openide.util.NbBundle.getMessage(SalesReportTopComponent.class, "SalesReportTopComponent.table.columnModel.title6")); // NOI18N
+        table.getColumnModel().getColumn(6).setCellRenderer(rightAlignCell);
 
         org.openide.awt.Mnemonics.setLocalizedText(totalProfitLabel, org.openide.util.NbBundle.getMessage(SalesReportTopComponent.class, "SalesReportTopComponent.totalProfitLabel.text")); // NOI18N
 

@@ -224,6 +224,21 @@ public final class PurchaseInvoiceTopComponent extends NTopComponent {
             }
         });
         jScrollPane1.setViewportView(table);
+        table.getColumnModel().getColumn(0).setHeaderValue(org.openide.util.NbBundle.getMessage(PurchaseInvoiceTopComponent.class, "PurchaseInvoiceTopComponent.table.columnModel.title0")); // NOI18N
+        table.getColumnModel().getColumn(1).setHeaderValue(org.openide.util.NbBundle.getMessage(PurchaseInvoiceTopComponent.class, "PurchaseInvoiceTopComponent.table.columnModel.title1")); // NOI18N
+        table.getColumnModel().getColumn(2).setHeaderValue(org.openide.util.NbBundle.getMessage(PurchaseInvoiceTopComponent.class, "PurchaseInvoiceTopComponent.table.columnModel.title2")); // NOI18N
+        table.getColumnModel().getColumn(3).setHeaderValue(org.openide.util.NbBundle.getMessage(PurchaseInvoiceTopComponent.class, "PurchaseInvoiceTopComponent.table.columnModel.title3")); // NOI18N
+        table.getColumnModel().getColumn(3).setCellRenderer(rightAlignCell);
+        table.getColumnModel().getColumn(4).setHeaderValue(org.openide.util.NbBundle.getMessage(PurchaseInvoiceTopComponent.class, "PurchaseInvoiceTopComponent.table.columnModel.title4")); // NOI18N
+        table.getColumnModel().getColumn(4).setCellRenderer(rightAlignCell);
+        table.getColumnModel().getColumn(5).setHeaderValue(org.openide.util.NbBundle.getMessage(PurchaseInvoiceTopComponent.class, "PurchaseInvoiceTopComponent.table.columnModel.title5")); // NOI18N
+        table.getColumnModel().getColumn(5).setCellRenderer(rightAlignCell);
+        table.getColumnModel().getColumn(6).setHeaderValue(org.openide.util.NbBundle.getMessage(PurchaseInvoiceTopComponent.class, "PurchaseInvoiceTopComponent.table.columnModel.title6")); // NOI18N
+        table.getColumnModel().getColumn(6).setCellRenderer(rightAlignCell);
+        table.getColumnModel().getColumn(7).setHeaderValue(org.openide.util.NbBundle.getMessage(PurchaseInvoiceTopComponent.class, "PurchaseInvoiceTopComponent.table.columnModel.title7")); // NOI18N
+        table.getColumnModel().getColumn(7).setCellRenderer(rightAlignCell);
+        table.getColumnModel().getColumn(8).setHeaderValue(org.openide.util.NbBundle.getMessage(PurchaseInvoiceTopComponent.class, "PurchaseInvoiceTopComponent.table.columnModel.title8")); // NOI18N
+        table.getColumnModel().getColumn(8).setCellRenderer(rightAlignCell);
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel8, org.openide.util.NbBundle.getMessage(PurchaseInvoiceTopComponent.class, "PurchaseInvoiceTopComponent.jLabel8.text")); // NOI18N
 
