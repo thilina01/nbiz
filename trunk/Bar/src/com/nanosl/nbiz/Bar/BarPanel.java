@@ -193,7 +193,7 @@ public class BarPanel extends javax.swing.JPanel {
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(totalAmountTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(totalQuantityTextField))))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 170, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 171, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(dateLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING))))
@@ -311,7 +311,7 @@ public class BarPanel extends javax.swing.JPanel {
         String ReceiptNumber = Data.getReceiptNo();
         double price = item.getPriceList().getSellingPack();
         double amount = price * quantity;
-        String message = "<html><center> <h3> " + item.getDescription() + " <br/> " + quantity + " X " + price + "<br/>  " + amount + " </h3></center></html>";
+        String message = "<html><center> <h2> [  " + item.getDescription() + "  ]<br/> " + nf2d.format(quantity) + " X " + nf2d.format(price) + "<br/>  " + nf2d.format(amount) + " </h2></center></html>";
         int option = JOptionPane.showConfirmDialog(itemDetailLabel, message, nf2d.format(amount), JOptionPane.YES_NO_OPTION);
         if (option != JOptionPane.OK_OPTION) {
             return;
@@ -413,7 +413,7 @@ public class BarPanel extends javax.swing.JPanel {
             tableModel.setRowCount(0);
             totalAmountTextField.setText("0.00");
             totalQuantityTextField.setText("0.00");
-            ResultSet resultSet = FindMySql.saleItemDate(new Date());//113, 0, 1
+            ResultSet resultSet = FindMySql.itemTotalSaleBetweenDates(new Date(), new Date());//113, 0, 1
             int rowNumber = 1;
             double totalQuantity = 0, totalAmount = 0;
             while (resultSet.next()) {

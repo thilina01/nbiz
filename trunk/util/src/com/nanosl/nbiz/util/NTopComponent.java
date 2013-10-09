@@ -5,6 +5,9 @@
 package com.nanosl.nbiz.util;
 
 import com.nanosl.lib.db.Manager;
+import java.awt.Color;
+import java.awt.Component;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import org.openide.DialogDisplayer;
 import org.openide.NotifyDescriptor;
@@ -16,11 +19,55 @@ import org.openide.windows.TopComponent;
  */
 public class NTopComponent extends TopComponent implements Format {
 
-    public DefaultTableCellRenderer rightAlignCell = new DefaultTableCellRenderer();
+    public DefaultTableCellRenderer rightAlignCell = new DefaultTableCellRenderer() {
+        private DefaultTableCellRenderer DEFAULT_RENDERER = new DefaultTableCellRenderer();
+
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            Component c = DEFAULT_RENDERER.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+            DEFAULT_RENDERER.setHorizontalAlignment(javax.swing.JLabel.RIGHT);
+
+            if (isSelected) {
+                c.setForeground(Color.WHITE);
+                c.setBackground(Color.BLACK);
+//                c.setForeground(row % 2 == 0 ? Color.BLACK : Color.BLUE);
+            } else {
+                c.setForeground(Color.BLACK);
+                if (row % 2 == 0) {
+                    c.setBackground(Color.WHITE);
+                } else {
+                    c.setBackground(new Color(200, 230, 250));
+                }
+            }
+            return c;
+        }
+    };
+    public DefaultTableCellRenderer coloredCellRenderer = new DefaultTableCellRenderer() {
+        private DefaultTableCellRenderer DEFAULT_RENDERER = new DefaultTableCellRenderer();
+
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            Component c = DEFAULT_RENDERER.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+
+            if (isSelected) {
+                c.setForeground(Color.WHITE);
+                c.setBackground(Color.BLACK);
+//                c.setForeground(row % 2 == 0 ? Color.BLACK : Color.BLUE);
+            } else {
+                c.setForeground(Color.BLACK);
+                if (row % 2 == 0) {
+                    c.setBackground(Color.WHITE);
+                } else {
+                    c.setBackground(new Color(200, 230, 250));
+                }
+            }
+            return c;
+        }
+    };
     public Manager m = Manager.getInstance();
 
     public NTopComponent() {
-        rightAlignCell.setHorizontalAlignment(javax.swing.JLabel.RIGHT);
+//        rightAlignCell.setHorizontalAlignment(javax.swing.JLabel.RIGHT);
     }
 
     /*

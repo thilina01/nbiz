@@ -531,6 +531,7 @@ public final class ItemTopComponent extends NTopComponent {
         initComponents();
         KeyAdapter();
         tableModel = (DefaultTableModel) masterTable.getModel();
+        masterTable.setDefaultRenderer(Object.class, coloredCellRenderer);
         clear();
     }
 

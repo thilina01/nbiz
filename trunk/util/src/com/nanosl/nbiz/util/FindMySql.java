@@ -57,12 +57,13 @@ public class FindMySql {
             + "WHERE "
             + "sale_invoice.inv_time BETWEEN ? AND ? "
             + "GROUP BY sale_invoice_has_item.item_code,sale_invoice_has_item.rate ";
-    private static String saleItemDate = "SELECT "
+    private static String itemTotalSaleBetweenDates = "SELECT "
             + "sale_invoice_has_item.item_code as 'code', "
             + "item.description as 'description', "
             + "Sum(sale_invoice_has_item.quantity) as'quantity', "
             + "sale_invoice_has_item.rate as 'price', "
-            + "sale_invoice_has_item.rate * Sum(sale_invoice_has_item.quantity) as 'value' "
+            + "sale_invoice_has_item.rate * Sum(sale_invoice_has_item.quantity) as 'value', "
+            + "sale_invoice_has_item.cost as 'cost' "
             + "FROM "
             + "sale_invoice_has_item "
             + "INNER JOIN sale_invoice ON sale_invoice_has_item.sale_invoice_inv_no = sale_invoice.inv_no "
@@ -158,12 +159,12 @@ public class FindMySql {
         return res;
     }
 
-    public static ResultSet saleItemDate(Date date) {
+    public static ResultSet itemTotalSaleBetweenDates(Date startDate,Date endDate) {
         connect();
         try {
-            preparedStatement = con.prepareStatement(saleItemDate);
-            preparedStatement.setString(1, yyyy_MM_dd.format(date) + " 00:00:00");
-            preparedStatement.setString(2, yyyy_MM_dd.format(date) + " 23:59:59");
+            preparedStatement = con.prepareStatement(itemTotalSaleBetweenDates);
+            preparedStatement.setString(1, yyyy_MM_dd.format(startDate) + " 00:00:00");
+            preparedStatement.setString(2, yyyy_MM_dd.format(endDate) + " 23:59:59");
             res = preparedStatement.executeQuery();
         } catch (SQLException ex) {
             Errors.reportError(ex);

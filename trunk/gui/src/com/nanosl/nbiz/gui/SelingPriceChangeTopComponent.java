@@ -66,7 +66,7 @@ public final class SelingPriceChangeTopComponent extends NTopComponent {
 
         jPanel1 = new javax.swing.JPanel();
         masterScrollPane = new javax.swing.JScrollPane();
-        masterTable = new javax.swing.JTable();
+        table = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
         itemComboBox = new javax.swing.JComboBox();
         jLabel2 = new javax.swing.JLabel();
@@ -76,8 +76,8 @@ public final class SelingPriceChangeTopComponent extends NTopComponent {
 
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        masterTable.setAutoCreateRowSorter(true);
-        masterTable.setModel(new javax.swing.table.DefaultTableModel(
+        table.setAutoCreateRowSorter(true);
+        table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -100,20 +100,20 @@ public final class SelingPriceChangeTopComponent extends NTopComponent {
                 return canEdit [columnIndex];
             }
         });
-        masterTable.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                masterTableMouseClicked(evt);
-            }
+        table.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
-                masterTableMouseReleased(evt);
+                tableMouseReleased(evt);
+            }
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tableMouseClicked(evt);
             }
         });
-        masterTable.addKeyListener(new java.awt.event.KeyAdapter() {
+        table.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                masterTableKeyReleased(evt);
+                tableKeyReleased(evt);
             }
         });
-        masterScrollPane.setViewportView(masterTable);
+        masterScrollPane.setViewportView(table);
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(SelingPriceChangeTopComponent.class, "SelingPriceChangeTopComponent.jLabel1.text")); // NOI18N
 
@@ -199,14 +199,18 @@ public final class SelingPriceChangeTopComponent extends NTopComponent {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void masterTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_masterTableMouseClicked
-    }//GEN-LAST:event_masterTableMouseClicked
+    private void tableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableMouseClicked
+    }//GEN-LAST:event_tableMouseClicked
 
-    private void masterTableMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_masterTableMouseReleased
-    }//GEN-LAST:event_masterTableMouseReleased
+    private void tableMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableMouseReleased
+    }//GEN-LAST:event_tableMouseReleased
 
-    private void masterTableKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_masterTableKeyReleased
-    }//GEN-LAST:event_masterTableKeyReleased
+    private void tableKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tableKeyReleased
+        if (evt.getKeyCode() == 127 && table.getSelectedRow() >= 0) {
+            tableModel.removeRow(table.getSelectedRow());
+            itemComboBox.requestFocus();
+        }
+    }//GEN-LAST:event_tableKeyReleased
 
     private void itemComboBoxKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_itemComboBoxKeyPressed
         if (evt.getKeyCode() == 10) {
@@ -216,6 +220,7 @@ public final class SelingPriceChangeTopComponent extends NTopComponent {
 
     private void newPriceTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newPriceTextFieldActionPerformed
         addToTable();
+        itemComboBox.setSelectedIndex(itemComboBox.getSelectedIndex() + 1);
         itemComboBox.requestFocus();
     }//GEN-LAST:event_newPriceTextFieldActionPerformed
 
@@ -229,16 +234,16 @@ public final class SelingPriceChangeTopComponent extends NTopComponent {
     private javax.swing.JPanel jPanel1;
     private org.jdesktop.swingx.JXDatePicker jXDatePicker1;
     private javax.swing.JScrollPane masterScrollPane;
-    private javax.swing.JTable masterTable;
     private javax.swing.JTextField newPriceTextField;
     private javax.swing.JButton processButton;
+    private javax.swing.JTable table;
     // End of variables declaration//GEN-END:variables
     DefaultTableModel tableModel;
 
     protected void onLoad() {
         initComponents();
         // AutoCompleteDecorator.decorate(itemComboBox);
-        tableModel = (DefaultTableModel) masterTable.getModel();
+        tableModel = (DefaultTableModel) table.getModel();
     }
 
     @Override
@@ -291,8 +296,8 @@ public final class SelingPriceChangeTopComponent extends NTopComponent {
             }
             List<Serializable> serializables = new ArrayList<Serializable>();
             for (int i = 0; i < rowCount; i++) {
-                double newPrice = Double.valueOf(masterTable.getValueAt(i, 4).toString());
-                Item item = m.find(Item.class, masterTable.getValueAt(i, 1).toString());
+                double newPrice = Double.valueOf(table.getValueAt(i, 4).toString());
+                Item item = m.find(Item.class, table.getValueAt(i, 1).toString());
                 PriceList priceList = item.getPriceList();
                 OldPrice oldPrice = new OldPrice(date, item.getCode());
                 oldPrice.setItem(item);

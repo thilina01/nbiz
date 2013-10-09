@@ -5,16 +5,18 @@
 package com.nanosl.nbiz.gui.report;
 
 import com.nanosl.lib.date.JXDatePicker;
-import query.Find;
+import com.nanosl.nbiz.util.FindMySql;
+import static com.nanosl.nbiz.util.Format.nf2d;
 import com.nanosl.nbiz.util.NTopComponent;
-import entity.SaleInvoice;
-import java.util.Collection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Calendar;
 import java.util.Date;
-import java.util.Iterator;
 import javax.swing.table.DefaultTableModel;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
+import org.openide.util.Exceptions;
 import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
 
@@ -57,53 +59,14 @@ public final class ItemSalesReportTopComponent extends NTopComponent {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        masterScrollPane = new javax.swing.JScrollPane();
-        masterTable = new javax.swing.JTable();
         startDatePicker = new JXDatePicker();
         jLabel3 = new javax.swing.JLabel();
         totalLabel = new javax.swing.JLabel();
         endDatePicker = new JXDatePicker();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        table = new javax.swing.JTable();
 
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-
-        masterTable.setAutoCreateRowSorter(true);
-        masterTable.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "#", "Date", "Code", "Customer", "Invoce", "Amount"
-            }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false
-            };
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        masterTable.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                masterTableMouseClicked(evt);
-            }
-            public void mouseReleased(java.awt.event.MouseEvent evt) {
-                masterTableMouseReleased(evt);
-            }
-        });
-        masterTable.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                masterTableKeyReleased(evt);
-            }
-        });
-        masterScrollPane.setViewportView(masterTable);
-        masterTable.getColumnModel().getColumn(0).setHeaderValue(org.openide.util.NbBundle.getMessage(ItemSalesReportTopComponent.class, "ItemSalesReportTopComponent.masterTable.columnModel.title0")); // NOI18N
-        masterTable.getColumnModel().getColumn(1).setHeaderValue(org.openide.util.NbBundle.getMessage(ItemSalesReportTopComponent.class, "ItemSalesReportTopComponent.masterTable.columnModel.title1")); // NOI18N
-        masterTable.getColumnModel().getColumn(2).setHeaderValue(org.openide.util.NbBundle.getMessage(ItemSalesReportTopComponent.class, "ItemSalesReportTopComponent.masterTable.columnModel.title2")); // NOI18N
-        masterTable.getColumnModel().getColumn(3).setHeaderValue(org.openide.util.NbBundle.getMessage(ItemSalesReportTopComponent.class, "ItemSalesReportTopComponent.masterTable.columnModel.title3")); // NOI18N
-        masterTable.getColumnModel().getColumn(4).setHeaderValue(org.openide.util.NbBundle.getMessage(ItemSalesReportTopComponent.class, "ItemSalesReportTopComponent.masterTable.columnModel.title4")); // NOI18N
-        masterTable.getColumnModel().getColumn(5).setHeaderValue(org.openide.util.NbBundle.getMessage(ItemSalesReportTopComponent.class, "ItemSalesReportTopComponent.masterTable.columnModel.title5")); // NOI18N
-        masterTable.getColumnModel().getColumn(5).setCellRenderer(rightAlignCell);
 
         startDatePicker.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -123,6 +86,34 @@ public final class ItemSalesReportTopComponent extends NTopComponent {
             }
         });
 
+        table.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "#", "Item", "Sold Quantity", "Sold Price", "Income", "Item Cost", "Total Cost", "Profit"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(table);
+        table.getColumnModel().getColumn(0).setPreferredWidth(50);
+        table.getColumnModel().getColumn(0).setHeaderValue(org.openide.util.NbBundle.getMessage(ItemSalesReportTopComponent.class, "ItemSalesReportTopComponent.table.columnModel.title7")); // NOI18N
+        table.getColumnModel().getColumn(1).setPreferredWidth(300);
+        table.getColumnModel().getColumn(1).setHeaderValue(org.openide.util.NbBundle.getMessage(ItemSalesReportTopComponent.class, "ItemSalesReportTopComponent.table.columnModel.title0")); // NOI18N
+        table.getColumnModel().getColumn(2).setHeaderValue(org.openide.util.NbBundle.getMessage(ItemSalesReportTopComponent.class, "ItemSalesReportTopComponent.table.columnModel.title1")); // NOI18N
+        table.getColumnModel().getColumn(3).setHeaderValue(org.openide.util.NbBundle.getMessage(ItemSalesReportTopComponent.class, "ItemSalesReportTopComponent.table.columnModel.title2")); // NOI18N
+        table.getColumnModel().getColumn(4).setHeaderValue(org.openide.util.NbBundle.getMessage(ItemSalesReportTopComponent.class, "ItemSalesReportTopComponent.table.columnModel.title3")); // NOI18N
+        table.getColumnModel().getColumn(5).setHeaderValue(org.openide.util.NbBundle.getMessage(ItemSalesReportTopComponent.class, "ItemSalesReportTopComponent.table.columnModel.title4")); // NOI18N
+        table.getColumnModel().getColumn(6).setHeaderValue(org.openide.util.NbBundle.getMessage(ItemSalesReportTopComponent.class, "ItemSalesReportTopComponent.table.columnModel.title5")); // NOI18N
+        table.getColumnModel().getColumn(7).setHeaderValue(org.openide.util.NbBundle.getMessage(ItemSalesReportTopComponent.class, "ItemSalesReportTopComponent.table.columnModel.title6")); // NOI18N
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -130,17 +121,17 @@ public final class ItemSalesReportTopComponent extends NTopComponent {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 816, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(totalLabel))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(startDatePicker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(endDatePicker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(masterScrollPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 816, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(totalLabel)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -151,9 +142,9 @@ public final class ItemSalesReportTopComponent extends NTopComponent {
                     .addComponent(startDatePicker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3)
                     .addComponent(endDatePicker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(masterScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 497, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 487, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(totalLabel)
                 .addContainerGap())
         );
@@ -176,15 +167,6 @@ public final class ItemSalesReportTopComponent extends NTopComponent {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void masterTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_masterTableMouseClicked
-    }//GEN-LAST:event_masterTableMouseClicked
-
-    private void masterTableMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_masterTableMouseReleased
-    }//GEN-LAST:event_masterTableMouseReleased
-
-    private void masterTableKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_masterTableKeyReleased
-    }//GEN-LAST:event_masterTableKeyReleased
-
     private void startDatePickerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startDatePickerActionPerformed
         fill();
     }//GEN-LAST:event_startDatePickerActionPerformed
@@ -196,36 +178,51 @@ public final class ItemSalesReportTopComponent extends NTopComponent {
     private org.jdesktop.swingx.JXDatePicker endDatePicker;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JScrollPane masterScrollPane;
-    private javax.swing.JTable masterTable;
+    private javax.swing.JScrollPane jScrollPane1;
     private org.jdesktop.swingx.JXDatePicker startDatePicker;
+    private javax.swing.JTable table;
     private javax.swing.JLabel totalLabel;
     // End of variables declaration//GEN-END:variables
     DefaultTableModel tableModel;
 
     private void fillTable() {
-        tableModel.setRowCount(0);
-        Date startDate = startDatePicker.getDate();
-        Date endDate = endDatePicker.getDate();
-        //ALTER TABLE `sgm`.`purchase_invoice` CHANGE COLUMN `inv_time` `inv_date` DATE NULL DEFAULT NULL  ;
-
-        Collection<SaleInvoice> saleInvoices = Find.saleInvoicesByDates(startDate, endDate);
-        if (saleInvoices == null) {
-            showError("No Record Found!");
-            return;
+        try {
+            tableModel.setRowCount(0);
+            Date startDate = getStartDate(startDatePicker.getDate());
+            Date endDate = getEndDate(endDatePicker.getDate());
+            ResultSet resultSet = FindMySql.itemTotalSaleBetweenDates(startDate, endDate);//113, 0, 1
+            int rowNumber = 1;
+            double totalCost = 0, totalAmount = 0, totlProfit = 0;
+            while (resultSet.next()) {
+                double quantity = resultSet.getDouble("quantity");
+                double cost = resultSet.getDouble("cost");
+                double itemTotalIncome = resultSet.getDouble("value");
+                double itemTotalCost = cost * quantity;
+                double profit = itemTotalIncome - itemTotalCost;
+                totalCost += itemTotalCost;
+                totalAmount += itemTotalIncome;
+                totlProfit += profit;
+                Object[] row = {
+                    rowNumber++,
+                    resultSet.getString("code") + resultSet.getString("description"),
+                    nf2d.format(quantity),
+                    nf2d.format(resultSet.getDouble("price")),
+                    nf2d.format(itemTotalIncome),
+                    nf2d.format(cost),
+                    nf2d.format(itemTotalCost),
+                    nf2d.format(profit)
+                };
+                tableModel.addRow(row);
+            }
+            totalLabel.setText("Total[ Cost: " + nf2d.format(totalCost) + "   Income: " + nf2d.format(totalAmount) + "   Profit: " + nf2d.format(totlProfit) + "]");
+        } catch (SQLException ex) {
+            Exceptions.printStackTrace(ex);
         }
-        int i = 0;
-        for (Iterator<SaleInvoice> it = saleInvoices.iterator(); it.hasNext();) {
-            SaleInvoice saleInvoice = it.next();
-            Object[] row = {++i, yyyy_MM_dd.format(saleInvoice.getInvTime()), saleInvoice.getCustomer().getCode(), saleInvoice.getCustomer().getName(), saleInvoice.getInvNo(), nf2d.format(saleInvoice.getAmount())};
-            tableModel.addRow(row);
-        }
-        calcTotal();
     }
 
     protected void onLoad() {
         initComponents();
-        tableModel = (DefaultTableModel) masterTable.getModel();
+        tableModel = (DefaultTableModel) table.getModel();
     }
 
     @Override
@@ -236,15 +233,6 @@ public final class ItemSalesReportTopComponent extends NTopComponent {
 
     private void fill() {
         fillTable();
-        calcTotal();
-    }
-
-    private void calcTotal() {
-        double total = 0;
-        for (int i = 0; i < tableModel.getRowCount(); i++) {
-            total += Double.valueOf(tableModel.getValueAt(i, 5).toString());
-        }
-        totalLabel.setText(nf2d.format(total));
     }
 
     @Override
@@ -267,5 +255,25 @@ public final class ItemSalesReportTopComponent extends NTopComponent {
     void readProperties(java.util.Properties p) {
         String version = p.getProperty("version");
         // TODO read your settings according to their version
+    }
+
+    private Date getStartDate(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.set(Calendar.HOUR_OF_DAY, 00);
+        calendar.set(Calendar.MINUTE, 00);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        return calendar.getTime();
+    }
+
+    private Date getEndDate(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        calendar.set(Calendar.MINUTE, 59);
+        calendar.set(Calendar.SECOND, 59);
+        calendar.set(Calendar.MILLISECOND, 900);
+        return calendar.getTime();
     }
 }
