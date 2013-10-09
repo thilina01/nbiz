@@ -18,17 +18,20 @@ public class Installer extends ModuleInstall {
     }
 
     private void initializeToolbar() {
-        addButton("Purchase", "PurchaseInvoiceTopComponent");
-        addButton("Sales", "SaleInvoiceTopComponent");
-        addButton("Transfer", "StockTransferTopComponent");        
-        addButton("Stock", "StockTopComponent");    
-        addButton("Supplier", "SupplierTopComponent");
-        
+        addButton("Purchase", "PurchaseInvoiceTopComponent","shopping_trolley");
+        addButton("Sales", "SaleInvoiceTopComponent","specials-offers-save-sale");
+        addButton("Transfer", "StockTransferTopComponent","wire-transfer-icon");
+        addButton("Stock", "StockTopComponent","box");
+        addButton("Supplier", "SupplierTopComponent","company");
+        addButton("Item", "ItemTopComponent","tv");
     }
 
-    private void addButton(String text, final String componentName) {
+    private void addButton(String text, final String componentName, String icon) {
 
         JButton button = new JButton(text);
+        if (!icon.equals("")) {
+            button.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/nanosl/nbiz/gui/resources/" + icon + ".png"))); // NOI18N
+        }
         button.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 TopComponent tc = WindowManager.getDefault().findTopComponent(componentName);
