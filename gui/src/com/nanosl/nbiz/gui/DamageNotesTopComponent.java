@@ -94,11 +94,11 @@ public final class DamageNotesTopComponent extends NTopComponent {
             }
         });
         masterTable.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                masterTableMouseClicked(evt);
-            }
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 masterTableMouseReleased(evt);
+            }
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                masterTableMouseClicked(evt);
             }
         });
         masterTable.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -107,6 +107,16 @@ public final class DamageNotesTopComponent extends NTopComponent {
             }
         });
         masterScrollPane.setViewportView(masterTable);
+        masterTable.getColumnModel().getColumn(0).setHeaderValue(org.openide.util.NbBundle.getMessage(DamageNotesTopComponent.class, "DamageNotesTopComponent.masterTable.columnModel.title0")); // NOI18N
+        masterTable.getColumnModel().getColumn(1).setHeaderValue(org.openide.util.NbBundle.getMessage(DamageNotesTopComponent.class, "DamageNotesTopComponent.masterTable.columnModel.title1")); // NOI18N
+        masterTable.getColumnModel().getColumn(2).setHeaderValue(org.openide.util.NbBundle.getMessage(DamageNotesTopComponent.class, "DamageNotesTopComponent.masterTable.columnModel.title2")); // NOI18N
+        masterTable.getColumnModel().getColumn(3).setHeaderValue(org.openide.util.NbBundle.getMessage(DamageNotesTopComponent.class, "DamageNotesTopComponent.masterTable.columnModel.title3")); // NOI18N
+        masterTable.getColumnModel().getColumn(4).setHeaderValue(org.openide.util.NbBundle.getMessage(DamageNotesTopComponent.class, "DamageNotesTopComponent.masterTable.columnModel.title4")); // NOI18N
+        masterTable.getColumnModel().getColumn(4).setCellRenderer(rightAlignCell);
+        masterTable.getColumnModel().getColumn(5).setHeaderValue(org.openide.util.NbBundle.getMessage(DamageNotesTopComponent.class, "DamageNotesTopComponent.masterTable.columnModel.title5")); // NOI18N
+        masterTable.getColumnModel().getColumn(5).setCellRenderer(rightAlignCell);
+        masterTable.getColumnModel().getColumn(6).setHeaderValue(org.openide.util.NbBundle.getMessage(DamageNotesTopComponent.class, "DamageNotesTopComponent.masterTable.columnModel.title6")); // NOI18N
+        masterTable.getColumnModel().getColumn(6).setCellRenderer(rightAlignCell);
 
         org.openide.awt.Mnemonics.setLocalizedText(reloadButton, org.openide.util.NbBundle.getMessage(DamageNotesTopComponent.class, "DamageNotesTopComponent.reloadButton.text")); // NOI18N
         reloadButton.addActionListener(new java.awt.event.ActionListener() {
