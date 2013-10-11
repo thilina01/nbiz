@@ -295,6 +295,11 @@ public final class SaleInvoicePaymentTopComponent extends NTopComponent {
             }
         });
         jScrollPane2.setViewportView(paymentTable);
+        paymentTable.getColumnModel().getColumn(0).setHeaderValue(org.openide.util.NbBundle.getMessage(SaleInvoicePaymentTopComponent.class, "SaleInvoicePaymentTopComponent.paymentTable.columnModel.title0")); // NOI18N
+        paymentTable.getColumnModel().getColumn(0).setCellRenderer(rightAlignCell);
+        paymentTable.getColumnModel().getColumn(1).setHeaderValue(org.openide.util.NbBundle.getMessage(SaleInvoicePaymentTopComponent.class, "SaleInvoicePaymentTopComponent.paymentTable.columnModel.title1")); // NOI18N
+        paymentTable.getColumnModel().getColumn(2).setHeaderValue(org.openide.util.NbBundle.getMessage(SaleInvoicePaymentTopComponent.class, "SaleInvoicePaymentTopComponent.paymentTable.columnModel.title2")); // NOI18N
+        paymentTable.getColumnModel().getColumn(3).setHeaderValue(org.openide.util.NbBundle.getMessage(SaleInvoicePaymentTopComponent.class, "SaleInvoicePaymentTopComponent.paymentTable.columnModel.title3")); // NOI18N
 
         bankComboBox.setName("bankCombo"); // NOI18N
         bankComboBox.addKeyListener(new java.awt.event.KeyAdapter() {

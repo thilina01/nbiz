@@ -114,6 +114,14 @@ public final class SelingPriceChangeTopComponent extends NTopComponent {
             }
         });
         masterScrollPane.setViewportView(table);
+        table.getColumnModel().getColumn(0).setHeaderValue(org.openide.util.NbBundle.getMessage(SelingPriceChangeTopComponent.class, "SelingPriceChangeTopComponent.table.columnModel.title0")); // NOI18N
+        table.getColumnModel().getColumn(1).setHeaderValue(org.openide.util.NbBundle.getMessage(SelingPriceChangeTopComponent.class, "SelingPriceChangeTopComponent.table.columnModel.title1")); // NOI18N
+        table.getColumnModel().getColumn(2).setHeaderValue(org.openide.util.NbBundle.getMessage(SelingPriceChangeTopComponent.class, "SelingPriceChangeTopComponent.table.columnModel.title2")); // NOI18N
+        table.getColumnModel().getColumn(3).setHeaderValue(org.openide.util.NbBundle.getMessage(SelingPriceChangeTopComponent.class, "SelingPriceChangeTopComponent.table.columnModel.title3")); // NOI18N
+        table.getColumnModel().getColumn(3).setCellRenderer(rightAlignCell
+        );
+        table.getColumnModel().getColumn(4).setHeaderValue(org.openide.util.NbBundle.getMessage(SelingPriceChangeTopComponent.class, "SelingPriceChangeTopComponent.table.columnModel.title4")); // NOI18N
+        table.getColumnModel().getColumn(4).setCellRenderer(rightAlignCell);
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(SelingPriceChangeTopComponent.class, "SelingPriceChangeTopComponent.jLabel1.text")); // NOI18N
 
