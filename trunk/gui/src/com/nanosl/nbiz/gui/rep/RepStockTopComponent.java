@@ -115,6 +115,11 @@ public final class RepStockTopComponent extends NTopComponent {
                 repComboBoxActionPerformed(evt);
             }
         });
+        repComboBox.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                repComboBoxKeyPressed(evt);
+            }
+        });
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(RepStockTopComponent.class, "RepStockTopComponent.jLabel1.text")); // NOI18N
 
@@ -189,6 +194,10 @@ public final class RepStockTopComponent extends NTopComponent {
     private void reloadButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reloadButtonActionPerformed
         fillRep();
     }//GEN-LAST:event_reloadButtonActionPerformed
+
+    private void repComboBoxKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_repComboBoxKeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_repComboBoxKeyPressed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
@@ -203,7 +212,8 @@ public final class RepStockTopComponent extends NTopComponent {
         tableModel.setRowCount(0);
         int i = tableModel.getRowCount();
         Employee rep = (Employee) repComboBox.getSelectedItem();
-
+        m.clearCache();
+        rep = m.find(Employee.class, rep.getCode());
         for (Iterator<SrStock> it = rep.getSrStockCollection().iterator(); it.hasNext();) {
             SrStock srStock = it.next();
             Item item = srStock.getItem();

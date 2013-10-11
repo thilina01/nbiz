@@ -226,6 +226,7 @@ public final class TransferReportTopComponent extends NTopComponent {
         if (employee == null) {
             return;
         }
+        m.clearCache();
         employee = m.find(Employee.class, employee.getCode());
         Date date = datePicker.getDate();
         Collection<StockTransfer> stockTransfers = employee.getStockTransferCollection();

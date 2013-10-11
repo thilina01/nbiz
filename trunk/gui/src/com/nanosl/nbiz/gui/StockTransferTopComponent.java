@@ -289,7 +289,7 @@ public final class StockTransferTopComponent extends NTopComponent {
     }//GEN-LAST:event_tableKeyReleased
 
     private void repComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_repComboBoxActionPerformed
-        datePicker.requestFocus();
+
     }//GEN-LAST:event_repComboBoxActionPerformed
 
     private void repComboBoxKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_repComboBoxKeyPressed

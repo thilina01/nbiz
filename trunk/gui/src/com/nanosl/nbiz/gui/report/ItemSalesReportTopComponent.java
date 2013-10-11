@@ -47,7 +47,7 @@ public final class ItemSalesReportTopComponent extends NTopComponent {
         onLoad();
         setName(Bundle.CTL_ItemSalesReportTopComponent());
         setToolTipText(Bundle.HINT_ItemSalesReportTopComponent());
-
+//        putClientProperty(PrintManager.PRINT_PRINTABLE, Boolean.TRUE);
     }
 
     /**
@@ -65,6 +65,7 @@ public final class ItemSalesReportTopComponent extends NTopComponent {
         endDatePicker = new JXDatePicker();
         jScrollPane1 = new javax.swing.JScrollPane();
         table = new javax.swing.JTable();
+        printButton = new javax.swing.JButton();
 
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
@@ -114,6 +115,13 @@ public final class ItemSalesReportTopComponent extends NTopComponent {
         table.getColumnModel().getColumn(6).setHeaderValue(org.openide.util.NbBundle.getMessage(ItemSalesReportTopComponent.class, "ItemSalesReportTopComponent.table.columnModel.title5")); // NOI18N
         table.getColumnModel().getColumn(7).setHeaderValue(org.openide.util.NbBundle.getMessage(ItemSalesReportTopComponent.class, "ItemSalesReportTopComponent.table.columnModel.title6")); // NOI18N
 
+        org.openide.awt.Mnemonics.setLocalizedText(printButton, org.openide.util.NbBundle.getMessage(ItemSalesReportTopComponent.class, "ItemSalesReportTopComponent.printButton.text")); // NOI18N
+        printButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                printButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -131,7 +139,8 @@ public final class ItemSalesReportTopComponent extends NTopComponent {
                         .addComponent(startDatePicker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(endDatePicker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(printButton)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -141,9 +150,10 @@ public final class ItemSalesReportTopComponent extends NTopComponent {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(startDatePicker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3)
-                    .addComponent(endDatePicker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(endDatePicker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(printButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 487, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 486, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(totalLabel)
                 .addContainerGap())
@@ -174,11 +184,17 @@ public final class ItemSalesReportTopComponent extends NTopComponent {
     private void endDatePickerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_endDatePickerActionPerformed
         fill();
     }//GEN-LAST:event_endDatePickerActionPerformed
+
+    private void printButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_printButtonActionPerformed
+//        PrintProvider[] providers = new PrintProvider[]{new TextProvider("Hello"), new TextProvider("Nano"), new TextProvider("Creations"),};
+//        PrintManager.printAction(providers);
+    }//GEN-LAST:event_printButtonActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.jdesktop.swingx.JXDatePicker endDatePicker;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JButton printButton;
     private org.jdesktop.swingx.JXDatePicker startDatePicker;
     private javax.swing.JTable table;
     private javax.swing.JLabel totalLabel;

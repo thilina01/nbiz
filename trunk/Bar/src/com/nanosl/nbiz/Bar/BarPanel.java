@@ -250,8 +250,15 @@ public class BarPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_itemCodeTextFieldActionPerformed
 
     private void quantityTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_quantityTextFieldActionPerformed
-        String itemCodeText = itemCodeTextField.getText().trim();
-        String quantityText = quantityTextField.getText().trim();
+        String itemCodeText = itemCodeTextField.getText();
+        String quantityText = quantityTextField.getText();
+        if (quantityText.equals("")) {
+            itemCodeTextField.requestFocus();
+            itemCodeTextField.setSelectionStart(0);
+            itemCodeTextField.setSelectionEnd(itemCodeText.length());
+        }
+        itemCodeText = itemCodeText.trim();
+        quantityText = quantityText.trim();
         double quantity = 0;
         try {
             quantity = Double.parseDouble(quantityText);
@@ -283,6 +290,9 @@ public class BarPanel extends javax.swing.JPanel {
             double price = item.getPriceList().getSellingPack();
             itemDetailLabel.setText(item.getDescription() + " [ " + nf2d.format(price) + " ]");
             quantityTextField.requestFocus();
+        } else {
+            itemCodeTextField.setSelectionStart(0);
+            itemCodeTextField.setSelectionEnd(itemCodeTextField.getText().length());
         }
     }
 
@@ -314,6 +324,7 @@ public class BarPanel extends javax.swing.JPanel {
         String message = "<html><center> <h2> [  " + item.getDescription() + "  ]<br/> " + nf2d.format(quantity) + " X " + nf2d.format(price) + "<br/>  " + nf2d.format(amount) + " </h2></center></html>";
         int option = JOptionPane.showConfirmDialog(itemDetailLabel, message, nf2d.format(amount), JOptionPane.YES_NO_OPTION);
         if (option != JOptionPane.OK_OPTION) {
+            clearFields();
             return;
         }
 //        if (invoiceNumber.equals("")) {
@@ -401,10 +412,7 @@ public class BarPanel extends javax.swing.JPanel {
     }
 
     private void clear() {
-        itemCodeTextField.setText("");
-        quantityTextField.setText("");
-        itemDetailLabel.setText("Item Detail");
-        itemCodeTextField.requestFocus();
+        clearFields();
         fillTable();
     }
 
@@ -434,5 +442,12 @@ public class BarPanel extends javax.swing.JPanel {
         } catch (SQLException ex) {
             Exceptions.printStackTrace(ex);
         }
+    }
+
+    private void clearFields() {
+        itemCodeTextField.setText("");
+        quantityTextField.setText("");
+        itemDetailLabel.setText("Item Detail");
+        itemCodeTextField.requestFocus();
     }
 }

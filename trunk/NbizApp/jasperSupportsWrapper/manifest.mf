@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module: com.nanosl.nbiz.jaspersupport
+OpenIDE-Module-Localizing-Bundle: com/nanosl/nbiz/jaspersupport/Bundle.properties
+OpenIDE-Module-Specification-Version: 1.0
+
