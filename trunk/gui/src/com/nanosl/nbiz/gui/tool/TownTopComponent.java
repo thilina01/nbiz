@@ -291,6 +291,7 @@ public final class TownTopComponent extends NTopComponent {
     private void onLoad() {
         initComponents();
         tableModel = (DefaultTableModel) masterTable.getModel();
+        masterTable.setDefaultRenderer(Object.class, coloredCellRenderer);
         clear();
         AutoCompleteDecorator.decorate(rootAreaComboBox);
     }
