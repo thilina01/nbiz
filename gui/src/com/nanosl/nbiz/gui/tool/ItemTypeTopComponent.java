@@ -40,7 +40,7 @@ import org.openide.util.NbBundle.Messages;
 public final class ItemTypeTopComponent extends NTopComponent {
 
     public ItemTypeTopComponent() {
-      onLoad();
+        onLoad();
         setName(Bundle.CTL_ItemTypeTopComponent());
         setToolTipText(Bundle.HINT_ItemTypeTopComponent());
 
@@ -318,15 +318,17 @@ public final class ItemTypeTopComponent extends NTopComponent {
     }
 
     private void fill() {
-       
-       int row = masterTable.getSelectedRow();
+
+        int row = masterTable.getSelectedRow();
         if (row > -1) {
             typeField.setText("" + masterTable.getValueAt(row, 1));
+        }
     }
-    }
-     protected void onLoad() {
+
+    protected void onLoad() {
         initComponents();
         tableModel = (DefaultTableModel) masterTable.getModel();
+        masterTable.setDefaultRenderer(Object.class, coloredCellRenderer);
         clear();
     }
 }
