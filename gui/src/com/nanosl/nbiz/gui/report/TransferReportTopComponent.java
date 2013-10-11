@@ -190,25 +190,20 @@ public final class TransferReportTopComponent extends NTopComponent {
     }// </editor-fold>//GEN-END:initComponents
 
     private void masterTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_masterTableMouseClicked
-
     }//GEN-LAST:event_masterTableMouseClicked
 
     private void masterTableMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_masterTableMouseReleased
-
     }//GEN-LAST:event_masterTableMouseReleased
 
     private void masterTableKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_masterTableKeyReleased
-
     }//GEN-LAST:event_masterTableKeyReleased
 
     private void repComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_repComboBoxActionPerformed
-
     }//GEN-LAST:event_repComboBoxActionPerformed
 
     private void datePickerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_datePickerActionPerformed
         fillTable();
     }//GEN-LAST:event_datePickerActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.jdesktop.swingx.JXDatePicker datePicker;
     private javax.swing.JLabel jLabel1;
@@ -219,7 +214,7 @@ public final class TransferReportTopComponent extends NTopComponent {
     private javax.swing.JComboBox repComboBox;
     private javax.swing.JLabel totalLabel;
     // End of variables declaration//GEN-END:variables
-     DefaultTableModel tableModel;
+    DefaultTableModel tableModel;
 
     private void fillTable() {
         Employee employee = (Employee) repComboBox.getSelectedItem();
@@ -253,6 +248,7 @@ public final class TransferReportTopComponent extends NTopComponent {
     protected void onLoad() {
         initComponents();
         tableModel = (DefaultTableModel) masterTable.getModel();
+        masterTable.setDefaultRenderer(Object.class, coloredCellRenderer);
         AutoCompleteDecorator.decorate(repComboBox);
     }
 
@@ -267,7 +263,7 @@ public final class TransferReportTopComponent extends NTopComponent {
         tableModel.setRowCount(0);
         repComboBox.setModel(new DefaultComboBoxModel(m.find(Employee.class).toArray()));
     }
-    
+
     @Override
     public void componentOpened() {
         // TODO add custom code on component opening

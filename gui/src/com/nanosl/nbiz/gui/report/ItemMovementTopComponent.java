@@ -215,13 +215,10 @@ public final class ItemMovementTopComponent extends NTopComponent {
     }//GEN-LAST:event_itemComboBoxActionPerformed
 
     private void startDatePickerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startDatePickerActionPerformed
-
     }//GEN-LAST:event_startDatePickerActionPerformed
 
     private void endDatePickerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_endDatePickerActionPerformed
-
     }//GEN-LAST:event_endDatePickerActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.jdesktop.swingx.JXDatePicker endDatePicker;
     private javax.swing.JTable issueTable;
@@ -238,7 +235,7 @@ public final class ItemMovementTopComponent extends NTopComponent {
     private javax.swing.JLabel totalIssueLabel;
     private javax.swing.JLabel totalReceiveLabel;
     // End of variables declaration//GEN-END:variables
-     DefaultTableModel issueTableModel;
+    DefaultTableModel issueTableModel;
     DefaultTableModel receiveTableModel;
 
     private void onLoad() {
@@ -246,6 +243,8 @@ public final class ItemMovementTopComponent extends NTopComponent {
         initComponents();
         issueTableModel = (DefaultTableModel) issueTable.getModel();
         receiveTableModel = (DefaultTableModel) receiveTable.getModel();
+        issueTable.setDefaultRenderer(Object.class, coloredCellRenderer);
+        receiveTable.setDefaultRenderer(Object.class, coloredCellRenderer);
     }
 
     @Override
@@ -258,7 +257,7 @@ public final class ItemMovementTopComponent extends NTopComponent {
         Combo.fillItems(itemComboBox);
         issueTableModel.setRowCount(0);
         receiveTableModel.setRowCount(0);
-        
+
         totalReceiveLabel.setText(nf2d.format(0));
         totalIssueLabel.setText(nf2d.format(0));
 
@@ -304,7 +303,7 @@ public final class ItemMovementTopComponent extends NTopComponent {
         totalReceiveLabel.setText(nf2d.format(totReceive));
 
     }
-    
+
     @Override
     public void componentOpened() {
         // TODO add custom code on component opening

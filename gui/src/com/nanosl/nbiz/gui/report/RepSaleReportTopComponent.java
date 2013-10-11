@@ -199,15 +199,12 @@ public final class RepSaleReportTopComponent extends NTopComponent {
     }// </editor-fold>//GEN-END:initComponents
 
     private void masterTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_masterTableMouseClicked
-
     }//GEN-LAST:event_masterTableMouseClicked
 
     private void masterTableMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_masterTableMouseReleased
-
     }//GEN-LAST:event_masterTableMouseReleased
 
     private void masterTableKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_masterTableKeyReleased
-
     }//GEN-LAST:event_masterTableKeyReleased
 
     private void repComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_repComboBoxActionPerformed
@@ -217,7 +214,6 @@ public final class RepSaleReportTopComponent extends NTopComponent {
     private void datePickerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_datePickerActionPerformed
         fillTable();
     }//GEN-LAST:event_datePickerActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.jdesktop.swingx.JXDatePicker datePicker;
     private javax.swing.JLabel jLabel1;
@@ -258,6 +254,8 @@ public final class RepSaleReportTopComponent extends NTopComponent {
         initComponents();
         tableModel = (DefaultTableModel) masterTable.getModel();
         AutoCompleteDecorator.decorate(repComboBox);
+        masterTable.setDefaultRenderer(Object.class, coloredCellRenderer);
+
     }
 
     @Override
@@ -279,8 +277,7 @@ public final class RepSaleReportTopComponent extends NTopComponent {
         totalTextField.setText(nf2d.format(total));
     }
 
-    
-   @Override
+    @Override
     public void componentOpened() {
         // TODO add custom code on component opening
     }

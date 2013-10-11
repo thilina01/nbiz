@@ -463,6 +463,8 @@ public final class PurchaseInvoicePaymentTopComponent extends NTopComponent {
         initComponents();
         invoiceDtm = (DefaultTableModel) invoiceTable.getModel();
         paymentDtm = (DefaultTableModel) paymentTable.getModel();
+        invoiceTable.setDefaultRenderer(Object.class, coloredCellRenderer);
+        paymentTable.setDefaultRenderer(Object.class, coloredCellRenderer);
         KeyAdapter();
     }
 

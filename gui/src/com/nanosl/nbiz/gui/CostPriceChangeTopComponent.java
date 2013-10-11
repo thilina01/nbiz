@@ -317,6 +317,7 @@ public final class CostPriceChangeTopComponent extends NTopComponent {
         initComponents();
         // AutoCompleteDecorator.decorate(itemComboBox);
         tableModel = (DefaultTableModel) masterTable.getModel();
+        masterTable.setDefaultRenderer(Object.class, coloredCellRenderer);
     }
 
     private void reset() {

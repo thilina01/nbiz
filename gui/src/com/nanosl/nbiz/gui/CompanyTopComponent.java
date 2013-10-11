@@ -36,6 +36,7 @@ import org.openide.util.NbBundle.Messages;
 public final class CompanyTopComponent extends NTopComponent {
 
     public CompanyTopComponent() {
+        
         initComponents();
         setName(Bundle.CTL_CompanyTopComponent());
         setToolTipText(Bundle.HINT_CompanyTopComponent());

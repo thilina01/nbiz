@@ -213,6 +213,7 @@ public final class SalesReportTopComponent extends NTopComponent {
     protected void onLoad() {
         initComponents();
         tableModel = (DefaultTableModel) table.getModel();
+        table.setDefaultRenderer(Object.class, coloredCellRenderer);
     }
 
     @Override
