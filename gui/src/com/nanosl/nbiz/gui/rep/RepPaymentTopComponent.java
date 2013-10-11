@@ -418,7 +418,6 @@ public final class RepPaymentTopComponent extends NTopComponent {
     private void repComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_repComboBoxActionPerformed
         fillDates();
     }//GEN-LAST:event_repComboBoxActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField amountField;
     private javax.swing.JComboBox bankComboBox;
@@ -460,6 +459,9 @@ public final class RepPaymentTopComponent extends NTopComponent {
         initComponents();
         dateDtm = (DefaultTableModel) dateTable.getModel();
         paymentDtm = (DefaultTableModel) paymentTable.getModel();
+        dateTable.setDefaultRenderer(Object.class, coloredCellRenderer);
+        paymentTable.setDefaultRenderer(Object.class, coloredCellRenderer);
+
     }
 
     @Override
@@ -572,9 +574,11 @@ public final class RepPaymentTopComponent extends NTopComponent {
         fillInvoiceTable();
         fillBanks();
     }
-     private void fillBanks() {
+
+    private void fillBanks() {
         bankComboBox.setModel(new DefaultComboBoxModel(m.find(Bank.class).toArray()));
     }
+
     @Override
     public void componentOpened() {
         // TODO add custom code on component opening
@@ -596,6 +600,7 @@ public final class RepPaymentTopComponent extends NTopComponent {
         String version = p.getProperty("version");
         // TODO read your settings according to their version
     }
+
     private void process() {
         int rowCount = paymentTable.getRowCount();
         if (purchaseInvoice == null || rowCount == 0) {
@@ -642,9 +647,9 @@ public final class RepPaymentTopComponent extends NTopComponent {
             showError("Unable to complete payment!");
         }
     }
-      private void fillDates() {
+
+    private void fillDates() {
         dateDtm.setRowCount(0);
         throw new UnsupportedOperationException("Not yet implemented");
     }
-
 }

@@ -206,6 +206,21 @@ public final class POSTopComponent extends NTopComponent {
             }
         });
         jScrollPane1.setViewportView(table);
+        table.getColumnModel().getColumn(0).setHeaderValue(org.openide.util.NbBundle.getMessage(POSTopComponent.class, "POSTopComponent.table.columnModel.title0")); // NOI18N
+        table.getColumnModel().getColumn(1).setHeaderValue(org.openide.util.NbBundle.getMessage(POSTopComponent.class, "POSTopComponent.table.columnModel.title1")); // NOI18N
+        table.getColumnModel().getColumn(2).setHeaderValue(org.openide.util.NbBundle.getMessage(POSTopComponent.class, "POSTopComponent.table.columnModel.title2")); // NOI18N
+        table.getColumnModel().getColumn(3).setHeaderValue(org.openide.util.NbBundle.getMessage(POSTopComponent.class, "POSTopComponent.table.columnModel.title3")); // NOI18N
+        table.getColumnModel().getColumn(3).setCellRenderer(rightAlignCell);
+        table.getColumnModel().getColumn(4).setHeaderValue(org.openide.util.NbBundle.getMessage(POSTopComponent.class, "POSTopComponent.table.columnModel.title4")); // NOI18N
+        table.getColumnModel().getColumn(4).setCellRenderer(rightAlignCell);
+        table.getColumnModel().getColumn(5).setHeaderValue(org.openide.util.NbBundle.getMessage(POSTopComponent.class, "POSTopComponent.table.columnModel.title5")); // NOI18N
+        table.getColumnModel().getColumn(5).setCellRenderer(rightAlignCell);
+        table.getColumnModel().getColumn(6).setHeaderValue(org.openide.util.NbBundle.getMessage(POSTopComponent.class, "POSTopComponent.table.columnModel.title6")); // NOI18N
+        table.getColumnModel().getColumn(6).setCellRenderer(rightAlignCell);
+        table.getColumnModel().getColumn(7).setHeaderValue(org.openide.util.NbBundle.getMessage(POSTopComponent.class, "POSTopComponent.table.columnModel.title7")); // NOI18N
+        table.getColumnModel().getColumn(7).setCellRenderer(rightAlignCell);
+        table.getColumnModel().getColumn(8).setHeaderValue(org.openide.util.NbBundle.getMessage(POSTopComponent.class, "POSTopComponent.table.columnModel.title8")); // NOI18N
+        table.getColumnModel().getColumn(8).setCellRenderer(rightAlignCell);
 
         jLabel8.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(jLabel8, org.openide.util.NbBundle.getMessage(POSTopComponent.class, "POSTopComponent.jLabel8.text")); // NOI18N
@@ -439,12 +454,12 @@ public final class POSTopComponent extends NTopComponent {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 951, Short.MAX_VALUE)
+            .addGap(0, 955, Short.MAX_VALUE)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
-                    .addGap(0, 5, Short.MAX_VALUE)
+                    .addGap(0, 9, Short.MAX_VALUE)
                     .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 5, Short.MAX_VALUE)))
+                    .addGap(0, 9, Short.MAX_VALUE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
