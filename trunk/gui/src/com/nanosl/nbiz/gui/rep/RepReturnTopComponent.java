@@ -334,6 +334,7 @@ public final class RepReturnTopComponent extends NTopComponent {
     protected void onLoad() {
         initComponents();
         tableModel = (DefaultTableModel) masterTable.getModel();
+        masterTable.setDefaultRenderer(Object.class, coloredCellRenderer);
         KeyAdapter();
     }
 

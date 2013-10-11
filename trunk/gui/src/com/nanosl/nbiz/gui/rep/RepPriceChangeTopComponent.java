@@ -276,6 +276,7 @@ public final class RepPriceChangeTopComponent extends NTopComponent {
 //        AutoCompleteDecorator.decorate(itemComboBox);
 //        AutoCompleteDecorator.decorate(repComboBox);
         tableModel = (DefaultTableModel) masterTable.getModel();
+        masterTable.setDefaultRenderer(Object.class, coloredCellRenderer);
     }
 
     @Override

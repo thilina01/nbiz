@@ -469,6 +469,7 @@ public final class SubDealerTopComponent extends NTopComponent {
     protected void onLoad() {
         initComponents();
         tableModel = (DefaultTableModel) masterTable.getModel();
+          masterTable.setDefaultRenderer(Object.class, coloredCellRenderer);
         // AutoCompleteDecorator.decorate(townComboBox);
         clear();
     }
