@@ -222,6 +222,7 @@ public final class OperatorTopComponent extends NTopComponent {
     protected void onLoad() {
         initComponents();
         tempTableModel = (DefaultTableModel) tempTable.getModel();
+        tempTable.setDefaultRenderer(Object.class, coloredCellRenderer);
     }
 
     private void removeRows() {

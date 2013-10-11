@@ -179,15 +179,12 @@ public final class IssuedChequeReportTopComponent extends NTopComponent {
     }// </editor-fold>//GEN-END:initComponents
 
     private void masterTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_masterTableMouseClicked
-
     }//GEN-LAST:event_masterTableMouseClicked
 
     private void masterTableMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_masterTableMouseReleased
-
     }//GEN-LAST:event_masterTableMouseReleased
 
     private void masterTableKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_masterTableKeyReleased
-
     }//GEN-LAST:event_masterTableKeyReleased
 
     private void startDatePickerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startDatePickerActionPerformed
@@ -197,7 +194,6 @@ public final class IssuedChequeReportTopComponent extends NTopComponent {
     private void endDatePickerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_endDatePickerActionPerformed
         fill();
     }//GEN-LAST:event_endDatePickerActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.jdesktop.swingx.JXDatePicker endDatePicker;
     private javax.swing.JLabel jLabel3;
@@ -207,7 +203,7 @@ public final class IssuedChequeReportTopComponent extends NTopComponent {
     private org.jdesktop.swingx.JXDatePicker startDatePicker;
     private javax.swing.JLabel totalLabel;
     // End of variables declaration//GEN-END:variables
-        DefaultTableModel tableModel;
+    DefaultTableModel tableModel;
 
     private void fillTable() {
         tableModel.setRowCount(0);
@@ -223,7 +219,7 @@ public final class IssuedChequeReportTopComponent extends NTopComponent {
         int i = 0;
         for (Iterator<IssuedCheque> it = issuedCheques.iterator(); it.hasNext();) {
             IssuedCheque issuedCheque = it.next();
-            Object[] row = {++i, issuedCheque.getChequeNumber(),nf2d.format(issuedCheque.getAmount()),yyyy_MM_dd.format(issuedCheque.getIssuedDate()),yyyy_MM_dd.format(issuedCheque.getBankingDate()), issuedCheque.getBank().getName(), issuedCheque.getPurchaseInvoice().getPurchaseInvoicePK().getInvNo(), issuedCheque.getPurchaseInvoice().getPurchaseInvoicePK().getSupplierCode()};
+            Object[] row = {++i, issuedCheque.getChequeNumber(), nf2d.format(issuedCheque.getAmount()), yyyy_MM_dd.format(issuedCheque.getIssuedDate()), yyyy_MM_dd.format(issuedCheque.getBankingDate()), issuedCheque.getBank().getName(), issuedCheque.getPurchaseInvoice().getPurchaseInvoicePK().getInvNo(), issuedCheque.getPurchaseInvoice().getPurchaseInvoicePK().getSupplierCode()};
             tableModel.addRow(row);
         }
         calcTotal();
@@ -232,6 +228,7 @@ public final class IssuedChequeReportTopComponent extends NTopComponent {
     protected void onLoad() {
         initComponents();
         tableModel = (DefaultTableModel) masterTable.getModel();
+        masterTable.setDefaultRenderer(Object.class, coloredCellRenderer);
     }
 
     @Override
@@ -253,8 +250,6 @@ public final class IssuedChequeReportTopComponent extends NTopComponent {
         totalLabel.setText(nf2d.format(total));
     }
 
-
-    
     @Override
     public void componentOpened() {
         // TODO add custom code on component opening

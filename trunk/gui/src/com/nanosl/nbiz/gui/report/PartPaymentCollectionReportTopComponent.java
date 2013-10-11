@@ -268,6 +268,7 @@ public final class PartPaymentCollectionReportTopComponent extends NTopComponent
         startDatePicker.setDate(new Date());
         endDatePicker.setDate(new Date());
         tableModel = (DefaultTableModel) masterTable.getModel();
+        masterTable.setDefaultRenderer(Object.class, coloredCellRenderer);
     }
 
     @Override

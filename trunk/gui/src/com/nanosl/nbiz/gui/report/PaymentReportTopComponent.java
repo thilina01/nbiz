@@ -230,25 +230,20 @@ public final class PaymentReportTopComponent extends NTopComponent {
     }// </editor-fold>//GEN-END:initComponents
 
     private void cashTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cashTableMouseClicked
-
     }//GEN-LAST:event_cashTableMouseClicked
 
     private void cashTableMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cashTableMouseReleased
-
     }//GEN-LAST:event_cashTableMouseReleased
 
     private void cashTableKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cashTableKeyReleased
-
     }//GEN-LAST:event_cashTableKeyReleased
 
     private void startDatePickerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startDatePickerActionPerformed
-
     }//GEN-LAST:event_startDatePickerActionPerformed
 
     private void endDatePickerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_endDatePickerActionPerformed
         fill();
     }//GEN-LAST:event_endDatePickerActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable cashTable;
     private javax.swing.JLabel cashTotalLabel;
@@ -263,7 +258,7 @@ public final class PaymentReportTopComponent extends NTopComponent {
     private javax.swing.JScrollPane masterScrollPane;
     private org.jdesktop.swingx.JXDatePicker startDatePicker;
     // End of variables declaration//GEN-END:variables
-      DefaultTableModel cashTableModel;
+    DefaultTableModel cashTableModel;
     DefaultTableModel chequeTableModel;
 
     private void fillTable() {
@@ -317,6 +312,8 @@ public final class PaymentReportTopComponent extends NTopComponent {
         initComponents();
         cashTableModel = (DefaultTableModel) cashTable.getModel();
         chequeTableModel = (DefaultTableModel) chequeTable.getModel();
+        cashTable.setDefaultRenderer(Object.class, coloredCellRenderer);
+        chequeTable.setDefaultRenderer(Object.class, coloredCellRenderer);
     }
 
     @Override
@@ -341,7 +338,7 @@ public final class PaymentReportTopComponent extends NTopComponent {
         }
         chequeTableLabel.setText(nf2d.format(total));
     }
-    
+
     @Override
     public void componentOpened() {
         // TODO add custom code on component opening

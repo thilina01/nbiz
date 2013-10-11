@@ -39,7 +39,7 @@ import org.openide.util.NbBundle.Messages;
 public final class DamageStockTopComponent extends NTopComponent {
 
     public DamageStockTopComponent() {
-        initComponents();
+        onLoad();
         setName(Bundle.CTL_DamageStockTopComponent());
         setToolTipText(Bundle.HINT_DamageStockTopComponent());
 
@@ -196,6 +196,7 @@ public final class DamageStockTopComponent extends NTopComponent {
     protected void onLoad() {
         initComponents();
         tableModel = (DefaultTableModel) masterTable.getModel();
+        masterTable.setDefaultRenderer(Object.class, coloredCellRenderer);
     }
 
     @Override
