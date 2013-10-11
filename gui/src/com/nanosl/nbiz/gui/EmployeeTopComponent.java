@@ -559,16 +559,19 @@ public final class EmployeeTopComponent extends NTopComponent {
     }
 
     private void fill(Employee employee) {
-        codeField.setText(employee.getCode());
-        firstNameField.setText(employee.getFirstName());
-        lastNameField.setText(employee.getLastName());
-        addressNumberField.setText(employee.getAddressNumber());
-        addressStreetField.setText(employee.getAddressStreet());
-        cityField.setText(employee.getCity());
-        mobileField.setText(employee.getMobile());
-        fixedLineField.setText(employee.getFixedLine());
-        notesField.setText(employee.getNotes());
-        positionComboBox.setSelectedItem(employee.getEmployeePosition());
+        if (employee != null) {
+            codeField.setText(employee.getCode());
+
+            firstNameField.setText(employee.getFirstName());
+            lastNameField.setText(employee.getLastName());
+            addressNumberField.setText(employee.getAddressNumber());
+            addressStreetField.setText(employee.getAddressStreet());
+            cityField.setText(employee.getCity());
+            mobileField.setText(employee.getMobile());
+            fixedLineField.setText(employee.getFixedLine());
+            notesField.setText(employee.getNotes());
+            positionComboBox.setSelectedItem(employee.getEmployeePosition());
+        }
     }
 
     private void fill(String code) {

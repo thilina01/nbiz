@@ -275,6 +275,7 @@ public final class ItemMovementTopComponent extends NTopComponent {
         Date endDate = endDatePicker.getDate();
 
         List<SaleInvoiceHasItem> saleInvoiceHasItems = Find.saleInvoiceItemsByItemAndDates(item, startDate, endDate);
+// Add stocktransfer tracking
         double totIssues = 0;
         for (Iterator<SaleInvoiceHasItem> it = saleInvoiceHasItems.iterator(); it.hasNext();) {
             SaleInvoiceHasItem saleInvoiceHasItem = it.next();
