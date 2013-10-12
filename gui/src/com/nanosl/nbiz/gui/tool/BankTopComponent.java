@@ -335,6 +335,7 @@ public final class BankTopComponent extends NTopComponent {
 
     @Override
     public void componentOpened() {
+        codeField.requestFocus();
         // TODO add custom code on component opening
     }
 

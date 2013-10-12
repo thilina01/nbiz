@@ -414,6 +414,7 @@ public final class CustomerTopComponent extends NTopComponent {
     protected void onLoad() {
         initComponents();
         tableModel = (DefaultTableModel) masterTable.getModel();
+        masterTable.setDefaultRenderer(Object.class, coloredCellRenderer);
         clear();
     }
 
@@ -524,7 +525,7 @@ public final class CustomerTopComponent extends NTopComponent {
 
     @Override
     public void componentOpened() {
-        // TODO add custom code on component opening
+        codeField.requestFocus();
     }
 
     @Override

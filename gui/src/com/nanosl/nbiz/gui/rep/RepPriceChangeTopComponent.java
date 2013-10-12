@@ -381,7 +381,7 @@ public final class RepPriceChangeTopComponent extends NTopComponent {
 
     @Override
     public void componentOpened() {
-        // TODO add custom code on component opening
+        repComboBox.requestFocus();
     }
 
     @Override

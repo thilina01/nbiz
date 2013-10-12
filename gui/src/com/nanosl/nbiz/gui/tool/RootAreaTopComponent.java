@@ -350,6 +350,7 @@ public final class RootAreaTopComponent extends NTopComponent {
 
     @Override
     public void componentClosed() {
+        codeField.requestFocus();
         // TODO add custom code on component closing
     }
 

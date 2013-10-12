@@ -471,7 +471,7 @@ public final class RepRemainingStockTopComponent extends NTopComponent {
 
     @Override
     public void componentOpened() {
-        // TODO add custom code on component opening
+      repComboBox.requestFocus();
     }
 
     @Override

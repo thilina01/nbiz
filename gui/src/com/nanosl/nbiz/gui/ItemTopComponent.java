@@ -592,7 +592,7 @@ public final class ItemTopComponent extends NTopComponent {
 
     @Override
     public void componentOpened() {
-        // TODO add custom code on component opening
+     codeField.requestFocus();
     }
 
     @Override

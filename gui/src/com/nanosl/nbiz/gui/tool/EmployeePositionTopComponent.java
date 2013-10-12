@@ -331,6 +331,7 @@ public final class EmployeePositionTopComponent extends NTopComponent {
 
     @Override
     public void componentOpened() {
+        codeField.requestFocus();
         // TODO add custom code on component opening
     }
 

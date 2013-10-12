@@ -360,12 +360,12 @@ public final class SubDealerTopComponent extends NTopComponent {
 
     @Override
     public void componentOpened() {
-        // TODO add custom code on component opening
+       codeField.requestFocus();
     }
 
     @Override
     public void componentClosed() {
-        // TODO add custom code on component closing
+         codeField.requestFocus();
     }
 
     void writeProperties(java.util.Properties p) {

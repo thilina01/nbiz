@@ -295,7 +295,7 @@ public final class StockChangeTopComponent extends NTopComponent {
 
     @Override
     public void componentOpened() {
-        // TODO add custom code on component opening
+        itemComboBox.requestFocus();
     }
 
     @Override

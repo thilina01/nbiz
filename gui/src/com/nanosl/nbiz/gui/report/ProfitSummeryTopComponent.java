@@ -289,6 +289,7 @@ public final class ProfitSummeryTopComponent extends NTopComponent {
     
     @Override
     public void componentOpened() {
+        // codeField.requestFocus();
         // TODO add custom code on component opening
     }
 
