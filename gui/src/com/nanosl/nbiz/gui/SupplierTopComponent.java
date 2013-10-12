@@ -13,6 +13,7 @@ import java.awt.Component;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import javax.swing.JComponent;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.netbeans.api.settings.ConvertAsProperties;
@@ -573,6 +574,9 @@ public final class SupplierTopComponent extends NTopComponent {
         String code = codeField.getText().trim();
         if (code.equals("")) {
             codeField.requestFocus();
+            return;
+        }
+        if (JOptionPane.YES_OPTION != JOptionPane.showConfirmDialog(deleteButton, "Delete " + code + " ?", "sure?", JOptionPane.YES_NO_OPTION)) {
             return;
         }
         if (controller.delete(code)) {

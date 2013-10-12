@@ -10,6 +10,7 @@ import entity.EmployeePosition;
 import java.util.Iterator;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
@@ -496,6 +497,8 @@ public final class EmployeeTopComponent extends NTopComponent {
             codeField.requestFocus();
             return;
         }
+         if (JOptionPane.YES_OPTION != JOptionPane.showConfirmDialog(deleteButton, "Delete " + code + " ?", "sure?", JOptionPane.YES_NO_OPTION)) {
+            return;}
         if (m.delete(Employee.class, code)) {
             clear();
             return;

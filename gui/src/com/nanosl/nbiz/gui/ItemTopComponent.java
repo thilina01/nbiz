@@ -22,6 +22,7 @@ import java.util.Iterator;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.netbeans.api.settings.ConvertAsProperties;
@@ -467,10 +468,14 @@ public final class ItemTopComponent extends NTopComponent {
             codeField.requestFocus();
             return;
         }
+        if (JOptionPane.YES_OPTION != JOptionPane.showConfirmDialog(deleteButton, "Delete " + code + " ?", "sure?", JOptionPane.YES_NO_OPTION)) {
+            return;
+        }
         if (m.delete(Item.class, code)) {
             clear();
-            showSuccess("Item Deleted");
             return;
+//            showSuccess("Item Deleted");
+
         }
         showError("Unable to delete " + code);
     }

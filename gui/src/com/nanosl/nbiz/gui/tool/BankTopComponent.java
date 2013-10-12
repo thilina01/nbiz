@@ -275,7 +275,7 @@ public final class BankTopComponent extends NTopComponent {
     protected void onLoad() {
         initComponents();
         tableModel = (DefaultTableModel) masterTable.getModel();
-         masterTable.setDefaultRenderer(Object.class, coloredCellRenderer);
+        masterTable.setDefaultRenderer(Object.class, coloredCellRenderer);
         clear();
     }
 
@@ -309,9 +309,9 @@ public final class BankTopComponent extends NTopComponent {
             codeField.requestFocus();
             return;
         }
-        
-        if(JOptionPane.YES_OPTION!=JOptionPane.showConfirmDialog(deleteButton, "Delete "+code+" ?", "sure?", JOptionPane.YES_NO_OPTION)){return;}
-       
+        if (JOptionPane.YES_OPTION != JOptionPane.showConfirmDialog(deleteButton, "Delete " + code + " ?", "sure?", JOptionPane.YES_NO_OPTION)) {
+            return;
+        }
         if (m.delete(Bank.class, code)) {
             clear();
             return;
