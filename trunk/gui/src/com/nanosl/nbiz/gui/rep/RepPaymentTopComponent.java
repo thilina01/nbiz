@@ -581,12 +581,12 @@ public final class RepPaymentTopComponent extends NTopComponent {
 
     @Override
     public void componentOpened() {
-        // TODO add custom code on component opening
+       repComboBox.requestFocus();
     }
 
     @Override
     public void componentClosed() {
-        // TODO add custom code on component closing
+        repComboBox.requestFocus();
     }
 
     void writeProperties(java.util.Properties p) {

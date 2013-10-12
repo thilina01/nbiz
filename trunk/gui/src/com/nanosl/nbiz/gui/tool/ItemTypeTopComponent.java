@@ -248,6 +248,7 @@ public final class ItemTypeTopComponent extends NTopComponent {
 
     @Override
     public void componentOpened() {
+        typeField.requestFocus();
         // TODO add custom code on component opening
     }
 

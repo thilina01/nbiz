@@ -399,7 +399,7 @@ public final class CompanyTopComponent extends NTopComponent {
     // End of variables declaration//GEN-END:variables
     @Override
     public void componentOpened() {
-        // TODO add custom code on component opening
+    codeField.requestFocus();
     }
 
     @Override

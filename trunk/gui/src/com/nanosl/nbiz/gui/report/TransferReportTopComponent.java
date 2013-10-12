@@ -271,6 +271,7 @@ public final class TransferReportTopComponent extends NTopComponent {
 
     @Override
     public void componentOpened() {
+        repComboBox.requestFocus();
         // TODO add custom code on component opening
     }
 

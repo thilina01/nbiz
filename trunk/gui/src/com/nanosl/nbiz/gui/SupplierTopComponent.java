@@ -447,6 +447,7 @@ public final class SupplierTopComponent extends NTopComponent {
     @Override
     public void componentOpened() {
         tableModel = (DefaultTableModel) masterTable.getModel();
+        codeField.requestFocus();
     }
 
     @Override

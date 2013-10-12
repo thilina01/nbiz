@@ -245,7 +245,7 @@ public final class CostPriceChangeTopComponent extends NTopComponent {
 
     @Override
     public void componentClosed() {
-        // TODO add custom code on component closing
+        itemComboBox.requestFocus();
     }
 
     void writeProperties(java.util.Properties p) {

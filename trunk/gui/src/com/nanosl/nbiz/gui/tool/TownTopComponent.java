@@ -362,6 +362,7 @@ public final class TownTopComponent extends NTopComponent {
 
     @Override
     public void componentOpened() {
+        codeField.requestFocus();
         // TODO add custom code on component opening
     }
 
