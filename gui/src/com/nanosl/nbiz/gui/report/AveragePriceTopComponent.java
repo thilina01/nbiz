@@ -96,8 +96,11 @@ public final class AveragePriceTopComponent extends NTopComponent {
             }
         });
         masterScrollPane.setViewportView(masterTable);
+        masterTable.getColumnModel().getColumn(0).setPreferredWidth(30);
         masterTable.getColumnModel().getColumn(0).setHeaderValue(org.openide.util.NbBundle.getMessage(AveragePriceTopComponent.class, "AveragePriceTopComponent.masterTable.columnModel.title0")); // NOI18N
+        masterTable.getColumnModel().getColumn(1).setPreferredWidth(50);
         masterTable.getColumnModel().getColumn(1).setHeaderValue(org.openide.util.NbBundle.getMessage(AveragePriceTopComponent.class, "AveragePriceTopComponent.masterTable.columnModel.title1")); // NOI18N
+        masterTable.getColumnModel().getColumn(2).setPreferredWidth(500);
         masterTable.getColumnModel().getColumn(2).setHeaderValue(org.openide.util.NbBundle.getMessage(AveragePriceTopComponent.class, "AveragePriceTopComponent.masterTable.columnModel.title2")); // NOI18N
         masterTable.getColumnModel().getColumn(3).setHeaderValue(org.openide.util.NbBundle.getMessage(AveragePriceTopComponent.class, "AveragePriceTopComponent.masterTable.columnModel.title3")); // NOI18N
         masterTable.getColumnModel().getColumn(3).setCellRenderer(rightAlignCell);
@@ -136,8 +139,8 @@ public final class AveragePriceTopComponent extends NTopComponent {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(datePicker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(masterScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 378, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(masterScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 367, Short.MAX_VALUE)
                 .addContainerGap())
         );
 

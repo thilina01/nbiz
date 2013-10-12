@@ -104,6 +104,12 @@ public final class SubDealerTopComponent extends NTopComponent {
             }
         });
         masterScrollPane.setViewportView(masterTable);
+        masterTable.getColumnModel().getColumn(0).setPreferredWidth(30);
+        masterTable.getColumnModel().getColumn(0).setHeaderValue(org.openide.util.NbBundle.getMessage(SubDealerTopComponent.class, "SubDealerTopComponent.masterTable.columnModel.title0")); // NOI18N
+        masterTable.getColumnModel().getColumn(1).setHeaderValue(org.openide.util.NbBundle.getMessage(SubDealerTopComponent.class, "SubDealerTopComponent.masterTable.columnModel.title1")); // NOI18N
+        masterTable.getColumnModel().getColumn(2).setPreferredWidth(200);
+        masterTable.getColumnModel().getColumn(2).setHeaderValue(org.openide.util.NbBundle.getMessage(SubDealerTopComponent.class, "SubDealerTopComponent.masterTable.columnModel.title2")); // NOI18N
+        masterTable.getColumnModel().getColumn(3).setHeaderValue(org.openide.util.NbBundle.getMessage(SubDealerTopComponent.class, "SubDealerTopComponent.masterTable.columnModel.title3")); // NOI18N
 
         org.openide.awt.Mnemonics.setLocalizedText(codeLabel, org.openide.util.NbBundle.getMessage(SubDealerTopComponent.class, "SubDealerTopComponent.codeLabel.text")); // NOI18N
 

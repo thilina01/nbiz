@@ -107,9 +107,11 @@ public final class DamageNotesTopComponent extends NTopComponent {
             }
         });
         masterScrollPane.setViewportView(masterTable);
+        masterTable.getColumnModel().getColumn(0).setPreferredWidth(30);
         masterTable.getColumnModel().getColumn(0).setHeaderValue(org.openide.util.NbBundle.getMessage(DamageNotesTopComponent.class, "DamageNotesTopComponent.masterTable.columnModel.title0")); // NOI18N
         masterTable.getColumnModel().getColumn(1).setHeaderValue(org.openide.util.NbBundle.getMessage(DamageNotesTopComponent.class, "DamageNotesTopComponent.masterTable.columnModel.title1")); // NOI18N
         masterTable.getColumnModel().getColumn(2).setHeaderValue(org.openide.util.NbBundle.getMessage(DamageNotesTopComponent.class, "DamageNotesTopComponent.masterTable.columnModel.title2")); // NOI18N
+        masterTable.getColumnModel().getColumn(3).setPreferredWidth(300);
         masterTable.getColumnModel().getColumn(3).setHeaderValue(org.openide.util.NbBundle.getMessage(DamageNotesTopComponent.class, "DamageNotesTopComponent.masterTable.columnModel.title3")); // NOI18N
         masterTable.getColumnModel().getColumn(4).setHeaderValue(org.openide.util.NbBundle.getMessage(DamageNotesTopComponent.class, "DamageNotesTopComponent.masterTable.columnModel.title4")); // NOI18N
         masterTable.getColumnModel().getColumn(4).setCellRenderer(rightAlignCell);

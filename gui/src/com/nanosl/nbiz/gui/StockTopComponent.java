@@ -106,8 +106,10 @@ public final class StockTopComponent extends NTopComponent {
             }
         });
         masterScrollPane.setViewportView(table);
+        table.getColumnModel().getColumn(0).setPreferredWidth(30);
         table.getColumnModel().getColumn(0).setHeaderValue(org.openide.util.NbBundle.getMessage(StockTopComponent.class, "StockTopComponent.table.columnModel.title0")); // NOI18N
         table.getColumnModel().getColumn(1).setHeaderValue(org.openide.util.NbBundle.getMessage(StockTopComponent.class, "StockTopComponent.table.columnModel.title1")); // NOI18N
+        table.getColumnModel().getColumn(2).setPreferredWidth(500);
         table.getColumnModel().getColumn(2).setHeaderValue(org.openide.util.NbBundle.getMessage(StockTopComponent.class, "StockTopComponent.table.columnModel.title2")); // NOI18N
         table.getColumnModel().getColumn(3).setHeaderValue(org.openide.util.NbBundle.getMessage(StockTopComponent.class, "StockTopComponent.table.columnModel.title3")); // NOI18N
         table.getColumnModel().getColumn(3).setCellRenderer(rightAlignCell);
