@@ -122,7 +122,7 @@
                 </Property>
                 <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
                   <TableColumnModel selectionModel="0">
-                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                    <Column maxWidth="-1" minWidth="-1" prefWidth="30" resizable="true">
                       <Title editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                         <ResourceString bundle="com/nanosl/nbiz/gui/report/Bundle.properties" key="CollectionReportTopComponent.cashTable.columnModel.title0" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                       </Title>
@@ -143,7 +143,7 @@
                       <Editor/>
                       <Renderer/>
                     </Column>
-                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                    <Column maxWidth="-1" minWidth="-1" prefWidth="500" resizable="true">
                       <Title editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                         <ResourceString bundle="com/nanosl/nbiz/gui/report/Bundle.properties" key="CollectionReportTopComponent.cashTable.columnModel.title3" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                       </Title>
@@ -250,7 +250,7 @@
                 </Property>
                 <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
                   <TableColumnModel selectionModel="0">
-                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                    <Column maxWidth="-1" minWidth="-1" prefWidth="30" resizable="true">
                       <Title editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                         <ResourceString bundle="com/nanosl/nbiz/gui/report/Bundle.properties" key="CollectionReportTopComponent.chequeTable.columnModel.title0" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                       </Title>
@@ -294,7 +294,7 @@
                       <Editor/>
                       <Renderer/>
                     </Column>
-                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                    <Column maxWidth="-1" minWidth="-1" prefWidth="200" resizable="true">
                       <Title editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                         <ResourceString bundle="com/nanosl/nbiz/gui/report/Bundle.properties" key="CollectionReportTopComponent.chequeTable.columnModel.title6" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                       </Title>

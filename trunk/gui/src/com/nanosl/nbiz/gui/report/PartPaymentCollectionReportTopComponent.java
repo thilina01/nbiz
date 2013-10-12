@@ -97,9 +97,11 @@ public final class PartPaymentCollectionReportTopComponent extends NTopComponent
             }
         });
         masterScrollPane.setViewportView(masterTable);
+        masterTable.getColumnModel().getColumn(0).setPreferredWidth(30);
         masterTable.getColumnModel().getColumn(0).setHeaderValue(org.openide.util.NbBundle.getMessage(PartPaymentCollectionReportTopComponent.class, "PartPaymentCollectionReportTopComponent.masterTable.columnModel.title0")); // NOI18N
         masterTable.getColumnModel().getColumn(1).setHeaderValue(org.openide.util.NbBundle.getMessage(PartPaymentCollectionReportTopComponent.class, "PartPaymentCollectionReportTopComponent.masterTable.columnModel.title1")); // NOI18N
         masterTable.getColumnModel().getColumn(2).setHeaderValue(org.openide.util.NbBundle.getMessage(PartPaymentCollectionReportTopComponent.class, "PartPaymentCollectionReportTopComponent.masterTable.columnModel.title2")); // NOI18N
+        masterTable.getColumnModel().getColumn(3).setPreferredWidth(300);
         masterTable.getColumnModel().getColumn(3).setHeaderValue(org.openide.util.NbBundle.getMessage(PartPaymentCollectionReportTopComponent.class, "PartPaymentCollectionReportTopComponent.masterTable.columnModel.title3")); // NOI18N
         masterTable.getColumnModel().getColumn(4).setHeaderValue(org.openide.util.NbBundle.getMessage(PartPaymentCollectionReportTopComponent.class, "PartPaymentCollectionReportTopComponent.masterTable.columnModel.title4")); // NOI18N
         masterTable.getColumnModel().getColumn(5).setHeaderValue(org.openide.util.NbBundle.getMessage(PartPaymentCollectionReportTopComponent.class, "PartPaymentCollectionReportTopComponent.masterTable.columnModel.title5")); // NOI18N
@@ -107,6 +109,7 @@ public final class PartPaymentCollectionReportTopComponent extends NTopComponent
         masterTable.getColumnModel().getColumn(6).setHeaderValue(org.openide.util.NbBundle.getMessage(PartPaymentCollectionReportTopComponent.class, "PartPaymentCollectionReportTopComponent.masterTable.columnModel.title6")); // NOI18N
         masterTable.getColumnModel().getColumn(6).setCellRenderer(rightAlignCell);
         masterTable.getColumnModel().getColumn(7).setHeaderValue(org.openide.util.NbBundle.getMessage(PartPaymentCollectionReportTopComponent.class, "PartPaymentCollectionReportTopComponent.masterTable.columnModel.title7")); // NOI18N
+        masterTable.getColumnModel().getColumn(8).setPreferredWidth(100);
         masterTable.getColumnModel().getColumn(8).setHeaderValue(org.openide.util.NbBundle.getMessage(PartPaymentCollectionReportTopComponent.class, "PartPaymentCollectionReportTopComponent.masterTable.columnModel.title8")); // NOI18N
 
         startDatePicker.addActionListener(new java.awt.event.ActionListener() {
@@ -137,7 +140,7 @@ public final class PartPaymentCollectionReportTopComponent extends NTopComponent
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(totalLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(masterScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 852, Short.MAX_VALUE)
+                    .addComponent(masterScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 962, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)

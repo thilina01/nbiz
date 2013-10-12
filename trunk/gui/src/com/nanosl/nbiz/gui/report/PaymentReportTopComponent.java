@@ -102,9 +102,11 @@ public final class PaymentReportTopComponent extends NTopComponent {
             }
         });
         masterScrollPane.setViewportView(cashTable);
+        cashTable.getColumnModel().getColumn(0).setPreferredWidth(30);
         cashTable.getColumnModel().getColumn(0).setHeaderValue(org.openide.util.NbBundle.getMessage(PaymentReportTopComponent.class, "PaymentReportTopComponent.cashTable.columnModel.title0")); // NOI18N
         cashTable.getColumnModel().getColumn(1).setHeaderValue(org.openide.util.NbBundle.getMessage(PaymentReportTopComponent.class, "PaymentReportTopComponent.cashTable.columnModel.title1")); // NOI18N
         cashTable.getColumnModel().getColumn(2).setHeaderValue(org.openide.util.NbBundle.getMessage(PaymentReportTopComponent.class, "PaymentReportTopComponent.cashTable.columnModel.title2")); // NOI18N
+        cashTable.getColumnModel().getColumn(3).setPreferredWidth(150);
         cashTable.getColumnModel().getColumn(3).setHeaderValue(org.openide.util.NbBundle.getMessage(PaymentReportTopComponent.class, "PaymentReportTopComponent.cashTable.columnModel.title3")); // NOI18N
         cashTable.getColumnModel().getColumn(4).setHeaderValue(org.openide.util.NbBundle.getMessage(PaymentReportTopComponent.class, "PaymentReportTopComponent.cashTable.columnModel.title4")); // NOI18N
         cashTable.getColumnModel().getColumn(5).setHeaderValue(org.openide.util.NbBundle.getMessage(PaymentReportTopComponent.class, "PaymentReportTopComponent.cashTable.columnModel.title5")); // NOI18N
@@ -146,6 +148,7 @@ public final class PaymentReportTopComponent extends NTopComponent {
             }
         });
         jScrollPane1.setViewportView(chequeTable);
+        chequeTable.getColumnModel().getColumn(0).setPreferredWidth(30);
         chequeTable.getColumnModel().getColumn(0).setHeaderValue(org.openide.util.NbBundle.getMessage(PaymentReportTopComponent.class, "PaymentReportTopComponent.chequeTable.columnModel.title0")); // NOI18N
         chequeTable.getColumnModel().getColumn(1).setHeaderValue(org.openide.util.NbBundle.getMessage(PaymentReportTopComponent.class, "PaymentReportTopComponent.chequeTable.columnModel.title1")); // NOI18N
         chequeTable.getColumnModel().getColumn(2).setHeaderValue(org.openide.util.NbBundle.getMessage(PaymentReportTopComponent.class, "PaymentReportTopComponent.chequeTable.columnModel.title2")); // NOI18N
@@ -154,6 +157,7 @@ public final class PaymentReportTopComponent extends NTopComponent {
         chequeTable.getColumnModel().getColumn(5).setHeaderValue(org.openide.util.NbBundle.getMessage(PaymentReportTopComponent.class, "PaymentReportTopComponent.chequeTable.columnModel.title5")); // NOI18N
         chequeTable.getColumnModel().getColumn(5).setCellRenderer(rightAlignCell);
         chequeTable.getColumnModel().getColumn(6).setHeaderValue(org.openide.util.NbBundle.getMessage(PaymentReportTopComponent.class, "PaymentReportTopComponent.chequeTable.columnModel.title6")); // NOI18N
+        chequeTable.getColumnModel().getColumn(7).setPreferredWidth(150);
         chequeTable.getColumnModel().getColumn(7).setHeaderValue(org.openide.util.NbBundle.getMessage(PaymentReportTopComponent.class, "PaymentReportTopComponent.chequeTable.columnModel.title7")); // NOI18N
         chequeTable.getColumnModel().getColumn(8).setHeaderValue(org.openide.util.NbBundle.getMessage(PaymentReportTopComponent.class, "PaymentReportTopComponent.chequeTable.columnModel.title8")); // NOI18N
 

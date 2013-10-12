@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.netbeans.api.settings.ConvertAsProperties;
@@ -329,6 +330,9 @@ public final class TownTopComponent extends NTopComponent {
         String code = codeField.getText().trim();
         if (code.equals("")) {
             codeField.requestFocus();
+            return;
+        }
+        if (JOptionPane.YES_OPTION != JOptionPane.showConfirmDialog(deleteButton, "Delete " + code + " ?", "sure?", JOptionPane.YES_NO_OPTION)) {
             return;
         }
         if (m.delete(Town.class, code)) {

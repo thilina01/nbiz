@@ -108,8 +108,10 @@ public final class CostPriceChangeTopComponent extends NTopComponent {
             }
         });
         masterScrollPane.setViewportView(masterTable);
+        masterTable.getColumnModel().getColumn(0).setPreferredWidth(30);
         masterTable.getColumnModel().getColumn(0).setHeaderValue(org.openide.util.NbBundle.getMessage(CostPriceChangeTopComponent.class, "CostPriceChangeTopComponent.masterTable.columnModel.title0")); // NOI18N
         masterTable.getColumnModel().getColumn(1).setHeaderValue(org.openide.util.NbBundle.getMessage(CostPriceChangeTopComponent.class, "CostPriceChangeTopComponent.masterTable.columnModel.title1")); // NOI18N
+        masterTable.getColumnModel().getColumn(2).setPreferredWidth(300);
         masterTable.getColumnModel().getColumn(2).setHeaderValue(org.openide.util.NbBundle.getMessage(CostPriceChangeTopComponent.class, "CostPriceChangeTopComponent.masterTable.columnModel.title2")); // NOI18N
         masterTable.getColumnModel().getColumn(3).setHeaderValue(org.openide.util.NbBundle.getMessage(CostPriceChangeTopComponent.class, "CostPriceChangeTopComponent.masterTable.columnModel.title3")); // NOI18N
         masterTable.getColumnModel().getColumn(3).setCellRenderer(rightAlignCell);

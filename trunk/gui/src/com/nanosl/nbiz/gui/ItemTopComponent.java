@@ -117,8 +117,10 @@ public final class ItemTopComponent extends NTopComponent {
             }
         });
         masterScrollPane.setViewportView(masterTable);
+        masterTable.getColumnModel().getColumn(0).setPreferredWidth(30);
         masterTable.getColumnModel().getColumn(0).setHeaderValue(org.openide.util.NbBundle.getMessage(ItemTopComponent.class, "ItemTopComponent.masterTable.columnModel.title0")); // NOI18N
         masterTable.getColumnModel().getColumn(1).setHeaderValue(org.openide.util.NbBundle.getMessage(ItemTopComponent.class, "ItemTopComponent.masterTable.columnModel.title1")); // NOI18N
+        masterTable.getColumnModel().getColumn(2).setPreferredWidth(500);
         masterTable.getColumnModel().getColumn(2).setHeaderValue(org.openide.util.NbBundle.getMessage(ItemTopComponent.class, "ItemTopComponent.masterTable.columnModel.title2")); // NOI18N
         masterTable.getColumnModel().getColumn(3).setHeaderValue(org.openide.util.NbBundle.getMessage(ItemTopComponent.class, "ItemTopComponent.masterTable.columnModel.title3")); // NOI18N
         masterTable.getColumnModel().getColumn(3).setCellRenderer(rightAlignCell);
