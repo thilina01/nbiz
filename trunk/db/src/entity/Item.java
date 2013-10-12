@@ -37,6 +37,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Item.findByProfitPersantage", query = "SELECT i FROM Item i WHERE i.profitPersantage = :profitPersantage"),
     @NamedQuery(name = "Item.findByCustomerProfitPersantage", query = "SELECT i FROM Item i WHERE i.customerProfitPersantage = :customerProfitPersantage"),
     @NamedQuery(name = "Item.findByRetailProfitPersantage", query = "SELECT i FROM Item i WHERE i.retailProfitPersantage = :retailProfitPersantage"),
+    @NamedQuery(name = "Item.findByQkey", query = "SELECT i FROM Item i WHERE i.qkey = :qkey"),
     @NamedQuery(name = "Item.findByOperator", query = "SELECT i FROM Item i WHERE i.operator = :operator")})
 public class Item implements Serializable, Comparable<Item> {
 
@@ -50,6 +51,8 @@ public class Item implements Serializable, Comparable<Item> {
     @Basic(optional = false)
     @Column(name = "code")
     private String code;
+    @Column(name = "qkey")
+    private Integer qkey;
     @Column(name = "description")
     private String description;
     @Column(name = "brand")
@@ -354,5 +357,13 @@ public class Item implements Serializable, Comparable<Item> {
 
     public void setItemTypeType(ItemType itemTypeType) {
         this.itemTypeType = itemTypeType;
+    }
+
+    public Integer getQkey() {
+        return qkey;
+    }
+
+    public void setQkey(Integer qkey) {
+        this.qkey = qkey;
     }
 }

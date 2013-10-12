@@ -4,6 +4,7 @@
  */
 package com.nanosl.nbiz.gui.report;
 
+import com.nanosl.lib.db.Manager;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
@@ -117,18 +118,18 @@ public final class TestTopComponent extends TopComponent {
             Map parameters = new HashMap();
             parameters.put("id", 42);
 
-            URL url = getClass().getResource("/com/nanosl/nbiz/gui/jrxml/report1.jasper");
-            i++;
-//            JasperReport report = (JasperReport) JRLoader.loadObject(url);//"src/com/nanosl/nbiz/gui/jrxml/report1.jasper"
-
-            if (i % 2 == 0) {
-            } else {
-                url = getClass().getResource("/com/nanosl/nbiz/gui/jrxml/report2.jasper");
-//                report = (JasperReport) JRLoader.loadObject("src/com/nanosl/nbiz/gui/jrxml/report2.jasper");
-            }
+            URL url = getClass().getResource("/com/nanosl/nbiz/gui/jrxml/report3.jasper");
+//            i++;
+////            JasperReport report = (JasperReport) JRLoader.loadObject(url);//"src/com/nanosl/nbiz/gui/jrxml/report1.jasper"
+//
+//            if (i % 2 == 0) {
+//            } else {
+//                url = getClass().getResource("/com/nanosl/nbiz/gui/jrxml/report2.jasper");
+////                report = (JasperReport) JRLoader.loadObject("src/com/nanosl/nbiz/gui/jrxml/report2.jasper");
+//            }
             JasperReport report = (JasperReport) JRLoader.loadObject(url);//"src/com/nanosl/nbiz/gui/jrxml/report1.jasper"
 
-            JasperPrint jasperPrint = JasperFillManager.fillReport(report, parameters, new JREmptyDataSource());
+            JasperPrint jasperPrint = JasperFillManager.fillReport(report, parameters, Manager.getInstance().getConnection());
             jScrollPane1.setViewportView(new JRViewer(jasperPrint));
         } catch (JRException ex) {
             Exceptions.printStackTrace(ex);

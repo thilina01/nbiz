@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="b2745190-6ed9-42d3-bacd-556f22f3f233">
+	<property name="ireport.zoom" value="8.0"/>
+	<property name="ireport.x" value="2768"/>
+	<property name="ireport.y" value="278"/>
+	<parameter name="first_date" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="last_date" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT  
+               sale_invoice_has_item.item_code as 'code',  
+               item.description as 'description',  
+               Sum(sale_invoice_has_item.quantity) as'quantity',  
+               sale_invoice_has_item.rate as 'price',  
+               sale_invoice_has_item.rate * Sum(sale_invoice_has_item.quantity) as 'value',  
+               sale_invoice_has_item.cost as 'cost'  
+               FROM  
+               sale_invoice_has_item  
+               INNER JOIN sale_invoice ON sale_invoice_has_item.sale_invoice_inv_no = sale_invoice.inv_no  
+               INNER JOIN item ON item.`code` = sale_invoice_has_item.item_code  
+               WHERE  
+               sale_invoice.inv_time BETWEEN $P{first_date} AND  $P{last_date}
+               GROUP BY sale_invoice_has_item.item_code ]]>
+	</queryString>
+	<field name="code" class="java.lang.String"/>
+	<field name="description" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="quantity" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="price" class="java.lang.Double"/>
+	<field name="value" class="java.lang.Double"/>
+	<field name="cost" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<variable name="value_1" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{value}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="26" splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="15" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="032af600-8b9a-4f65-bae9-e0042f2dc4c7" x="0" y="0" width="60" height="15"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Code]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="677cf7bc-a84d-4090-ab15-af4f5a3f5368" x="60" y="0" width="245" height="15"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Description]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="87525c8f-b4d2-4d2d-910a-1bb1a227fd4d" x="305" y="0" width="60" height="15"/>
+				<textElement textAlignment="Right">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Quantity]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="7ddff4fd-129c-41dc-995d-5f645675b330" x="365" y="0" width="60" height="15"/>
+				<textElement textAlignment="Right">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Price]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="eb393d01-fa5d-44e8-9403-21ede2f672f3" x="425" y="0" width="69" height="15"/>
+				<textElement textAlignment="Right">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Value]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="856fd877-f7a9-435f-b75c-9f48888f7889" x="494" y="0" width="60" height="15"/>
+				<textElement textAlignment="Right">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cost]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="d23c75e7-686a-4353-b96a-8ec017bb0962" x="425" y="0" width="1" height="15"/>
+			</line>
+			<line>
+				<reportElement uuid="3e68b770-93f7-4b3e-8be9-fc7ba4c90a02" x="493" y="0" width="1" height="15"/>
+			</line>
+			<line>
+				<reportElement uuid="d2ad8a49-8851-4cb0-84d8-9cd412cc3e47" x="554" y="0" width="1" height="15"/>
+			</line>
+			<line>
+				<reportElement uuid="c7d65027-002f-4f38-88dd-b65734fba435" x="365" y="0" width="1" height="15"/>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="15" splitType="Stretch">
+			<textField>
+				<reportElement uuid="f6483956-3245-46b6-8f4a-eb4a8f69bb04" x="0" y="0" width="60" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{code}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="c2ae1300-de6a-4b86-abe1-7eb3bf1424a3" x="60" y="0" width="245" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{description}]]></textFieldExpression>
+			</textField>
+			<textField pattern="##,###.00">
+				<reportElement uuid="d8ed069d-cbd8-46af-a8b4-94c49b71f8b6" x="305" y="0" width="60" height="15"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{quantity}]]></textFieldExpression>
+			</textField>
+			<textField pattern="##,###.00">
+				<reportElement uuid="fae96752-b486-460c-8d3c-e53bb3302a01" x="365" y="0" width="60" height="15"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{price}]]></textFieldExpression>
+			</textField>
+			<textField pattern="##,###.00">
+				<reportElement uuid="e9375d4c-769d-4aee-bcb0-a953058494c9" x="425" y="0" width="69" height="15"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{value}]]></textFieldExpression>
+			</textField>
+			<textField pattern="##,###.00">
+				<reportElement uuid="527bd23d-4d77-4f05-8682-0776f5e38ca0" x="494" y="0" width="60" height="15"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{cost}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement uuid="97fd9f10-15e3-4a76-a399-461f262e78e4" x="425" y="0" width="1" height="15"/>
+			</line>
+			<line>
+				<reportElement uuid="53980d26-6532-40c7-b3f7-6b1a27a28fde" x="365" y="0" width="1" height="15"/>
+			</line>
+			<line>
+				<reportElement uuid="c63f8f06-a115-4b4c-bfd3-329a891f0cf6" x="554" y="0" width="1" height="15"/>
+			</line>
+			<line>
+				<reportElement uuid="24f05478-8e3f-407e-a9a1-1f43b161604c" x="493" y="0" width="1" height="15"/>
+			</line>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="25" splitType="Stretch">
+			<textField pattern="##,###.00">
+				<reportElement uuid="2656ad4d-9508-4cb5-a8f5-a3b50cdbf020" x="455" y="0" width="100" height="20"/>
+				<textElement textAlignment="Right">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{value_1}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="af59ff7c-0b56-479b-b548-e2b770ef2379" x="398" y="0" width="57" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total Value:]]></text>
+			</staticText>
+		</band>
+	</summary>
+</jasperReport>
