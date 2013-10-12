@@ -67,7 +67,7 @@ public class BarPanel extends javax.swing.JPanel {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        itemCodeTextField = new javax.swing.JTextField();
+        qKeyTextField = new javax.swing.JTextField();
         itemDetailLabel = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         quantityTextField = new javax.swing.JTextField();
@@ -85,11 +85,11 @@ public class BarPanel extends javax.swing.JPanel {
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(BarPanel.class, "BarPanel.jLabel1.text")); // NOI18N
 
-        itemCodeTextField.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        itemCodeTextField.setText(org.openide.util.NbBundle.getMessage(BarPanel.class, "BarPanel.jTextField4.text")); // NOI18N
-        itemCodeTextField.addActionListener(new java.awt.event.ActionListener() {
+        qKeyTextField.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        qKeyTextField.setText(org.openide.util.NbBundle.getMessage(BarPanel.class, "BarPanel.jTextField4.text")); // NOI18N
+        qKeyTextField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                itemCodeTextFieldActionPerformed(evt);
+                qKeyTextFieldActionPerformed(evt);
             }
         });
 
@@ -183,7 +183,7 @@ public class BarPanel extends javax.swing.JPanel {
                                     .addComponent(jLabel3))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(itemCodeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(qKeyTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(quantityTextField))
                                 .addGap(18, 18, 18)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -205,7 +205,7 @@ public class BarPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(itemCodeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(qKeyTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4)
                     .addComponent(totalAmountTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(dateLabel))
@@ -243,19 +243,19 @@ public class BarPanel extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void itemCodeTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemCodeTextFieldActionPerformed
+    private void qKeyTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_qKeyTextFieldActionPerformed
         itemDetailLabel.setText("Item Detail");
-        String itemCodeText = itemCodeTextField.getText().trim();
-        showItemDetail(selectItem(itemCodeText));
-    }//GEN-LAST:event_itemCodeTextFieldActionPerformed
+        String qKeyText = qKeyTextField.getText().trim();
+        showItemDetail(selectItem(qKeyText));
+    }//GEN-LAST:event_qKeyTextFieldActionPerformed
 
     private void quantityTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_quantityTextFieldActionPerformed
-        String itemCodeText = itemCodeTextField.getText();
+        String itemCodeText = qKeyTextField.getText();
         String quantityText = quantityTextField.getText();
         if (quantityText.equals("")) {
-            itemCodeTextField.requestFocus();
-            itemCodeTextField.setSelectionStart(0);
-            itemCodeTextField.setSelectionEnd(itemCodeText.length());
+            qKeyTextField.requestFocus();
+            qKeyTextField.setSelectionStart(0);
+            qKeyTextField.setSelectionEnd(itemCodeText.length());
         }
         itemCodeText = itemCodeText.trim();
         quantityText = quantityText.trim();
@@ -270,7 +270,6 @@ public class BarPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_quantityTextFieldActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel dateLabel;
-    private javax.swing.JTextField itemCodeTextField;
     private javax.swing.JLabel itemDetailLabel;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
@@ -279,6 +278,7 @@ public class BarPanel extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextField qKeyTextField;
     private javax.swing.JTextField quantityTextField;
     private javax.swing.JTable table;
     private javax.swing.JTextField totalAmountTextField;
@@ -291,25 +291,21 @@ public class BarPanel extends javax.swing.JPanel {
             itemDetailLabel.setText(item.getDescription() + " [ " + nf2d.format(price) + " ]");
             quantityTextField.requestFocus();
         } else {
-            itemCodeTextField.setSelectionStart(0);
-            itemCodeTextField.setSelectionEnd(itemCodeTextField.getText().length());
+            qKeyTextField.setSelectionStart(0);
+            qKeyTextField.setSelectionEnd(qKeyTextField.getText().length());
         }
     }
 
-    private Item selectItem(String itemCodeText) {
+    private Item selectItem(String qKeyText) {
         for (Iterator<Item> it = items.iterator(); it.hasNext();) {
-            Item item = it.next();
-            String itemCode = item.getCode();
+            Item item = it.next();            
+            int qKey = item.getQkey()==null?-1:item.getQkey();
             try {
-                int itemCodeint = Integer.parseInt(itemCode);
-                int itemCodeTextint = Integer.parseInt(itemCodeText);
-                if (itemCodeint == itemCodeTextint) {
+                int qKeyInt = Integer.parseInt(qKeyText);
+                if (qKey == qKeyInt) {
                     return (item);
                 }
             } catch (Exception e) {
-            }
-            if (itemCode.equalsIgnoreCase(itemCodeText)) {
-                return (item);
             }
         }
         return null;
@@ -321,7 +317,9 @@ public class BarPanel extends javax.swing.JPanel {
         String ReceiptNumber = Data.getReceiptNo();
         double price = item.getPriceList().getSellingPack();
         double amount = price * quantity;
-        String message = "<html><center> <h2> [  " + item.getDescription() + "  ]<br/> " + nf2d.format(quantity) + " X " + nf2d.format(price) + "<br/>  " + nf2d.format(amount) + " </h2></center></html>";
+        
+        String message = "<html><center> <h2> [  " + item.getDescription() + "  ]<br/> " + nf2d.format(price)  + " X " + nf2d.format(quantity)+ "<br/>  " + nf2d.format(amount) + " </h2></center></html>";
+        
         int option = JOptionPane.showConfirmDialog(itemDetailLabel, message, nf2d.format(amount), JOptionPane.YES_NO_OPTION);
         if (option != JOptionPane.OK_OPTION) {
             clearFields();
@@ -445,9 +443,9 @@ public class BarPanel extends javax.swing.JPanel {
     }
 
     private void clearFields() {
-        itemCodeTextField.setText("");
+        qKeyTextField.setText("");
         quantityTextField.setText("");
         itemDetailLabel.setText("Item Detail");
-        itemCodeTextField.requestFocus();
+        qKeyTextField.requestFocus();
     }
 }
