@@ -6,11 +6,14 @@ package com.nanosl.nbiz.gui.report;
 
 import com.nanosl.lib.date.JXDatePicker;
 import com.nanosl.nbiz.util.Combo;
+import static com.nanosl.nbiz.util.Format.nf2d;
+import static com.nanosl.nbiz.util.Format.yyyy_MM_dd;
 import query.Find;
 import com.nanosl.nbiz.util.NTopComponent;
 import entity.Item;
 import entity.PurchaseInvoiceHasItem;
 import entity.SaleInvoiceHasItem;
+import entity.StockTransfer;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -104,13 +107,16 @@ public final class ItemMovementTopComponent extends NTopComponent {
 
             },
             new String [] {
-                "Date", "Quantity"
+                "Date", "Quantity", "Source"
             }
         ));
         jScrollPane2.setViewportView(issueTable);
+        issueTable.getColumnModel().getColumn(0).setPreferredWidth(50);
         issueTable.getColumnModel().getColumn(0).setHeaderValue(org.openide.util.NbBundle.getMessage(ItemMovementTopComponent.class, "ItemMovementTopComponent.issueTable.columnModel.title0")); // NOI18N
+        issueTable.getColumnModel().getColumn(1).setPreferredWidth(50);
         issueTable.getColumnModel().getColumn(1).setHeaderValue(org.openide.util.NbBundle.getMessage(ItemMovementTopComponent.class, "ItemMovementTopComponent.issueTable.columnModel.title1")); // NOI18N
         issueTable.getColumnModel().getColumn(1).setCellRenderer(rightAlignCell);
+        issueTable.getColumnModel().getColumn(2).setHeaderValue(org.openide.util.NbBundle.getMessage(ItemMovementTopComponent.class, "ItemMovementTopComponent.issueTable.columnModel.title2")); // NOI18N
 
         org.openide.awt.Mnemonics.setLocalizedText(totalReceiveLabel, org.openide.util.NbBundle.getMessage(ItemMovementTopComponent.class, "ItemMovementTopComponent.totalReceiveLabel.text")); // NOI18N
 
@@ -274,6 +280,7 @@ public final class ItemMovementTopComponent extends NTopComponent {
         Date endDate = endDatePicker.getDate();
 
         List<SaleInvoiceHasItem> saleInvoiceHasItems = Find.saleInvoiceItemsByItemAndDates(item, startDate, endDate);
+        List<StockTransfer> stockTransfers = Find.stockTransferItemsByItemAndDates(item, startDate, endDate);
 // Add stocktransfer tracking
         double totIssues = 0;
         for (Iterator<SaleInvoiceHasItem> it = saleInvoiceHasItems.iterator(); it.hasNext();) {
@@ -282,9 +289,22 @@ public final class ItemMovementTopComponent extends NTopComponent {
             totIssues += qty;
             Object[] row = {
                 yyyy_MM_dd.format(saleInvoiceHasItem.getSaleInvoice().getInvTime()),
-                nf2d.format(qty)
+                nf2d.format(qty),
+                "Sale"
             };
             issueTableModel.addRow(row);
+        }
+        for (Iterator<StockTransfer> it = stockTransfers.iterator(); it.hasNext();) {
+            StockTransfer stockTransfer = it.next();
+            double qty = stockTransfer.getQuantity();
+            totIssues += qty;
+            Object[] row = {
+                yyyy_MM_dd.format(stockTransfer.getStockTransferPK().getTransferDate()),
+                nf2d.format(qty),
+                "Transfer"
+            };
+            issueTableModel.addRow(row);
+            
         }
         totalIssueLabel.setText(nf2d.format(totIssues));
         ///////////////////////////////////////
