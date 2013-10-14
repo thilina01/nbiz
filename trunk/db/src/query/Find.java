@@ -16,6 +16,7 @@ import entity.SaleInvoice;
 import entity.SaleInvoiceHasItem;
 import entity.SrSalesPayments;
 import entity.Stock;
+import entity.StockTransfer;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
@@ -52,6 +53,7 @@ import javax.persistence.Table;
     @NamedQuery(name = "CollectionReceipt.findByDates", query = "SELECT c FROM CollectionReceipt c WHERE c.collectedTime BETWEEN :startDate AND :endDate"),
     @NamedQuery(name = "IssuedCheque.findByDates", query = "SELECT i FROM IssuedCheque i WHERE i.issuedDate BETWEEN :startDate AND :endDate"),
     @NamedQuery(name = "SaleCheque.findByBankingDates", query = "SELECT s FROM SaleCheque s WHERE s.bankingDate BETWEEN :startDate AND :endDate"),
+    @NamedQuery(name = "StockTransfer.findByItemAndTransferDates", query = "SELECT s FROM StockTransfer s WHERE s.stockTransferPK.itemCode = :item AND s.stockTransferPK.transferDate BETWEEN :startDate AND :endDate"),
     @NamedQuery(name = "SrSalesPayments.findByStatusAndEmployee", query = "SELECT s FROM SrSalesPayments s WHERE s.status = :status AND s.employee = :employee")
 })
 public class Find implements Serializable {
@@ -157,6 +159,14 @@ public class Find implements Serializable {
         return man.exNamedQueryParamResult(qry);
     }
 
+    public static List<StockTransfer> stockTransferItemsByItemAndDates(Item item, Date startDate, Date endDate) {
+        Query qry = man.getEm().createNamedQuery("StockTransfer.findByItemAndTransferDates");
+        qry.setParameter("item", item.getCode());
+        qry.setParameter("startDate", startDate);
+        qry.setParameter("endDate", endDate);
+        return man.exNamedQueryParamResult(qry);
+    }
+
     public static List<PurchaseInvoiceHasItem> PurchaseInvoiceHasItemByItemAndDates(Item item, Date startDate, Date endDate) {
         Query qry = man.getEm().createNamedQuery("PurchaseInvoiceHasItem.findByItemndInvDates");
         qry.setParameter("item", item);
@@ -172,6 +182,7 @@ public class Find implements Serializable {
         qry.setParameter("endDate", endDate);
         return man.exNamedQueryParamResult(qry);
     }
+    
     @Id
     private Long id;
     private static Manager man = Manager.getInstance();
