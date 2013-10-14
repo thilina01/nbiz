@@ -191,8 +191,8 @@ public final class ItemSalesReportTopComponent extends NTopComponent {
     private void printButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_printButtonActionPerformed
         PrintTopComponent tc = (PrintTopComponent) WindowManager.getDefault().findTopComponent("TestTopComponent");
         HashMap parameters = new HashMap();
-        parameters.put("first_date", yyyy_MM_dd.format(startDatePicker.getDate()));
-        parameters.put("last_date", yyyy_MM_dd.format(endDatePicker.getDate()));
+        parameters.put("first_date", yyyy_MM_dd.format(startDatePicker.getDate())+ " 00:00:00");
+        parameters.put("last_date", yyyy_MM_dd.format(endDatePicker.getDate())+ " 23:59:59");
         tc.print("itemSalesReport", parameters);
         tc.open();
         tc.requestActive();
