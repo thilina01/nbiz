@@ -7,11 +7,13 @@ package com.nanosl.nbiz.gui.report;
 import com.nanosl.lib.date.JXDatePicker;
 import com.nanosl.nbiz.util.FindMySql;
 import static com.nanosl.nbiz.util.Format.nf2d;
+import static com.nanosl.nbiz.util.Format.yyyy_MM_dd;
 import com.nanosl.nbiz.util.NTopComponent;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import javax.swing.table.DefaultTableModel;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
@@ -19,6 +21,7 @@ import org.openide.awt.ActionReference;
 import org.openide.util.Exceptions;
 import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
+import org.openide.windows.WindowManager;
 
 /**
  * Top component which displays something.
@@ -186,8 +189,13 @@ public final class ItemSalesReportTopComponent extends NTopComponent {
     }//GEN-LAST:event_endDatePickerActionPerformed
 
     private void printButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_printButtonActionPerformed
-//        PrintProvider[] providers = new PrintProvider[]{new TextProvider("Hello"), new TextProvider("Nano"), new TextProvider("Creations"),};
-//        PrintManager.printAction(providers);
+        PrintTopComponent tc = (PrintTopComponent) WindowManager.getDefault().findTopComponent("TestTopComponent");
+        HashMap parameters = new HashMap();
+        parameters.put("first_date", yyyy_MM_dd.format(startDatePicker.getDate()));
+        parameters.put("last_date", yyyy_MM_dd.format(endDatePicker.getDate()));
+        tc.print("itemSalesReport", parameters);
+        tc.open();
+        tc.requestActive();
     }//GEN-LAST:event_printButtonActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.jdesktop.swingx.JXDatePicker endDatePicker;
