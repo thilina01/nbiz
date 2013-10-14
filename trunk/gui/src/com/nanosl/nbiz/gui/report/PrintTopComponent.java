@@ -39,15 +39,15 @@ import org.openide.util.NbBundle.Messages;
         displayName = "#CTL_TestAction",
         preferredID = "TestTopComponent")
 @Messages({
-    "CTL_TestAction=Test",
-    "CTL_TestTopComponent=Test Window",
-    "HINT_TestTopComponent=This is a Test window"
+    "CTL_TestAction=Print",
+    "CTL_TestTopComponent=Print Window",
+    "HINT_TestTopComponent=This is a Print window"
 })
-public final class TestTopComponent extends TopComponent {
+public final class PrintTopComponent extends TopComponent {
 
     JRViewer jRViewer;
 
-    public TestTopComponent() {
+    public PrintTopComponent() {
         initComponents();
         setName(Bundle.CTL_TestTopComponent());
         setToolTipText(Bundle.HINT_TestTopComponent());
@@ -84,7 +84,7 @@ public final class TestTopComponent extends TopComponent {
 
         //jPanel1 = jRViewer;
 
-        org.openide.awt.Mnemonics.setLocalizedText(jButton1, org.openide.util.NbBundle.getMessage(TestTopComponent.class, "TestTopComponent.jButton1.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(jButton1, org.openide.util.NbBundle.getMessage(PrintTopComponent.class, "PrintTopComponent.jButton1.text")); // NOI18N
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -141,6 +141,18 @@ public final class TestTopComponent extends TopComponent {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
+
+    public void print(String fileName, Map parameters) {
+        try {
+            URL url = getClass().getResource("/com/nanosl/nbiz/gui/jrxml/" + fileName + ".jasper");
+            JasperReport report = (JasperReport) JRLoader.loadObject(url);//"src/com/nanosl/nbiz/gui/jrxml/report1.jasper"
+
+            JasperPrint jasperPrint = JasperFillManager.fillReport(report, parameters, Manager.getInstance().getConnection());
+            jScrollPane1.setViewportView(new JRViewer(jasperPrint));
+        } catch (JRException ex) {
+            Exceptions.printStackTrace(ex);
+        }
+    }
 
     @Override
     public void componentOpened() {
