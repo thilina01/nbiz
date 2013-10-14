@@ -108,6 +108,7 @@ public final class CustomerTopComponent extends NTopComponent {
             }
         });
         masterScrollPane.setViewportView(masterTable);
+        masterTable.getColumnModel().getColumn(0).setPreferredWidth(30);
         masterTable.getColumnModel().getColumn(0).setHeaderValue(org.openide.util.NbBundle.getMessage(CustomerTopComponent.class, "CustomerTopComponent.masterTable.columnModel.title0")); // NOI18N
         masterTable.getColumnModel().getColumn(1).setHeaderValue(org.openide.util.NbBundle.getMessage(CustomerTopComponent.class, "CustomerTopComponent.masterTable.columnModel.title1")); // NOI18N
         masterTable.getColumnModel().getColumn(2).setPreferredWidth(300);

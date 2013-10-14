@@ -142,12 +142,22 @@ public final class RepSaleTopComponent extends NTopComponent {
                 repComboBoxActionPerformed(evt);
             }
         });
+        repComboBox.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                repComboBoxKeyPressed(evt);
+            }
+        });
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(RepSaleTopComponent.class, "RepSaleTopComponent.jLabel1.text")); // NOI18N
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel2, org.openide.util.NbBundle.getMessage(RepSaleTopComponent.class, "RepSaleTopComponent.jLabel2.text")); // NOI18N
 
         itemComboBox.setName("itemComboBox"); // NOI18N
+        itemComboBox.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                itemComboBoxKeyPressed(evt);
+            }
+        });
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel3, org.openide.util.NbBundle.getMessage(RepSaleTopComponent.class, "RepSaleTopComponent.jLabel3.text")); // NOI18N
 
@@ -263,6 +273,15 @@ public final class RepSaleTopComponent extends NTopComponent {
     private void processButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_processButtonActionPerformed
         process();
     }//GEN-LAST:event_processButtonActionPerformed
+
+    private void repComboBoxKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_repComboBoxKeyPressed
+            fillTable();
+    }//GEN-LAST:event_repComboBoxKeyPressed
+
+    private void itemComboBoxKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_itemComboBoxKeyPressed
+             fillTable();
+    }//GEN-LAST:event_itemComboBoxKeyPressed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox itemComboBox;
     private javax.swing.JLabel jLabel1;
@@ -432,13 +451,13 @@ public final class RepSaleTopComponent extends NTopComponent {
     KeyAdapter itemComboBoxKeyAdapter = new java.awt.event.KeyAdapter() {
         @Override
         public void keyPressed(KeyEvent evt) {
-            itemComboBoxKeyAdapter.keyPressed(evt);
+            itemComboBoxKeyPressed(evt);
         }
     };
     KeyAdapter repComboBoxKeyAdapter = new java.awt.event.KeyAdapter() {
         @Override
         public void keyPressed(KeyEvent evt) {
-            repComboBoxKeyAdapter.keyPressed(evt);
+            repComboBoxKeyPressed(evt);
         }
     };
 

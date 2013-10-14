@@ -254,6 +254,7 @@ public final class SelingPriceChangeTopComponent extends NTopComponent {
         initComponents();
         // AutoCompleteDecorator.decorate(itemComboBox);
         tableModel = (DefaultTableModel) table.getModel();
+        table.setDefaultRenderer(Object.class, coloredCellRenderer);
     }
 
     @Override
@@ -369,7 +370,7 @@ public final class SelingPriceChangeTopComponent extends NTopComponent {
 
     @Override
     public void componentOpened() {
-    itemComboBox.requestFocus();
+        itemComboBox.requestFocus();
     }
 
     @Override
