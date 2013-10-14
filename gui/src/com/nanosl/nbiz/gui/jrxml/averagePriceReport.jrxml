@@ -1,29 +1,110 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE jasperReport PUBLIC "-//JasperReports//DTD JasperReport//EN" "http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
-
-<jasperReport name="report name" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
-    <background>
-        <band/>
-    </background>
-    <title>
-        <band height="79"/>
-    </title>
-    <pageHeader>
-        <band height="35"/>
-    </pageHeader>
-    <columnHeader>
-        <band height="61"/>
-    </columnHeader>
-    <detail>
-        <band height="125"/>
-    </detail>
-    <columnFooter>
-        <band height="45"/>
-    </columnFooter>
-    <pageFooter>
-        <band height="54"/>
-    </pageFooter>
-    <summary>
-        <band height="42"/>
-    </summary>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="2aeb321e-b80c-45a8-a6e0-332c3d864c74">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="start_date" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="end_date" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+purchase_invoice_has_item.item_code AS `Code`,
+item.description AS "Description",
+Min(purchase_invoice_has_item.cost) AS "Min Cost",
+Max(purchase_invoice_has_item.cost) AS "Max Cost",
+Avg(purchase_invoice_has_item.cost) AS "Average Cost"
+FROM
+purchase_invoice_has_item
+INNER JOIN purchase_invoice ON purchase_invoice_has_item.purchase_invoice_supplier_code = purchase_invoice.supplier_code AND purchase_invoice_has_item.purchase_invoice_inv_no = purchase_invoice.inv_no
+INNER JOIN item ON purchase_invoice_has_item.item_code = item.`code`
+WHERE 
+purchase_invoice.inv_date BETWEEN $P{start_date} AND $P{end_date}
+GROUP BY  purchase_invoice_has_item.item_code]]>
+	</queryString>
+	<field name="Code" class="java.lang.String"/>
+	<field name="Description" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Min Cost" class="java.lang.Double"/>
+	<field name="Max Cost" class="java.lang.Double"/>
+	<field name="Average Cost" class="java.lang.Double"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="34" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="21" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="c5a5a854-217e-409d-aaf1-73ed36ae1402" x="0" y="0" width="111" height="20"/>
+				<textElement/>
+				<text><![CDATA[Code]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="f4bdcb91-b598-488a-859c-0e3ace927e06" x="111" y="0" width="111" height="20"/>
+				<textElement/>
+				<text><![CDATA[Description]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="08d5d06d-c733-4c83-bef5-4339be1691cc" x="222" y="0" width="111" height="20"/>
+				<textElement/>
+				<text><![CDATA[Min Cost]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="ec01be1e-96eb-4a8e-b1f1-6f529cad3594" x="333" y="0" width="111" height="20"/>
+				<textElement/>
+				<text><![CDATA[Max Cost]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="239c5bd1-12bb-4a55-8319-d293964297c2" x="444" y="0" width="111" height="20"/>
+				<textElement/>
+				<text><![CDATA[Average Cost]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="21" splitType="Stretch">
+			<textField>
+				<reportElement uuid="a68aff24-a51f-4353-9266-d2b1a4739d54" x="0" y="0" width="111" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{Code}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="6144544b-2988-46ad-9794-a73dee1e993b" x="111" y="0" width="111" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{Description}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="1366de07-6f73-425a-94ce-2be02e5a1a6f" x="222" y="0" width="111" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{Min Cost}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="d9d67b5a-769c-4135-bcf6-fa63653292d0" x="333" y="0" width="111" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{Max Cost}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="61ebb589-efa7-4eb6-87dc-6e7462fe72d3" x="444" y="0" width="111" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{Average Cost}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
 </jasperReport>
