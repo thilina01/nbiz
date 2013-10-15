@@ -6,14 +6,22 @@ package com.nanosl.nbiz.gui;
 
 import com.nanosl.nbiz.util.Data;
 import com.nanosl.nbiz.util.NTopComponent;
+import com.nanosl.nbiz.util.PrintViewTopComponent;
 import com.nanosl.nbiz.util.Printer;
+import java.net.URL;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.util.JRLoader;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
+import org.openide.util.Exceptions;
 import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
+import org.openide.windows.WindowManager;
 
 /**
  * Top component which displays something.
@@ -169,9 +177,30 @@ public final class FindInvoiceTopComponent extends NTopComponent {
 
     private void printInvoice() {
         String invoiceNumber = invoiceNumberTextField.getText().trim();
-        Map<String, Object> params = Data.getParams();
-        params.put("invoice", invoiceNumber);
-        Printer.printInvoice(params);
+        Map<String, Object> parameters = Data.getParams();
+        parameters.put("invoice", invoiceNumber);
+//        Printer.printInvoice(params);
+        try {
+            PrintViewTopComponent tc = (PrintViewTopComponent) WindowManager.getDefault().findTopComponent("PrintViewTopComponent");
+            URL url = getClass().getResource("/com/nanosl/nbiz/gui/jrxml/" + "Invoice1" + ".jasper");
+            //            URL url = getClass().getResource("/com/nanosl/nbiz/gui/jrxml/" + fileName + ".jasper");
+            JasperReport report = (JasperReport) JRLoader.loadObject(url);//"src/com/nanosl/nbiz/gui/jrxml/report1.jasper"
+            tc.print(report, parameters);
+            tc.open();
+            tc.requestActive();
+            //                try {
+            //                    String reportSource = "src/rpt/invoice1.jrxml";
+            //                    
+            //                    JasperReport jasperReport = JasperCompileManager.compileReport(reportSource);
+            //                    Connection con = m.getConnection();
+            //                    JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, params, con);
+            //                    JRViewer jRViewer = new JRViewer(jasperPrint, "Invoice");
+            //                } catch (Exception ex) {
+            //                }
+            //                }
+        } catch (JRException ex) {
+            Exceptions.printStackTrace(ex);
+        }
     }
 
     @Override
