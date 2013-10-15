@@ -9,6 +9,9 @@ import com.nanosl.nbiz.util.FindMySql;
 import static com.nanosl.nbiz.util.Format.nf2d;
 import static com.nanosl.nbiz.util.Format.yyyy_MM_dd;
 import com.nanosl.nbiz.util.NTopComponent;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Calendar;
@@ -61,6 +64,7 @@ public final class ItemSalesReportTopComponent extends NTopComponent {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jFileChooser1 = new javax.swing.JFileChooser();
         jPanel1 = new javax.swing.JPanel();
         startDatePicker = new JXDatePicker();
         jLabel3 = new javax.swing.JLabel();
@@ -69,6 +73,7 @@ public final class ItemSalesReportTopComponent extends NTopComponent {
         jScrollPane1 = new javax.swing.JScrollPane();
         table = new javax.swing.JTable();
         printButton = new javax.swing.JButton();
+        exportButton = new javax.swing.JButton();
 
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
@@ -125,6 +130,13 @@ public final class ItemSalesReportTopComponent extends NTopComponent {
             }
         });
 
+        org.openide.awt.Mnemonics.setLocalizedText(exportButton, org.openide.util.NbBundle.getMessage(ItemSalesReportTopComponent.class, "ItemSalesReportTopComponent.exportButton.text")); // NOI18N
+        exportButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                exportButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -143,6 +155,8 @@ public final class ItemSalesReportTopComponent extends NTopComponent {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(endDatePicker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(exportButton)
+                        .addGap(18, 18, 18)
                         .addComponent(printButton)))
                 .addContainerGap())
         );
@@ -154,7 +168,8 @@ public final class ItemSalesReportTopComponent extends NTopComponent {
                     .addComponent(startDatePicker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3)
                     .addComponent(endDatePicker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(printButton))
+                    .addComponent(printButton)
+                    .addComponent(exportButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 486, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -191,14 +206,20 @@ public final class ItemSalesReportTopComponent extends NTopComponent {
     private void printButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_printButtonActionPerformed
         PrintTopComponent tc = (PrintTopComponent) WindowManager.getDefault().findTopComponent("TestTopComponent");
         HashMap parameters = new HashMap();
-        parameters.put("first_date", yyyy_MM_dd.format(startDatePicker.getDate())+ " 00:00:00");
-        parameters.put("last_date", yyyy_MM_dd.format(endDatePicker.getDate())+ " 23:59:59");
+        parameters.put("first_date", yyyy_MM_dd.format(startDatePicker.getDate()) + " 00:00:00");
+        parameters.put("last_date", yyyy_MM_dd.format(endDatePicker.getDate()) + " 23:59:59");
         tc.print("itemSalesReport", parameters);
         tc.open();
         tc.requestActive();
     }//GEN-LAST:event_printButtonActionPerformed
+
+    private void exportButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportButtonActionPerformed
+        export();
+    }//GEN-LAST:event_exportButtonActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.jdesktop.swingx.JXDatePicker endDatePicker;
+    private javax.swing.JButton exportButton;
+    private javax.swing.JFileChooser jFileChooser1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
@@ -300,5 +321,24 @@ public final class ItemSalesReportTopComponent extends NTopComponent {
         calendar.set(Calendar.SECOND, 59);
         calendar.set(Calendar.MILLISECOND, 900);
         return calendar.getTime();
+    }
+
+    private void export() {
+        Date startDate = getStartDate(startDatePicker.getDate());
+        Date endDate = getEndDate(endDatePicker.getDate());
+        ResultSet resultSet = FindMySql.itemTotalSaleBetweenDates(startDate, endDate);
+        jFileChooser1.setVisible(true);
+        try {
+            FileOutputStream fileOut =
+                    new FileOutputStream("C:/Users/Public/Documents/list.ser");
+            ObjectOutputStream out = new ObjectOutputStream(fileOut);
+            out.writeObject(resultSet);
+            out.close();
+            fileOut.close();
+            System.out.printf("Serialized data is saved in C:/Users/Public/Documents/list.ser");
+            Runtime.getRuntime().exec("explorer C:/Users/Public/Documents/");
+        } catch (IOException i) {
+            i.printStackTrace();
+        }
     }
 }

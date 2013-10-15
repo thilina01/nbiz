@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="576" pageHeight="360" orientation="Landscape" columnWidth="536" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+    <property name="ireport.zoom" value="1.5"/>
+    <property name="ireport.x" value="74"/>
+    <property name="ireport.y" value="0"/>
+    <parameter name="company" class="java.lang.String"/>
+    <parameter name="desc1" class="java.lang.String"/>
+    <parameter name="desc2" class="java.lang.String"/>
+    <parameter name="phone1" class="java.lang.String"/>
+    <parameter name="phone2" class="java.lang.String"/>
+    <parameter name="fax" class="java.lang.String"/>
+    <parameter name="add1" class="java.lang.String"/>
+    <parameter name="add2" class="java.lang.String"/>
+    <parameter name="add3" class="java.lang.String"/>
+    <parameter name="ctiy" class="java.lang.String"/>
+    <parameter name="idate" class="java.lang.String"/>
+    <parameter name="customer" class="java.lang.String"/>
+    <parameter name="cusAdd1" class="java.lang.String"/>
+    <parameter name="cusAdd2" class="java.lang.String"/>
+    <parameter name="cusCity" class="java.lang.String"/>
+    <parameter name="total" class="java.lang.String"/>
+    <parameter name="discount" class="java.lang.String"/>
+    <parameter name="net" class="java.lang.String"/>
+    <parameter name="operator" class="java.lang.String"/>
+    <parameter name="invoice" class="java.lang.String"/>
+    <parameter name="cusPhone1" class="java.lang.String"/>
+    <parameter name="cusPhone2" class="java.lang.String"/>
+    <parameter name="email" class="java.lang.String"/>
+    <parameter name="discount_4" class="java.lang.String"/>
+    <background>
+        <band splitType="Stretch"/>
+    </background>
+    <title>
+        <band height="110" splitType="Stretch">
+            <textField>
+                <reportElement x="8" y="2" width="516" height="31"/>
+                <textElement textAlignment="Center">
+                    <font size="24"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$P{company}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="46" y="34" width="100" height="15"/>
+                <textElement/>
+                <textFieldExpression><![CDATA[$P{add1}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="46" y="49" width="100" height="15"/>
+                <textElement/>
+                <textFieldExpression><![CDATA[$P{phone1}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="46" y="64" width="100" height="15"/>
+                <textElement/>
+                <textFieldExpression><![CDATA[$P{fax}]]></textFieldExpression>
+            </textField>
+            <staticText>
+                <reportElement x="8" y="34" width="30" height="15"/>
+                <textElement/>
+                <text><![CDATA[No :]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="8" y="49" width="30" height="15"/>
+                <textElement/>
+                <text><![CDATA[Tel :]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="8" y="64" width="31" height="15"/>
+                <textElement/>
+                <text><![CDATA[Fax :]]></text>
+            </staticText>
+            <textField>
+                <reportElement x="292" y="34" width="232" height="15"/>
+                <textElement/>
+                <textFieldExpression><![CDATA[$P{desc1}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="292" y="49" width="232" height="15"/>
+                <textElement/>
+                <textFieldExpression><![CDATA[$P{desc2}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="78" y="77" width="299" height="15"/>
+                <textElement/>
+                <textFieldExpression><![CDATA[$P{customer}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="78" y="93" width="458" height="15"/>
+                <textElement/>
+                <textFieldExpression><![CDATA[$P{cusAdd1}]]></textFieldExpression>
+            </textField>
+            <staticText>
+                <reportElement x="0" y="93" width="75" height="15"/>
+                <textElement/>
+                <text><![CDATA[Address :]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="0" y="77" width="75" height="15"/>
+                <textElement/>
+                <text><![CDATA[Name :]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="390" y="77" width="55" height="15"/>
+                <textElement/>
+                <text><![CDATA[Date :]]></text>
+            </staticText>
+            <textField>
+                <reportElement x="447" y="77" width="89" height="15"/>
+                <textElement/>
+                <textFieldExpression><![CDATA[$P{idate}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="169" y="44" width="100" height="20"/>
+                <textElement>
+                    <font isBold="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$P{invoice}]]></textFieldExpression>
+            </textField>
+        </band>
+    </title>
+    <pageHeader>
+        <band splitType="Stretch"/>
+    </pageHeader>
+    <columnHeader>
+        <band splitType="Stretch"/>
+    </columnHeader>
+    <detail>
+        <band height="133" splitType="Stretch"/>
+    </detail>
+    <columnFooter>
+        <band height="47" splitType="Stretch">
+            <textField>
+                <reportElement x="402" y="0" width="134" height="15"/>
+                <textElement textAlignment="Right"/>
+                <textFieldExpression><![CDATA[$P{total}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="402" y="16" width="134" height="15"/>
+                <textElement textAlignment="Right"/>
+                <textFieldExpression><![CDATA[$P{discount}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="402" y="31" width="134" height="15"/>
+                <textElement textAlignment="Right"/>
+                <textFieldExpression><![CDATA[$P{net}]]></textFieldExpression>
+            </textField>
+            <staticText>
+                <reportElement x="344" y="0" width="58" height="15"/>
+                <textElement/>
+                <text><![CDATA[Sub Total:]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="344" y="16" width="58" height="15"/>
+                <textElement/>
+                <text><![CDATA[Discount:]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="344" y="31" width="58" height="15"/>
+                <textElement/>
+                <text><![CDATA[Net Total:]]></text>
+            </staticText>
+        </band>
+    </columnFooter>
+    <pageFooter>
+        <band splitType="Stretch"/>
+    </pageFooter>
+    <summary>
+        <band splitType="Stretch"/>
+    </summary>
+</jasperReport>

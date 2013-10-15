@@ -45,7 +45,7 @@ import org.openide.util.NbBundle.Messages;
 })
 public final class PrintTopComponent extends TopComponent {
 
-    JRViewer jRViewer;
+//    JRViewer jRViewer;
 
     public PrintTopComponent() {
         initComponents();
@@ -100,7 +100,7 @@ public final class PrintTopComponent extends TopComponent {
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
-    int i = 0;
+//    int i = 0;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
