@@ -7,6 +7,8 @@ import entity.Operator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import javax.swing.JOptionPane;
+import org.openide.windows.TopComponent;
+import org.openide.windows.WindowManager;
 //import ui.CompanyView;
 
 /**
@@ -110,6 +112,9 @@ public class Data {
             params.put("web", company.getWeb());
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Update Your Company Information");
+            TopComponent tc =  WindowManager.getDefault().findTopComponent("CompanyTopComponent");
+            tc.open();
+            tc.requestActive();
 //            CompanyView.display();
         }
         return params;
