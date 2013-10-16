@@ -5,12 +5,11 @@
 package com.nanosl.nbiz.gui.report;
 
 import com.nanosl.lib.date.JXDatePicker;
-import query.Find;
+import com.nanosl.nbiz.util.FindMySql;
 import com.nanosl.nbiz.util.NTopComponent;
-import entity.SaleInvoice;
-import java.util.Collection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Date;
-import java.util.Iterator;
 import javax.swing.table.DefaultTableModel;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
@@ -76,19 +75,34 @@ public final class SalesReportTopComponent extends NTopComponent {
             new String [] {
                 "Item", "Sold Quantity", "Sold Price", "Income", "Item Cost", "Total Cost", "Profit"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane1.setViewportView(table);
+        table.getColumnModel().getColumn(0).setPreferredWidth(400);
         table.getColumnModel().getColumn(0).setHeaderValue(org.openide.util.NbBundle.getMessage(SalesReportTopComponent.class, "SalesReportTopComponent.table.columnModel.title0")); // NOI18N
+        table.getColumnModel().getColumn(1).setPreferredWidth(50);
         table.getColumnModel().getColumn(1).setHeaderValue(org.openide.util.NbBundle.getMessage(SalesReportTopComponent.class, "SalesReportTopComponent.table.columnModel.title1")); // NOI18N
         table.getColumnModel().getColumn(1).setCellRenderer(rightAlignCell);
+        table.getColumnModel().getColumn(2).setPreferredWidth(50);
         table.getColumnModel().getColumn(2).setHeaderValue(org.openide.util.NbBundle.getMessage(SalesReportTopComponent.class, "SalesReportTopComponent.table.columnModel.title2")); // NOI18N
         table.getColumnModel().getColumn(2).setCellRenderer(rightAlignCell);
+        table.getColumnModel().getColumn(3).setPreferredWidth(50);
         table.getColumnModel().getColumn(3).setHeaderValue(org.openide.util.NbBundle.getMessage(SalesReportTopComponent.class, "SalesReportTopComponent.table.columnModel.title3")); // NOI18N
         table.getColumnModel().getColumn(3).setCellRenderer(rightAlignCell);
+        table.getColumnModel().getColumn(4).setPreferredWidth(50);
         table.getColumnModel().getColumn(4).setHeaderValue(org.openide.util.NbBundle.getMessage(SalesReportTopComponent.class, "SalesReportTopComponent.table.columnModel.title4")); // NOI18N
         table.getColumnModel().getColumn(4).setCellRenderer(rightAlignCell);
+        table.getColumnModel().getColumn(5).setPreferredWidth(50);
         table.getColumnModel().getColumn(5).setHeaderValue(org.openide.util.NbBundle.getMessage(SalesReportTopComponent.class, "SalesReportTopComponent.table.columnModel.title5")); // NOI18N
         table.getColumnModel().getColumn(5).setCellRenderer(rightAlignCell);
+        table.getColumnModel().getColumn(6).setPreferredWidth(50);
         table.getColumnModel().getColumn(6).setHeaderValue(org.openide.util.NbBundle.getMessage(SalesReportTopComponent.class, "SalesReportTopComponent.table.columnModel.title6")); // NOI18N
         table.getColumnModel().getColumn(6).setCellRenderer(rightAlignCell);
 
@@ -191,23 +205,66 @@ public final class SalesReportTopComponent extends NTopComponent {
     DefaultTableModel tableModel;
 
     private void fillTable() {
-        tableModel.setRowCount(0);
-        Date startDate = startDatePicker.getDate();
-        Date endDate = endDatePicker.getDate();
-        //ALTER TABLE `sgm`.`purchase_invoice` CHANGE COLUMN `inv_time` `inv_date` DATE NULL DEFAULT NULL  ;
+       try {
+            tableModel.setRowCount(0);
+            totalProfitLabel.setText(nf2d.format(0));
+            Date startDate = startDatePicker.getDate();
+            Date endDate = endDatePicker.getDate();
+            double totalProfit = 0;
+            ///////////////////////
 
-        Collection<SaleInvoice> saleInvoices = Find.saleInvoicesByDates(startDate, endDate);
-        if (saleInvoices == null) {
-            showError("No Record Found!");
-            return;
+            ResultSet res = FindMySql.saleItemProfitBetweenDates(startDate, endDate);
+            while (res.next()) {
+                String code = res.getString("Code");
+                String item = res.getString("Item");
+
+                double qty = res.getDouble("Quantity");
+                double rate = res.getDouble("Rate");
+                double income = res.getDouble("Income");
+                double itemCost = res.getDouble("Item Cost");
+                double totalCost = res.getDouble("Total Cost");
+                double profit = res.getDouble("Profit");
+                totalProfit += profit;
+                Object[] row = {
+                    code + " " + item,
+                    nf2d.format(qty),
+                    nf2d.format(rate),
+                    nf2d.format(income),
+                    nf2d.format(itemCost),
+                    nf2d.format(totalCost),
+                    nf2d.format(profit)
+                };
+                tableModel.addRow(row);
+                totalProfitLabel.setText(nf2d.format(totalProfit));
+            }
+            FindMySql.close();
+            ///////////////////////
+//            List<SaleInvoiceHasItem> saleInvoiceHasItems = Find.saleInvoiceItemsByDates(startDate, endDate);
+//
+//            for (Iterator<SaleInvoiceHasItem> it = saleInvoiceHasItems.iterator(); it.hasNext();) {
+//                SaleInvoiceHasItem saleInvoiceHasItem = it.next();
+//                double qty = saleInvoiceHasItem.getQuantity();
+//                double rate = saleInvoiceHasItem.getSaleInvoiceHasItemPK().getRate();
+//                double income = rate * qty;
+//                double itemCost = saleInvoiceHasItem.getCost();
+//                double totalCost = itemCost * qty;
+//                double profit = income - totalCost;
+//                totalProfit += profit;
+//                Object[] row = {
+//                    saleInvoiceHasItem.getItem(),
+//                    nf2d.format(qty),
+//                    nf2d.format(rate),
+//                    nf2d.format(income),
+//                    nf2d.format(itemCost),
+//                    nf2d.format(totalCost),
+//                    nf2d.format(profit)
+//                };
+//                tableModel.addRow(row);
+//                totalProfitLabel.setText(nf2d.format(totalProfit));
+//            }
+        } catch (SQLException ex) {
+           // Logger.getLogger(SalesReport.class.getName()).log(Level.SEVERE, null, ex);
         }
-        int i = 0;
-        for (Iterator<SaleInvoice> it = saleInvoices.iterator(); it.hasNext();) {
-            SaleInvoice saleInvoice = it.next();
-            Object[] row = {++i, yyyy_MM_dd.format(saleInvoice.getInvTime()), saleInvoice.getCustomer().getCode(), saleInvoice.getCustomer().getName(), saleInvoice.getInvNo(), nf2d.format(saleInvoice.getAmount()), nf2d.format(saleInvoice.getReceivedAmount())};
-            tableModel.addRow(row);
-        }
-        calcTotal();
     }
 
     protected void onLoad() {
