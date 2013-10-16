@@ -33,6 +33,7 @@ public class Installer extends ModuleInstall {
             button.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/nanosl/nbiz/gui/resources/" + icon + ".png"))); // NOI18N
         }
         button.addActionListener(new java.awt.event.ActionListener() {
+            @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 TopComponent tc = WindowManager.getDefault().findTopComponent(componentName);
                 tc.open();

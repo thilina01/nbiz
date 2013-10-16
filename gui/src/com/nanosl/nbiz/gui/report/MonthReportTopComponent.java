@@ -5,20 +5,25 @@
 package com.nanosl.nbiz.gui.report;
 
 import com.nanosl.lib.date.JXDatePicker;
-import com.nanosl.lib.print.JRViewer;
+import com.nanosl.nbiz.util.Data;
+import static com.nanosl.nbiz.util.Format.yyyy_MM_dd;
 import com.nanosl.nbiz.util.NTopComponent;
+import com.nanosl.nbiz.util.PrintViewTopComponent;
+import java.net.URL;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import net.sf.jasperreports.engine.JasperCompileManager;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
+import java.util.Map;
+import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.util.JRLoader;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
+import org.openide.util.Exceptions;
 import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
+import org.openide.windows.WindowManager;
 
 /**
  * Top component which displays something.
@@ -150,17 +155,37 @@ public final class MonthReportTopComponent extends NTopComponent {
         params.put("d3", yyyy_MM_dd.format(c3.getTime()));
 
         java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 try {
-                    String reportSource = "src/rpt/report1.jrxml";
+                    PrintViewTopComponent tc = (PrintViewTopComponent) WindowManager.getDefault().findTopComponent("PrintViewTopComponent");
+                    Map<String, Object> parameters = Data.getParams();
+                    //        parameters.put("first_date", yyyy_MM_dd.format(startDatePicker.getDate()) + " 00:00:00");
+                    //        parameters.put("last_date", yyyy_MM_dd.format(endDatePicker.getDate()) + " 23:59:59");
+                    String reportSource = "report1_1";
                     if (halfCheckBox.isSelected()) {
-                        reportSource = "src/rpt/monthReportA4.jrxml";
+                        reportSource = "monthReportA4";
                     }
-                    JasperReport jasperReport = JasperCompileManager.compileReport(reportSource);
-                    JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, params, m.getConnection());
-                    new JRViewer(jasperPrint, "Month");
-                } catch (Exception ex) {
-                    ex.printStackTrace();
+                    URL url = getClass().getResource("/com/nanosl/nbiz/gui/jrxml/" + reportSource + ".jasper");
+                    //            System.out.println(url);
+                    JasperReport report = (JasperReport) JRLoader.loadObject(url);
+                    tc.print(report, parameters);
+                    tc.open();
+                    tc.requestActive();
+                    //////////////////////
+                    //                try {
+                    //                    String reportSource = "src/rpt/report1.jrxml";
+                    //                    if (halfCheckBox.isSelected()) {
+                    //                        reportSource = "src/rpt/monthReportA4.jrxml";
+                    //                    }
+                    //                    JasperReport jasperReport = JasperCompileManager.compileReport(reportSource);
+                    //                    JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, params, m.getConnection());
+                    //                    new JRViewer(jasperPrint, "Month");
+                    //                } catch (Exception ex) {
+                    //                }
+                    //                }
+                } catch (JRException ex) {
+                    Exceptions.printStackTrace(ex);
                 }
             }
         });
