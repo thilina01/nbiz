@@ -146,6 +146,8 @@ public final class SaleInvoicePaymentTopComponent extends NTopComponent {
             }
         });
         jScrollPane1.setViewportView(invoiceTable);
+        invoiceTable.getColumnModel().getColumn(0).setHeaderValue(org.openide.util.NbBundle.getMessage(SaleInvoicePaymentTopComponent.class, "SaleInvoicePaymentTopComponent.invoiceTable.columnModel.title0")); // NOI18N
+        invoiceTable.getColumnModel().getColumn(0).setCellRenderer(rightAlignCell);
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(org.openide.util.NbBundle.getMessage(SaleInvoicePaymentTopComponent.class, "SaleInvoicePaymentTopComponent.jPanel2.border.title"))); // NOI18N
 
@@ -265,6 +267,11 @@ public final class SaleInvoicePaymentTopComponent extends NTopComponent {
         org.openide.awt.Mnemonics.setLocalizedText(jLabel6, org.openide.util.NbBundle.getMessage(SaleInvoicePaymentTopComponent.class, "SaleInvoicePaymentTopComponent.jLabel6.text")); // NOI18N
 
         bankingDatePicker.setName("bankingDatePicker"); // NOI18N
+        bankingDatePicker.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bankingDatePickerActionPerformed(evt);
+            }
+        });
         bankingDatePicker.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 bankingDatePickerKeyPressed(evt);
@@ -489,7 +496,7 @@ public final class SaleInvoicePaymentTopComponent extends NTopComponent {
 
     private void bankingDatePickerKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_bankingDatePickerKeyPressed
         if (evt.getKeyCode() == 10) {
-            amountField.requestFocus();
+            paymentAmountTextField.requestFocus();
         }
     }//GEN-LAST:event_bankingDatePickerKeyPressed
 
@@ -522,6 +529,11 @@ public final class SaleInvoicePaymentTopComponent extends NTopComponent {
             receiptNumberTextField.requestFocus();
         }
     }//GEN-LAST:event_receiptDatePickerKeyPressed
+
+    private void bankingDatePickerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bankingDatePickerActionPerformed
+   //paymentAmountTextField.requestFocus();
+    }//GEN-LAST:event_bankingDatePickerActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField amountField;
     private javax.swing.JComboBox bankComboBox;

@@ -118,11 +118,17 @@ public final class ItemSalesReportTopComponent extends NTopComponent {
         table.getColumnModel().getColumn(1).setPreferredWidth(300);
         table.getColumnModel().getColumn(1).setHeaderValue(org.openide.util.NbBundle.getMessage(ItemSalesReportTopComponent.class, "ItemSalesReportTopComponent.table.columnModel.title0")); // NOI18N
         table.getColumnModel().getColumn(2).setHeaderValue(org.openide.util.NbBundle.getMessage(ItemSalesReportTopComponent.class, "ItemSalesReportTopComponent.table.columnModel.title1")); // NOI18N
+        table.getColumnModel().getColumn(2).setCellRenderer(rightAlignCell);
         table.getColumnModel().getColumn(3).setHeaderValue(org.openide.util.NbBundle.getMessage(ItemSalesReportTopComponent.class, "ItemSalesReportTopComponent.table.columnModel.title2")); // NOI18N
+        table.getColumnModel().getColumn(3).setCellRenderer(rightAlignCell);
         table.getColumnModel().getColumn(4).setHeaderValue(org.openide.util.NbBundle.getMessage(ItemSalesReportTopComponent.class, "ItemSalesReportTopComponent.table.columnModel.title3")); // NOI18N
+        table.getColumnModel().getColumn(4).setCellRenderer(rightAlignCell);
         table.getColumnModel().getColumn(5).setHeaderValue(org.openide.util.NbBundle.getMessage(ItemSalesReportTopComponent.class, "ItemSalesReportTopComponent.table.columnModel.title4")); // NOI18N
+        table.getColumnModel().getColumn(5).setCellRenderer(rightAlignCell);
         table.getColumnModel().getColumn(6).setHeaderValue(org.openide.util.NbBundle.getMessage(ItemSalesReportTopComponent.class, "ItemSalesReportTopComponent.table.columnModel.title5")); // NOI18N
+        table.getColumnModel().getColumn(6).setCellRenderer(rightAlignCell);
         table.getColumnModel().getColumn(7).setHeaderValue(org.openide.util.NbBundle.getMessage(ItemSalesReportTopComponent.class, "ItemSalesReportTopComponent.table.columnModel.title6")); // NOI18N
+        table.getColumnModel().getColumn(7).setCellRenderer(rightAlignCell);
 
         org.openide.awt.Mnemonics.setLocalizedText(printButton, org.openide.util.NbBundle.getMessage(ItemSalesReportTopComponent.class, "ItemSalesReportTopComponent.printButton.text")); // NOI18N
         printButton.addActionListener(new java.awt.event.ActionListener() {

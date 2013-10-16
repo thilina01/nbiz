@@ -39,65 +39,101 @@ ORDER BY
 	<columnHeader>
 		<band height="20" splitType="Stretch">
 			<staticText>
-				<reportElement uuid="12a594e7-1de5-4ace-826a-f11eaf8aad9c" x="0" y="0" width="80" height="20"/>
+				<reportElement uuid="12a594e7-1de5-4ace-826a-f11eaf8aad9c" x="2" y="0" width="80" height="20"/>
 				<textElement>
 					<font size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[QKey]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="93c07091-48a1-4911-9bbf-03f92290a2e8" x="80" y="0" width="80" height="20"/>
+				<reportElement uuid="93c07091-48a1-4911-9bbf-03f92290a2e8" x="82" y="0" width="80" height="20"/>
 				<textElement>
 					<font size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Code]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="05884524-04f7-4e09-b9bf-2a804884ea30" x="160" y="0" width="311" height="20"/>
+				<reportElement uuid="05884524-04f7-4e09-b9bf-2a804884ea30" x="162" y="0" width="311" height="20"/>
 				<textElement>
 					<font size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Description]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="020c51c6-a2bb-4bb5-9770-bac422809bed" x="471" y="0" width="81" height="20"/>
+				<reportElement uuid="020c51c6-a2bb-4bb5-9770-bac422809bed" x="474" y="0" width="80" height="20"/>
 				<textElement>
 					<font size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Type]]></text>
 			</staticText>
+			<line>
+				<reportElement uuid="61954f8e-6fdc-427e-b101-2dd2aeb7becc" x="1" y="0" width="553" height="1"/>
+			</line>
+			<line>
+				<reportElement uuid="516dfc13-9a92-4075-9ee2-6263f661290a" x="0" y="0" width="1" height="20"/>
+			</line>
+			<line>
+				<reportElement uuid="81b51cee-3b61-48d1-b8b2-f194d9add467" x="80" y="0" width="1" height="20"/>
+			</line>
+			<line>
+				<reportElement uuid="dac5d358-67ab-4c22-bfe4-d5889c1b4b3b" x="471" y="0" width="1" height="20"/>
+			</line>
+			<line>
+				<reportElement uuid="a3e085b4-963f-4d03-8839-cfc5f00199bd" x="160" y="0" width="1" height="20"/>
+			</line>
+			<line>
+				<reportElement uuid="ae8a2fa6-7b25-492c-b4c1-bafd1190cb25" x="554" y="0" width="1" height="20"/>
+			</line>
+			<line>
+				<reportElement uuid="cbd503cb-62da-4f1f-878f-661fbb49d9ca" x="1" y="19" width="554" height="1"/>
+			</line>
 		</band>
 	</columnHeader>
 	<detail>
 		<band height="20" splitType="Stretch">
 			<textField>
-				<reportElement uuid="8bc4b41c-c285-4adf-9e6f-9437f67f0bff" x="0" y="0" width="80" height="20"/>
+				<reportElement uuid="8bc4b41c-c285-4adf-9e6f-9437f67f0bff" x="2" y="0" width="80" height="20"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{QKey}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="6a95db71-1807-4614-ade1-924241ff2f65" x="80" y="0" width="80" height="20"/>
+				<reportElement uuid="6a95db71-1807-4614-ade1-924241ff2f65" x="82" y="0" width="80" height="20"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Code}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="e7c06c4d-9bd4-4598-b845-0ccf3fdf99de" x="160" y="0" width="311" height="20"/>
+				<reportElement uuid="e7c06c4d-9bd4-4598-b845-0ccf3fdf99de" x="162" y="0" width="311" height="20"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Description}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="da1124d8-6f65-4add-ab8e-d89b29284181" x="471" y="0" width="81" height="20"/>
+				<reportElement uuid="da1124d8-6f65-4add-ab8e-d89b29284181" x="474" y="0" width="80" height="20"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Type}]]></textFieldExpression>
 			</textField>
+			<line>
+				<reportElement uuid="b3116cd1-d934-495e-be4a-d5fc11d4cf17" x="0" y="0" width="1" height="20"/>
+			</line>
+			<line>
+				<reportElement uuid="923d5f07-ad16-4900-8f97-9123120bdbc8" x="471" y="0" width="1" height="20"/>
+			</line>
+			<line>
+				<reportElement uuid="b24439e5-e4f6-49e0-9aaa-9344612c339f" x="160" y="0" width="1" height="20"/>
+			</line>
+			<line>
+				<reportElement uuid="5cc44697-2e62-4014-9e5a-f9e5fd2b4ead" x="80" y="0" width="1" height="20"/>
+			</line>
+			<line>
+				<reportElement uuid="e79bf780-b8b2-463c-9c91-44d506a1a51f" x="554" y="0" width="1" height="20"/>
+			</line>
 		</band>
 	</detail>
 	<columnFooter>
