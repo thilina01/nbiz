@@ -83,8 +83,9 @@ public final class PrintViewTopComponent extends TopComponent {
 
     public void print(String fileName, Map parameters) {
         try {
-            URL url = getClass().getResource("/com/nanosl/nbiz/gui/jrxml/" + "report1" + ".jasper");
-//            URL url = getClass().getResource("/com/nanosl/nbiz/gui/jrxml/" + fileName + ".jasper");
+//            URL url = getClass().getResource("/com/nanosl/nbiz/gui/jrxml/" + "report1" + ".jasper");
+            URL url = getClass().getResource("/com/nanosl/nbiz/gui/jrxml/" + fileName + ".jasper");
+//            System.out.println(url);
             JasperReport report = (JasperReport) JRLoader.loadObject(url);//"src/com/nanosl/nbiz/gui/jrxml/report1.jasper"
             print(report, parameters);
         } catch (JRException ex) {
