@@ -542,6 +542,7 @@ public final class POSTopComponent extends NTopComponent {
 
     private void totalDiscountFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_totalDiscountFieldActionPerformed
         paidAmountField.requestFocus();
+        paidAmountField.selectAll();
     }//GEN-LAST:event_totalDiscountFieldActionPerformed
 
     private void totalDiscountFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_totalDiscountFieldKeyReleased
