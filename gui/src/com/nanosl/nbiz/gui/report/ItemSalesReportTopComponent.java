@@ -17,6 +17,7 @@ import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Vector;
 import javax.swing.table.DefaultTableModel;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
@@ -324,21 +325,20 @@ public final class ItemSalesReportTopComponent extends NTopComponent {
     }
 
     private void export() {
-        Date startDate = getStartDate(startDatePicker.getDate());
-        Date endDate = getEndDate(endDatePicker.getDate());
-        ResultSet resultSet = FindMySql.itemTotalSaleBetweenDates(startDate, endDate);
+        @SuppressWarnings("UseOfObsoleteCollectionType")
+        Vector vector = tableModel.getDataVector();
+        jFileChooser1.setSize(200, 200);
         jFileChooser1.setVisible(true);
         try {
             FileOutputStream fileOut =
                     new FileOutputStream("C:/Users/Public/Documents/list.ser");
             ObjectOutputStream out = new ObjectOutputStream(fileOut);
-            out.writeObject(resultSet);
+            out.writeObject(vector);
             out.close();
             fileOut.close();
-            System.out.printf("Serialized data is saved in C:/Users/Public/Documents/list.ser");
+            System.out.println("Serialized data is saved in C:/Users/Public/Documents/list.ser");
             Runtime.getRuntime().exec("explorer C:/Users/Public/Documents/");
         } catch (IOException i) {
-            i.printStackTrace();
         }
     }
 }
