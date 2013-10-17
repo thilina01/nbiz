@@ -27,7 +27,6 @@ import java.awt.event.KeyEvent;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.swing.JComboBox;
@@ -37,6 +36,7 @@ import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
+import org.openide.util.Exceptions;
 import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
 import org.openide.windows.WindowManager;
@@ -140,11 +140,6 @@ public final class POSTopComponent extends NTopComponent {
 
         customerComboBox.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         customerComboBox.setName("customerComboBox"); // NOI18N
-        customerComboBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                customerComboBoxActionPerformed(evt);
-            }
-        });
         customerComboBox.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 customerComboBoxKeyPressed(evt);
@@ -164,9 +159,6 @@ public final class POSTopComponent extends NTopComponent {
         itemComboBox.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 itemComboBoxKeyPressed(evt);
-            }
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                itemComboBoxKeyReleased(evt);
             }
         });
 
@@ -196,11 +188,11 @@ public final class POSTopComponent extends NTopComponent {
 
             },
             new String [] {
-                "#", "Code", "Description", "Price", "Quantity", "Net", "Discount", "D%", "Amount"
+                "Code", "Description", "Price", "Quantity", "Net", "Discount", "D%", "Amount"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false, false
+                false, false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -213,25 +205,25 @@ public final class POSTopComponent extends NTopComponent {
             }
         });
         jScrollPane1.setViewportView(table);
-        table.getColumnModel().getColumn(0).setPreferredWidth(25);
-        table.getColumnModel().getColumn(0).setHeaderValue(org.openide.util.NbBundle.getMessage(POSTopComponent.class, "POSTopComponent.table.columnModel.title0")); // NOI18N
-        table.getColumnModel().getColumn(1).setPreferredWidth(50);
-        table.getColumnModel().getColumn(1).setHeaderValue(org.openide.util.NbBundle.getMessage(POSTopComponent.class, "POSTopComponent.table.columnModel.title1")); // NOI18N
-        table.getColumnModel().getColumn(2).setPreferredWidth(300);
-        table.getColumnModel().getColumn(2).setHeaderValue(org.openide.util.NbBundle.getMessage(POSTopComponent.class, "POSTopComponent.table.columnModel.title2")); // NOI18N
-        table.getColumnModel().getColumn(3).setHeaderValue(org.openide.util.NbBundle.getMessage(POSTopComponent.class, "POSTopComponent.table.columnModel.title3")); // NOI18N
-        table.getColumnModel().getColumn(3).setCellRenderer(rightAlignCell);
-        table.getColumnModel().getColumn(4).setHeaderValue(org.openide.util.NbBundle.getMessage(POSTopComponent.class, "POSTopComponent.table.columnModel.title4")); // NOI18N
-        table.getColumnModel().getColumn(4).setCellRenderer(rightAlignCell);
-        table.getColumnModel().getColumn(5).setHeaderValue(org.openide.util.NbBundle.getMessage(POSTopComponent.class, "POSTopComponent.table.columnModel.title5")); // NOI18N
-        table.getColumnModel().getColumn(5).setCellRenderer(rightAlignCell);
-        table.getColumnModel().getColumn(6).setHeaderValue(org.openide.util.NbBundle.getMessage(POSTopComponent.class, "POSTopComponent.table.columnModel.title6")); // NOI18N
-        table.getColumnModel().getColumn(6).setCellRenderer(rightAlignCell);
-        table.getColumnModel().getColumn(7).setPreferredWidth(50);
-        table.getColumnModel().getColumn(7).setHeaderValue(org.openide.util.NbBundle.getMessage(POSTopComponent.class, "POSTopComponent.table.columnModel.title7")); // NOI18N
-        table.getColumnModel().getColumn(7).setCellRenderer(rightAlignCell);
-        table.getColumnModel().getColumn(8).setHeaderValue(org.openide.util.NbBundle.getMessage(POSTopComponent.class, "POSTopComponent.table.columnModel.title8")); // NOI18N
-        table.getColumnModel().getColumn(8).setCellRenderer(rightAlignCell);
+        if (table.getColumnModel().getColumnCount() > 0) {
+            table.getColumnModel().getColumn(0).setPreferredWidth(50);
+            table.getColumnModel().getColumn(0).setHeaderValue(org.openide.util.NbBundle.getMessage(POSTopComponent.class, "POSTopComponent.table.columnModel.title1")); // NOI18N
+            table.getColumnModel().getColumn(1).setPreferredWidth(300);
+            table.getColumnModel().getColumn(1).setHeaderValue(org.openide.util.NbBundle.getMessage(POSTopComponent.class, "POSTopComponent.table.columnModel.title2")); // NOI18N
+            table.getColumnModel().getColumn(2).setHeaderValue(org.openide.util.NbBundle.getMessage(POSTopComponent.class, "POSTopComponent.table.columnModel.title3")); // NOI18N
+            table.getColumnModel().getColumn(2).setCellRenderer(rightAlignCell);
+            table.getColumnModel().getColumn(3).setHeaderValue(org.openide.util.NbBundle.getMessage(POSTopComponent.class, "POSTopComponent.table.columnModel.title4")); // NOI18N
+            table.getColumnModel().getColumn(3).setCellRenderer(rightAlignCell);
+            table.getColumnModel().getColumn(4).setHeaderValue(org.openide.util.NbBundle.getMessage(POSTopComponent.class, "POSTopComponent.table.columnModel.title5")); // NOI18N
+            table.getColumnModel().getColumn(4).setCellRenderer(rightAlignCell);
+            table.getColumnModel().getColumn(5).setHeaderValue(org.openide.util.NbBundle.getMessage(POSTopComponent.class, "POSTopComponent.table.columnModel.title6")); // NOI18N
+            table.getColumnModel().getColumn(5).setCellRenderer(rightAlignCell);
+            table.getColumnModel().getColumn(6).setPreferredWidth(50);
+            table.getColumnModel().getColumn(6).setHeaderValue(org.openide.util.NbBundle.getMessage(POSTopComponent.class, "POSTopComponent.table.columnModel.title7")); // NOI18N
+            table.getColumnModel().getColumn(6).setCellRenderer(rightAlignCell);
+            table.getColumnModel().getColumn(7).setHeaderValue(org.openide.util.NbBundle.getMessage(POSTopComponent.class, "POSTopComponent.table.columnModel.title8")); // NOI18N
+            table.getColumnModel().getColumn(7).setCellRenderer(rightAlignCell);
+        }
 
         jLabel8.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(jLabel8, org.openide.util.NbBundle.getMessage(POSTopComponent.class, "POSTopComponent.jLabel8.text")); // NOI18N
@@ -494,9 +486,6 @@ public final class POSTopComponent extends NTopComponent {
         }
     }//GEN-LAST:event_invoiceNumberFieldActionPerformed
 
-    private void customerComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_customerComboBoxActionPerformed
-    }//GEN-LAST:event_customerComboBoxActionPerformed
-
     private void customerComboBoxKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_customerComboBoxKeyPressed
         if (evt.getKeyCode() == 10) {
             itemComboBox.requestFocus();
@@ -511,6 +500,12 @@ public final class POSTopComponent extends NTopComponent {
     }//GEN-LAST:event_itemComboBoxActionPerformed
 
     private void itemComboBoxKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_itemComboBoxKeyPressed
+        if (evt.getKeyCode() == 10) {
+            quantityField.requestFocus();
+        } else if (evt.getKeyCode() == 192) {
+            totalDiscountField.requestFocus();
+            totalDiscountField.selectAll();
+        }
     }//GEN-LAST:event_itemComboBoxKeyPressed
 
     private void quantityFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_quantityFieldActionPerformed
@@ -544,6 +539,10 @@ public final class POSTopComponent extends NTopComponent {
     }//GEN-LAST:event_totalDiscountFieldActionPerformed
 
     private void totalDiscountFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_totalDiscountFieldKeyReleased
+        if (totalDiscountField.getText().equals("`")) {
+            totalDiscountField.setText("0");
+            totalDiscountField.selectAll();
+        }
         substractDiscount();
     }//GEN-LAST:event_totalDiscountFieldKeyReleased
 
@@ -561,7 +560,7 @@ public final class POSTopComponent extends NTopComponent {
     }//GEN-LAST:event_paidAmountFieldKeyReleased
 
     private void addCustomerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addCustomerButtonActionPerformed
-        TopComponent tc = (TopComponent) WindowManager.getDefault().findTopComponent("CustomerTopComponent");
+        TopComponent tc = WindowManager.getDefault().findTopComponent("CustomerTopComponent");
         tc.open();
         tc.requestActive();
     }//GEN-LAST:event_addCustomerButtonActionPerformed
@@ -573,14 +572,6 @@ public final class POSTopComponent extends NTopComponent {
     private void receiptNumberFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_receiptNumberFieldKeyReleased
     }//GEN-LAST:event_receiptNumberFieldKeyReleased
 
-    private void itemComboBoxKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_itemComboBoxKeyReleased
-        if (evt.getKeyCode() == 10) {
-            quantityField.requestFocus();
-        } else if (evt.getKeyCode() == 192) {
-            totalDiscountField.requestFocus();
-            totalDiscountField.setSelectionStart(0);
-        }
-    }//GEN-LAST:event_itemComboBoxKeyReleased
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addCustomerButton;
     private javax.swing.JButton clearButton;
@@ -629,12 +620,12 @@ public final class POSTopComponent extends NTopComponent {
         clear();
     }
 
-    private void setComboBoxKeyAdapters(JComboBox supp) {
-        String compName = supp.getName();
-        Component component[] = supp.getComponents();
-        for (int i = 0; i < component.length; i++) {
+    private void setComboBoxKeyAdapters(JComboBox<Object> comboBox) {
+        String compName = comboBox.getName();
+        Component component[] = comboBox.getComponents();
+        for (Component component1 : component) {
             if (compName.equals("itemComboBox")) {
-                component[i].addKeyListener(itemComboBoxKeyAdapter);
+                component1.addKeyListener(itemComboBoxKeyAdapter);
             }
         }
     }
@@ -671,8 +662,8 @@ public final class POSTopComponent extends NTopComponent {
         totalAmount = 0;
         double totalDiscount = 0;
         for (int i = 0; i < table.getRowCount(); i++) {
-            totalAmount += Double.valueOf(table.getValueAt(i, 8).toString());
-            totalDiscount += Double.valueOf(table.getValueAt(i, 6).toString());
+            totalAmount += Double.valueOf(table.getValueAt(i, 7).toString());
+            totalDiscount += Double.valueOf(table.getValueAt(i, 5).toString());
         }
         totalAmountField.setText("" + totalAmount);
         totalDiscountField.setText("" + totalDiscount);
@@ -692,14 +683,14 @@ public final class POSTopComponent extends NTopComponent {
         double totalAmount1 = 0, paidAmount = 0, remainingAmount = 0;
         try {
             totalAmount1 = Double.parseDouble(totalAmountText);
-        } catch (Exception e) {
+        } catch (NumberFormatException e) {
         }
         if (totalAmount1 == 0) {
             return;
         }
         try {
             paidAmount = Double.parseDouble(paidAmountText);
-        } catch (Exception e) {
+        } catch (NumberFormatException e) {
         }
         remainingAmount = totalAmount1 - paidAmount;
         remainingAmountField.setText(nf2d.format(remainingAmount));
@@ -711,6 +702,13 @@ public final class POSTopComponent extends NTopComponent {
         double discount = 0;
         double net = 0;
         Item item = (Item) itemComboBox.getSelectedItem();
+        String code = item.getCode();
+        for (int i = 0; i < table.getRowCount(); i++) {
+            if (code.equals(table.getValueAt(i, 0))) {
+                dtm.removeRow(i);
+                break;
+            }
+        }
         item = m.find(Item.class, item.getCode());
         double availableQuantity = item.getStock().getQuantity();
 
@@ -739,9 +737,9 @@ public final class POSTopComponent extends NTopComponent {
         net = price * quantity;
         double discountAmount = net * discount / 100;
         double amount = net - discountAmount;
-        int i = dtm.getRowCount();
-        Object[] rowData = {++i,
-            item.getCode(),
+//        int i = dtm.getRowCount();
+        Object[] rowData = {
+            code,
             item.getDescription(),
             nf2d.format(price),
             nf3d.format(quantity),
@@ -794,9 +792,30 @@ public final class POSTopComponent extends NTopComponent {
         } else {
             customerName = customer.getName();
         }
-        double amount = Double.valueOf(totalAmountField.getText());
-        double credit = Double.valueOf(remainingAmountField.getText());
-        double discount = Double.valueOf(totalDiscountField.getText());
+        String totalAmountText = totalAmountField.getText().trim();
+        String remainingAmountText = remainingAmountField.getText().trim();
+        String totalDiscountText = totalDiscountField.getText().trim();
+        totalDiscountText = totalDiscountText.equals("") ? "0" : totalDiscountText;
+        double discount = 0;
+        try {
+            discount = Double.parseDouble(totalDiscountText);
+        } catch (NumberFormatException e) {
+            showError("Invalid Amount");
+            return;
+        }
+
+        String paidAmountText = paidAmountField.getText().trim();
+        paidAmountText = paidAmountText.equals("") ? "0" : paidAmountText;
+        double paidAmount = 0;
+        try {
+            paidAmount = Double.parseDouble(paidAmountText);
+        } catch (NumberFormatException e) {
+            showError("Invalid Amount");
+            return;
+        }
+        double amount = Double.valueOf(totalAmountText);
+        double credit = Double.valueOf(remainingAmountText);
+//        double discount = Double.valueOf(totalDiscountText);
         SaleInvoice saleInvoice = new SaleInvoice(invoiceNumber);
         saleInvoice.setCustomer(customer);
         saleInvoice.setCustomerName(customerName);
@@ -808,10 +827,10 @@ public final class POSTopComponent extends NTopComponent {
         saleInvoice.setEmployee(Data.getOperator().getEmployee());
         List<Serializable> serializables = new ArrayList<Serializable>();
         for (int i = 0; i < rowCount; i++) {
-            Item item = m.find(Item.class, table.getValueAt(i, 1).toString());
-            double quantity = Double.valueOf(table.getValueAt(i, 4).toString());
-            double rate = Double.valueOf(table.getValueAt(i, 3).toString());
-            double itemDiscount = Double.valueOf(table.getValueAt(i, 6).toString());
+            Item item = m.find(Item.class, table.getValueAt(i, 0).toString());
+            double quantity = Double.valueOf(table.getValueAt(i, 3).toString());
+            double rate = Double.valueOf(table.getValueAt(i, 2).toString());
+            double itemDiscount = Double.valueOf(table.getValueAt(i, 5).toString());
             SaleInvoiceHasItemPK saleInvoiceHasItemPK = new SaleInvoiceHasItemPK(invoiceNumber, item.getCode());
             SaleInvoiceHasItem sihi = new SaleInvoiceHasItem(saleInvoiceHasItemPK);
             sihi.setSaleInvoice(saleInvoice);
@@ -830,13 +849,6 @@ public final class POSTopComponent extends NTopComponent {
             serializables.add(stock);
         }
         serializables.add(saleInvoice);
-        String paidAmountText = paidAmountField.getText().trim();
-        paidAmountText = paidAmountText.equals("") ? "0" : paidAmountText;
-        double paidAmount = 0;
-        try {
-            paidAmount = Double.parseDouble(paidAmountText);
-        } catch (Exception e) {
-        }
         if (paidAmount > 0) {
             if (ReceiptNumber.equals("")) {
                 showError("Recipt Number Required!");
