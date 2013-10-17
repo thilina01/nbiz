@@ -46,6 +46,8 @@ public class SaleInvoice implements Serializable {
     @Basic(optional = false)
     @Column(name = "inv_no")
     private String invNo;
+    @Column(name = "customer_name")
+    private String customerName;
     @Column(name = "inv_time")
     @Temporal(TemporalType.TIMESTAMP)
     private Date invTime;
@@ -202,5 +204,13 @@ public class SaleInvoice implements Serializable {
     public String toString() {
         return "ent.SaleInvoice[ invNo=" + invNo + " ]";
     }
-    
+
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
+    }
+
 }

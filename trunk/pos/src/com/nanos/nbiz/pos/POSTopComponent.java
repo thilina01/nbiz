@@ -31,6 +31,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.netbeans.api.settings.ConvertAsProperties;
@@ -163,6 +164,9 @@ public final class POSTopComponent extends NTopComponent {
         itemComboBox.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 itemComboBoxKeyPressed(evt);
+            }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                itemComboBoxKeyReleased(evt);
             }
         });
 
@@ -507,12 +511,6 @@ public final class POSTopComponent extends NTopComponent {
     }//GEN-LAST:event_itemComboBoxActionPerformed
 
     private void itemComboBoxKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_itemComboBoxKeyPressed
-        if (evt.getKeyCode() == 10) {
-            quantityField.requestFocus();
-        } else if (evt.getKeyCode() == 192) {
-            totalDiscountField.requestFocus();
-            totalDiscountField.setSelectionStart(0);
-        }
     }//GEN-LAST:event_itemComboBoxKeyPressed
 
     private void quantityFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_quantityFieldActionPerformed
@@ -574,6 +572,15 @@ public final class POSTopComponent extends NTopComponent {
 
     private void receiptNumberFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_receiptNumberFieldKeyReleased
     }//GEN-LAST:event_receiptNumberFieldKeyReleased
+
+    private void itemComboBoxKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_itemComboBoxKeyReleased
+        if (evt.getKeyCode() == 10) {
+            quantityField.requestFocus();
+        } else if (evt.getKeyCode() == 192) {
+            totalDiscountField.requestFocus();
+            totalDiscountField.setSelectionStart(0);
+        }
+    }//GEN-LAST:event_itemComboBoxKeyReleased
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addCustomerButton;
     private javax.swing.JButton clearButton;
@@ -617,7 +624,7 @@ public final class POSTopComponent extends NTopComponent {
         setComboBoxKeyAdapters(itemComboBox);
         datePicker.setFormats(yyyy_MM_dd);
 //        KeyAdapter();
-        dtm = (DefaultTableModel) table.getModel();        
+        dtm = (DefaultTableModel) table.getModel();
         table.setDefaultRenderer(Object.class, coloredCellRenderer);
         clear();
     }
@@ -781,11 +788,18 @@ public final class POSTopComponent extends NTopComponent {
         }
 
         Customer customer = (Customer) customerComboBox.getSelectedItem();
+        String customerName = "";
+        if (customer.getCode().equals("000") || customer.getCode().equalsIgnoreCase("CASH")) {
+            customerName = JOptionPane.showInputDialog("Customer Name");
+        } else {
+            customerName = customer.getName();
+        }
         double amount = Double.valueOf(totalAmountField.getText());
         double credit = Double.valueOf(remainingAmountField.getText());
         double discount = Double.valueOf(totalDiscountField.getText());
         SaleInvoice saleInvoice = new SaleInvoice(invoiceNumber);
         saleInvoice.setCustomer(customer);
+        saleInvoice.setCustomerName(customerName);
         saleInvoice.setAmount(amount);
         saleInvoice.setCredit(credit);
         saleInvoice.setDiscount(discount);
