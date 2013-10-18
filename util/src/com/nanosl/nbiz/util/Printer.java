@@ -62,18 +62,40 @@ public class Printer {
         });
     }
 
+    public static void printPosInvoice(final JasperReport report, final Map<String, Object> params) {
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                try {
+//                    String reportSource = "src/rpt/posInvoice.jrxml";
+//                    JasperReport jasperReport = JasperCompileManager.compileReport(reportSource);
+                    Connection con = m.getConnection();
+                    JasperPrint jasperPrint = JasperFillManager.fillReport(report, params, con);
+//                    jasperPrint.setPageHeight(100);
+//                    jasperPrint.setPageWidth(80);
+//                    jasperPrint.setOrientation(report.getOrientationValue().LANDSCAPE);
+                    JasperPrintManager.printReport(jasperPrint, false);
+//                    JRViewer jRViewer = new JRViewer(jasperPrint, "Invoice");
+                } catch (JRException ex) {
+                    Loggings.logError(Printer.class.getName(), ex);
+                }
+            }
+        });
+    }
+
     public static void printPosInvoice(final Map<String, Object> params) {
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
                 try {
-                    String reportSource = "src/rpt/posInvoice.jrxml";
+                    String reportSource = "src/com/nanos/nbiz/pos/jrxml/posInvoice.jrxml";
                     JasperReport jasperReport = JasperCompileManager.compileReport(reportSource);
-                    Connection con = m.getConnection();
-                    JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, params, con);
-                    JasperPrintManager.printReport(jasperPrint, false);
-//                    JRViewer jRViewer = new JRViewer(jasperPrint, "Invoice");
-                } catch (Exception ex) {
+                    printPosInvoice(jasperReport, params);
+//                    Connection con = m.getConnection();
+//                    JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, params, con);
+//                    JasperPrintManager.printReport(jasperPrint, false);
+////                    JRViewer jRViewer = new JRViewer(jasperPrint, "Invoice");
+                } catch (JRException ex) {
                     Loggings.logError(Printer.class.getName(), ex);
                 }
             }

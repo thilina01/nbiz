@@ -25,6 +25,7 @@ import java.awt.Rectangle;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.Serializable;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -32,6 +33,9 @@ import java.util.Map;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.util.JRLoader;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
@@ -51,7 +55,7 @@ import org.openide.windows.WindowManager;
         preferredID = "POSTopComponent",
         //iconBase="SET/PATH/TO/ICON/HERE", 
         persistenceType = TopComponent.PERSISTENCE_ALWAYS)
-@TopComponent.Registration(mode = "editor", openAtStartup = false)
+@TopComponent.Registration(mode = "editor", openAtStartup = true)
 @ActionID(category = "Window", id = "com.nanos.nbiz.pos.POSTopComponent")
 @ActionReference(path = "Menu/Sales" /*, position = 333 */)
 @TopComponent.OpenActionRegistration(
@@ -502,7 +506,7 @@ public final class POSTopComponent extends NTopComponent {
     private void itemComboBoxKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_itemComboBoxKeyPressed
         if (evt.getKeyCode() == 10) {
             quantityField.requestFocus();
-        } else if (evt.getKeyCode() == 192) {
+        } else if (evt.getKeyCode() == 192 || evt.getKeyCode() == KeyEvent.VK_ADD || evt.getKeyCode() == KeyEvent.VK_RIGHT) {
             totalDiscountField.requestFocus();
             totalDiscountField.selectAll();
         }
@@ -871,9 +875,15 @@ public final class POSTopComponent extends NTopComponent {
 //            SaleInvoicePaymentView.getInstance().fill(saleInvoice);
 //            SaleInvoicePaymentView.display();
             if (printCheckBox.isSelected()) {
-                Map<String, Object> params = Data.getParams();
-                params.put("invoice", invoiceNumber);
-                Printer.printPosInvoice(params);
+                try {
+                    URL url = getClass().getResource("/com/nanos/nbiz/pos/jrxml/posInvoice.jasper");
+                    JasperReport report = (JasperReport) JRLoader.loadObject(url);//"src/com/nanosl/nbiz/gui/jrxml/report1.jasper"
+                    Map<String, Object> params = Data.getParams();
+                    params.put("invoice", invoiceNumber);
+                    Printer.printPosInvoice(report, params);
+                } catch (JRException ex) {
+                    Exceptions.printStackTrace(ex);
+                }
             }
             showSuccess("Update success");
             Data.setInvoiceNo(invoiceNumber);
