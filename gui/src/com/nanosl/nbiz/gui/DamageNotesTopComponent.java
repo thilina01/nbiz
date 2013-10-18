@@ -4,7 +4,6 @@
  */
 package com.nanosl.nbiz.gui;
 
-
 import entity.DamageNotes;
 import entity.Employee;
 import entity.Item;
@@ -24,7 +23,6 @@ import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
 import query.Find;
 import com.nanosl.nbiz.util.NTopComponent;
-
 
 /**
  * Top component which displays something.
@@ -50,9 +48,9 @@ import com.nanosl.nbiz.util.NTopComponent;
 public final class DamageNotesTopComponent extends NTopComponent {
 
     public DamageNotesTopComponent() {
-        onLoad();
         setName(Bundle.CTL_DamageNotesTopComponent());
         setToolTipText(Bundle.HINT_DamageNotesTopComponent());
+        onLoad();
 
     }
 

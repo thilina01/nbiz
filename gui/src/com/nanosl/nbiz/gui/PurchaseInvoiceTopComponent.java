@@ -553,6 +553,7 @@ public final class PurchaseInvoiceTopComponent extends NTopComponent {
         datePicker.setFormats(yyyy_MM_dd);
         KeyAdapter();
         dtm = (DefaultTableModel) table.getModel();
+         table.setDefaultRenderer(Object.class, coloredCellRenderer);
         clear();
 //        Utilities.attachInitJob(supplierComboBox, new AsyncGUIJob() {
 //            @Override
@@ -806,6 +807,7 @@ public final class PurchaseInvoiceTopComponent extends NTopComponent {
 
     @Override
     public void componentOpened() {
+        supplierComboBox.requestFocus();
     }
 
     @Override
