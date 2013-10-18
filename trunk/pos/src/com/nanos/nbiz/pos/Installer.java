@@ -1,8 +1,9 @@
 /*
- * To change this template, choose Tools | Templates
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.nanosl.nbiz.gui;
+package com.nanos.nbiz.pos;
 
 import com.nanosl.nbiz.quicklaunch.SideBarPanel;
 import javax.swing.JButton;
@@ -18,19 +19,14 @@ public class Installer extends ModuleInstall {
     }
 
     private void initializeToolbar() {
-        addButton("Purchase", "PurchaseInvoiceTopComponent", "shopping_trolley");
-//        addButton("Sales", "SaleInvoiceTopComponent","specials-offers-save-sale");
-//        addButton("Transfer", "StockTransferTopComponent","wire-transfer-icon");
-        addButton("Stock", "StockTopComponent", "box");
-        addButton("Supplier", "SupplierTopComponent", "company");
-        addButton("Item", "ItemTopComponent", "tv");
+        addButton("POS", "POSTopComponent","specials-offers-save-sale");
     }
 
     private void addButton(String text, final String componentName, String icon) {
 
         JButton button = new JButton(text);
         if (!icon.equals("")) {
-            button.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/nanosl/nbiz/gui/resources/" + icon + ".png"))); // NOI18N
+            button.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/nanos/nbiz/pos/resources/" + icon + ".png"))); // NOI18N
         }
         button.addActionListener(new java.awt.event.ActionListener() {
             @Override
@@ -42,4 +38,5 @@ public class Installer extends ModuleInstall {
         });
         SideBarPanel.addButton(button);
     }
+
 }
