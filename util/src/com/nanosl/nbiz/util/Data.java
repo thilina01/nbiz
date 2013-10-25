@@ -23,6 +23,10 @@ public class Data {
 
     public static Operator getOperator() {
         m.clearCache();
+        if (operator == null) {
+            operator = new Operator("admin");
+            m.update(operator);
+        }
         return m.find(Operator.class, operator.getUsername());
     }
 
@@ -112,7 +116,7 @@ public class Data {
             params.put("web", company.getWeb());
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Update Your Company Information");
-            TopComponent tc =  WindowManager.getDefault().findTopComponent("CompanyTopComponent");
+            TopComponent tc = WindowManager.getDefault().findTopComponent("CompanyTopComponent");
             tc.open();
             tc.requestActive();
 //            CompanyView.display();

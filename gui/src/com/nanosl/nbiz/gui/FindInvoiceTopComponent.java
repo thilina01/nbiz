@@ -158,11 +158,21 @@ public final class FindInvoiceTopComponent extends NTopComponent {
     }//GEN-LAST:event_printInvoiceButtonActionPerformed
 
     private void printReceiptButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_printReceiptButtonActionPerformed
-        String receiptNumber = receiptNumberTextField.getText().trim();
-        Map<String, Object> params = new LinkedHashMap<String, Object>();
-        params.put("invoice", "");
-        params.put("receipt", receiptNumber);
-        Printer.printReceipt(params);
+        try {
+            String receiptNumber = receiptNumberTextField.getText().trim();
+            Map<String, Object> parameters = new LinkedHashMap<String, Object>();
+            parameters.put("invoice", "");
+            parameters.put("receipt", receiptNumber);            
+            PrintViewTopComponent tc = (PrintViewTopComponent) WindowManager.getDefault().findTopComponent("PrintViewTopComponent");
+            URL url = getClass().getResource("/com/nanosl/nbiz/gui/jrxml/" + "receipt" + ".jasper");
+            //            URL url = getClass().getResource("/com/nanosl/nbiz/gui/jrxml/" + fileName + ".jasper");
+            JasperReport report = (JasperReport) JRLoader.loadObject(url);//"src/com/nanosl/nbiz/gui/jrxml/report1.jasper"
+            tc.print(report, parameters);
+            tc.open();
+            tc.requestActive();
+        } catch (JRException ex) {
+            Exceptions.printStackTrace(ex);
+        }
     }//GEN-LAST:event_printReceiptButtonActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField invoiceNumberTextField;

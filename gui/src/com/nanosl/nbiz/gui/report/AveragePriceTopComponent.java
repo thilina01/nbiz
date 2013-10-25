@@ -198,7 +198,7 @@ public final class AveragePriceTopComponent extends NTopComponent {
         double tot = 0;
 //        Query qry = man.getEm().createQuery("SELECT i FROM Item i");
 //        qry.setParameter("invDate", date);
-        Collection<Item> items = m.find(Item.class);
+        Collection<Item> items = manager.find(Item.class);
         for (Iterator<Item> it = items.iterator(); it.hasNext();) {
             Item item = it.next();
             Collection<PurchaseInvoiceHasItem> purchaseInvoiceHasItems = item.getPurchaseInvoiceHasItemCollection();

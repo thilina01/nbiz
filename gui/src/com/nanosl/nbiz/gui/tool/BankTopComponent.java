@@ -261,12 +261,10 @@ public final class BankTopComponent extends NTopComponent {
     }
 
     private void fillTable() {
-        banks = m.find(Bank.class);
+        banks = manager.find(Bank.class);
         tableModel.setRowCount(0);
         int i = 0;
-        for (Iterator<Bank> it = banks.iterator(); it.hasNext();) {
-            Bank bank = it.next();
-
+        for (Bank bank : banks) {
             Object[] row = {++i, bank.getCode(), bank.getName()};
             tableModel.addRow(row);
         }
@@ -295,7 +293,7 @@ public final class BankTopComponent extends NTopComponent {
         int index = banks.indexOf(bank);
         bank = index == -1 ? bank : banks.get(index);
         bank.setName(name);
-        if (m.update(bank)) {
+        if (manager.update(bank)) {
             clear();
             codeField.requestFocus();
             return;
@@ -312,7 +310,7 @@ public final class BankTopComponent extends NTopComponent {
         if (JOptionPane.YES_OPTION != JOptionPane.showConfirmDialog(deleteButton, "Delete " + code + " ?", "sure?", JOptionPane.YES_NO_OPTION)) {
             return;
         }
-        if (m.delete(Bank.class, code)) {
+        if (manager.delete(Bank.class, code)) {
             clear();
             return;
         }

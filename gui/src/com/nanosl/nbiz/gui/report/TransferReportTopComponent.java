@@ -229,8 +229,8 @@ public final class TransferReportTopComponent extends NTopComponent {
         if (employee == null) {
             return;
         }
-        m.clearCache();
-        employee = m.find(Employee.class, employee.getCode());
+        manager.clearCache();
+        employee = manager.find(Employee.class, employee.getCode());
         Date date = datePicker.getDate();
         Collection<StockTransfer> stockTransfers = employee.getStockTransferCollection();
         tableModel.setRowCount(0);
@@ -269,7 +269,7 @@ public final class TransferReportTopComponent extends NTopComponent {
 
     private void fillReps() {
         tableModel.setRowCount(0);
-        repComboBox.setModel(new DefaultComboBoxModel(m.find(Employee.class).toArray()));
+        repComboBox.setModel(new DefaultComboBoxModel(manager.find(Employee.class).toArray()));
     }
 
     @Override

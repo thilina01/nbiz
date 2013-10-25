@@ -183,7 +183,7 @@ public final class DamageStockTopComponent extends NTopComponent {
         tableModel.setRowCount(0);
         int i = 0;
         double total = 0;
-        for (Iterator<DamageStock> it = m.find(DamageStock.class).iterator(); it.hasNext();) {
+        for (Iterator<DamageStock> it = manager.find(DamageStock.class).iterator(); it.hasNext();) {
             DamageStock damageStock = it.next();
             Item item = damageStock.getItem();
             double quantity = damageStock.getQuantity();

@@ -473,7 +473,7 @@ public final class RepPaymentTopComponent extends NTopComponent {
     private void fillInvoiceTable() {
         dateDtm.setRowCount(0);
         paymentDtm.setRowCount(0);
-        purchaseInvoices = m.find(PurchaseInvoice.class);
+        purchaseInvoices = manager.find(PurchaseInvoice.class);
         for (Iterator<PurchaseInvoice> it = purchaseInvoices.iterator(); it.hasNext();) {
             PurchaseInvoice pi = it.next();
             double credit = pi.getCredit() == null ? 0 : pi.getCredit();
@@ -576,7 +576,7 @@ public final class RepPaymentTopComponent extends NTopComponent {
     }
 
     private void fillBanks() {
-        bankComboBox.setModel(new DefaultComboBoxModel(m.find(Bank.class).toArray()));
+        bankComboBox.setModel(new DefaultComboBoxModel(manager.find(Bank.class).toArray()));
     }
 
     @Override
@@ -641,7 +641,7 @@ public final class RepPaymentTopComponent extends NTopComponent {
         double remainingAmount = Double.valueOf(remainingAmountField.getText().trim());
         purchaseInvoice.setCredit(remainingAmount);
         serializables.add(purchaseInvoice);
-        if (m.update(serializables)) {
+        if (manager.update(serializables)) {
             clearAll();
         } else {
             showError("Unable to complete payment!");

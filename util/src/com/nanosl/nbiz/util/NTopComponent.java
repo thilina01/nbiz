@@ -64,9 +64,10 @@ public class NTopComponent extends TopComponent implements Format {
             return c;
         }
     };
-    public Manager m = Manager.getInstance();
+    public Manager manager;
 
     public NTopComponent() {
+        this.manager = Manager.getInstance();
 //        rightAlignCell.setHorizontalAlignment(javax.swing.JLabel.RIGHT);
     }
 

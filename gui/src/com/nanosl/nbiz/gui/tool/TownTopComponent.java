@@ -279,7 +279,7 @@ public final class TownTopComponent extends NTopComponent {
     }
 
     private void fillTable() {
-        towns = m.find(Town.class);
+        towns = manager.find(Town.class);
         int i = 0;
         tableModel.setRowCount(i);
         for (Iterator<Town> it = towns.iterator(); it.hasNext();) {
@@ -319,7 +319,7 @@ public final class TownTopComponent extends NTopComponent {
         List<Serializable> serializables = new ArrayList<Serializable>();
         serializables.add(rootArea);
         serializables.add(town);
-        if (m.update(serializables)) {
+        if (manager.update(serializables)) {
             clear();
             return;
         }
@@ -335,7 +335,7 @@ public final class TownTopComponent extends NTopComponent {
         if (JOptionPane.YES_OPTION != JOptionPane.showConfirmDialog(deleteButton, "Delete " + code + " ?", "sure?", JOptionPane.YES_NO_OPTION)) {
             return;
         }
-        if (m.delete(Town.class, code)) {
+        if (manager.delete(Town.class, code)) {
             clear();
         }
     }
@@ -343,7 +343,7 @@ public final class TownTopComponent extends NTopComponent {
     private void fill() {
         int row = masterTable.getSelectedRow();
         if (row > -1) {
-            Town town = m.find(Town.class, "" + masterTable.getValueAt(row, 1));
+            Town town = manager.find(Town.class, "" + masterTable.getValueAt(row, 1));
             codeField.setText(town.getCode());
             nameField.setText(town.getName());
             rootAreaComboBox.setSelectedItem(town.getRootArea());
@@ -357,7 +357,7 @@ public final class TownTopComponent extends NTopComponent {
     }
 
     private void fillRootAreas() {
-        rootAreaComboBox.setModel(new DefaultComboBoxModel(m.find(RootArea.class).toArray()));
+        rootAreaComboBox.setModel(new DefaultComboBoxModel(manager.find(RootArea.class).toArray()));
     }
 
     @Override

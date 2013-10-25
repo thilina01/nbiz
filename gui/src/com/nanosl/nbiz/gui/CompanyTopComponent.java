@@ -422,7 +422,7 @@ public final class CompanyTopComponent extends NTopComponent {
     
     private void fill(String code) {
         Company company;
-        company = m.find(Company.class, code);
+        company = manager.find(Company.class, code);
         if (company == null) {
             return;
         }
@@ -464,7 +464,7 @@ public final class CompanyTopComponent extends NTopComponent {
         String email = emailField.getText().trim();
         String web = webField.getText().trim();
         
-        Company company = m.find(Company.class, code);
+        Company company = manager.find(Company.class, code);
         if (company == null) {
             company = new Company(code);
         }
@@ -479,7 +479,7 @@ public final class CompanyTopComponent extends NTopComponent {
         company.setFax(fax);
         company.setEmail(email);
         company.setWeb(web);
-        if (m.update(company)) {
+        if (manager.update(company)) {
             clearFields();
             codeField.requestFocus();
             return;

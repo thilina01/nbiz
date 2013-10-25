@@ -456,7 +456,7 @@ public final class EmployeeTopComponent extends NTopComponent {
     }
 
     private void fillTable() {
-        List<Employee> employees = m.find(Employee.class);
+        List<Employee> employees = manager.find(Employee.class);
         tableModel.setRowCount(0);
         int i = 0;
         for (Iterator<Employee> it = employees.iterator(); it.hasNext();) {
@@ -467,7 +467,7 @@ public final class EmployeeTopComponent extends NTopComponent {
     }
 
     private void fillPositions() {
-        positionComboBox.setModel(new DefaultComboBoxModel(m.find(EmployeePosition.class).toArray()));
+        positionComboBox.setModel(new DefaultComboBoxModel(manager.find(EmployeePosition.class).toArray()));
     }
 
     private void clearFields() {
@@ -499,7 +499,7 @@ public final class EmployeeTopComponent extends NTopComponent {
         }
          if (JOptionPane.YES_OPTION != JOptionPane.showConfirmDialog(deleteButton, "Delete " + code + " ?", "sure?", JOptionPane.YES_NO_OPTION)) {
             return;}
-        if (m.delete(Employee.class, code)) {
+        if (manager.delete(Employee.class, code)) {
             clear();
             return;
         }
@@ -525,7 +525,7 @@ public final class EmployeeTopComponent extends NTopComponent {
         String fixedLine = fixedLineField.getText().trim();
         String notes = notesField.getText().trim();
         String city = cityField.getText().trim();
-        Employee employee = m.find(Employee.class, code);
+        Employee employee = manager.find(Employee.class, code);
         if (employee == null) {
             employee = new Employee(code);
         }
@@ -538,7 +538,7 @@ public final class EmployeeTopComponent extends NTopComponent {
         employee.setMobile(mobile);
         employee.setNotes(notes);
         employee.setCity(city);
-        if (m.update(employee)) {
+        if (manager.update(employee)) {
             clear();
             codeField.requestFocus();
             return;
@@ -585,7 +585,7 @@ public final class EmployeeTopComponent extends NTopComponent {
     }
 
     private void fill(String code) {
-        Employee employee = m.find(Employee.class, code);
+        Employee employee = manager.find(Employee.class, code);
         fill(employee);
     }
 }

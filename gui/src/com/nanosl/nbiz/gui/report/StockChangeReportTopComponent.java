@@ -210,7 +210,7 @@ public final class StockChangeReportTopComponent extends NTopComponent {
     private void fillTable() {
         tableModel.setRowCount(0);
         Date date = jXDatePicker1.getDate();
-        StockChangeSummery stockChangeSummery = m.find(StockChangeSummery.class, date);
+        StockChangeSummery stockChangeSummery = manager.find(StockChangeSummery.class, date);
         if (stockChangeSummery == null) {
             return;
 

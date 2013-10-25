@@ -233,8 +233,10 @@ public final class RepSaleReportTopComponent extends NTopComponent {
             return;
         }
         int i = tableModel.getRowCount();
-        for (Iterator<RepSale> it = employee.getRepSaleCollection().iterator(); it.hasNext();) {
-            RepSale repSale = it.next();
+        if (employee == null) {
+            return;
+        }
+        for (RepSale repSale : employee.getRepSaleCollection()) {
             Item item = repSale.getItem();
             if (yyyy_MM_dd.format(date).equals(yyyy_MM_dd.format(repSale.getRepSalePK().getSaleDate()))) {
                 double loaded = repSale.getLoaded();
@@ -265,7 +267,7 @@ public final class RepSaleReportTopComponent extends NTopComponent {
 
     private void fillRep() {
         tableModel.setRowCount(0);
-        repComboBox.setModel(new DefaultComboBoxModel(m.find(Employee.class).toArray()));
+        repComboBox.setModel(new DefaultComboBoxModel(manager.find(Employee.class).toArray()));
     }
 
     private void calcTotal() {
@@ -278,7 +280,7 @@ public final class RepSaleReportTopComponent extends NTopComponent {
 
     @Override
     public void componentOpened() {
-         repComboBox.requestFocus();
+        repComboBox.requestFocus();
         // TODO add custom code on component opening
     }
 

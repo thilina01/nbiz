@@ -89,6 +89,7 @@ public final class SupplierTopComponent extends NTopComponent {
 
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
+        masterTable.setAutoCreateRowSorter(true);
         masterTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -123,12 +124,14 @@ public final class SupplierTopComponent extends NTopComponent {
             }
         });
         masterScrollPane.setViewportView(masterTable);
-        masterTable.getColumnModel().getColumn(0).setPreferredWidth(30);
-        masterTable.getColumnModel().getColumn(0).setHeaderValue(org.openide.util.NbBundle.getMessage(SupplierTopComponent.class, "SupplierTopComponent.masterTable.columnModel.title0")); // NOI18N
-        masterTable.getColumnModel().getColumn(1).setHeaderValue(org.openide.util.NbBundle.getMessage(SupplierTopComponent.class, "SupplierTopComponent.masterTable.columnModel.title1")); // NOI18N
-        masterTable.getColumnModel().getColumn(2).setPreferredWidth(300);
-        masterTable.getColumnModel().getColumn(2).setHeaderValue(org.openide.util.NbBundle.getMessage(SupplierTopComponent.class, "SupplierTopComponent.masterTable.columnModel.title2")); // NOI18N
-        masterTable.getColumnModel().getColumn(3).setHeaderValue(org.openide.util.NbBundle.getMessage(SupplierTopComponent.class, "SupplierTopComponent.masterTable.columnModel.title3")); // NOI18N
+        if (masterTable.getColumnModel().getColumnCount() > 0) {
+            masterTable.getColumnModel().getColumn(0).setPreferredWidth(30);
+            masterTable.getColumnModel().getColumn(0).setHeaderValue(org.openide.util.NbBundle.getMessage(SupplierTopComponent.class, "SupplierTopComponent.masterTable.columnModel.title0")); // NOI18N
+            masterTable.getColumnModel().getColumn(1).setHeaderValue(org.openide.util.NbBundle.getMessage(SupplierTopComponent.class, "SupplierTopComponent.masterTable.columnModel.title1")); // NOI18N
+            masterTable.getColumnModel().getColumn(2).setPreferredWidth(300);
+            masterTable.getColumnModel().getColumn(2).setHeaderValue(org.openide.util.NbBundle.getMessage(SupplierTopComponent.class, "SupplierTopComponent.masterTable.columnModel.title2")); // NOI18N
+            masterTable.getColumnModel().getColumn(3).setHeaderValue(org.openide.util.NbBundle.getMessage(SupplierTopComponent.class, "SupplierTopComponent.masterTable.columnModel.title3")); // NOI18N
+        }
 
         org.openide.awt.Mnemonics.setLocalizedText(codeLabel, org.openide.util.NbBundle.getMessage(SupplierTopComponent.class, "SupplierTopComponent.codeLabel.text")); // NOI18N
 

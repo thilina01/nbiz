@@ -329,7 +329,7 @@ public final class RepStockChangeTopComponent extends NTopComponent {
     }
 
     private void fillItems() {
-        itemComboBox.setModel(new DefaultComboBoxModel(m.find(Item.class).toArray()));
+        itemComboBox.setModel(new DefaultComboBoxModel(manager.find(Item.class).toArray()));
     }
 
     private void editTable() {
@@ -376,8 +376,8 @@ public final class RepStockChangeTopComponent extends NTopComponent {
         List<Serializable> serializables = new ArrayList<Serializable>();
         for (int i = 0; i < tableModel.getRowCount(); i++) {
             Employee employee = (Employee) repComboBox.getSelectedItem();
-            SrStock srStock = m.find(SrStock.class, new SrStockPK(employee.getCode(), masterTable.getValueAt(i, 1).toString()));
-            Item item = m.find(Item.class, masterTable.getValueAt(i, 1));
+            SrStock srStock = manager.find(SrStock.class, new SrStockPK(employee.getCode(), masterTable.getValueAt(i, 1).toString()));
+            Item item = manager.find(Item.class, masterTable.getValueAt(i, 1));
             double oldQuantity = srStock.getQuantity();
             double actualQuantity = Double.valueOf(masterTable.getValueAt(i, 4).toString());
             double rate = Double.valueOf(masterTable.getValueAt(i, 6).toString());
@@ -391,7 +391,7 @@ public final class RepStockChangeTopComponent extends NTopComponent {
             repStockChange.setRate(rate);
             serializables.add(repStockChange);
         }
-        if (m.update(serializables)) {
+        if (manager.update(serializables)) {
             showSuccess("Update success");
             reset();
         }
@@ -406,7 +406,7 @@ public final class RepStockChangeTopComponent extends NTopComponent {
     }
 
     private void fillReps() {
-        repComboBox.setModel(new DefaultComboBoxModel(m.find(Employee.class).toArray()));
+        repComboBox.setModel(new DefaultComboBoxModel(manager.find(Employee.class).toArray()));
     }
 
     private void KeyAdapter() {

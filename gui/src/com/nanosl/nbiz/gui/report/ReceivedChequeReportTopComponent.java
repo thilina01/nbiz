@@ -349,7 +349,7 @@ public final class ReceivedChequeReportTopComponent extends NTopComponent {
             String chequeNumber = tableModel.getValueAt(row, 1).toString();
             String bankCode = tableModel.getValueAt(row, 5).toString();
             String ReceiptNumber = tableModel.getValueAt(row, 7).toString();
-            saleCheque = m.find(SaleCheque.class, new SaleChequePK(chequeNumber, bankCode, ReceiptNumber));
+            saleCheque = manager.find(SaleCheque.class, new SaleChequePK(chequeNumber, bankCode, ReceiptNumber));
             if (saleCheque != null) {
                 chequeNumberTextField.setText(chequeNumber);
             }
@@ -362,7 +362,7 @@ public final class ReceivedChequeReportTopComponent extends NTopComponent {
             return;
         }
         saleCheque.setStatus(setStatusComboBox.getSelectedIndex());
-        if (m.update(saleCheque)) {
+        if (manager.update(saleCheque)) {
             showSuccess("Cheque " + saleCheque.getSaleChequePK().getChequeNumber() + " Updated.");
             clear();
             fill();

@@ -8,6 +8,7 @@ import com.nanosl.lib.date.JXDatePicker;
 import query.Find;
 import com.nanosl.nbiz.util.NTopComponent;
 import entity.CollectionReceipt;
+import entity.Customer;
 import entity.SaleCheque;
 import entity.SaleInvoice;
 import java.util.Collection;
@@ -278,57 +279,34 @@ public final class CollectionReportTopComponent extends NTopComponent {
             showError("No Collection Record Found!");
         }
         int i1 = 0, i2 = 0;
-        for (Iterator<CollectionReceipt> it = collectionReceipts.iterator(); it.hasNext();) {
-            CollectionReceipt collectionReceipt = it.next();
+        for (CollectionReceipt collectionReceipt : collectionReceipts) {
             SaleInvoice saleInvoice = collectionReceipt.getSaleInvoice();
+            Customer customer = saleInvoice.getCustomer();
             Object[] row = {
                 ++i1,
                 yyyy_MM_dd.format(collectionReceipt.getCollectedTime()),
-                saleInvoice.getCustomer().getCode(),
-                saleInvoice.getCustomer().getName(),
+                customer != null ? customer.getCode() : "",
+                customer != null ? customer.getName() : "",
                 saleInvoice.getInvNo(),
                 nf2d.format(collectionReceipt.getSaleCash().getAmount()),
                 collectionReceipt.getReceiptNumber()
             };
             cashTableModel.addRow(row);
             Collection<SaleCheque> saleCheques = collectionReceipt.getSaleChequeCollection();
-            for (Iterator<SaleCheque> it1 = saleCheques.iterator(); it1.hasNext();) {
-                SaleCheque saleCheque = it1.next();
+            for (SaleCheque saleCheque : saleCheques) {
                 Object[] row1 = {
                     ++i2,
                     saleCheque.getSaleChequePK().getChequeNumber(),
                     saleCheque.getBank().getName(),
                     yyyy_MM_dd.format(saleCheque.getBankingDate()),
                     nf2d.format(saleCheque.getAmount()),
-                    saleInvoice.getCustomer().getCode(),
-                    saleInvoice.getCustomer().getName(),
+                    customer != null ? customer.getCode() : "",
+                    customer != null ? customer.getName() : "",
                     saleInvoice.getInvNo()
                 };
                 chequeTableModel.addRow(row1);
             }
         }
-//
-//        Collection<SaleCheque> saleCheques = Find.saleChequeByDates(startDate, endDate);
-//        if (saleCheques == null) {
-//            setStatusMessage("No Cheque Record Found!", Color.red);
-//        }
-//        i = 0;
-//        for (Iterator<SaleCheque> it = saleCheques.iterator(); it.hasNext();) {
-//            SaleCheque saleCheque = it.next();
-//            CollectionReceipt collectionReceipt = saleCheque.getCollectionReceipt();
-//            SaleInvoice saleInvoice = collectionReceipt.getSaleInvoice();
-//            Object[] row = {
-//                ++i,
-//                saleCheque.getSaleChequePK().getChequeNumber(),
-//                saleCheque.getBank().getName(),
-//                yyyy_MM_dd.format(saleCheque.getBankingDate()),
-//                nf2d.format(saleCheque.getAmount()),
-//                saleInvoice.getCustomer().getCode(),
-//                saleInvoice.getCustomer().getName(),
-//                saleInvoice.getInvNo()
-//            };
-//            chequeTableModel.addRow(row);
-//        }
     }
 
     protected void onLoad() {

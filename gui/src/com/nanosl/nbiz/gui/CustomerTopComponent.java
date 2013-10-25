@@ -425,7 +425,7 @@ public final class CustomerTopComponent extends NTopComponent {
     }
 
     private void fillTable() {
-        List<Customer> customers = m.find(Customer.class);
+        List<Customer> customers = manager.find(Customer.class);
         tableModel.setRowCount(0);
         int i = 0;
         for (Iterator<Customer> it = customers.iterator(); it.hasNext();) {
@@ -464,7 +464,7 @@ public final class CustomerTopComponent extends NTopComponent {
         //clearFields();
         int row = masterTable.getSelectedRow();
         if (row > -1) {
-            Customer customer = m.find(Customer.class, masterTable.getValueAt(row, 1));
+            Customer customer = manager.find(Customer.class, masterTable.getValueAt(row, 1));
             fillData(customer);
         }
     }
@@ -478,7 +478,7 @@ public final class CustomerTopComponent extends NTopComponent {
         if (JOptionPane.YES_OPTION != JOptionPane.showConfirmDialog(deleteButton, "Delete " + code + " ?", "sure?", JOptionPane.YES_NO_OPTION)) {
             return;
         }
-        if (m.delete(Customer.class, code)) {
+        if (manager.delete(Customer.class, code)) {
             clear();
             return;
         }
@@ -504,7 +504,7 @@ public final class CustomerTopComponent extends NTopComponent {
         String fax = faxField.getText().trim();
         String notes = notesField.getText().trim();
         String city = cityField.getText().trim();
-        Customer customer = m.find(Customer.class, code);
+        Customer customer = manager.find(Customer.class, code);
         if (customer == null) {
             customer = new Customer(code);
         }
@@ -516,7 +516,7 @@ public final class CustomerTopComponent extends NTopComponent {
         customer.setMobile(mobile);
         customer.setNotes(notes);
         customer.setCity(city);
-        if (m.update(customer)) {
+        if (manager.update(customer)) {
             clear();
             codeField.requestFocus();
             return;

@@ -275,7 +275,7 @@ public final class RootAreaTopComponent extends NTopComponent {
     }
 
     private void fillTable() {
-        List<RootArea> rootAreas = m.find(RootArea.class);
+        List<RootArea> rootAreas = manager.find(RootArea.class);
         tableModel.setRowCount(0);
         int i = 0;
         for (Iterator<RootArea> it = rootAreas.iterator(); it.hasNext();) {
@@ -306,7 +306,7 @@ public final class RootAreaTopComponent extends NTopComponent {
 
         RootArea rootArea = new RootArea(code);
         rootArea.setName(name);
-        if (m.update(rootArea)) {
+        if (manager.update(rootArea)) {
             clear();
             return;
         }
@@ -322,7 +322,7 @@ public final class RootAreaTopComponent extends NTopComponent {
         if (JOptionPane.YES_OPTION != JOptionPane.showConfirmDialog(deleteButton, "Delete " + code + " ?", "sure?", JOptionPane.YES_NO_OPTION)) {
             return;
         }
-        if (m.delete(RootArea.class, code)) {
+        if (manager.delete(RootArea.class, code)) {
             clear();
              return;
         }

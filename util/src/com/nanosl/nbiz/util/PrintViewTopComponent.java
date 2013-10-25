@@ -95,6 +95,9 @@ public final class PrintViewTopComponent extends TopComponent {
 
     public void print(JasperReport report, Map parameters) {
         try {
+            if (report == null) {
+                return;
+            }
             JasperPrint jasperPrint = JasperFillManager.fillReport(report, parameters, Manager.getInstance().getConnection());
             jScrollPane1.setViewportView(new JRViewer(jasperPrint));
         } catch (JRException ex) {

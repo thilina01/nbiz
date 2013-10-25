@@ -4,6 +4,7 @@
  */
 package com.nanosl.nbiz.gui;
 
+import static com.nanosl.nbiz.util.Format.nf2d;
 import query.Find;
 import com.nanosl.nbiz.util.NTopComponent;
 import com.nanosl.nbiz.util.Printer;
@@ -11,7 +12,10 @@ import entity.Item;
 import entity.Stock;
 import java.util.Iterator;
 import java.util.List;
+import javax.swing.SwingWorker;
 import javax.swing.table.DefaultTableModel;
+import org.netbeans.api.progress.ProgressHandle;
+import org.netbeans.api.progress.ProgressHandleFactory;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
@@ -268,25 +272,51 @@ public final class StockTopComponent extends NTopComponent {
 
     private void fillTable() {
         tableModel.setRowCount(0);
-        int i = 0;
-        double total = 0;
-        m.clearCache();
-        List<Stock> stocks = allRadioButton.isSelected() ? m.find(Stock.class) : Find.stockLessMinLimit();
-        for (Iterator<Stock> it = stocks.iterator(); it.hasNext();) {
-            Stock stock = it.next();
-            Item item = stock.getItem();
-            if (item == null) {
-                showError("Item Not Found!");
-                return;
-            }
-            double quantity = stock.getQuantity();
-            double rate = item.getPriceList() != null ? item.getPriceList().getCostPack() != null ? item.getPriceList().getCostPack() : 0.0 : 0.0;
-            total += (quantity * rate);
-            Object[] row = {++i, item.getCode(), item.getDescription(), nf2d.format(quantity), nf2d.format(rate), nf2d.format(quantity * rate)};
-            tableModel.addRow(row);
+        SwingWorker<DefaultTableModel, Object[]> worker = new SwingWorker<DefaultTableModel, Object[]>() {
+            double total = 0;
 
-        }
-        totalLabel.setText(nf2d.format(total));
+            @Override
+            protected DefaultTableModel doInBackground() throws Exception {
+
+                Runnable run = new Runnable() {
+
+                    @Override
+                    public void run() {
+                        ProgressHandle p = ProgressHandleFactory.createHandle("Loading...");
+                        p.start();
+                        int i = 0;
+                        manager.clearCache();
+                        List<Stock> stocks = allRadioButton.isSelected() ? manager.find(Stock.class) : Find.stockLessMinLimit();
+                        for (Stock stock : stocks) {
+                            Item item = stock.getItem();
+                            if (item == null) {
+                                showError("Item Not Found!");
+                                return;
+                            }
+                            double quantity = stock.getQuantity();
+                            double rate = item.getPriceList() != null ? item.getPriceList().getCostPack() != null ? item.getPriceList().getCostPack() : 0.0 : 0.0;
+                            total += (quantity * rate);
+                            Object[] row = {++i, item.getCode(), item.getDescription(), nf2d.format(quantity), nf2d.format(rate), nf2d.format(quantity * rate)};
+                            publish(row);
+                        }
+                        p.finish();
+                    }
+                };
+                Thread t = new Thread(run);
+                t.start(); // start the task and progress visualisation
+
+                return tableModel;
+            }
+
+            @Override
+            protected void process(List<Object[]> chunks) {
+                for (Iterator<Object[]> it = chunks.iterator(); it.hasNext();) {
+                    tableModel.addRow(it.next());
+                }
+                totalLabel.setText(nf2d.format(total));
+            }
+        };
+        worker.execute();
     }
 
     protected void onLoad() {

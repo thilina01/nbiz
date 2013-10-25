@@ -322,7 +322,7 @@ public final class StockChangeTopComponent extends NTopComponent {
     }
 
     private void fillItems() {
-        itemComboBox.setModel(new DefaultComboBoxModel(m.find(Item.class).toArray()));
+        itemComboBox.setModel(new DefaultComboBoxModel(manager.find(Item.class).toArray()));
     }
 
     private void editTable() {
@@ -373,7 +373,7 @@ public final class StockChangeTopComponent extends NTopComponent {
         stockChangeSummery.setDeferent(Double.valueOf(totalLabel.getText().trim()));
         serializables.add(stockChangeSummery);
         for (int i = 0; i < tableModel.getRowCount(); i++) {
-            Item item = m.find(Item.class, masterTable.getValueAt(i, 1));
+            Item item = manager.find(Item.class, masterTable.getValueAt(i, 1));
             Stock stock = item.getStock();
             double oldQuantity = stock.getQuantity();
             double actualQuantity = Double.valueOf(masterTable.getValueAt(i, 4).toString());
@@ -389,7 +389,7 @@ public final class StockChangeTopComponent extends NTopComponent {
             stockChange.setStockChangeSummery(stockChangeSummery);
             serializables.add(stockChange);
         }
-        if (m.update(serializables)) {
+        if (manager.update(serializables)) {
             showSuccess("Update success");
 //            setStatusMessage("Update success");
             reset();
@@ -431,7 +431,7 @@ public final class StockChangeTopComponent extends NTopComponent {
     private void fillTable() {
         tableModel.setRowCount(0);
         int i = tableModel.getRowCount();
-        for (Iterator<Stock> it = m.find(Stock.class).iterator(); it.hasNext();) {
+        for (Iterator<Stock> it = manager.find(Stock.class).iterator(); it.hasNext();) {
             Stock stock = it.next();
             Item item = stock.getItem();
             double quantity = stock.getQuantity() == null ? 0 : stock.getQuantity();

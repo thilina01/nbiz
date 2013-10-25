@@ -312,15 +312,19 @@ public final class RepReturnTopComponent extends NTopComponent {
 
     private void fillTable() {
         Employee employee = (Employee) repComboBox.getSelectedItem();
+        if (employee != null) {
+            return;
+        }
         Item item = (Item) itemComboBox.getSelectedItem();
         int i = tableModel.getRowCount();
-        SrStock srStock = m.find(SrStock.class, new SrStockPK(employee.getCode(), item.getCode()));
+        SrStock srStock;
+        srStock = manager.find(SrStock.class, new SrStockPK(employee.getCode(), item.getCode()));
         double returnQuantity = Double.parseDouble(returnTextField.getText().trim());
         double price = item.getPriceList().getSellingPack() == null ? 0.0 : item.getPriceList().getSellingPack();
         if (srStock != null) {
             if (srStock.getPackPrice() == null) {
                 srStock.setPackPrice(price);
-                m.update(srStock);
+                manager.update(srStock);
             }
             price = srStock.getPackPrice();
         }
@@ -346,12 +350,12 @@ public final class RepReturnTopComponent extends NTopComponent {
 
     private void fillRep() {
         tableModel.setRowCount(0);
-        repComboBox.setModel(new DefaultComboBoxModel(m.find(Employee.class).toArray()));
+        repComboBox.setModel(new DefaultComboBoxModel(manager.find(Employee.class).toArray()));
         fillItems();
     }
 
     private void fillItems() {
-        itemComboBox.setModel(new DefaultComboBoxModel(m.find(Item.class).toArray()));
+        itemComboBox.setModel(new DefaultComboBoxModel(manager.find(Item.class).toArray()));
     }
 
     private void calcTotal() {
@@ -370,9 +374,9 @@ public final class RepReturnTopComponent extends NTopComponent {
         }
         List<Serializable> serializables = new ArrayList<Serializable>();
         for (int i = 0; i < tableModel.getRowCount(); i++) {
-            Item item = m.find(Item.class, tableModel.getValueAt(i, 1).toString());
+            Item item = manager.find(Item.class, tableModel.getValueAt(i, 1).toString());
             double returnQuantity = Double.parseDouble(tableModel.getValueAt(i, 3).toString());
-            SrStock srStock = m.find(SrStock.class, new SrStockPK(employee.getCode(), item.getCode()));
+            SrStock srStock = manager.find(SrStock.class, new SrStockPK(employee.getCode(), item.getCode()));
             DamageStock damageStock = item.getDamageStock();
             if (damageStock == null) {
                 damageStock = new DamageStock(item.getCode());
@@ -393,7 +397,7 @@ public final class RepReturnTopComponent extends NTopComponent {
             damageNotes.setReason(employee.getCode() + " " + employee.getFirstName());
             serializables.add(damageNotes);
         }
-        if (m.update(serializables)) {
+        if (manager.update(serializables)) {
             showSuccess("Update success");
             fillRep();
             fillItems();
@@ -447,8 +451,8 @@ public final class RepReturnTopComponent extends NTopComponent {
 
     @Override
     public void componentOpened() {
-       repComboBox.requestFocus();
-        
+        repComboBox.requestFocus();
+
     }
 
     @Override

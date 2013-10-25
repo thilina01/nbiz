@@ -383,13 +383,13 @@ public final class SubDealerTopComponent extends NTopComponent {
     private void clear() {
         clearFields();
         fillTable();
-        townComboBox.setModel(new DefaultComboBoxModel(m.find(Town.class).toArray()));
+        townComboBox.setModel(new DefaultComboBoxModel(manager.find(Town.class).toArray()));
     }
 
     private void fillTable() {
         int i = 0;
         tableModel.setRowCount(i);
-        for (Iterator<SubDealer> it = m.find(SubDealer.class).iterator(); it.hasNext();) {
+        for (Iterator<SubDealer> it = manager.find(SubDealer.class).iterator(); it.hasNext();) {
             SubDealer subDealer = it.next();
             Object[] row = {++i, subDealer.getCode(), subDealer.getName(), subDealer.getContact()};
             tableModel.addRow(row);
@@ -410,7 +410,7 @@ public final class SubDealerTopComponent extends NTopComponent {
         clearFields();
         int row = masterTable.getSelectedRow();
         if (row > -1) {
-            SubDealer subDealer = m.find(SubDealer.class, masterTable.getValueAt(row, 1));
+            SubDealer subDealer = manager.find(SubDealer.class, masterTable.getValueAt(row, 1));
             codeField.setText(subDealer.getCode());
             nameField.setText(subDealer.getName());
             addressNumberField.setText(subDealer.getAddress());
@@ -427,7 +427,7 @@ public final class SubDealerTopComponent extends NTopComponent {
             codeField.requestFocus();
             return;
         }
-        if (m.delete(SubDealer.class, code)) {
+        if (manager.delete(SubDealer.class, code)) {
             clear();
             return;
         }
@@ -455,7 +455,7 @@ public final class SubDealerTopComponent extends NTopComponent {
         String contact = phoneField.getText().trim();
         String owner = ownerField.getText().trim();
         Town town = (Town) townComboBox.getSelectedItem();
-        SubDealer subDealer = m.find(SubDealer.class, code);
+        SubDealer subDealer = manager.find(SubDealer.class, code);
         if (subDealer == null) {
             subDealer = new SubDealer(code);
         }
@@ -465,7 +465,7 @@ public final class SubDealerTopComponent extends NTopComponent {
         subDealer.setContact(contact);
         subDealer.setOwner(owner);
         subDealer.setTown(town);
-        if (m.update(subDealer)) {
+        if (manager.update(subDealer)) {
             clear();
             return;
         }
