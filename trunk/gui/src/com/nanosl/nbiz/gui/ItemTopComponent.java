@@ -5,6 +5,8 @@
 package com.nanosl.nbiz.gui;
 
 import com.nanosl.lib.log.Loggings;
+import com.nanosl.nbiz.util.Combo;
+import static com.nanosl.nbiz.util.Format.nf2d;
 import com.nanosl.nbiz.util.NTopComponent;
 import entity.Item;
 import entity.ItemType;
@@ -23,8 +25,11 @@ import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
+import javax.swing.SwingWorker;
 import javax.swing.table.DefaultTableModel;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
+import org.netbeans.api.progress.ProgressHandle;
+import org.netbeans.api.progress.ProgressHandleFactory;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
@@ -337,7 +342,7 @@ public final class ItemTopComponent extends NTopComponent {
     private void codeFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_codeFieldActionPerformed
         String code = codeField.getText().trim();
         if (!code.equals("")) {
-            fill(m.find(Item.class, code));
+            fill(manager.find(Item.class, code));
             itemTypeComboBox.requestFocus();
         }
     }//GEN-LAST:event_codeFieldActionPerformed
@@ -390,7 +395,7 @@ public final class ItemTopComponent extends NTopComponent {
         clearFields();
         int row = masterTable.getSelectedRow();
         if (row > -1) {
-            Item item = m.find(Item.class, masterTable.getValueAt(row, 1));
+            Item item = manager.find(Item.class, masterTable.getValueAt(row, 1));
             fill(item);
         }
     }
@@ -413,11 +418,11 @@ public final class ItemTopComponent extends NTopComponent {
             minLimText = minLimText.isEmpty() ? "0.0" : minLimText;
             double minimumLimit = Double.parseDouble(minLimText);
             Supplier supplier = (Supplier) supplierComboBox.getSelectedItem();
-            Item item = m.find(Item.class, code);
+            Item item = manager.find(Item.class, code);
             List<Serializable> serializables = new ArrayList<Serializable>();
             if (item == null) {
                 item = new Item(code);
-                LastCode lastCode = m.find(LastCode.class, "Item");
+                LastCode lastCode = manager.find(LastCode.class, "Item");
                 lastCode = lastCode == null ? new LastCode("Item") : lastCode;
                 lastCode.setCode(code);
                 serializables.add(lastCode);
@@ -438,7 +443,7 @@ public final class ItemTopComponent extends NTopComponent {
                 serializables.add(stock);
             }
             supplier.getItemCollection().add(item);
-            PriceList priceList = m.find(PriceList.class, code);
+            PriceList priceList = manager.find(PriceList.class, code);
             priceList = priceList == null ? new PriceList(code) : priceList;
             priceList.setCostPack(0.0);
             priceList.setItem(item);
@@ -449,7 +454,7 @@ public final class ItemTopComponent extends NTopComponent {
             serializables.add(item);
             serializables.add(priceList);
 
-            if (m.update(serializables)) {
+            if (manager.update(serializables)) {
                 clear();
                 codeField.requestFocus();
                 return;
@@ -471,7 +476,7 @@ public final class ItemTopComponent extends NTopComponent {
         if (JOptionPane.YES_OPTION != JOptionPane.showConfirmDialog(deleteButton, "Delete " + code + " ?", "sure?", JOptionPane.YES_NO_OPTION)) {
             return;
         }
-        if (m.delete(Item.class, code)) {
+        if (manager.delete(Item.class, code)) {
             clear();
             return;
 //            showSuccess("Item Deleted");
@@ -482,7 +487,8 @@ public final class ItemTopComponent extends NTopComponent {
 
     private void clear() {
         fillTable();
-        fillSuppliers();
+        Combo.fillSuppliers(supplierComboBox);
+//        fillSuppliers();
         fillItemTypes();
         clearFields();
         codeField.requestFocus();
@@ -500,38 +506,64 @@ public final class ItemTopComponent extends NTopComponent {
 
     private void fillTable() {
         tableModel.setRowCount(0);
-        int i = 0;
-        List<Serializable> serializables = new ArrayList<Serializable>();
-        List<Item> items = m.find(Item.class);
-        Collections.sort(items);
-        for (Iterator<Item> it = items.iterator(); it.hasNext();) {
-            Item item = it.next();
-            Stock stock = item.getStock();
-            if (stock == null) {
-                stock = new Stock(item.getCode());
-                stock.setBundles(0.0);
-                stock.setItem(item);
-                stock.setQuantity(0.0);
-                item.setStock(stock);
-                serializables.add(stock);
-            }
-            PriceList priceList = item.getPriceList();
+        SwingWorker<DefaultTableModel, Object[]> worker = new SwingWorker<DefaultTableModel, Object[]>() {
+            @Override
+            protected DefaultTableModel doInBackground() throws Exception {
 
-            if (priceList == null) {
-                priceList = new PriceList(item.getCode());
-                priceList.setCostPack(0.0);
-                priceList.setCostUnit(0.0);
-                priceList.setSellingPack(0.0);
-                priceList.setSellingUnit(0.0);
-                priceList.setItem(item);
-                item.setPriceList(priceList);
-                serializables.add(priceList);
+                Runnable run = new Runnable() {
+                    @Override
+                    public void run() {
+                        ProgressHandle p = ProgressHandleFactory.createHandle("Loading...");
+                        p.start();
+
+                        int i = 0;
+                        List<Serializable> serializables = new ArrayList<Serializable>();
+                        List<Item> items = manager.find(Item.class);
+                        Collections.sort(items);
+                        for (Item item : items) {
+                            Stock stock = item.getStock();
+                            if (stock == null) {
+                                stock = new Stock(item.getCode());
+                                stock.setBundles(0.0);
+                                stock.setItem(item);
+                                stock.setQuantity(0.0);
+                                item.setStock(stock);
+                                serializables.add(stock);
+                            }
+                            PriceList priceList = item.getPriceList();
+
+                            if (priceList == null) {
+                                priceList = new PriceList(item.getCode());
+                                priceList.setCostPack(0.0);
+                                priceList.setCostUnit(0.0);
+                                priceList.setSellingPack(0.0);
+                                priceList.setSellingUnit(0.0);
+                                priceList.setItem(item);
+                                item.setPriceList(priceList);
+                                serializables.add(priceList);
+                            }
+                            manager.update(serializables);
+                            double paymentAmount = Double.valueOf(priceList.getSellingPack() != null ? priceList.getSellingPack() : 0);
+                            Object[] row = {++i, item.getCode(), item.getDescription(), stock.getQuantity(), nf2d.format(paymentAmount)};
+                            publish(row);
+                        }
+                        p.finish();
+                    }
+                };
+                Thread t = new Thread(run);
+                t.start(); // start the task and progress visualisation
+
+                return tableModel;
             }
-            m.update(serializables);
-            double paymentAmount = Double.valueOf(priceList.getSellingPack() != null ? priceList.getSellingPack() : 0);
-            Object[] row = {++i, item.getCode(), item.getDescription(), stock.getQuantity(), nf2d.format(paymentAmount)};
-            tableModel.addRow(row);
-        }
+
+            @Override
+            protected void process(List<Object[]> chunks) {
+                for (Iterator<Object[]> it = chunks.iterator(); it.hasNext();) {
+                    tableModel.addRow(it.next());
+                }
+            }
+        };
+        worker.execute();
     }
 
     protected void onLoad() {
@@ -548,16 +580,16 @@ public final class ItemTopComponent extends NTopComponent {
     }
 
     private void fillSuppliers() {
-        supplierComboBox.setModel(new DefaultComboBoxModel(m.find(Supplier.class).toArray()));
+        supplierComboBox.setModel(new DefaultComboBoxModel(manager.find(Supplier.class).toArray()));
     }
 
     private void fillItemTypes() {
-        List<ItemType> itemTypes = m.find(ItemType.class);
+        List<ItemType> itemTypes = manager.find(ItemType.class);
         if (itemTypes.isEmpty()) {
-            m.update(new ItemType("ITEM"));
-            m.update(new ItemType("METERIAL"));
+            manager.update(new ItemType("ITEM"));
+            manager.update(new ItemType("METERIAL"));
         }
-        itemTypes = m.find(ItemType.class);
+        itemTypes = manager.find(ItemType.class);
         itemTypeComboBox.setModel(new DefaultComboBoxModel(itemTypes.toArray()));
     }
     KeyAdapter supplierComboBoxKeyAdapter = new java.awt.event.KeyAdapter() {
@@ -592,7 +624,7 @@ public final class ItemTopComponent extends NTopComponent {
 
     @Override
     public void componentOpened() {
-     codeField.requestFocus();
+        codeField.requestFocus();
     }
 
     @Override

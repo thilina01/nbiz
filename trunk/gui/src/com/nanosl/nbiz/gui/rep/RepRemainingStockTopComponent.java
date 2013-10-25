@@ -307,13 +307,15 @@ public final class RepRemainingStockTopComponent extends NTopComponent {
         Employee employee = (Employee) repComboBox.getSelectedItem();
         int i = 0;
         tableModel.setRowCount(i);
-        for (Iterator<SrStock> it = employee.getSrStockCollection().iterator(); it.hasNext();) {
-            SrStock srStock = it.next();
+        if (employee != null) {
+            return;
+        }
+        for (SrStock srStock : employee.getSrStockCollection()) {
             Item item = srStock.getItem();
             double quantity = srStock.getQuantity();
             if (srStock.getPackPrice() == null) {
                 srStock.setPackPrice(item.getPriceList().getSellingPack() == null ? 0.0 : item.getPriceList().getSellingPack());
-                m.update(srStock);
+                manager.update(srStock);
             }
             double price = srStock.getPackPrice();
             Object[] row = {++i, item.getCode(), item.getDescription(), quantity, 0.0, quantity, price, quantity * price};
@@ -338,13 +340,13 @@ public final class RepRemainingStockTopComponent extends NTopComponent {
 
     private void fillRep() {
         tableModel.setRowCount(0);
-        repComboBox.setModel(new DefaultComboBoxModel(m.find(Employee.class).toArray()));
+        repComboBox.setModel(new DefaultComboBoxModel(manager.find(Employee.class).toArray()));
         fillItems();
         fillTable();
     }
 
     private void fillItems() {
-        itemComboBox.setModel(new DefaultComboBoxModel(m.find(Item.class).toArray()));
+        itemComboBox.setModel(new DefaultComboBoxModel(manager.find(Item.class).toArray()));
     }
 
     private void editTable() {
@@ -396,9 +398,9 @@ public final class RepRemainingStockTopComponent extends NTopComponent {
         }
         List<Serializable> serializables = new ArrayList<Serializable>();
         for (int i = 0; i < tableModel.getRowCount(); i++) {
-            Item item = m.find(Item.class, tableModel.getValueAt(i, 1).toString());
+            Item item = manager.find(Item.class, tableModel.getValueAt(i, 1).toString());
             RepSalePK repSalePK = new RepSalePK(date, item.getCode(), employee.getCode());
-            RepSale repSale = m.find(RepSale.class, repSalePK);
+            RepSale repSale = manager.find(RepSale.class, repSalePK);
             if (repSale != null) {
                 showError("Can't update same item twice a day!" + repSalePK);
                 return;
@@ -414,7 +416,7 @@ public final class RepRemainingStockTopComponent extends NTopComponent {
             repSale.setRate(rate);
             serializables.add(repSale);
 
-            SrStock srStock = m.find(SrStock.class, new SrStockPK(employee.getCode(), item.getCode()));
+            SrStock srStock = manager.find(SrStock.class, new SrStockPK(employee.getCode(), item.getCode()));
             srStock.setQuantity(remaining);
             serializables.add(srStock);
         }
@@ -422,7 +424,7 @@ public final class RepRemainingStockTopComponent extends NTopComponent {
         repSaleValue.setAmount(Double.valueOf(totalTextField.getText().trim()));
         repSaleValue.setEmployee(employee);
         serializables.add(repSaleValue);
-        if (m.update(serializables)) {
+        if (manager.update(serializables)) {
             showSuccess("Update success");
             fillRep();
             fillItems();
@@ -438,7 +440,6 @@ public final class RepRemainingStockTopComponent extends NTopComponent {
         AutoCompleteDecorator.decorate(repComboBox);
         setComboBoxKeyAdapters(itemComboBox);
         setComboBoxKeyAdapters(repComboBox);
-
 
     }
 
@@ -471,7 +472,7 @@ public final class RepRemainingStockTopComponent extends NTopComponent {
 
     @Override
     public void componentOpened() {
-      repComboBox.requestFocus();
+        repComboBox.requestFocus();
     }
 
     @Override

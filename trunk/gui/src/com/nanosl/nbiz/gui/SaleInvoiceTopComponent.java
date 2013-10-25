@@ -8,6 +8,7 @@ import com.nanosl.lib.date.JXDatePicker;
 import com.nanosl.nbiz.util.Combo;
 import com.nanosl.nbiz.util.Data;
 import com.nanosl.nbiz.util.NTopComponent;
+import com.nanosl.nbiz.util.PrintViewTopComponent;
 import com.nanosl.nbiz.util.Printer;
 import entity.CollectionReceipt;
 import entity.Customer;
@@ -23,6 +24,7 @@ import java.awt.Component;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.Serializable;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -30,14 +32,19 @@ import java.util.Map;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComponent;
 import javax.swing.table.DefaultTableModel;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.util.JRLoader;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.util.AsyncGUIJob;
+import org.openide.util.Exceptions;
 import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
 import org.openide.util.Utilities;
+import org.openide.windows.WindowManager;
 
 /**
  * Top component which displays something.
@@ -455,10 +462,10 @@ public final class SaleInvoiceTopComponent extends NTopComponent {
             priceList.setSellingPack(price);
             priceList.setSellingUnit(price);
             priceList.setItem(item);
-            m.update(priceList);
+            manager.update(priceList);
         } else if (priceList.getSellingPack() == null) {
             priceList.setSellingPack(price);
-            m.update(priceList);
+            manager.update(priceList);
         }
         price = priceList.getSellingPack();
         quantityLabel.setText(nf2d.format(item.getStock().getQuantity()));
@@ -651,7 +658,7 @@ public final class SaleInvoiceTopComponent extends NTopComponent {
         saleInvoice.setEmployee(Data.getOperator().getEmployee());
         List<Serializable> serializables = new ArrayList<Serializable>();
         for (int i = 0; i < rowCount; i++) {
-            Item item = m.find(Item.class, table.getValueAt(i, 1).toString());
+            Item item = manager.find(Item.class, table.getValueAt(i, 1).toString());
             double quantity = Double.valueOf(table.getValueAt(i, 4).toString());
             double rate = Double.valueOf(table.getValueAt(i, 3).toString());
             double discount = Double.valueOf(table.getValueAt(i, 6).toString());
@@ -698,16 +705,24 @@ public final class SaleInvoiceTopComponent extends NTopComponent {
             serializables.add(collectionReceipt);
         }
 
-        if (m.update(serializables)) {
-//            SaleInvoicePaymentView.getInstance().fill(saleInvoice);
+        if (manager.update(serializables)) {
+            try {
+                //            SaleInvoicePaymentView.getInstance().fill(saleInvoice);
 //            SaleInvoicePaymentView.display();
-            Map<String, Object> params = Data.getParams();
-            params.put("invoice", invoiceNumber);
-            Printer.printInvoice(params);
-            showSuccess("Update success");
-            Data.setInvoiceNo(invoiceNumber);
-            Data.setReceiptNo(ReceiptNumber);
-            clear();
+                Map<String, Object> parameters = Data.getParams();
+                parameters.put("invoice", invoiceNumber);
+                PrintViewTopComponent tc = (PrintViewTopComponent) WindowManager.getDefault().findTopComponent("PrintViewTopComponent");
+                URL url = getClass().getResource("/com/nanosl/nbiz/gui/jrxml/" + "report1" + ".jasper");
+                //            URL url = getClass().getResource("/com/nanosl/nbiz/gui/jrxml/" + fileName + ".jasper");
+                JasperReport report = (JasperReport) JRLoader.loadObject(url);//"src/com/nanosl/nbiz/gui/jrxml/report1.jasper"
+                tc.print(report, parameters);
+                showSuccess("Update success");
+                Data.setInvoiceNo(invoiceNumber);
+                Data.setReceiptNo(ReceiptNumber);
+                clear();
+            } catch (JRException ex) {
+                Exceptions.printStackTrace(ex);
+            }
         } else {
             showError("Update failed");
         }
@@ -759,7 +774,7 @@ public final class SaleInvoiceTopComponent extends NTopComponent {
         double discount = 0;
         double net = 0;
         Item item = (Item) itemComboBox.getSelectedItem();
-        item = m.find(Item.class, item.getCode());
+        item = manager.find(Item.class, item.getCode());
         double availableQuantity = item.getStock().getQuantity();
 
         try {

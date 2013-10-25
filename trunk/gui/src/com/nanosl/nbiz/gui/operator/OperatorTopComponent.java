@@ -232,7 +232,7 @@ public final class OperatorTopComponent extends NTopComponent {
             return;
         }
         for (int idx = 0; idx < selected.length; idx++) {
-            if (!m.delete(Operator.class, tempTable.getValueAt(selected[idx], 1).toString())) {
+            if (!manager.delete(Operator.class, tempTable.getValueAt(selected[idx], 1).toString())) {
                 continue;
             }
         }
@@ -257,7 +257,7 @@ public final class OperatorTopComponent extends NTopComponent {
                 operator.setPassword(password);
                 operator.setPower(0);
                 operator.setCreatedDate(new Date());
-                m.update(operator);
+                manager.update(operator);
                 fillTempTable();
                 usernameTextField.setText("");
                 PasswordField.setText("");
@@ -270,11 +270,14 @@ public final class OperatorTopComponent extends NTopComponent {
 
     void fillTempTable() {
         tempTableModel.setRowCount(0);
-        List<Operator> operators = m.find(Operator.class);
-        for (Iterator<Operator> it = operators.iterator(); it.hasNext();) {
-            Operator operator = it.next();
+        List<Operator> operators = manager.find(Operator.class);
+        for (Operator operator : operators) {
             Date cDat = operator.getCreatedDate() == null ? new Date() : operator.getCreatedDate();
-            Object[] row = {operator.getEmployee().getFirstName(), operator.getUsername(), yyyy_MM_dd.format(cDat), operator.getCreatedBy()};
+            Employee employee = operator.getEmployee();
+            if (employee == null) {
+                continue;
+            }
+            Object[] row = {employee.getFirstName(), operator.getUsername(), yyyy_MM_dd.format(cDat), operator.getCreatedBy()};
             tempTableModel.addRow(row);
         }
     }

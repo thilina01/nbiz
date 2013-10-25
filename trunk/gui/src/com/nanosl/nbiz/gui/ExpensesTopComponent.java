@@ -232,12 +232,12 @@ public final class ExpensesTopComponent extends NTopComponent {
         calendar.set(Calendar.SECOND, nowCalendar.get(Calendar.SECOND));
         calendar.set(Calendar.MILLISECOND, nowCalendar.get(Calendar.MILLISECOND));
         date = calendar.getTime();
-        ExpensesType expensesType = m.find(ExpensesType.class, "OTHER");
+        ExpensesType expensesType = manager.find(ExpensesType.class, "OTHER");
         if (expensesType == null) {
             expensesType = new ExpensesType("OTHER");
             expensesType.setDescription("OTHER EXPENSES");
-            m.update(expensesType);
-            expensesType = m.find(ExpensesType.class, "OTHER");
+            manager.update(expensesType);
+            expensesType = manager.find(ExpensesType.class, "OTHER");
         }
         Expenses expenses = new Expenses(date);
         expenses.setExpensesType(expensesType);
@@ -245,7 +245,7 @@ public final class ExpensesTopComponent extends NTopComponent {
         expenses.setAmount(amount);
         expenses.setPaidTime(date);
 
-        if (m.update(expenses)) {
+        if (manager.update(expenses)) {
             showSuccess("Update Success!");
             clear();
         }

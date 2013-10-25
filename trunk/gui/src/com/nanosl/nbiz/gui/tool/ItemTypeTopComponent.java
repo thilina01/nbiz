@@ -278,7 +278,7 @@ public final class ItemTypeTopComponent extends NTopComponent {
 
         ItemType itemType = new ItemType(type);
         itemType.setType(type);
-        if (m.update(itemType)) {
+        if (manager.update(itemType)) {
             clear();
             return;
         }
@@ -295,7 +295,7 @@ public final class ItemTypeTopComponent extends NTopComponent {
         if (JOptionPane.YES_OPTION != JOptionPane.showConfirmDialog(deleteButton, "Delete " + code + " ?", "sure?", JOptionPane.YES_NO_OPTION)) {
             return;
         }
-        if (m.delete(ItemType.class, code)) {
+        if (manager.delete(ItemType.class, code)) {
             clear();
             return;
         }
@@ -313,7 +313,7 @@ public final class ItemTypeTopComponent extends NTopComponent {
     }
 
     private void fillTable() {
-        List<ItemType> rootAreas = m.find(ItemType.class);
+        List<ItemType> rootAreas = manager.find(ItemType.class);
         tableModel.setRowCount(0);
         int i = 0;
         for (Iterator<ItemType> it = rootAreas.iterator(); it.hasNext();) {

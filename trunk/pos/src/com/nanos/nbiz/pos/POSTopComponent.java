@@ -20,8 +20,6 @@ import entity.SaleInvoiceHasItem;
 import entity.SaleInvoiceHasItemPK;
 import entity.Stock;
 import java.awt.Component;
-import java.awt.GraphicsEnvironment;
-import java.awt.Rectangle;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.Serializable;
@@ -30,8 +28,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
+import javax.swing.SwingWorker;
 import javax.swing.table.DefaultTableModel;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperReport;
@@ -72,7 +73,6 @@ public final class POSTopComponent extends NTopComponent {
         onLoad();
         setName(Bundle.CTL_POSTopComponent());
         setToolTipText(Bundle.HINT_POSTopComponent());
-
     }
 
     /**
@@ -154,6 +154,7 @@ public final class POSTopComponent extends NTopComponent {
         org.openide.awt.Mnemonics.setLocalizedText(jLabel4, org.openide.util.NbBundle.getMessage(POSTopComponent.class, "POSTopComponent.jLabel4.text")); // NOI18N
 
         itemComboBox.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
+        itemComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Loading....." }));
         itemComboBox.setName("itemComboBox"); // NOI18N
         itemComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -499,8 +500,10 @@ public final class POSTopComponent extends NTopComponent {
     private void itemComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemComboBoxActionPerformed
         Item item = (Item) itemComboBox.getSelectedItem();
         PriceList priceList = item.getPriceList();
-        quantityLabel.setText(nf2d.format(item.getStock().getQuantity()));
-        priceField.setText(nf2d.format(priceList.getSellingPack()));
+        double quantity = item.getStock().getQuantity() == null ? 0 : item.getStock().getQuantity();
+        quantityLabel.setText(nf2d.format(quantity));
+        double price = priceList.getSellingPack() == null ? 0 : priceList.getSellingPack();
+        priceField.setText(nf2d.format(price));
     }//GEN-LAST:event_itemComboBoxActionPerformed
 
     private void itemComboBoxKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_itemComboBoxKeyPressed
@@ -611,10 +614,10 @@ public final class POSTopComponent extends NTopComponent {
     private javax.swing.JTextField totalDiscountField;
     // End of variables declaration//GEN-END:variables
     DefaultTableModel dtm;
+    private DefaultComboBoxModel comboBoxModel = new DefaultComboBoxModel();
 
     private void onLoad() {
         initComponents();
-
         AutoCompleteDecorator.decorate(itemComboBox);
         setComboBoxKeyAdapters(itemComboBox);
         datePicker.setFormats(yyyy_MM_dd);
@@ -644,6 +647,8 @@ public final class POSTopComponent extends NTopComponent {
         dtm.setRowCount(0);
         Combo.fillCustomers(customerComboBox);
         Combo.fillItems(itemComboBox);
+        
+//        itemComboBoxWorker.execute();
         clearFields();
     }
 
@@ -713,10 +718,11 @@ public final class POSTopComponent extends NTopComponent {
                 break;
             }
         }
-        item = m.find(Item.class, item.getCode());
-        double availableQuantity = item.getStock().getQuantity();
+        item = manager.find(Item.class, item.getCode());
+        double availableQuantity = 0.0;
 
         try {
+            availableQuantity = item.getStock().getQuantity();
             quantity = Double.valueOf(quantityField.getText());
             price = Double.valueOf(priceField.getText().trim());
             discount = Double.valueOf(discountField.getText().trim());
@@ -763,10 +769,10 @@ public final class POSTopComponent extends NTopComponent {
     @Override
     public void setVisible(boolean b) {
         super.setVisible(b);
-        Rectangle rectangle = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
-        setBounds(0, 50, rectangle.width, rectangle.height - 50);
-        Combo.fillCustomers(customerComboBox);
-        Combo.fillItems(itemComboBox);
+//        Rectangle rectangle = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
+//        setBounds(0, 50, rectangle.width, rectangle.height - 50);
+//        Combo.fillCustomers(customerComboBox);
+//        Combo.fillItems(itemComboBox);
 //        customerComboBox.requestFocus();
         itemComboBox.requestFocus();
     }
@@ -791,11 +797,14 @@ public final class POSTopComponent extends NTopComponent {
 
         Customer customer = (Customer) customerComboBox.getSelectedItem();
         String customerName = "";
-        if (customer.getCode().equals("000") || customer.getCode().equalsIgnoreCase("CASH")) {
+        if (customer == null) {
+            customerName = JOptionPane.showInputDialog("Customer Name");
+        } else if (customer.getCode().equals("000") || customer.getCode().equalsIgnoreCase("CASH")) {
             customerName = JOptionPane.showInputDialog("Customer Name");
         } else {
             customerName = customer.getName();
         }
+
         String totalAmountText = totalAmountField.getText().trim();
         String remainingAmountText = remainingAmountField.getText().trim();
         String totalDiscountText = totalDiscountField.getText().trim();
@@ -831,7 +840,7 @@ public final class POSTopComponent extends NTopComponent {
         saleInvoice.setEmployee(Data.getOperator().getEmployee());
         List<Serializable> serializables = new ArrayList<Serializable>();
         for (int i = 0; i < rowCount; i++) {
-            Item item = m.find(Item.class, table.getValueAt(i, 0).toString());
+            Item item = manager.find(Item.class, table.getValueAt(i, 0).toString());
             double quantity = Double.valueOf(table.getValueAt(i, 3).toString());
             double rate = Double.valueOf(table.getValueAt(i, 2).toString());
             double itemDiscount = Double.valueOf(table.getValueAt(i, 5).toString());
@@ -871,7 +880,7 @@ public final class POSTopComponent extends NTopComponent {
             serializables.add(collectionReceipt);
         }
 
-        if (m.update(serializables)) {
+        if (manager.update(serializables)) {
 //            SaleInvoicePaymentView.getInstance().fill(saleInvoice);
 //            SaleInvoicePaymentView.display();
             if (printCheckBox.isSelected()) {

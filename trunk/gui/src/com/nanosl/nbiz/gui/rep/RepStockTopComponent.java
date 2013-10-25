@@ -211,15 +211,17 @@ public final class RepStockTopComponent extends NTopComponent {
     private void fillTable() {
         tableModel.setRowCount(0);
         int i = tableModel.getRowCount();
-        Employee rep = (Employee) repComboBox.getSelectedItem();
-        m.clearCache();
-        rep = m.find(Employee.class, rep.getCode());
-        for (Iterator<SrStock> it = rep.getSrStockCollection().iterator(); it.hasNext();) {
-            SrStock srStock = it.next();
+        Employee employee = (Employee) repComboBox.getSelectedItem();
+        if (employee != null) {
+            return;
+        }
+        manager.clearCache();
+        employee = manager.find(Employee.class, employee.getCode());
+        for (SrStock srStock : employee.getSrStockCollection()) {
             Item item = srStock.getItem();
             if (srStock.getPackPrice() == null) {
                 srStock.setPackPrice(item.getPriceList().getSellingPack() == null ? 0.0 : item.getPriceList().getSellingPack());
-                m.update(srStock);
+                manager.update(srStock);
             }
             double price = srStock.getPackPrice();
             Object[] row = {++i, item.getCode(), item.getDescription(), srStock.getQuantity(), nf2d.format(price)};
@@ -242,7 +244,7 @@ public final class RepStockTopComponent extends NTopComponent {
 
     private void fillRep() {
         tableModel.setRowCount(0);
-        repComboBox.setModel(new DefaultComboBoxModel(m.find(Employee.class).toArray()));
+        repComboBox.setModel(new DefaultComboBoxModel(manager.find(Employee.class).toArray()));
         fillTable();
     }
 

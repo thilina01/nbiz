@@ -260,7 +260,7 @@ public final class EmployeePositionTopComponent extends NTopComponent {
     }
 
     private void fillTable() {
-        List<EmployeePosition> employeePositions = m.find(EmployeePosition.class);
+        List<EmployeePosition> employeePositions = manager.find(EmployeePosition.class);
         tableModel.setRowCount(0);
         int i = 0;
         for (Iterator<EmployeePosition> it = employeePositions.iterator(); it.hasNext();) {
@@ -289,10 +289,10 @@ public final class EmployeePositionTopComponent extends NTopComponent {
             return;
         }
 
-        EmployeePosition employeePosition = m.find(EmployeePosition.class, code);
+        EmployeePosition employeePosition = manager.find(EmployeePosition.class, code);
         employeePosition = employeePosition == null ? new EmployeePosition(code) : employeePosition;
         employeePosition.setDescription(name);
-        if (m.update(employeePosition)) {
+        if (manager.update(employeePosition)) {
             clear();
             return;
         }
@@ -308,7 +308,7 @@ public final class EmployeePositionTopComponent extends NTopComponent {
         if (JOptionPane.YES_OPTION != JOptionPane.showConfirmDialog(deleteButton, "Delete " + code + " ?", "sure?", JOptionPane.YES_NO_OPTION)) {
             return;
         }
-        if (m.delete(EmployeePosition.class, code)) {
+        if (manager.delete(EmployeePosition.class, code)) {
             clear();
             return;
         }

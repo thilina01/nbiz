@@ -265,7 +265,7 @@ public final class SelingPriceChangeTopComponent extends NTopComponent {
 
     private void reset() {
         tableModel.setRowCount(0);
-        itemComboBox.setModel(new DefaultComboBoxModel(m.find(Item.class).toArray()));
+        itemComboBox.setModel(new DefaultComboBoxModel(manager.find(Item.class).toArray()));
         newPriceTextField.setText("");
     }
 
@@ -283,8 +283,8 @@ public final class SelingPriceChangeTopComponent extends NTopComponent {
                 priceList.setSellingUnit(0.0);
                 priceList.setItem(item);
                 item.setPriceList(priceList);
-                m.update(priceList);
-                m.update(item);
+                manager.update(priceList);
+                manager.update(item);
             }
             int i = tableModel.getRowCount();
 
@@ -308,7 +308,7 @@ public final class SelingPriceChangeTopComponent extends NTopComponent {
             List<Serializable> serializables = new ArrayList<Serializable>();
             for (int i = 0; i < rowCount; i++) {
                 double newPrice = Double.valueOf(table.getValueAt(i, 4).toString());
-                Item item = m.find(Item.class, table.getValueAt(i, 1).toString());
+                Item item = manager.find(Item.class, table.getValueAt(i, 1).toString());
                 PriceList priceList = item.getPriceList();
                 OldPrice oldPrice = new OldPrice(date, item.getCode());
                 oldPrice.setItem(item);
@@ -321,7 +321,7 @@ public final class SelingPriceChangeTopComponent extends NTopComponent {
                 serializables.add(priceList);
                 serializables.add(item);
             }
-            if (m.update(serializables)) {
+            if (manager.update(serializables)) {
                 showSuccess("Update Success");
                 reset();
             } else {

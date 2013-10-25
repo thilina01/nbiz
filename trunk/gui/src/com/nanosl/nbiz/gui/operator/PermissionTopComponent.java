@@ -203,8 +203,8 @@ public final class PermissionTopComponent extends NTopComponent {
                 ses.add(viewPanel);
             }
             ses.add(operator);
-            m.update(ses);
-            m.clearCache();
+            manager.update(ses);
+            manager.clearCache();
             loadOperatorViews();
             loadAvaliableViews();
 
@@ -237,8 +237,8 @@ public final class PermissionTopComponent extends NTopComponent {
             return;
         }
         Operator operator = (Operator) o;
-        operator = m.find(Operator.class, operator.getUsername());
-        List<ViewPanel> viewPanels = m.exNamedQueryResult("ViewPanel.findAll");
+        operator = manager.find(Operator.class, operator.getUsername());
+        List<ViewPanel> viewPanels = manager.exNamedQueryResult("ViewPanel.findAll");
         List<ViewPanel> blankViewPanels = new ArrayList<ViewPanel>();
 
         if (operator == null || viewPanels == null) {
@@ -264,7 +264,7 @@ public final class PermissionTopComponent extends NTopComponent {
             return;
         }
         Operator operator = (Operator) o;
-        operator = m.find(Operator.class, operator.getUsername());
+        operator = manager.find(Operator.class, operator.getUsername());
         permitedViewList.setListData(operator.getViewPanelCollection().toArray());
     }
 
@@ -281,8 +281,8 @@ public final class PermissionTopComponent extends NTopComponent {
         ViewPanel viewPanel = (ViewPanel) o;
         viewPanel.getOperatorCollection().remove(operator);
         operator.getViewPanelCollection().remove(viewPanel);
-        m.update(viewPanel);
-        m.update(operator);
+        manager.update(viewPanel);
+        manager.update(operator);
 
         loadAvaliableViews();
         loadOperatorViews();
@@ -300,7 +300,7 @@ public final class PermissionTopComponent extends NTopComponent {
     }
 
     private void loadOperators() {
-        List<Operator> operators = m.find(Operator.class);
+        List<Operator> operators = manager.find(Operator.class);
         operatorList.setListData(operators.toArray());
     }
 

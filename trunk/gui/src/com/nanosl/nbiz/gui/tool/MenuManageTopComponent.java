@@ -327,7 +327,7 @@ public final class MenuManageTopComponent extends NTopComponent {
             return;
         }
         Menu menu = (Menu) o;
-        menu = m.find(Menu.class, menu.getMenu());
+        menu = manager.find(Menu.class, menu.getMenu());
 
         activeMenuItemList.setListData(Find.menuItemByMenuAndStatus(menu, 1).toArray());
         inactiveMenuItemList.setListData(Find.menuItemByMenuAndStatus(menu, 0).toArray());
@@ -339,9 +339,9 @@ public final class MenuManageTopComponent extends NTopComponent {
             return;
         }
         Menu menu = (Menu) o;
-        menu = m.find(Menu.class, menu.getMenu());
+        menu = manager.find(Menu.class, menu.getMenu());
         menu.setStatus(i);
-        m.update(menu);
+        manager.update(menu);
         refresh();
     }
 
@@ -351,9 +351,9 @@ public final class MenuManageTopComponent extends NTopComponent {
             return;
         }
         MenuItem menuItem = (MenuItem) o;
-        menuItem = m.find(MenuItem.class, menuItem.getMenuItemPK());
+        menuItem = manager.find(MenuItem.class, menuItem.getMenuItemPK());
         menuItem.setStatus(i);
-        m.update(menuItem);
+        manager.update(menuItem);
         fillMenuItemList();
 //        mainView.menuRegister();
     }

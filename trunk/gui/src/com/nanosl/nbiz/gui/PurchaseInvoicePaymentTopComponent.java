@@ -477,7 +477,7 @@ public final class PurchaseInvoicePaymentTopComponent extends NTopComponent {
     private void fillInvoiceTable() {
         invoiceDtm.setRowCount(0);
         paymentDtm.setRowCount(0);
-        purchaseInvoices = m.find(PurchaseInvoice.class);
+        purchaseInvoices = manager.find(PurchaseInvoice.class);
         for (Iterator<PurchaseInvoice> it = purchaseInvoices.iterator(); it.hasNext();) {
             PurchaseInvoice pi = it.next();
             double credit = pi.getCredit() == null ? 0 : pi.getCredit();
@@ -497,7 +497,7 @@ public final class PurchaseInvoicePaymentTopComponent extends NTopComponent {
 
     public void fill(PurchaseInvoice pi) {
         clearAll();
-        purchaseInvoice = m.find(PurchaseInvoice.class, pi.getPurchaseInvoicePK());
+        purchaseInvoice = manager.find(PurchaseInvoice.class, pi.getPurchaseInvoicePK());
         invoiceNumberField.setText(purchaseInvoice.getPurchaseInvoicePK().getInvNo());
         invoiceDateField.setText(yyyy_MM_dd.format(purchaseInvoice.getInvDate()));
         supplierNameField.setText(purchaseInvoice.getSupplier().getName());
@@ -577,7 +577,7 @@ public final class PurchaseInvoicePaymentTopComponent extends NTopComponent {
             for (int i = 0; i < rowCount; i++) {
                 Object o = paymentTable.getValueAt(i, 1);
                 String chequeNumber = o == null ? "" : o.toString().trim();
-                Bank bank = m.find(Bank.class, paymentTable.getValueAt(i, 3).toString());
+                Bank bank = manager.find(Bank.class, paymentTable.getValueAt(i, 3).toString());
                 double amount = Double.valueOf(paymentTable.getValueAt(i, 0).toString());
                 Date date = yyyy_MM_dd.parse(paymentTable.getValueAt(i, 2).toString());
                 if (chequeNumber.equals("")) {
@@ -613,7 +613,7 @@ public final class PurchaseInvoicePaymentTopComponent extends NTopComponent {
         double remainingAmount = Double.valueOf(remainingAmountField.getText().trim());
         purchaseInvoice.setCredit(remainingAmount);
         serializables.add(purchaseInvoice);
-        if (m.update(serializables)) {
+        if (manager.update(serializables)) {
             clearAll();
         } else {
             showError("Unable to complete payment!");

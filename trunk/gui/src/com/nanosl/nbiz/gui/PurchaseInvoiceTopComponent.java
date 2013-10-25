@@ -577,15 +577,15 @@ public final class PurchaseInvoiceTopComponent extends NTopComponent {
 
     private void fillItems() {
         Supplier supplier = (Supplier) supplierComboBox.getSelectedItem();
-        supplier = m.find(Supplier.class, supplier.getCode());
+        supplier = manager.find(Supplier.class, supplier.getCode());
         if (supplier.getCode().equals("000")) {
-            LastCode lastCode = m.find(LastCode.class, "SUPPLIERINVOICE");
+            LastCode lastCode = manager.find(LastCode.class, "SUPPLIERINVOICE");
             if (lastCode == null) {
                 lastCode = new LastCode("SUPPLIERINVOICE");
                 lastCode.setCode("000");
-                m.update(lastCode);
+                manager.update(lastCode);
             }
-            lastCode = m.find(LastCode.class, "SUPPLIERINVOICE");
+            lastCode = manager.find(LastCode.class, "SUPPLIERINVOICE");
             invoiceNumberField.setText(lastCode.getCode());
         }
         itemComboBox.setModel(new DefaultComboBoxModel(supplier.getItemCollection().toArray()));
@@ -618,7 +618,7 @@ public final class PurchaseInvoiceTopComponent extends NTopComponent {
             return;
         }
         Supplier supplier = (Supplier) supplierComboBox.getSelectedItem();
-        PurchaseInvoice purchaseInvoice = m.find(PurchaseInvoice.class, new PurchaseInvoicePK(invoiceNumber, supplier.getCode()));//new PurchaseInvoice(invoiceNumber, supplier.getCode());
+        PurchaseInvoice purchaseInvoice = manager.find(PurchaseInvoice.class, new PurchaseInvoicePK(invoiceNumber, supplier.getCode()));//new PurchaseInvoice(invoiceNumber, supplier.getCode());
         if (purchaseInvoice != null) {
             showError("Invoice Already Updated!");
             return;
@@ -635,7 +635,7 @@ public final class PurchaseInvoiceTopComponent extends NTopComponent {
 
         List<Serializable> serializables = new ArrayList<Serializable>();
         for (int i = 0; i < rowCount; i++) {
-            Item item = m.find(Item.class, table.getValueAt(i, 1).toString());
+            Item item = manager.find(Item.class, table.getValueAt(i, 1).toString());
             double value = Double.valueOf(table.getValueAt(i, 3).toString());
             double quantity = Double.valueOf(table.getValueAt(i, 4).toString());
             double discount = Double.valueOf(table.getValueAt(i, 7).toString());
@@ -665,12 +665,12 @@ public final class PurchaseInvoiceTopComponent extends NTopComponent {
             serializables.add(stock);
         }
         if (supplier.getCode().equals("000")) {
-            LastCode lastCode = m.find(LastCode.class, "SUPPLIERINVOICE");
+            LastCode lastCode = manager.find(LastCode.class, "SUPPLIERINVOICE");
             lastCode.setCode(invoiceNumber);
             serializables.add(lastCode);
         }
         serializables.add(purchaseInvoice);
-        if (m.update(serializables)) {
+        if (manager.update(serializables)) {
             clear();
             showSuccess("Update Success");
         }

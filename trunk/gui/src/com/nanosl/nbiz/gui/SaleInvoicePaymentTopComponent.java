@@ -8,6 +8,7 @@ import com.nanosl.lib.date.JXDatePicker;
 import com.nanosl.lib.log.Loggings;
 import com.nanosl.nbiz.util.Data;
 import com.nanosl.nbiz.util.NTopComponent;
+import com.nanosl.nbiz.util.PrintViewTopComponent;
 import com.nanosl.nbiz.util.Printer;
 import entity.Bank;
 import entity.CanceledInvoice;
@@ -25,6 +26,7 @@ import java.awt.Component;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.Serializable;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -36,12 +38,15 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.util.JRLoader;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
+import org.openide.windows.WindowManager;
 
 /**
  * Top component which displays something.
@@ -531,7 +536,7 @@ public final class SaleInvoicePaymentTopComponent extends NTopComponent {
     }//GEN-LAST:event_receiptDatePickerKeyPressed
 
     private void bankingDatePickerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bankingDatePickerActionPerformed
-   //paymentAmountTextField.requestFocus();
+        //paymentAmountTextField.requestFocus();
     }//GEN-LAST:event_bankingDatePickerActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -592,7 +597,7 @@ public final class SaleInvoicePaymentTopComponent extends NTopComponent {
     private void fillInvoiceTable() {
         invoiceDtm.setRowCount(0);
         paymentDtm.setRowCount(0);
-        for (Iterator<SaleInvoice> it = m.find(SaleInvoice.class).iterator(); it.hasNext();) {
+        for (Iterator<SaleInvoice> it = manager.find(SaleInvoice.class).iterator(); it.hasNext();) {
             SaleInvoice si = it.next();
             double receivedAmount = si.getReceivedAmount() == null ? 0 : si.getReceivedAmount();
             if (si.getAmount() > receivedAmount) {
@@ -606,7 +611,7 @@ public final class SaleInvoicePaymentTopComponent extends NTopComponent {
         saleInvoice = null;
         int selectedRow = invoiceTable.getSelectedRow();
         if (selectedRow > -1) {
-            saleInvoice = m.find(SaleInvoice.class, invoiceTable.getValueAt(selectedRow, 0));
+            saleInvoice = manager.find(SaleInvoice.class, invoiceTable.getValueAt(selectedRow, 0));
             fill(saleInvoice);
         }
     }
@@ -669,7 +674,7 @@ public final class SaleInvoicePaymentTopComponent extends NTopComponent {
     }
 
     private void calcRemaining() {
-        SaleInvoice saleInvoice = m.find(SaleInvoice.class, invoiceNumberField.getText().trim());
+        SaleInvoice saleInvoice = manager.find(SaleInvoice.class, invoiceNumberField.getText().trim());
         double remaining = saleInvoice.getAmount() - (saleInvoice.getReceivedAmount() == null ? 0 : saleInvoice.getReceivedAmount());
         int rowCount = paymentTable.getRowCount();
         for (int i = 0; i < rowCount; i++) {
@@ -705,14 +710,14 @@ public final class SaleInvoicePaymentTopComponent extends NTopComponent {
         try {
             List<Serializable> serializables = new ArrayList<Serializable>();
             String invoiceNumber = invoiceNumberField.getText().trim();
-            SaleInvoice saleInvoice = m.find(SaleInvoice.class, invoiceNumber);
+            SaleInvoice saleInvoice = manager.find(SaleInvoice.class, invoiceNumber);
             String receiptNumber = receiptNumberTextField.getText().trim();
             double paidAmount = Double.parseDouble(paidTextField.getText().trim());
             if (receiptNumber.isEmpty()) {
                 showError("Receipt Number Required.");
                 return;
             }
-            CollectionReceipt collectionReceipt = m.find(CollectionReceipt.class, receiptNumber);
+            CollectionReceipt collectionReceipt = manager.find(CollectionReceipt.class, receiptNumber);
             if (collectionReceipt != null) {
                 showError("Receipt " + receiptNumber + " Already Updated.");
                 return;
@@ -738,7 +743,7 @@ public final class SaleInvoicePaymentTopComponent extends NTopComponent {
                 } else {
                     Date bankingDate = yyyy_MM_dd.parse(paymentTable.getValueAt(i, 2).toString());
                     String bankCode = paymentTable.getValueAt(i, 3).toString();
-                    Bank bank = m.find(Bank.class, bankCode);
+                    Bank bank = manager.find(Bank.class, bankCode);
                     SaleChequePK saleChequePK = new SaleChequePK(chequeNumber, bankCode, receiptNumber);
                     SaleCheque saleCheque = new SaleCheque(saleChequePK);
                     saleCheque.setAmount(amount);
@@ -756,12 +761,16 @@ public final class SaleInvoicePaymentTopComponent extends NTopComponent {
             saleInvoice.setCredit(remainingAmount);
             saleInvoice.setReceivedAmount(saleInvoice.getAmount() - remainingAmount);
             serializables.add(saleInvoice);
-            if (m.update(serializables)) {
-                Map<String, Object> params = new LinkedHashMap<String, Object>();
-                params.put("invoice", invoiceNumber);
-                params.put("receipt", receiptNumber);
-                params.put("paidAmount", paidAmount);
-                Printer.printReceipt(params);
+            if (manager.update(serializables)) {
+                Map<String, Object> parameters = new LinkedHashMap<String, Object>();
+                parameters.put("invoice", invoiceNumber);
+                parameters.put("receipt", receiptNumber);
+                parameters.put("paidAmount", paidAmount);
+                PrintViewTopComponent tc = (PrintViewTopComponent) WindowManager.getDefault().findTopComponent("PrintViewTopComponent");
+                URL url = getClass().getResource("/com/nanosl/nbiz/gui/jrxml/" + "receipt" + ".jasper");
+                //            URL url = getClass().getResource("/com/nanosl/nbiz/gui/jrxml/" + fileName + ".jasper");
+                JasperReport report = (JasperReport) JRLoader.loadObject(url);//"src/com/nanosl/nbiz/gui/jrxml/report1.jasper"
+                tc.print(report, parameters);
                 showSuccess("Update Success.");
                 clearAll();
                 return;
@@ -773,7 +782,7 @@ public final class SaleInvoicePaymentTopComponent extends NTopComponent {
     }
 
     private void fillBanks() {
-        bankComboBox.setModel(new DefaultComboBoxModel(m.find(Bank.class).toArray()));
+        bankComboBox.setModel(new DefaultComboBoxModel(manager.find(Bank.class).toArray()));
     }
 
     private void KeyAdapter() {
@@ -818,7 +827,7 @@ public final class SaleInvoicePaymentTopComponent extends NTopComponent {
 
     private void cancelInvoice() {
         String invoiceNumber = invoiceNumberField.getText().trim();
-        SaleInvoice saleInvoice = m.find(SaleInvoice.class, invoiceNumber);
+        SaleInvoice saleInvoice = manager.find(SaleInvoice.class, invoiceNumber);
         if (saleInvoice == null) {
             showError("No Invoice Selected.");
             return;
@@ -838,7 +847,7 @@ public final class SaleInvoicePaymentTopComponent extends NTopComponent {
         List<Serializable> serializables = new ArrayList<Serializable>();
         for (Iterator<SaleInvoiceHasItem> it = saleInvoiceHasItems.iterator(); it.hasNext();) {
             SaleInvoiceHasItem saleInvoiceHasItem = it.next();
-            Item item = m.find(Item.class, saleInvoiceHasItem.getItem().getCode());
+            Item item = manager.find(Item.class, saleInvoiceHasItem.getItem().getCode());
             CanceledInvoiceHasItem canceledInvoiceHasItem = new CanceledInvoiceHasItem(invoiceNumber, item.getCode());
             canceledInvoiceHasItem.setCanceledInvoice(canceledInvoice);
             canceledInvoiceHasItem.setItem(item);
@@ -861,8 +870,8 @@ public final class SaleInvoicePaymentTopComponent extends NTopComponent {
         canceledInvoice.setReceivedAmount(saleInvoice.getReceivedAmount());
         canceledInvoice.setCanceledInvoiceHasItemCollection(canceledInvoiceHasItems);
         serializables.add(canceledInvoice);
-        if (m.update(serializables)) {
-            m.delete(SaleInvoice.class, saleInvoice.getInvNo());
+        if (manager.update(serializables)) {
+            manager.delete(SaleInvoice.class, saleInvoice.getInvNo());
             showSuccess("Invoice Canceled");
             clearAll();
         }
