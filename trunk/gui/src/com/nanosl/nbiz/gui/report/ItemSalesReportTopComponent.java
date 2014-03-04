@@ -17,7 +17,6 @@ import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Vector;
 import javax.swing.table.DefaultTableModel;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
@@ -332,18 +331,22 @@ public final class ItemSalesReportTopComponent extends NTopComponent {
 
     private void export() {
         @SuppressWarnings("UseOfObsoleteCollectionType")
-        Vector vector = tableModel.getDataVector();
-        jFileChooser1.setSize(200, 200);
-        jFileChooser1.setVisible(true);
+        String osUser = System.getProperty("user.name");
+        String firstDate = yyyy_MM_dd.format(startDatePicker.getDate());
+        String lastDate = yyyy_MM_dd.format(endDatePicker.getDate());
+        String fileName = firstDate;
+        if (!firstDate.equals(lastDate)) {
+            fileName = fileName + " to " + lastDate;
+        }
+        String path = "C:/Users/" + osUser + "/Documents/" + fileName+".ser";
         try {
-            FileOutputStream fileOut =
-                    new FileOutputStream("C:/Users/Public/Documents/list.ser");
+            FileOutputStream fileOut = new FileOutputStream(path);
             ObjectOutputStream out = new ObjectOutputStream(fileOut);
-            out.writeObject(vector);
+            out.writeObject(tableModel.getDataVector());
             out.close();
             fileOut.close();
-            System.out.println("Serialized data is saved in C:/Users/Public/Documents/list.ser");
-            Runtime.getRuntime().exec("explorer C:/Users/Public/Documents/");
+            System.out.println("Serialized data is saved in " + path);
+            Runtime.getRuntime().exec("explorer " + path);
         } catch (IOException i) {
         }
     }
