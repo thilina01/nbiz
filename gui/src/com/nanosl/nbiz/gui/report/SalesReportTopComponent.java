@@ -59,7 +59,7 @@ public final class SalesReportTopComponent extends NTopComponent {
         jLabel2 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         table = new javax.swing.JTable();
-        totalProfitLabel = new javax.swing.JLabel();
+        totalLabel = new javax.swing.JLabel();
         startDatePicker = new JXDatePicker();
         endDatePicker = new JXDatePicker();
         fillButton = new javax.swing.JButton();
@@ -85,28 +85,30 @@ public final class SalesReportTopComponent extends NTopComponent {
             }
         });
         jScrollPane1.setViewportView(table);
-        table.getColumnModel().getColumn(0).setPreferredWidth(400);
-        table.getColumnModel().getColumn(0).setHeaderValue(org.openide.util.NbBundle.getMessage(SalesReportTopComponent.class, "SalesReportTopComponent.table.columnModel.title0")); // NOI18N
-        table.getColumnModel().getColumn(1).setPreferredWidth(50);
-        table.getColumnModel().getColumn(1).setHeaderValue(org.openide.util.NbBundle.getMessage(SalesReportTopComponent.class, "SalesReportTopComponent.table.columnModel.title1")); // NOI18N
-        table.getColumnModel().getColumn(1).setCellRenderer(rightAlignCell);
-        table.getColumnModel().getColumn(2).setPreferredWidth(50);
-        table.getColumnModel().getColumn(2).setHeaderValue(org.openide.util.NbBundle.getMessage(SalesReportTopComponent.class, "SalesReportTopComponent.table.columnModel.title2")); // NOI18N
-        table.getColumnModel().getColumn(2).setCellRenderer(rightAlignCell);
-        table.getColumnModel().getColumn(3).setPreferredWidth(50);
-        table.getColumnModel().getColumn(3).setHeaderValue(org.openide.util.NbBundle.getMessage(SalesReportTopComponent.class, "SalesReportTopComponent.table.columnModel.title3")); // NOI18N
-        table.getColumnModel().getColumn(3).setCellRenderer(rightAlignCell);
-        table.getColumnModel().getColumn(4).setPreferredWidth(50);
-        table.getColumnModel().getColumn(4).setHeaderValue(org.openide.util.NbBundle.getMessage(SalesReportTopComponent.class, "SalesReportTopComponent.table.columnModel.title4")); // NOI18N
-        table.getColumnModel().getColumn(4).setCellRenderer(rightAlignCell);
-        table.getColumnModel().getColumn(5).setPreferredWidth(50);
-        table.getColumnModel().getColumn(5).setHeaderValue(org.openide.util.NbBundle.getMessage(SalesReportTopComponent.class, "SalesReportTopComponent.table.columnModel.title5")); // NOI18N
-        table.getColumnModel().getColumn(5).setCellRenderer(rightAlignCell);
-        table.getColumnModel().getColumn(6).setPreferredWidth(50);
-        table.getColumnModel().getColumn(6).setHeaderValue(org.openide.util.NbBundle.getMessage(SalesReportTopComponent.class, "SalesReportTopComponent.table.columnModel.title6")); // NOI18N
-        table.getColumnModel().getColumn(6).setCellRenderer(rightAlignCell);
+        if (table.getColumnModel().getColumnCount() > 0) {
+            table.getColumnModel().getColumn(0).setPreferredWidth(400);
+            table.getColumnModel().getColumn(0).setHeaderValue(org.openide.util.NbBundle.getMessage(SalesReportTopComponent.class, "SalesReportTopComponent.table.columnModel.title0")); // NOI18N
+            table.getColumnModel().getColumn(1).setPreferredWidth(50);
+            table.getColumnModel().getColumn(1).setHeaderValue(org.openide.util.NbBundle.getMessage(SalesReportTopComponent.class, "SalesReportTopComponent.table.columnModel.title1")); // NOI18N
+            table.getColumnModel().getColumn(1).setCellRenderer(rightAlignCell);
+            table.getColumnModel().getColumn(2).setPreferredWidth(50);
+            table.getColumnModel().getColumn(2).setHeaderValue(org.openide.util.NbBundle.getMessage(SalesReportTopComponent.class, "SalesReportTopComponent.table.columnModel.title2")); // NOI18N
+            table.getColumnModel().getColumn(2).setCellRenderer(rightAlignCell);
+            table.getColumnModel().getColumn(3).setPreferredWidth(50);
+            table.getColumnModel().getColumn(3).setHeaderValue(org.openide.util.NbBundle.getMessage(SalesReportTopComponent.class, "SalesReportTopComponent.table.columnModel.title3")); // NOI18N
+            table.getColumnModel().getColumn(3).setCellRenderer(rightAlignCell);
+            table.getColumnModel().getColumn(4).setPreferredWidth(50);
+            table.getColumnModel().getColumn(4).setHeaderValue(org.openide.util.NbBundle.getMessage(SalesReportTopComponent.class, "SalesReportTopComponent.table.columnModel.title4")); // NOI18N
+            table.getColumnModel().getColumn(4).setCellRenderer(rightAlignCell);
+            table.getColumnModel().getColumn(5).setPreferredWidth(50);
+            table.getColumnModel().getColumn(5).setHeaderValue(org.openide.util.NbBundle.getMessage(SalesReportTopComponent.class, "SalesReportTopComponent.table.columnModel.title5")); // NOI18N
+            table.getColumnModel().getColumn(5).setCellRenderer(rightAlignCell);
+            table.getColumnModel().getColumn(6).setPreferredWidth(50);
+            table.getColumnModel().getColumn(6).setHeaderValue(org.openide.util.NbBundle.getMessage(SalesReportTopComponent.class, "SalesReportTopComponent.table.columnModel.title6")); // NOI18N
+            table.getColumnModel().getColumn(6).setCellRenderer(rightAlignCell);
+        }
 
-        org.openide.awt.Mnemonics.setLocalizedText(totalProfitLabel, org.openide.util.NbBundle.getMessage(SalesReportTopComponent.class, "SalesReportTopComponent.totalProfitLabel.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(totalLabel, org.openide.util.NbBundle.getMessage(SalesReportTopComponent.class, "SalesReportTopComponent.totalLabel.text")); // NOI18N
 
         startDatePicker.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -136,7 +138,7 @@ public final class SalesReportTopComponent extends NTopComponent {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(totalProfitLabel))
+                        .addComponent(totalLabel))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 922, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel2)
@@ -161,7 +163,7 @@ public final class SalesReportTopComponent extends NTopComponent {
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 437, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(totalProfitLabel)
+                .addComponent(totalLabel)
                 .addContainerGap())
         );
 
@@ -200,14 +202,14 @@ public final class SalesReportTopComponent extends NTopComponent {
     private javax.swing.JScrollPane jScrollPane1;
     private org.jdesktop.swingx.JXDatePicker startDatePicker;
     private javax.swing.JTable table;
-    private javax.swing.JLabel totalProfitLabel;
+    private javax.swing.JLabel totalLabel;
     // End of variables declaration//GEN-END:variables
     DefaultTableModel tableModel;
 
     private void fillTable() {
        try {
             tableModel.setRowCount(0);
-            totalProfitLabel.setText(nf2d.format(0));
+            totalLabel.setText(nf2d.format(0));
             Date startDate = startDatePicker.getDate();
             Date endDate = endDatePicker.getDate();
             double totalProfit = 0;
@@ -235,7 +237,7 @@ public final class SalesReportTopComponent extends NTopComponent {
                     nf2d.format(profit)
                 };
                 tableModel.addRow(row);
-                totalProfitLabel.setText(nf2d.format(totalProfit));
+                totalLabel.setText(nf2d.format(totalProfit));
             }
             FindMySql.close();
             ///////////////////////
@@ -285,11 +287,13 @@ public final class SalesReportTopComponent extends NTopComponent {
     }
 
     private void calcTotal() {
-        double total = 0;
+        double totalProfit = 0;
+        double totalIncome = 0;
         for (int i = 0; i < tableModel.getRowCount(); i++) {
-            total += Double.valueOf(tableModel.getValueAt(i, 6).toString());
+            totalProfit += Double.valueOf(tableModel.getValueAt(i, 6).toString());
+            totalIncome += Double.valueOf(tableModel.getValueAt(i, 3).toString());
         }
-        totalProfitLabel.setText(nf2d.format(total));
+        totalLabel.setText("Total: Income "+nf2d.format(totalIncome) +" & Profit " +nf2d.format(totalProfit) );
     }
 
     @Override
