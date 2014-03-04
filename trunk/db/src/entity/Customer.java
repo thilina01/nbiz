@@ -36,6 +36,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Customer.findByFixedLine", query = "SELECT c FROM Customer c WHERE c.fixedLine = :fixedLine"),
     @NamedQuery(name = "Customer.findByFax", query = "SELECT c FROM Customer c WHERE c.fax = :fax"),
     @NamedQuery(name = "Customer.findByNotes", query = "SELECT c FROM Customer c WHERE c.notes = :notes"),
+    @NamedQuery(name = "Customer.findByNic", query = "SELECT c FROM Customer c WHERE c.nic = :nic"),
     @NamedQuery(name = "Customer.findByOperator", query = "SELECT c FROM Customer c WHERE c.operator = :operator")})
 public class Customer implements Serializable, Comparable<Customer> {
 
@@ -59,6 +60,16 @@ public class Customer implements Serializable, Comparable<Customer> {
     @Column(name = "fax")
     private String fax;
     @Column(name = "notes")
+    private String nic;
+
+    public String getNic() {
+        return nic;
+    }
+
+    public void setNic(String nic) {
+        this.nic = nic;
+    }
+    @Column(name = "nic")
     private String notes;
     @Column(name = "operator")
     private String operator;

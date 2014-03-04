@@ -38,6 +38,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "SaleInvoice.findByReceivedAmount", query = "SELECT s FROM SaleInvoice s WHERE s.receivedAmount = :receivedAmount"),
     @NamedQuery(name = "SaleInvoice.findByDiscount", query = "SELECT s FROM SaleInvoice s WHERE s.discount = :discount"),
     @NamedQuery(name = "SaleInvoice.findByCredit", query = "SELECT s FROM SaleInvoice s WHERE s.credit = :credit"),
+    @NamedQuery(name = "SaleInvoice.findByCardNumber", query = "SELECT s FROM SaleInvoice s WHERE s.cardNumber = :cardNumber"),
     @NamedQuery(name = "SaleInvoice.findByPrinted", query = "SELECT s FROM SaleInvoice s WHERE s.printed = :printed"),
     @NamedQuery(name = "SaleInvoice.findByOperator", query = "SELECT s FROM SaleInvoice s WHERE s.operator = :operator")})
 public class SaleInvoice implements Serializable {
@@ -60,6 +61,8 @@ public class SaleInvoice implements Serializable {
     private Double discount;
     @Column(name = "credit")
     private Double credit;
+    @Column(name = "card_number")
+    private Double cardNumber;
     @Column(name = "printed")
     private Integer printed;
     @Column(name = "operator")
@@ -90,6 +93,14 @@ public class SaleInvoice implements Serializable {
         this.invNo = invNo;
     }
 
+    public Double getCardNumber() {
+        return cardNumber;
+    }
+
+    public void setCardNumber(Double cardNumber) {
+        this.cardNumber = cardNumber;
+    }
+    
     public Date getInvTime() {
         return invTime;
     }
