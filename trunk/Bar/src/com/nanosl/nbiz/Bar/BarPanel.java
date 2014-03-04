@@ -24,7 +24,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -54,6 +53,7 @@ public class BarPanel extends javax.swing.JPanel {
         items = manager.find(Item.class);
         tableModel = (DefaultTableModel) table.getModel();
         fillTable();
+        codeRadioButton.setSelected(true);
     }
 
     /**
@@ -65,8 +65,8 @@ public class BarPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        buttonGroup1 = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
         qKeyTextField = new javax.swing.JTextField();
         itemDetailLabel = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -79,11 +79,10 @@ public class BarPanel extends javax.swing.JPanel {
         totalQuantityTextField = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
         dateLabel = new javax.swing.JLabel();
+        qKeyRadioButton = new javax.swing.JRadioButton();
+        codeRadioButton = new javax.swing.JRadioButton();
 
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(BarPanel.class, "BarPanel.jLabel1.text")); // NOI18N
 
         qKeyTextField.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         qKeyTextField.setText(org.openide.util.NbBundle.getMessage(BarPanel.class, "BarPanel.jTextField4.text")); // NOI18N
@@ -130,18 +129,20 @@ public class BarPanel extends javax.swing.JPanel {
             }
         });
         jScrollPane1.setViewportView(table);
-        table.getColumnModel().getColumn(0).setPreferredWidth(50);
-        table.getColumnModel().getColumn(0).setHeaderValue(org.openide.util.NbBundle.getMessage(BarPanel.class, "BarPanel.table.columnModel.title0")); // NOI18N
-        table.getColumnModel().getColumn(1).setPreferredWidth(100);
-        table.getColumnModel().getColumn(1).setHeaderValue(org.openide.util.NbBundle.getMessage(BarPanel.class, "BarPanel.table.columnModel.title1")); // NOI18N
-        table.getColumnModel().getColumn(2).setPreferredWidth(500);
-        table.getColumnModel().getColumn(2).setHeaderValue(org.openide.util.NbBundle.getMessage(BarPanel.class, "BarPanel.table.columnModel.title2")); // NOI18N
-        table.getColumnModel().getColumn(3).setHeaderValue(org.openide.util.NbBundle.getMessage(BarPanel.class, "BarPanel.jTable1.columnModel.title4")); // NOI18N
-        table.getColumnModel().getColumn(3).setCellRenderer(rightAlignCell);
-        table.getColumnModel().getColumn(4).setHeaderValue(org.openide.util.NbBundle.getMessage(BarPanel.class, "BarPanel.jTable1.columnModel.title3")); // NOI18N
-        table.getColumnModel().getColumn(4).setCellRenderer(rightAlignCell);
-        table.getColumnModel().getColumn(5).setHeaderValue(org.openide.util.NbBundle.getMessage(BarPanel.class, "BarPanel.table.columnModel.title5")); // NOI18N
-        table.getColumnModel().getColumn(5).setCellRenderer(rightAlignCell);
+        if (table.getColumnModel().getColumnCount() > 0) {
+            table.getColumnModel().getColumn(0).setPreferredWidth(50);
+            table.getColumnModel().getColumn(0).setHeaderValue(org.openide.util.NbBundle.getMessage(BarPanel.class, "BarPanel.table.columnModel.title0")); // NOI18N
+            table.getColumnModel().getColumn(1).setPreferredWidth(100);
+            table.getColumnModel().getColumn(1).setHeaderValue(org.openide.util.NbBundle.getMessage(BarPanel.class, "BarPanel.table.columnModel.title1")); // NOI18N
+            table.getColumnModel().getColumn(2).setPreferredWidth(500);
+            table.getColumnModel().getColumn(2).setHeaderValue(org.openide.util.NbBundle.getMessage(BarPanel.class, "BarPanel.table.columnModel.title2")); // NOI18N
+            table.getColumnModel().getColumn(3).setHeaderValue(org.openide.util.NbBundle.getMessage(BarPanel.class, "BarPanel.jTable1.columnModel.title4")); // NOI18N
+            table.getColumnModel().getColumn(3).setCellRenderer(rightAlignCell);
+            table.getColumnModel().getColumn(4).setHeaderValue(org.openide.util.NbBundle.getMessage(BarPanel.class, "BarPanel.jTable1.columnModel.title3")); // NOI18N
+            table.getColumnModel().getColumn(4).setCellRenderer(rightAlignCell);
+            table.getColumnModel().getColumn(5).setHeaderValue(org.openide.util.NbBundle.getMessage(BarPanel.class, "BarPanel.table.columnModel.title5")); // NOI18N
+            table.getColumnModel().getColumn(5).setCellRenderer(rightAlignCell);
+        }
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(jLabel4, org.openide.util.NbBundle.getMessage(BarPanel.class, "BarPanel.jLabel4.text")); // NOI18N
@@ -166,6 +167,14 @@ public class BarPanel extends javax.swing.JPanel {
         dateLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         org.openide.awt.Mnemonics.setLocalizedText(dateLabel, org.openide.util.NbBundle.getMessage(BarPanel.class, "BarPanel.dateLabel.text")); // NOI18N
 
+        buttonGroup1.add(qKeyRadioButton);
+        qKeyRadioButton.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(qKeyRadioButton, org.openide.util.NbBundle.getMessage(BarPanel.class, "BarPanel.qKeyRadioButton.text")); // NOI18N
+
+        buttonGroup1.add(codeRadioButton);
+        codeRadioButton.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(codeRadioButton, org.openide.util.NbBundle.getMessage(BarPanel.class, "BarPanel.codeRadioButton.text")); // NOI18N
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -179,9 +188,12 @@ public class BarPanel extends javax.swing.JPanel {
                             .addComponent(itemDetailLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel3))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(jLabel3)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(qKeyRadioButton)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(codeRadioButton)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(qKeyTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(quantityTextField))
@@ -193,7 +205,7 @@ public class BarPanel extends javax.swing.JPanel {
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(totalAmountTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(totalQuantityTextField))))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 171, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 108, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(dateLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING))))
@@ -204,11 +216,12 @@ public class BarPanel extends javax.swing.JPanel {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
                     .addComponent(qKeyTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4)
                     .addComponent(totalAmountTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(dateLabel))
+                    .addComponent(dateLabel)
+                    .addComponent(qKeyRadioButton)
+                    .addComponent(codeRadioButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -262,22 +275,24 @@ public class BarPanel extends javax.swing.JPanel {
         double quantity = 0;
         try {
             quantity = Double.parseDouble(quantityText);
-        } catch (Exception e) {
+        } catch (NumberFormatException e) {
             return;
         }
         sellItem(selectItem(itemCodeText), quantity);
 
     }//GEN-LAST:event_quantityTextFieldActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JRadioButton codeRadioButton;
     private javax.swing.JLabel dateLabel;
     private javax.swing.JLabel itemDetailLabel;
     private javax.swing.JButton jButton1;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JRadioButton qKeyRadioButton;
     private javax.swing.JTextField qKeyTextField;
     private javax.swing.JTextField quantityTextField;
     private javax.swing.JTable table;
@@ -297,15 +312,20 @@ public class BarPanel extends javax.swing.JPanel {
     }
 
     private Item selectItem(String qKeyText) {
-        for (Iterator<Item> it = items.iterator(); it.hasNext();) {
-            Item item = it.next();            
-            int qKey = item.getQkey()==null?-1:item.getQkey();
-            try {
-                int qKeyInt = Integer.parseInt(qKeyText);
-                if (qKey == qKeyInt) {
-                    return (item);
+        for (Item item : items) {
+            if (codeRadioButton.isSelected()) {
+                if (item.getCode().equals(qKeyText)) {
+                    return item;
                 }
-            } catch (Exception e) {
+            } else {
+                try {
+                    int qKey = item.getQkey() == null ? -1 : item.getQkey();
+                    int qKeyInt = Integer.parseInt(qKeyText);
+                    if (qKey == qKeyInt) {
+                        return (item);
+                    }
+                } catch (NumberFormatException e) {
+                }
             }
         }
         return null;
@@ -317,9 +337,9 @@ public class BarPanel extends javax.swing.JPanel {
         String ReceiptNumber = Data.getReceiptNo();
         double price = item.getPriceList().getSellingPack();
         double amount = price * quantity;
-        
-        String message = "<html><center> <h2> [  " + item.getDescription() + "  ]<br/> " + nf2d.format(price)  + " X " + nf2d.format(quantity)+ "<br/>  " + nf2d.format(amount) + " </h2></center></html>";
-        
+
+        String message = "<html><center> <h2> [  " + item.getDescription() + "  ]<br/> " + nf2d.format(price) + " X " + nf2d.format(quantity) + "<br/>  " + nf2d.format(amount) + " </h2></center></html>";
+
         int option = JOptionPane.showConfirmDialog(itemDetailLabel, message, nf2d.format(amount), JOptionPane.YES_NO_OPTION);
         if (option != JOptionPane.OK_OPTION) {
             clearFields();
@@ -366,7 +386,6 @@ public class BarPanel extends javax.swing.JPanel {
         sihi.setRate(price);
         serializables.add(sihi);
 //        serializables.add(stock);
-
 
         serializables.add(saleInvoice);
 //        String paidAmountText = paidAmountField.getText().trim();
