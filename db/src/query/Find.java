@@ -43,6 +43,9 @@ import javax.persistence.Table;
     @NamedQuery(name = "DamageNotes.findByDateTimeAndEmployeeCode", query = "SELECT d FROM DamageNotes d WHERE d.damageNotesPK.dateTime = :dateTime AND d.damageNotesPK.employeeCode = :employeeCode"),
     @NamedQuery(name = "PurchaseInvoice.findByInvDates", query = "SELECT p FROM PurchaseInvoice p WHERE p.invDate BETWEEN :startDate AND :endDate"),
     @NamedQuery(name = "SaleInvoice.findByInvDates", query = "SELECT s FROM SaleInvoice s WHERE s.invTime BETWEEN :startDate AND :endDate"),
+    @NamedQuery(name = "SaleInvoice.findByCard", query = "SELECT s FROM SaleInvoice s WHERE s.cardNumber = :card"),
+    @NamedQuery(name = "SaleInvoice.findAllCards", query = "SELECT s FROM SaleInvoice s WHERE s.cardNumber IS NOT NULL"),
+    @NamedQuery(name = "SaleInvoice.findActiveCardsByNic", query = "SELECT s FROM SaleInvoice s WHERE s.customer.nic = :nic AND s.cardNumber IS NOT NULL AND s.amount> s.receivedAmount"),
     @NamedQuery(name = "SaleInvoiceHasItem.findByItemAndInvDates", query = "SELECT s FROM SaleInvoiceHasItem s WHERE s.item = :item AND s.saleInvoice.invTime BETWEEN :startDate AND :endDate"),
     @NamedQuery(name = "SaleInvoiceHasItem.findByInvDates", query = "SELECT s FROM SaleInvoiceHasItem s WHERE s.saleInvoice.invTime BETWEEN :startDate AND :endDate GROUP BY s.saleInvoiceHasItemPK.itemCode, s.rate ORDER BY s.saleInvoiceHasItemPK.itemCode"),
     @NamedQuery(name = "PurchaseInvoiceHasItem.findByItemndInvDates", query = "SELECT p FROM PurchaseInvoiceHasItem p WHERE p.item = :item AND p.purchaseInvoice.invDate BETWEEN :startDate AND :endDate"),
@@ -75,6 +78,23 @@ public class Find implements Serializable {
         Query qry = man.getEm().createNamedQuery("SaleInvoice.findByInvDates");
         qry.setParameter("startDate", startDate);
         qry.setParameter("endDate", endDate);
+        return man.exNamedQueryParamResult(qry);
+    }
+
+    public static Collection<SaleInvoice> saleInvoicesByCard(String card) {
+        Query qry = man.getEm().createNamedQuery("SaleInvoice.findByCard");
+        qry.setParameter("card", card);
+        return man.exNamedQueryParamResult(qry);
+    }
+
+    public static Collection<SaleInvoice> saleInvoicesAsActiveCardsByNic(String nic) {
+        Query qry = man.getEm().createNamedQuery("SaleInvoice.findActiveCardsByNic");
+        qry.setParameter("nic", nic);
+        return man.exNamedQueryParamResult(qry);
+    }
+
+    public static Collection<SaleInvoice> saleInvoicesAsCard() {
+        Query qry = man.getEm().createNamedQuery("SaleInvoice.findAllCards");
         return man.exNamedQueryParamResult(qry);
     }
 
@@ -176,13 +196,13 @@ public class Find implements Serializable {
     }
 
     public static List<SaleInvoiceHasItem> saleInvoiceItemsByDates(Date startDate, Date endDate) {
-        
+
         Query qry = man.getEm().createNamedQuery("SaleInvoiceHasItem.findByInvDates");
         qry.setParameter("startDate", startDate);
         qry.setParameter("endDate", endDate);
         return man.exNamedQueryParamResult(qry);
     }
-    
+
     @Id
     private Long id;
     private static Manager man = Manager.getInstance();

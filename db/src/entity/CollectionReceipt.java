@@ -50,7 +50,9 @@ public class CollectionReceipt implements Serializable {
     private String operator;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "cash")
-    private Double cash;
+    private Double cash; 
+    @Column(name = "amount")
+    private Double amount;
     @JoinColumn(name = "sale_invoice_inv_no", referencedColumnName = "inv_no")
     @ManyToOne(optional = false)
     private SaleInvoice saleInvoice;
@@ -146,6 +148,14 @@ public class CollectionReceipt implements Serializable {
     @Override
     public String toString() {
         return "ent.CollectionReceipt[ receiptNumber=" + receiptNumber + " ]";
+    }
+
+    public Double getAmount() {
+        return amount;
+    }
+
+    public void setAmount(Double amount) {
+        this.amount = amount;
     }
     
 }

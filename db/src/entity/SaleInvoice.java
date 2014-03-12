@@ -59,10 +59,16 @@ public class SaleInvoice implements Serializable {
     private Double receivedAmount;
     @Column(name = "discount")
     private Double discount;
+    @Column(name = "initial_payment")
+    private Double initialPayment;
+    @Column(name = "number_of_terms")
+    private int numberOfTerms;
+    @Column(name = "term_amount")
+    private Double termAmount;
     @Column(name = "credit")
     private Double credit;
     @Column(name = "card_number")
-    private Double cardNumber;
+    private String cardNumber;
     @Column(name = "printed")
     private Integer printed;
     @Column(name = "operator")
@@ -93,11 +99,11 @@ public class SaleInvoice implements Serializable {
         this.invNo = invNo;
     }
 
-    public Double getCardNumber() {
+    public String getCardNumber() {
         return cardNumber;
     }
 
-    public void setCardNumber(Double cardNumber) {
+    public void setCardNumber(String cardNumber) {
         this.cardNumber = cardNumber;
     }
     
@@ -222,6 +228,36 @@ public class SaleInvoice implements Serializable {
 
     public void setCustomerName(String customerName) {
         this.customerName = customerName;
+    }
+
+    /**
+     * @return the initialPayment
+     */
+    public Double getInitialPayment() {
+        return initialPayment;
+    }
+
+    /**
+     * @param initialPayment the initialPayment to set
+     */
+    public void setInitialPayment(Double initialPayment) {
+        this.initialPayment = initialPayment;
+    }
+
+    public int getNumberOfTerms() {
+        return numberOfTerms;
+    }
+
+    public void setNumberOfTerms(int numberOfTerms) {
+        this.numberOfTerms = numberOfTerms;
+    }
+
+    public Double getTermAmount() {
+        return termAmount;
+    }
+
+    public void setTermAmount(Double termAmount) {
+        this.termAmount = termAmount;
     }
 
 }
