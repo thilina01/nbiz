@@ -93,6 +93,7 @@ public final class ItemTopComponent extends NTopComponent {
         minimumLimitTextField = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         itemTypeComboBox = new javax.swing.JComboBox();
+        disableCheckBox = new javax.swing.JCheckBox();
 
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
@@ -123,15 +124,17 @@ public final class ItemTopComponent extends NTopComponent {
             }
         });
         masterScrollPane.setViewportView(masterTable);
-        masterTable.getColumnModel().getColumn(0).setPreferredWidth(30);
-        masterTable.getColumnModel().getColumn(0).setHeaderValue(org.openide.util.NbBundle.getMessage(ItemTopComponent.class, "ItemTopComponent.masterTable.columnModel.title0")); // NOI18N
-        masterTable.getColumnModel().getColumn(1).setHeaderValue(org.openide.util.NbBundle.getMessage(ItemTopComponent.class, "ItemTopComponent.masterTable.columnModel.title1")); // NOI18N
-        masterTable.getColumnModel().getColumn(2).setPreferredWidth(500);
-        masterTable.getColumnModel().getColumn(2).setHeaderValue(org.openide.util.NbBundle.getMessage(ItemTopComponent.class, "ItemTopComponent.masterTable.columnModel.title2")); // NOI18N
-        masterTable.getColumnModel().getColumn(3).setHeaderValue(org.openide.util.NbBundle.getMessage(ItemTopComponent.class, "ItemTopComponent.masterTable.columnModel.title3")); // NOI18N
-        masterTable.getColumnModel().getColumn(3).setCellRenderer(rightAlignCell);
-        masterTable.getColumnModel().getColumn(4).setHeaderValue(org.openide.util.NbBundle.getMessage(ItemTopComponent.class, "ItemTopComponent.masterTable.columnModel.title4")); // NOI18N
-        masterTable.getColumnModel().getColumn(4).setCellRenderer(rightAlignCell);
+        if (masterTable.getColumnModel().getColumnCount() > 0) {
+            masterTable.getColumnModel().getColumn(0).setPreferredWidth(30);
+            masterTable.getColumnModel().getColumn(0).setHeaderValue(org.openide.util.NbBundle.getMessage(ItemTopComponent.class, "ItemTopComponent.masterTable.columnModel.title0")); // NOI18N
+            masterTable.getColumnModel().getColumn(1).setHeaderValue(org.openide.util.NbBundle.getMessage(ItemTopComponent.class, "ItemTopComponent.masterTable.columnModel.title1")); // NOI18N
+            masterTable.getColumnModel().getColumn(2).setPreferredWidth(500);
+            masterTable.getColumnModel().getColumn(2).setHeaderValue(org.openide.util.NbBundle.getMessage(ItemTopComponent.class, "ItemTopComponent.masterTable.columnModel.title2")); // NOI18N
+            masterTable.getColumnModel().getColumn(3).setHeaderValue(org.openide.util.NbBundle.getMessage(ItemTopComponent.class, "ItemTopComponent.masterTable.columnModel.title3")); // NOI18N
+            masterTable.getColumnModel().getColumn(3).setCellRenderer(rightAlignCell);
+            masterTable.getColumnModel().getColumn(4).setHeaderValue(org.openide.util.NbBundle.getMessage(ItemTopComponent.class, "ItemTopComponent.masterTable.columnModel.title4")); // NOI18N
+            masterTable.getColumnModel().getColumn(4).setCellRenderer(rightAlignCell);
+        }
 
         brandField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -208,6 +211,8 @@ public final class ItemTopComponent extends NTopComponent {
             }
         });
 
+        org.openide.awt.Mnemonics.setLocalizedText(disableCheckBox, org.openide.util.NbBundle.getMessage(ItemTopComponent.class, "ItemTopComponent.disableCheckBox.text")); // NOI18N
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -238,6 +243,8 @@ public final class ItemTopComponent extends NTopComponent {
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(itemTypeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(disableCheckBox)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(descriptionField))
                 .addContainerGap())
@@ -250,7 +257,8 @@ public final class ItemTopComponent extends NTopComponent {
                     .addComponent(codeLabel)
                     .addComponent(codeField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2)
-                    .addComponent(itemTypeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(itemTypeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(disableCheckBox))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(descriptionLabel)
@@ -377,6 +385,7 @@ public final class ItemTopComponent extends NTopComponent {
     private javax.swing.JButton deleteButton;
     private javax.swing.JTextField descriptionField;
     private javax.swing.JLabel descriptionLabel;
+    private javax.swing.JCheckBox disableCheckBox;
     private javax.swing.JComboBox itemTypeComboBox;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -427,6 +436,7 @@ public final class ItemTopComponent extends NTopComponent {
                 lastCode.setCode(code);
                 serializables.add(lastCode);
             }
+            item.setDisable(disableCheckBox.isSelected()?1:0);
             item.setDescription(description);
             item.setBrand(brand);
             item.setSupplier(supplier);
@@ -499,6 +509,7 @@ public final class ItemTopComponent extends NTopComponent {
         descriptionField.setText("");
         brandField.setText("");
         minimumLimitTextField.setText("");
+        disableCheckBox.setSelected(false);
         if (supplierComboBox.getItemCount() > 0) {
             supplierComboBox.setSelectedIndex(0);
         }
@@ -614,6 +625,7 @@ public final class ItemTopComponent extends NTopComponent {
             return;
         }
         codeField.setText(item.getCode());
+        disableCheckBox.setSelected(item.getDisable()==1);
         descriptionField.setText(item.getDescription());
         brandField.setText(item.getBrand());
         supplierComboBox.setSelectedItem(item.getSupplier());
