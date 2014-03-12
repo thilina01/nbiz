@@ -20,8 +20,14 @@ import entity.SaleInvoiceHasItem;
 import entity.SaleInvoiceHasItemPK;
 import entity.Stock;
 import java.awt.Component;
+import java.awt.event.ContainerEvent;
+import java.awt.event.ContainerListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.Serializable;
 import java.net.URL;
 import java.util.ArrayList;
@@ -615,9 +621,10 @@ public final class POSTopComponent extends NTopComponent {
     // End of variables declaration//GEN-END:variables
     DefaultTableModel dtm;
     private DefaultComboBoxModel comboBoxModel = new DefaultComboBoxModel();
-
+    
     private void onLoad() {
         initComponents();
+        setVisible(true);
         AutoCompleteDecorator.decorate(itemComboBox);
         setComboBoxKeyAdapters(itemComboBox);
         datePicker.setFormats(yyyy_MM_dd);
@@ -647,7 +654,7 @@ public final class POSTopComponent extends NTopComponent {
         dtm.setRowCount(0);
         Combo.fillCustomers(customerComboBox);
         Combo.fillItems(itemComboBox);
-        
+
 //        itemComboBoxWorker.execute();
         clearFields();
     }
@@ -768,10 +775,10 @@ public final class POSTopComponent extends NTopComponent {
 
     @Override
     public void setVisible(boolean b) {
-        super.setVisible(b);
+        super.setVisible(b);        
 //        Rectangle rectangle = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
 //        setBounds(0, 50, rectangle.width, rectangle.height - 50);
-//        Combo.fillCustomers(customerComboBox);
+        Combo.fillCustomers(customerComboBox);
 //        Combo.fillItems(itemComboBox);
 //        customerComboBox.requestFocus();
         itemComboBox.requestFocus();
@@ -916,7 +923,6 @@ public final class POSTopComponent extends NTopComponent {
 
     @Override
     public void componentOpened() {
-        // TODO add custom code on component opening
     }
 
     @Override
@@ -935,4 +941,5 @@ public final class POSTopComponent extends NTopComponent {
         String version = p.getProperty("version");
         // TODO read your settings according to their version
     }
+
 }
