@@ -139,13 +139,13 @@ public final class MonthReportTopComponent extends NTopComponent {
     private void reportButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reportButtonActionPerformed
         final HashMap<String, Object> params = new HashMap<String, Object>();
         Date date = datePicker.getDate();
-        Calendar c1 = Calendar.getInstance();
+        final Calendar c1 = Calendar.getInstance();
         c1.setTime(date);
         c1.set(Calendar.DATE, 1);
-        Calendar c2 = Calendar.getInstance();
+        final Calendar c2 = Calendar.getInstance();
         c2.setTime(date);
         c2.set(Calendar.DATE, c2.getActualMaximum(Calendar.DATE));
-        Calendar c3 = Calendar.getInstance();
+        final Calendar c3 = Calendar.getInstance();
         c3.setTime(date);
         c3.set(Calendar.DATE, 1);
         c3.set(Calendar.MONTH, c2.get(Calendar.MONTH) + 1);
@@ -160,8 +160,11 @@ public final class MonthReportTopComponent extends NTopComponent {
                 try {
                     PrintViewTopComponent tc = (PrintViewTopComponent) WindowManager.getDefault().findTopComponent("PrintViewTopComponent");
                     Map<String, Object> parameters = Data.getParams();
-                    //        parameters.put("first_date", yyyy_MM_dd.format(startDatePicker.getDate()) + " 00:00:00");
-                    //        parameters.put("last_date", yyyy_MM_dd.format(endDatePicker.getDate()) + " 23:59:59");
+//                            parameters.put("first_date", yyyy_MM_dd.format(startDatePicker.getDate()) + " 00:00:00");
+//                            parameters.put("last_date", yyyy_MM_dd.format(endDatePicker.getDate()) + " 23:59:59");
+                    parameters.put("d1", yyyy_MM_dd.format(c1.getTime()));
+                    parameters.put("d2", yyyy_MM_dd.format(c2.getTime()));
+                    parameters.put("d3", yyyy_MM_dd.format(c3.getTime()));
                     String reportSource = "report1_1";
                     if (halfCheckBox.isSelected()) {
                         reportSource = "monthReportA4";

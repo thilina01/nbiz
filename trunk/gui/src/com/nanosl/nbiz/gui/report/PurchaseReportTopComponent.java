@@ -7,9 +7,12 @@ package com.nanosl.nbiz.gui.report;
 import query.Find;
 import com.nanosl.nbiz.util.NTopComponent;
 import entity.PurchaseInvoice;
+import entity.PurchaseInvoiceHasItem;
+import entity.PurchaseInvoicePK;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
@@ -182,6 +185,15 @@ public final class PurchaseReportTopComponent extends NTopComponent {
             int row = masterTable.getSelectedRow();
             String invoiceNumber = masterTable.getValueAt(row, 4).toString();
             String supperCode = masterTable.getValueAt(row, 2).toString();
+            PurchaseInvoice purchaseInvoice = manager.find(PurchaseInvoice.class, new PurchaseInvoicePK(invoiceNumber, supperCode));
+            String message = "<html><table >";   
+            message += "<tr><td> Item </td><td align = 'right'> Quantity </td></tr>";
+                       
+            for (PurchaseInvoiceHasItem purchaseInvoiceHasItem : purchaseInvoice.getPurchaseInvoiceHasItemCollection()) {
+                message += "<tr><td>" + purchaseInvoiceHasItem.getItem() + " </td><td align = 'right'>" + nf2d.format(purchaseInvoiceHasItem.getQuantity())+"</td></tr>";
+            }
+            message += "</table> </html>";
+            JOptionPane.showMessageDialog(null, message, "Invoice Data: "+supperCode+" - "+invoiceNumber, JOptionPane.PLAIN_MESSAGE, null);
 //            new PurchaseInvoiceView(invoiceNumber, supperCode);
         }
     }//GEN-LAST:event_masterTableMouseClicked
@@ -221,7 +233,7 @@ public final class PurchaseReportTopComponent extends NTopComponent {
 
         Collection<PurchaseInvoice> purchaseInvoices = Find.purchaseInvoicesByDates(startDate, endDate);
         if (purchaseInvoices == null) {
-           showError("No Record Found!");
+            showError("No Record Found!");
             return;
         }
         int i = 0;
@@ -236,8 +248,8 @@ public final class PurchaseReportTopComponent extends NTopComponent {
     protected void onLoad() {
         initComponents();
         tableModel = (DefaultTableModel) masterTable.getModel();
-         masterTable.setDefaultRenderer(Object.class, coloredCellRenderer);
-        
+        masterTable.setDefaultRenderer(Object.class, coloredCellRenderer);
+
     }
 
     @Override
@@ -258,7 +270,6 @@ public final class PurchaseReportTopComponent extends NTopComponent {
         totalLabel.setText(nf2d.format(total));
     }
 
-    
     @Override
     public void componentOpened() {
         // TODO add custom code on component opening
