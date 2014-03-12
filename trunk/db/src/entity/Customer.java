@@ -69,7 +69,7 @@ public class Customer implements Serializable, Comparable<Customer> {
     public void setNic(String nic) {
         this.nic = nic;
     }
-    @Column(name = "nic")
+    @Column(name = "person_nic")
     private String notes;
     @Column(name = "operator")
     private String operator;
