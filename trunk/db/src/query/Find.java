@@ -2,6 +2,7 @@ package query;
 
 import com.nanosl.lib.db.Manager;
 import entity.CollectionReceipt;
+import entity.Customer;
 import entity.DamageNotes;
 import entity.Employee;
 import entity.Expenses;
@@ -40,7 +41,9 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "find")
 @NamedQueries({
+    @NamedQuery(name = "Customer.findBy$", query = "SELECT c FROM Customer c WHERE  UPPER(c.code) LIKE UPPER(:text) OR UPPER(c.nic) LIKE UPPER(:text) OR UPPER(c.name) LIKE UPPER(:text) "),
     @NamedQuery(name = "DamageNotes.findByDateTimeAndEmployeeCode", query = "SELECT d FROM DamageNotes d WHERE d.damageNotesPK.dateTime = :dateTime AND d.damageNotesPK.employeeCode = :employeeCode"),
+    @NamedQuery(name = "Item.findBy$", query = "SELECT i FROM Item i WHERE  UPPER(i.code) LIKE UPPER(:text) OR UPPER(i.description) LIKE UPPER(:text) OR UPPER(i.brand) LIKE UPPER(:text) "),
     @NamedQuery(name = "PurchaseInvoice.findByInvDates", query = "SELECT p FROM PurchaseInvoice p WHERE p.invDate BETWEEN :startDate AND :endDate"),
     @NamedQuery(name = "SaleInvoice.findByInvDates", query = "SELECT s FROM SaleInvoice s WHERE s.invTime BETWEEN :startDate AND :endDate"),
     @NamedQuery(name = "SaleInvoice.findByCard", query = "SELECT s FROM SaleInvoice s WHERE s.cardNumber = :card"),
@@ -200,6 +203,18 @@ public class Find implements Serializable {
         Query qry = man.getEm().createNamedQuery("SaleInvoiceHasItem.findByInvDates");
         qry.setParameter("startDate", startDate);
         qry.setParameter("endDate", endDate);
+        return man.exNamedQueryParamResult(qry);
+    }
+
+    public static List<Customer> customerBy$(String text) {
+        Query qry = man.getEm().createNamedQuery("Customer.findBy$");
+        qry.setParameter("text", "%"+text+"%");
+        return man.exNamedQueryParamResult(qry);
+    }
+    
+    public static List<Item> itemBy$(String text) {
+        Query qry = man.getEm().createNamedQuery("Item.findBy$");
+        qry.setParameter("text", "%"+text+"%");
         return man.exNamedQueryParamResult(qry);
     }
 
