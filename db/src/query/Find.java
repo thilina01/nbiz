@@ -18,6 +18,7 @@ import entity.SaleInvoiceHasItem;
 import entity.SrSalesPayments;
 import entity.Stock;
 import entity.StockTransfer;
+import entity.Supplier;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
@@ -51,9 +52,12 @@ import javax.persistence.Table;
     @NamedQuery(name = "SaleInvoice.findActiveCardsByNic", query = "SELECT s FROM SaleInvoice s WHERE s.customer.nic = :nic AND s.cardNumber IS NOT NULL AND s.amount> s.receivedAmount"),
     @NamedQuery(name = "SaleInvoiceHasItem.findByItemAndInvDates", query = "SELECT s FROM SaleInvoiceHasItem s WHERE s.item = :item AND s.saleInvoice.invTime BETWEEN :startDate AND :endDate"),
     @NamedQuery(name = "SaleInvoiceHasItem.findByInvDates", query = "SELECT s FROM SaleInvoiceHasItem s WHERE s.saleInvoice.invTime BETWEEN :startDate AND :endDate GROUP BY s.saleInvoiceHasItemPK.itemCode, s.rate ORDER BY s.saleInvoiceHasItemPK.itemCode"),
+    @NamedQuery(name = "Supplier.findByName", query = "SELECT s FROM Supplier s WHERE s.name = :name"),
+    @NamedQuery(name = "Supplier.findBy$", query = "SELECT s FROM Supplier s WHERE  UPPER(s.code) LIKE UPPER(:text) OR UPPER(s.name) LIKE UPPER(:text)"),
     @NamedQuery(name = "PurchaseInvoiceHasItem.findByItemndInvDates", query = "SELECT p FROM PurchaseInvoiceHasItem p WHERE p.item = :item AND p.purchaseInvoice.invDate BETWEEN :startDate AND :endDate"),
     @NamedQuery(name = "MenuItem.findByMenuAndStatus", query = "SELECT m FROM MenuItem m WHERE m.menu = :menu AND m.status = :status"),
     @NamedQuery(name = "Stock.findLessMinLimit", query = "SELECT s FROM Stock s WHERE s.minLimit > s.quantity"),
+    @NamedQuery(name = "Stock.findBySupplier", query = "SELECT s FROM Stock s WHERE s.item.supplier = :supplier"),
     @NamedQuery(name = "IssuedCash.findByDates", query = "SELECT i FROM IssuedCash i WHERE i.issuedTime BETWEEN :startDate AND :endDate"),
     @NamedQuery(name = "Expenses.findByDates", query = "SELECT e FROM Expenses e WHERE e.paidTime BETWEEN :startDate AND :endDate"),
     @NamedQuery(name = "CollectionReceipt.findByDates", query = "SELECT c FROM CollectionReceipt c WHERE c.collectedTime BETWEEN :startDate AND :endDate"),
@@ -174,6 +178,18 @@ public class Find implements Serializable {
         return man.exNamedQueryParamResult(qry);
     }
 
+    public static List<Stock> stockBySupplier(Supplier supplier) {
+        Query qry = man.getEm().createNamedQuery("Stock.findBySupplier");
+        qry.setParameter("supplier", supplier);
+        return man.exNamedQueryParamResult(qry);
+    }
+
+//    public static List<SaleInvoice> saleInvoiceByDate(Date date) {
+//        Query qry = man.getEm().createNamedQuery("SaleInvoice.findByDate");
+//        qry.setParameter("date", date);
+//        return man.exNamedQueryParamResult(qry);
+//    }
+
     public static List<SaleInvoiceHasItem> saleInvoiceItemsByItemAndDates(Item item, Date startDate, Date endDate) {
         Query qry = man.getEm().createNamedQuery("SaleInvoiceHasItem.findByItemAndInvDates");
         qry.setParameter("item", item);
@@ -208,19 +224,32 @@ public class Find implements Serializable {
 
     public static List<Customer> customerBy$(String text) {
         Query qry = man.getEm().createNamedQuery("Customer.findBy$");
-        qry.setParameter("text", "%"+text+"%");
+        qry.setParameter("text", "%" + text + "%");
         return man.exNamedQueryParamResult(qry);
     }
-    
+
+    public static Supplier supplierByName(String name) {
+        Query qry = man.getEm().createNamedQuery("Supplier.findByName");
+        qry.setParameter("name", name);
+        List<Supplier> suppliers = man.exNamedQueryParamResult(qry);
+        return suppliers.size() > 0 ? suppliers.get(0) : null;
+    }
+
     public static List<Item> itemBy$(String text) {
         Query qry = man.getEm().createNamedQuery("Item.findBy$");
-        qry.setParameter("text", "%"+text+"%");
+        qry.setParameter("text", "%" + text + "%");
+        return man.exNamedQueryParamResult(qry);
+    }
+
+    public static List<Supplier> supplierBy$(String text) {
+        Query qry = man.getEm().createNamedQuery("Supplier.findBy$");
+        qry.setParameter("text", "%" + text + "%");
         return man.exNamedQueryParamResult(qry);
     }
 
     @Id
     private Long id;
-    private static Manager man = Manager.getInstance();
+    private static final Manager man = Manager.getInstance();
 
     public Long getId() {
         return id;
