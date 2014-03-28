@@ -9,7 +9,6 @@ import com.nanosl.nbiz.util.Combo;
 import com.nanosl.nbiz.util.Data;
 import com.nanosl.nbiz.util.NTopComponent;
 import com.nanosl.nbiz.util.PrintViewTopComponent;
-import com.nanosl.nbiz.util.Printer;
 import entity.CollectionReceipt;
 import entity.Customer;
 import entity.Item;
@@ -19,7 +18,6 @@ import entity.SaleInvoice;
 import entity.SaleInvoiceHasItem;
 import entity.SaleInvoiceHasItemPK;
 import entity.Stock;
-import entity.Supplier;
 import java.awt.Component;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -656,7 +654,7 @@ public final class SaleInvoiceTopComponent extends NTopComponent {
         saleInvoice.setInvTime(date);
         saleInvoice.setReceivedAmount(0.0);
         saleInvoice.setEmployee(Data.getOperator().getEmployee());
-        List<Serializable> serializables = new ArrayList<Serializable>();
+        List<Serializable> serializables = new ArrayList<>();
         for (int i = 0; i < rowCount; i++) {
             Item item = manager.find(Item.class, table.getValueAt(i, 1).toString());
             double quantity = Double.valueOf(table.getValueAt(i, 4).toString());
@@ -685,7 +683,7 @@ public final class SaleInvoiceTopComponent extends NTopComponent {
         double paidAmount = 0;
         try {
             paidAmount = Double.parseDouble(paidAmountText);
-        } catch (Exception e) {
+        } catch (NumberFormatException e) {
         }
         if (paidAmount > 0) {
             if (ReceiptNumber.equals("")) {
@@ -739,13 +737,17 @@ public final class SaleInvoiceTopComponent extends NTopComponent {
     private void setComboBoxKeyAdapters(JComponent comp) {
         String compName = comp.getName();
         Component component[] = comp.getComponents();
-        for (int i = 0; i < component.length; i++) {
-            if (compName.equals("customerComboBox")) {
-                component[i].addKeyListener(customerComboBoxKeyAdapter);
-            } else if (compName.equals("itemComboBox")) {
-                component[i].addKeyListener(itemComboBoxKeyAdapter);
-            } else if (compName.equals("datePicker")) {
-                component[i].addKeyListener(datePickerKeyAdapter);
+        for (Component component1 : component) {
+            switch (compName) {
+                case "customerComboBox":
+                    component1.addKeyListener(customerComboBoxKeyAdapter);
+                    break;
+                case "itemComboBox":
+                    component1.addKeyListener(itemComboBoxKeyAdapter);
+                    break;
+                case "datePicker":
+                    component1.addKeyListener(datePickerKeyAdapter);
+                    break;
             }
         }
     }
@@ -772,7 +774,7 @@ public final class SaleInvoiceTopComponent extends NTopComponent {
         double quantity = 0;
         double price = 0;
         double discount = 0;
-        double net = 0;
+        double net;
         Item item = (Item) itemComboBox.getSelectedItem();
         item = manager.find(Item.class, item.getCode());
         double availableQuantity = item.getStock().getQuantity();
@@ -781,7 +783,7 @@ public final class SaleInvoiceTopComponent extends NTopComponent {
             quantity = Double.valueOf(quantityField.getText());
             price = Double.valueOf(priceField.getText().trim());
             discount = Double.valueOf(discountField.getText().trim());
-        } catch (Exception e) {
+        } catch (NumberFormatException e) {
         }
 
         if (quantity == 0) {
@@ -835,17 +837,17 @@ public final class SaleInvoiceTopComponent extends NTopComponent {
         totalAmountText = totalAmountText.equals("") ? "0" : totalAmountText;
         String paidAmountText = paidAmountField.getText().trim();
         paidAmountText = paidAmountText.equals("") ? "0" : paidAmountText;
-        double totalAmount = 0, paidAmount = 0, remainingAmount = 0;
+        double totalAmount = 0, paidAmount = 0, remainingAmount;
         try {
             totalAmount = Double.parseDouble(totalAmountText);
-        } catch (Exception e) {
+        } catch (NumberFormatException e) {
         }
         if (totalAmount == 0) {
             return;
         }
         try {
             paidAmount = Double.parseDouble(paidAmountText);
-        } catch (Exception e) {
+        } catch (NumberFormatException e) {
         }
         remainingAmount = totalAmount - paidAmount;
         remainingAmountField.setText(nf2d.format(remainingAmount));

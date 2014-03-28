@@ -504,4 +504,8 @@ public final class CompanyTopComponent extends NTopComponent {
         emailField.setText("");
         webField.setText("");
     }
+
+    private void fill() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

@@ -81,7 +81,7 @@ public final class PrintViewTopComponent extends TopComponent {
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
 
-    public void print(String fileName, Map parameters) {
+    public void print(String fileName, Map<String,Object> parameters) {
         try {
 //            URL url = getClass().getResource("/com/nanosl/nbiz/gui/jrxml/" + "report1" + ".jasper");
             URL url = getClass().getResource("/com/nanosl/nbiz/gui/jrxml/" + fileName + ".jasper");
@@ -93,7 +93,7 @@ public final class PrintViewTopComponent extends TopComponent {
         }
     }
 
-    public void print(JasperReport report, Map parameters) {
+    public void print(JasperReport report, Map<String,Object> parameters) {
         try {
             if (report == null) {
                 return;

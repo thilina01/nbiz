@@ -10,6 +10,7 @@ import com.nanosl.nbiz.util.NTopComponent;
 import com.nanosl.nbiz.util.Printer;
 import entity.Item;
 import entity.Stock;
+import entity.Supplier;
 import java.util.Iterator;
 import java.util.List;
 import javax.swing.SwingWorker;
@@ -69,6 +70,7 @@ public final class StockTopComponent extends NTopComponent {
         allRadioButton = new javax.swing.JRadioButton();
         minimumRadioButton = new javax.swing.JRadioButton();
         printButton = new javax.swing.JButton();
+        supplierRadioButton = new javax.swing.JRadioButton();
 
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
@@ -110,17 +112,19 @@ public final class StockTopComponent extends NTopComponent {
             }
         });
         masterScrollPane.setViewportView(table);
-        table.getColumnModel().getColumn(0).setPreferredWidth(30);
-        table.getColumnModel().getColumn(0).setHeaderValue(org.openide.util.NbBundle.getMessage(StockTopComponent.class, "StockTopComponent.table.columnModel.title0")); // NOI18N
-        table.getColumnModel().getColumn(1).setHeaderValue(org.openide.util.NbBundle.getMessage(StockTopComponent.class, "StockTopComponent.table.columnModel.title1")); // NOI18N
-        table.getColumnModel().getColumn(2).setPreferredWidth(500);
-        table.getColumnModel().getColumn(2).setHeaderValue(org.openide.util.NbBundle.getMessage(StockTopComponent.class, "StockTopComponent.table.columnModel.title2")); // NOI18N
-        table.getColumnModel().getColumn(3).setHeaderValue(org.openide.util.NbBundle.getMessage(StockTopComponent.class, "StockTopComponent.table.columnModel.title3")); // NOI18N
-        table.getColumnModel().getColumn(3).setCellRenderer(rightAlignCell);
-        table.getColumnModel().getColumn(4).setHeaderValue(org.openide.util.NbBundle.getMessage(StockTopComponent.class, "StockTopComponent.table.columnModel.title4")); // NOI18N
-        table.getColumnModel().getColumn(4).setCellRenderer(rightAlignCell);
-        table.getColumnModel().getColumn(5).setHeaderValue(org.openide.util.NbBundle.getMessage(StockTopComponent.class, "StockTopComponent.table.columnModel.title5")); // NOI18N
-        table.getColumnModel().getColumn(5).setCellRenderer(rightAlignCell);
+        if (table.getColumnModel().getColumnCount() > 0) {
+            table.getColumnModel().getColumn(0).setPreferredWidth(30);
+            table.getColumnModel().getColumn(0).setHeaderValue(org.openide.util.NbBundle.getMessage(StockTopComponent.class, "StockTopComponent.table.columnModel.title0")); // NOI18N
+            table.getColumnModel().getColumn(1).setHeaderValue(org.openide.util.NbBundle.getMessage(StockTopComponent.class, "StockTopComponent.table.columnModel.title1")); // NOI18N
+            table.getColumnModel().getColumn(2).setPreferredWidth(500);
+            table.getColumnModel().getColumn(2).setHeaderValue(org.openide.util.NbBundle.getMessage(StockTopComponent.class, "StockTopComponent.table.columnModel.title2")); // NOI18N
+            table.getColumnModel().getColumn(3).setHeaderValue(org.openide.util.NbBundle.getMessage(StockTopComponent.class, "StockTopComponent.table.columnModel.title3")); // NOI18N
+            table.getColumnModel().getColumn(3).setCellRenderer(rightAlignCell);
+            table.getColumnModel().getColumn(4).setHeaderValue(org.openide.util.NbBundle.getMessage(StockTopComponent.class, "StockTopComponent.table.columnModel.title4")); // NOI18N
+            table.getColumnModel().getColumn(4).setCellRenderer(rightAlignCell);
+            table.getColumnModel().getColumn(5).setHeaderValue(org.openide.util.NbBundle.getMessage(StockTopComponent.class, "StockTopComponent.table.columnModel.title5")); // NOI18N
+            table.getColumnModel().getColumn(5).setCellRenderer(rightAlignCell);
+        }
 
         org.openide.awt.Mnemonics.setLocalizedText(reloadButton, org.openide.util.NbBundle.getMessage(StockTopComponent.class, "StockTopComponent.reloadButton.text")); // NOI18N
         reloadButton.addActionListener(new java.awt.event.ActionListener() {
@@ -155,6 +159,14 @@ public final class StockTopComponent extends NTopComponent {
             }
         });
 
+        buttonGroup1.add(supplierRadioButton);
+        org.openide.awt.Mnemonics.setLocalizedText(supplierRadioButton, org.openide.util.NbBundle.getMessage(StockTopComponent.class, "StockTopComponent.supplierRadioButton.text")); // NOI18N
+        supplierRadioButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                supplierRadioButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -167,6 +179,8 @@ public final class StockTopComponent extends NTopComponent {
                         .addComponent(allRadioButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(minimumRadioButton)
+                        .addGap(18, 18, 18)
+                        .addComponent(supplierRadioButton)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(reloadButton)
@@ -182,7 +196,8 @@ public final class StockTopComponent extends NTopComponent {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(allRadioButton)
-                    .addComponent(minimumRadioButton))
+                    .addComponent(minimumRadioButton)
+                    .addComponent(supplierRadioButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(masterScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 471, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -235,6 +250,20 @@ public final class StockTopComponent extends NTopComponent {
     private void printButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_printButtonActionPerformed
         Printer.printStock();
     }//GEN-LAST:event_printButtonActionPerformed
+
+    private void supplierRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_supplierRadioButtonActionPerformed
+        if (supplierRadioButton.isSelected()) {
+            searchSupplier();
+        }
+    }//GEN-LAST:event_supplierRadioButtonActionPerformed
+    private void searchSupplier() {
+        SearchSupplierDialog searchSupplierDialog = new SearchSupplierDialog(null, true);
+        supplier = searchSupplierDialog.suppllier;
+        if (supplier != null) {
+            fillTable();
+        }
+    }
+    Supplier supplier = null;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JRadioButton allRadioButton;
     private javax.swing.ButtonGroup buttonGroup1;
@@ -243,6 +272,7 @@ public final class StockTopComponent extends NTopComponent {
     private javax.swing.JRadioButton minimumRadioButton;
     private javax.swing.JButton printButton;
     private javax.swing.JButton reloadButton;
+    private javax.swing.JRadioButton supplierRadioButton;
     private javax.swing.JTable table;
     private javax.swing.JLabel totalLabel;
     // End of variables declaration//GEN-END:variables
@@ -286,7 +316,18 @@ public final class StockTopComponent extends NTopComponent {
                         p.start();
                         int i = 0;
                         manager.clearCache();
-                        List<Stock> stocks = allRadioButton.isSelected() ? manager.find(Stock.class) : Find.stockLessMinLimit();
+                        List<Stock> stocks = null;
+                        if (allRadioButton.isSelected()) {
+                            stocks = manager.find(Stock.class);
+                        } else if (minimumRadioButton.isSelected()) {
+                            stocks = Find.stockLessMinLimit();
+                        } else if (supplierRadioButton.isSelected()) {
+
+                            stocks = Find.stockBySupplier(supplier);
+                        }
+                        if (stocks == null) {
+                            return;
+                        }
                         for (Stock stock : stocks) {
                             Item item = stock.getItem();
                             if (item == null) {
@@ -323,5 +364,9 @@ public final class StockTopComponent extends NTopComponent {
         initComponents();
         tableModel = (DefaultTableModel) table.getModel();
         table.setDefaultRenderer(Object.class, coloredCellRenderer);
+    }
+
+    private void fillTable(Supplier supplier) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }
