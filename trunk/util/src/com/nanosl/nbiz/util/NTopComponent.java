@@ -5,10 +5,6 @@
 package com.nanosl.nbiz.util;
 
 import com.nanosl.lib.db.Manager;
-import java.awt.Color;
-import java.awt.Component;
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableCellRenderer;
 import org.openide.DialogDisplayer;
 import org.openide.NotifyDescriptor;
 import org.openide.windows.TopComponent;
@@ -17,53 +13,8 @@ import org.openide.windows.TopComponent;
  *
  * @author Thilina Ranathunga
  */
-public class NTopComponent extends TopComponent implements Format {
+public class NTopComponent extends TopComponent implements Format, Cell {
 
-    public DefaultTableCellRenderer rightAlignCell = new DefaultTableCellRenderer() {
-        private DefaultTableCellRenderer DEFAULT_RENDERER = new DefaultTableCellRenderer();
-
-        @Override
-        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-            Component c = DEFAULT_RENDERER.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-            DEFAULT_RENDERER.setHorizontalAlignment(javax.swing.JLabel.RIGHT);
-
-            if (isSelected) {
-                c.setForeground(Color.WHITE);
-                c.setBackground(Color.BLACK);
-//                c.setForeground(row % 2 == 0 ? Color.BLACK : Color.BLUE);
-            } else {
-                c.setForeground(Color.BLACK);
-                if (row % 2 == 0) {
-                    c.setBackground(Color.WHITE);
-                } else {
-                    c.setBackground(new Color(200, 230, 250));
-                }
-            }
-            return c;
-        }
-    };
-    public DefaultTableCellRenderer coloredCellRenderer = new DefaultTableCellRenderer() {
-        private DefaultTableCellRenderer DEFAULT_RENDERER = new DefaultTableCellRenderer();
-
-        @Override
-        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-            Component c = DEFAULT_RENDERER.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-
-            if (isSelected) {
-                c.setForeground(Color.WHITE);
-                c.setBackground(Color.BLACK);
-//                c.setForeground(row % 2 == 0 ? Color.BLACK : Color.BLUE);
-            } else {
-                c.setForeground(Color.BLACK);
-                if (row % 2 == 0) {
-                    c.setBackground(Color.WHITE);
-                } else {
-                    c.setBackground(new Color(200, 230, 250));
-                }
-            }
-            return c;
-        }
-    };
     public Manager manager;
 
     public NTopComponent() {
@@ -83,14 +34,19 @@ public class NTopComponent extends TopComponent implements Format {
      public static final NumberFormat nf3d = new DecimalFormat("#0.000");
      */
     protected void showError(String string) {
-        NotifyDescriptor d =
-                new NotifyDescriptor.Message(string, NotifyDescriptor.ERROR_MESSAGE);
+        NotifyDescriptor d
+                = new NotifyDescriptor.Message(string, NotifyDescriptor.ERROR_MESSAGE);
         DialogDisplayer.getDefault().notify(d);
     }
 
     protected void showSuccess(String string) {
-        NotifyDescriptor d =
-                new NotifyDescriptor.Message(string, NotifyDescriptor.INFORMATION_MESSAGE);
+        NotifyDescriptor d
+                = new NotifyDescriptor.Message(string, NotifyDescriptor.INFORMATION_MESSAGE);
+        DialogDisplayer.getDefault().notify(d);
+    }
+    protected void showMessage(String string) {
+        NotifyDescriptor d
+                = new NotifyDescriptor.Message(string, NotifyDescriptor.PLAIN_MESSAGE);
         DialogDisplayer.getDefault().notify(d);
     }
 }

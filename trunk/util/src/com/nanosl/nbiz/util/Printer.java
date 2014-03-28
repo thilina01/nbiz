@@ -33,7 +33,7 @@ public class Printer {
             @Override
             public void run() {
                 PrintViewTopComponent tc = (PrintViewTopComponent) WindowManager.getDefault().findTopComponent("PrintViewTopComponent");
-                HashMap parameters = new HashMap();
+                HashMap<String,Object> parameters = new HashMap<>();
                 parameters.put("first_date", " 00:00:00");
                 parameters.put("last_date", " 23:59:59");
                 tc.print(report, parameters);
@@ -99,7 +99,7 @@ public class Printer {
                     Connection con = m.getConnection();
                     JasperPrint jasperPrint = JasperFillManager.fillReport(report, params, con);
                     JRViewer jRViewer = new JRViewer(jasperPrint, "Receipt");
-                } catch (Exception ex) {
+                } catch (JRException ex) {
                     Loggings.logError(Printer.class.getName(), ex);
                 }
             }

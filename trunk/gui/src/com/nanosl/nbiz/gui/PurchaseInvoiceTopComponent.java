@@ -32,6 +32,9 @@ import org.openide.awt.ActionReference;
 import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
 import com.nanosl.nbiz.util.Combo;
+import com.nanosl.nbiz.util.FindMySql;
+import static com.nanosl.nbiz.util.Format.nf2d;
+import java.util.concurrent.ExecutionException;
 import javax.swing.SwingWorker;
 import org.openide.awt.StatusDisplayer;
 
@@ -93,7 +96,7 @@ public final class PurchaseInvoiceTopComponent extends NTopComponent {
         jLabel5 = new javax.swing.JLabel();
         quantityField = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
-        valueField = new javax.swing.JTextField();
+        costField = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         table = new javax.swing.JTable();
         jLabel8 = new javax.swing.JLabel();
@@ -104,6 +107,9 @@ public final class PurchaseInvoiceTopComponent extends NTopComponent {
         discountField = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
         totalDiscountLabel = new javax.swing.JLabel();
+        stockLabel = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        sellingTextField = new javax.swing.JTextField();
 
         datePicker.setName("datePicker"); // NOI18N
         datePicker.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -128,6 +134,11 @@ public final class PurchaseInvoiceTopComponent extends NTopComponent {
         supplierComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 supplierComboBoxActionPerformed(evt);
+            }
+        });
+        supplierComboBox.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                supplierComboBoxFocusGained(evt);
             }
         });
         supplierComboBox.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -181,24 +192,24 @@ public final class PurchaseInvoiceTopComponent extends NTopComponent {
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel6, org.openide.util.NbBundle.getMessage(PurchaseInvoiceTopComponent.class, "PurchaseInvoiceTopComponent.jLabel6.text")); // NOI18N
 
-        valueField.addMouseListener(new java.awt.event.MouseAdapter() {
+        costField.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                valueFieldMouseClicked(evt);
+                costFieldMouseClicked(evt);
             }
         });
-        valueField.addActionListener(new java.awt.event.ActionListener() {
+        costField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                valueFieldActionPerformed(evt);
+                costFieldActionPerformed(evt);
             }
         });
-        valueField.addFocusListener(new java.awt.event.FocusAdapter() {
+        costField.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
-                valueFieldFocusGained(evt);
+                costFieldFocusGained(evt);
             }
         });
-        valueField.addKeyListener(new java.awt.event.KeyAdapter() {
+        costField.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
-                valueFieldKeyPressed(evt);
+                costFieldKeyPressed(evt);
             }
         });
 
@@ -207,11 +218,11 @@ public final class PurchaseInvoiceTopComponent extends NTopComponent {
 
             },
             new String [] {
-                "#", "Code", "Description", "Value", "Quantity", "Net", "Discount", "D%", "Amount"
+                "#", "Code", "Description", "Cost", "Quantity", "Net", "Discount", "D%", "Amount", "Selling"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false, false
+                false, false, false, false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -224,23 +235,26 @@ public final class PurchaseInvoiceTopComponent extends NTopComponent {
             }
         });
         jScrollPane1.setViewportView(table);
-        table.getColumnModel().getColumn(0).setPreferredWidth(30);
-        table.getColumnModel().getColumn(0).setHeaderValue(org.openide.util.NbBundle.getMessage(PurchaseInvoiceTopComponent.class, "PurchaseInvoiceTopComponent.table.columnModel.title0")); // NOI18N
-        table.getColumnModel().getColumn(1).setHeaderValue(org.openide.util.NbBundle.getMessage(PurchaseInvoiceTopComponent.class, "PurchaseInvoiceTopComponent.table.columnModel.title1")); // NOI18N
-        table.getColumnModel().getColumn(2).setPreferredWidth(500);
-        table.getColumnModel().getColumn(2).setHeaderValue(org.openide.util.NbBundle.getMessage(PurchaseInvoiceTopComponent.class, "PurchaseInvoiceTopComponent.table.columnModel.title2")); // NOI18N
-        table.getColumnModel().getColumn(3).setHeaderValue(org.openide.util.NbBundle.getMessage(PurchaseInvoiceTopComponent.class, "PurchaseInvoiceTopComponent.table.columnModel.title3")); // NOI18N
-        table.getColumnModel().getColumn(3).setCellRenderer(rightAlignCell);
-        table.getColumnModel().getColumn(4).setHeaderValue(org.openide.util.NbBundle.getMessage(PurchaseInvoiceTopComponent.class, "PurchaseInvoiceTopComponent.table.columnModel.title4")); // NOI18N
-        table.getColumnModel().getColumn(4).setCellRenderer(rightAlignCell);
-        table.getColumnModel().getColumn(5).setHeaderValue(org.openide.util.NbBundle.getMessage(PurchaseInvoiceTopComponent.class, "PurchaseInvoiceTopComponent.table.columnModel.title5")); // NOI18N
-        table.getColumnModel().getColumn(5).setCellRenderer(rightAlignCell);
-        table.getColumnModel().getColumn(6).setHeaderValue(org.openide.util.NbBundle.getMessage(PurchaseInvoiceTopComponent.class, "PurchaseInvoiceTopComponent.table.columnModel.title6")); // NOI18N
-        table.getColumnModel().getColumn(6).setCellRenderer(rightAlignCell);
-        table.getColumnModel().getColumn(7).setHeaderValue(org.openide.util.NbBundle.getMessage(PurchaseInvoiceTopComponent.class, "PurchaseInvoiceTopComponent.table.columnModel.title7")); // NOI18N
-        table.getColumnModel().getColumn(7).setCellRenderer(rightAlignCell);
-        table.getColumnModel().getColumn(8).setHeaderValue(org.openide.util.NbBundle.getMessage(PurchaseInvoiceTopComponent.class, "PurchaseInvoiceTopComponent.table.columnModel.title8")); // NOI18N
-        table.getColumnModel().getColumn(8).setCellRenderer(rightAlignCell);
+        if (table.getColumnModel().getColumnCount() > 0) {
+            table.getColumnModel().getColumn(0).setPreferredWidth(30);
+            table.getColumnModel().getColumn(0).setHeaderValue(org.openide.util.NbBundle.getMessage(PurchaseInvoiceTopComponent.class, "PurchaseInvoiceTopComponent.table.columnModel.title0")); // NOI18N
+            table.getColumnModel().getColumn(1).setHeaderValue(org.openide.util.NbBundle.getMessage(PurchaseInvoiceTopComponent.class, "PurchaseInvoiceTopComponent.table.columnModel.title1")); // NOI18N
+            table.getColumnModel().getColumn(2).setPreferredWidth(500);
+            table.getColumnModel().getColumn(2).setHeaderValue(org.openide.util.NbBundle.getMessage(PurchaseInvoiceTopComponent.class, "PurchaseInvoiceTopComponent.table.columnModel.title2")); // NOI18N
+            table.getColumnModel().getColumn(3).setHeaderValue(org.openide.util.NbBundle.getMessage(PurchaseInvoiceTopComponent.class, "PurchaseInvoiceTopComponent.table.columnModel.title3")); // NOI18N
+            table.getColumnModel().getColumn(3).setCellRenderer(rightAlignCell);
+            table.getColumnModel().getColumn(4).setHeaderValue(org.openide.util.NbBundle.getMessage(PurchaseInvoiceTopComponent.class, "PurchaseInvoiceTopComponent.table.columnModel.title4")); // NOI18N
+            table.getColumnModel().getColumn(4).setCellRenderer(rightAlignCell);
+            table.getColumnModel().getColumn(5).setHeaderValue(org.openide.util.NbBundle.getMessage(PurchaseInvoiceTopComponent.class, "PurchaseInvoiceTopComponent.table.columnModel.title5")); // NOI18N
+            table.getColumnModel().getColumn(5).setCellRenderer(rightAlignCell);
+            table.getColumnModel().getColumn(6).setHeaderValue(org.openide.util.NbBundle.getMessage(PurchaseInvoiceTopComponent.class, "PurchaseInvoiceTopComponent.table.columnModel.title6")); // NOI18N
+            table.getColumnModel().getColumn(6).setCellRenderer(rightAlignCell);
+            table.getColumnModel().getColumn(7).setHeaderValue(org.openide.util.NbBundle.getMessage(PurchaseInvoiceTopComponent.class, "PurchaseInvoiceTopComponent.table.columnModel.title7")); // NOI18N
+            table.getColumnModel().getColumn(7).setCellRenderer(rightAlignCell);
+            table.getColumnModel().getColumn(8).setHeaderValue(org.openide.util.NbBundle.getMessage(PurchaseInvoiceTopComponent.class, "PurchaseInvoiceTopComponent.table.columnModel.title8")); // NOI18N
+            table.getColumnModel().getColumn(8).setCellRenderer(rightAlignCell);
+            table.getColumnModel().getColumn(9).setHeaderValue(org.openide.util.NbBundle.getMessage(PurchaseInvoiceTopComponent.class, "PurchaseInvoiceTopComponent.table.columnModel.title9")); // NOI18N
+        }
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel8, org.openide.util.NbBundle.getMessage(PurchaseInvoiceTopComponent.class, "PurchaseInvoiceTopComponent.jLabel8.text")); // NOI18N
 
@@ -277,6 +291,17 @@ public final class PurchaseInvoiceTopComponent extends NTopComponent {
         totalDiscountLabel.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         totalDiscountLabel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
+        org.openide.awt.Mnemonics.setLocalizedText(stockLabel, org.openide.util.NbBundle.getMessage(PurchaseInvoiceTopComponent.class, "PurchaseInvoiceTopComponent.stockLabel.text")); // NOI18N
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel10, org.openide.util.NbBundle.getMessage(PurchaseInvoiceTopComponent.class, "PurchaseInvoiceTopComponent.jLabel10.text")); // NOI18N
+
+        sellingTextField.setText(org.openide.util.NbBundle.getMessage(PurchaseInvoiceTopComponent.class, "PurchaseInvoiceTopComponent.sellingTextField.text")); // NOI18N
+        sellingTextField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sellingTextFieldActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -284,19 +309,6 @@ public final class PurchaseInvoiceTopComponent extends NTopComponent {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(processButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(clearButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel9)
-                        .addGap(18, 18, 18)
-                        .addComponent(totalDiscountLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel8)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(totalAmountLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel3)
@@ -316,20 +328,42 @@ public final class PurchaseInvoiceTopComponent extends NTopComponent {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(datePicker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(stockLabel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jLabel5)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(quantityField, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jLabel6)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(valueField, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(costField, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jLabel10)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(sellingTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jLabel7)
                                 .addGap(18, 18, 18)
                                 .addComponent(discountField, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 128, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(processButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(clearButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel9)
+                        .addGap(18, 18, 18)
+                        .addComponent(totalDiscountLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel8)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(totalAmountLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
+
+        jPanel1Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {discountField, sellingTextField});
+
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
@@ -342,15 +376,21 @@ public final class PurchaseInvoiceTopComponent extends NTopComponent {
                     .addComponent(datePicker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(itemComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel5)
-                    .addComponent(quantityField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel6)
-                    .addComponent(valueField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel7)
-                    .addComponent(discountField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel7)
+                        .addComponent(discountField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel10)
+                        .addComponent(sellingTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel4)
+                        .addComponent(itemComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel5)
+                        .addComponent(quantityField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel6)
+                        .addComponent(costField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(stockLabel)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 473, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
@@ -402,6 +442,8 @@ public final class PurchaseInvoiceTopComponent extends NTopComponent {
     private void supplierComboBoxKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_supplierComboBoxKeyPressed
         if (evt.getKeyCode() == 10) {
             invoiceNumberField.requestFocus();
+        } else if (evt.getKeyCode() == KeyEvent.VK_F2) {
+            searchSupplier();
         }
     }//GEN-LAST:event_supplierComboBoxKeyPressed
 
@@ -409,12 +451,23 @@ public final class PurchaseInvoiceTopComponent extends NTopComponent {
     }//GEN-LAST:event_supplierComboBoxKeyReleased
 
     private void itemComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemComboBoxActionPerformed
-        fillCost();
+        Item item = (Item) itemComboBox.getSelectedItem();
+        if (item == null) {
+            return;
+        }
+        PriceList priceList = item.getPriceList();
+        manager.clearCache();
+//        Stock stock = manager.find(Stock.class, item.getCode());
+        double quantity = FindMySql.quantityByItemCode(item.getCode());
+//        double quantity = stock.getQuantity() == null ? 0 : item.getStock().getQuantity();
+        stockLabel.setText(nf2d.format(quantity));
+        fillPrice();
     }//GEN-LAST:event_itemComboBoxActionPerformed
 
     private void itemComboBoxKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_itemComboBoxKeyPressed
         if (evt.getKeyCode() == 10) {
-            fillCost();
+            fillPrice();
+            quantityField.selectAll();
             quantityField.requestFocus();
         }
     }//GEN-LAST:event_itemComboBoxKeyPressed
@@ -431,9 +484,9 @@ public final class PurchaseInvoiceTopComponent extends NTopComponent {
     private void quantityFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_quantityFieldActionPerformed
         try {
             double quantity = Double.valueOf(quantityField.getText().trim());
-            if (quantity > 0) {
-                valueField.setSelectionStart(0);
-                valueField.requestFocus();
+            if (quantity != 0) {
+                costField.selectAll();
+                costField.requestFocus();
             }
         } catch (NumberFormatException numberFormatException) {
         }
@@ -449,27 +502,28 @@ public final class PurchaseInvoiceTopComponent extends NTopComponent {
         }
     }//GEN-LAST:event_quantityFieldKeyPressed
 
-    private void valueFieldMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_valueFieldMouseClicked
+    private void costFieldMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_costFieldMouseClicked
         //        System.out.println(evt.getButton());
         if (evt.getButton() == 3) {
             dozPriceToItemPrice();
         }
-    }//GEN-LAST:event_valueFieldMouseClicked
+    }//GEN-LAST:event_costFieldMouseClicked
 
-    private void valueFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_valueFieldActionPerformed
-        discountField.requestFocus();
-    }//GEN-LAST:event_valueFieldActionPerformed
+    private void costFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_costFieldActionPerformed
+        sellingTextField.selectAll();
+        sellingTextField.requestFocus();
+    }//GEN-LAST:event_costFieldActionPerformed
 
-    private void valueFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_valueFieldFocusGained
+    private void costFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_costFieldFocusGained
         StatusDisplayer.getDefault().setStatusText("Hint: F2 for DOZ");
-    }//GEN-LAST:event_valueFieldFocusGained
+    }//GEN-LAST:event_costFieldFocusGained
 
-    private void valueFieldKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_valueFieldKeyPressed
+    private void costFieldKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_costFieldKeyPressed
         //        System.out.println(evt.getKeyCode());
         if (evt.getKeyCode() == 113) {
             dozPriceToItemPrice();
         }
-    }//GEN-LAST:event_valueFieldKeyPressed
+    }//GEN-LAST:event_costFieldKeyPressed
 
     private void tableKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tableKeyReleased
         if (evt.getKeyCode() == 127) {
@@ -491,13 +545,24 @@ public final class PurchaseInvoiceTopComponent extends NTopComponent {
     private void discountFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_discountFieldActionPerformed
         addToTable();
     }//GEN-LAST:event_discountFieldActionPerformed
+
+    private void sellingTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sellingTextFieldActionPerformed
+        addToTable();
+    }//GEN-LAST:event_sellingTextFieldActionPerformed
+
+    private void supplierComboBoxFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_supplierComboBoxFocusGained
+        searchSupplier();
+    }//GEN-LAST:event_supplierComboBoxFocusGained
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton clearButton;
+    private javax.swing.JTextField costField;
     private org.jdesktop.swingx.JXDatePicker datePicker;
     private javax.swing.JTextField discountField;
     private javax.swing.JTextField invoiceNumberField;
     private javax.swing.JComboBox itemComboBox;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -510,11 +575,12 @@ public final class PurchaseInvoiceTopComponent extends NTopComponent {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton processButton;
     private javax.swing.JTextField quantityField;
+    private javax.swing.JTextField sellingTextField;
+    private javax.swing.JLabel stockLabel;
     private javax.swing.JComboBox supplierComboBox;
     private javax.swing.JTable table;
     private javax.swing.JLabel totalAmountLabel;
     private javax.swing.JLabel totalDiscountLabel;
-    private javax.swing.JTextField valueField;
     // End of variables declaration//GEN-END:variables
     DefaultTableModel dtm;
     DefaultComboBoxModel<Supplier> supplierComboBoxModel;
@@ -529,7 +595,7 @@ public final class PurchaseInvoiceTopComponent extends NTopComponent {
         protected void done() {
             try {
                 supplierComboBox.setModel(get());
-            } catch (Exception ignore) {
+            } catch (InterruptedException | ExecutionException ignore) {
             }
         }
     };
@@ -543,7 +609,7 @@ public final class PurchaseInvoiceTopComponent extends NTopComponent {
         protected void done() {
             try {
                 supplierComboBox.setModel(get());
-            } catch (Exception ignore) {
+            } catch (InterruptedException | ExecutionException ignore) {
             }
         }
     };
@@ -553,7 +619,7 @@ public final class PurchaseInvoiceTopComponent extends NTopComponent {
         datePicker.setFormats(yyyy_MM_dd);
         KeyAdapter();
         dtm = (DefaultTableModel) table.getModel();
-         table.setDefaultRenderer(Object.class, coloredCellRenderer);
+        table.setDefaultRenderer(Object.class, coloredCellRenderer);
         clear();
 //        Utilities.attachInitJob(supplierComboBox, new AsyncGUIJob() {
 //            @Override
@@ -633,12 +699,13 @@ public final class PurchaseInvoiceTopComponent extends NTopComponent {
         purchaseInvoice.setInvDate(date);
         purchaseInvoice.setPurchaseInvoiceHasItemCollection(new ArrayList<PurchaseInvoiceHasItem>());
 
-        List<Serializable> serializables = new ArrayList<Serializable>();
+        List<Serializable> serializables = new ArrayList<>();
         for (int i = 0; i < rowCount; i++) {
             Item item = manager.find(Item.class, table.getValueAt(i, 1).toString());
             double value = Double.valueOf(table.getValueAt(i, 3).toString());
             double quantity = Double.valueOf(table.getValueAt(i, 4).toString());
             double discount = Double.valueOf(table.getValueAt(i, 7).toString());
+            double selling = Double.valueOf(table.getValueAt(i, 9).toString());
             double cost = value - (value * discount / 100);
             PurchaseInvoiceHasItem pihi = new PurchaseInvoiceHasItem(invoiceNumber, supplier.getCode(), item.getCode());
             pihi.setPurchaseInvoice(purchaseInvoice);
@@ -659,6 +726,7 @@ public final class PurchaseInvoiceTopComponent extends NTopComponent {
             PriceList priceList = item.getPriceList();
             priceList = priceList == null ? new PriceList(item.getCode()) : priceList;
             priceList.setCostPack(cost);
+            priceList.setSellingPack(selling);
             serializables.add(priceList);
             serializables.add(item);
             serializables.add(pihi);
@@ -679,47 +747,52 @@ public final class PurchaseInvoiceTopComponent extends NTopComponent {
     private void clearFields() {
         invoiceNumberField.setText("");
         quantityField.setText("");
-        valueField.setText("");
+        costField.setText("");
         totalAmountLabel.setText("");
         totalDiscountLabel.setText("");
+        stockLabel.setText("stock");
     }
 
     private void addToTable() {
         double quantity = 0;
-        double value = 0;
+        double cost = 0;
         double discount = 0;
+        double sellingPrice = 0;
         Item item = (Item) itemComboBox.getSelectedItem();
         try {
             quantity = Double.valueOf(quantityField.getText());
-            value = Double.valueOf(valueField.getText().trim());
+            cost = Double.valueOf(costField.getText().trim());
             discount = Double.valueOf(discountField.getText().trim());
-        } catch (Exception e) {
+            sellingPrice = Double.valueOf(sellingTextField.getText().trim());
+        } catch (NumberFormatException e) {
         }
         if (quantity == 0) {
             showError("Quantity Required");
             return;
         }
-        if (value == 0) {
+        if (cost == 0) {
             showError("No cost value");
             showError("No cost value");
             return;
         }
-        double net = value * quantity;
+        double net = cost * quantity;
         double discountAmount = net * discount / 100;
         double amount = net - discountAmount;
         int i = dtm.getRowCount();
         Object[] rowData = {++i,
             item.getCode(),
             item.getDescription(),
-            nf2d.format(value),
+            nf2d.format(cost),
             nf3d.format(quantity),
             nf2d.format(net),
             nf2d.format(discountAmount),
             nf2d.format(discount),
-            nf2d.format(amount)};
+            nf2d.format(amount),
+            nf2d.format(sellingPrice)};
         dtm.addRow(rowData);
         quantityField.setText("");
-        valueField.setText("");
+        costField.setText("");
+        sellingTextField.setText("");
         discountField.setText("");
         itemComboBox.requestFocus();
         calcTotal();
@@ -739,13 +812,17 @@ public final class PurchaseInvoiceTopComponent extends NTopComponent {
             return;
         }
         Component component[] = comp.getComponents();
-        for (int i = 0; i < component.length; i++) {
-            if (compName.equals("supplierComboBox")) {
-                component[i].addKeyListener(supplierComboBoxKeyAdapter);
-            } else if (compName.equals("itemComboBox")) {
-                component[i].addKeyListener(itemComboBoxKeyAdapter);
-            } else if (compName.equals("datePicker")) {
-                component[i].addKeyListener(datePickerKeyAdapter);
+        for (Component component1 : component) {
+            switch (compName) {
+                case "supplierComboBox":
+                    component1.addKeyListener(supplierComboBoxKeyAdapter);
+                    break;
+                case "itemComboBox":
+                    component1.addKeyListener(itemComboBoxKeyAdapter);
+                    break;
+                case "datePicker":
+                    component1.addKeyListener(datePickerKeyAdapter);
+                    break;
             }
         }
     }
@@ -768,16 +845,33 @@ public final class PurchaseInvoiceTopComponent extends NTopComponent {
         }
     };
 
-    private void fillCost() {
+    private void fillPrice() {
         Object o = itemComboBox.getSelectedItem();
         if (o != null && o instanceof Item) {
             Item item = (Item) o;
             PriceList priceList = item.getPriceList();
-            double cost = 0.0;
-            if (priceList != null && priceList.getCostPack() != null) {
-                cost = priceList.getCostPack();
+            double cost = 0.0, selling = 0.0;
+            if (priceList != null) {
+                if (priceList.getCostPack() != null) {
+                    cost = priceList.getCostPack();
+                }
+                if (priceList.getSellingPack() != null) {
+                    selling = priceList.getSellingPack();
+                }
+                costField.setText(cost + "");
+                sellingTextField.setText(selling + "");
             }
-            valueField.setText(cost + "");
+        }
+    }
+
+    private void searchSupplier() {
+        SearchSupplierDialog searchSupplierDialog = new SearchSupplierDialog(null, true);
+        Supplier supplier = searchSupplierDialog.suppllier;
+        if (supplier != null) {
+            supplierComboBox.setSelectedItem(supplier);
+            invoiceNumberField.requestFocus();
+        } else {
+            supplierComboBox.requestFocus();
         }
     }
 
@@ -791,7 +885,7 @@ public final class PurchaseInvoiceTopComponent extends NTopComponent {
         String dozPriceText = JOptionPane.showInputDialog(this, "DOZ Price");
         try {
             double dozPrice = Double.parseDouble(dozPriceText);
-            valueField.setText((nf2d.format(dozPrice / 12)) + "");
+            costField.setText((nf2d.format(dozPrice / 12)) + "");
         } catch (Exception e) {
         }
     }

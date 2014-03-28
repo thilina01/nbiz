@@ -4,7 +4,6 @@
  */
 package com.nanosl.nbiz.gui;
 
-import com.nanosl.lib.log.Loggings;
 import com.nanosl.nbiz.util.Combo;
 import static com.nanosl.nbiz.util.Format.nf2d;
 import com.nanosl.nbiz.util.NTopComponent;
@@ -94,6 +93,12 @@ public final class ItemTopComponent extends NTopComponent {
         jLabel2 = new javax.swing.JLabel();
         itemTypeComboBox = new javax.swing.JComboBox();
         disableCheckBox = new javax.swing.JCheckBox();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        costTextField = new javax.swing.JTextField();
+        sellingPriceTextField = new javax.swing.JTextField();
+        quantityTextField = new javax.swing.JTextField();
 
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
@@ -213,6 +218,36 @@ public final class ItemTopComponent extends NTopComponent {
 
         org.openide.awt.Mnemonics.setLocalizedText(disableCheckBox, org.openide.util.NbBundle.getMessage(ItemTopComponent.class, "ItemTopComponent.disableCheckBox.text")); // NOI18N
 
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel3, org.openide.util.NbBundle.getMessage(ItemTopComponent.class, "ItemTopComponent.jLabel3.text")); // NOI18N
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel4, org.openide.util.NbBundle.getMessage(ItemTopComponent.class, "ItemTopComponent.jLabel4.text")); // NOI18N
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel5, org.openide.util.NbBundle.getMessage(ItemTopComponent.class, "ItemTopComponent.jLabel5.text")); // NOI18N
+
+        costTextField.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
+        costTextField.setText(org.openide.util.NbBundle.getMessage(ItemTopComponent.class, "ItemTopComponent.costTextField.text")); // NOI18N
+        costTextField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                costTextFieldActionPerformed(evt);
+            }
+        });
+
+        sellingPriceTextField.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
+        sellingPriceTextField.setText(org.openide.util.NbBundle.getMessage(ItemTopComponent.class, "ItemTopComponent.sellingPriceTextField.text")); // NOI18N
+        sellingPriceTextField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sellingPriceTextFieldActionPerformed(evt);
+            }
+        });
+
+        quantityTextField.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
+        quantityTextField.setText(org.openide.util.NbBundle.getMessage(ItemTopComponent.class, "ItemTopComponent.quantityTextField.text")); // NOI18N
+        quantityTextField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                quantityTextFieldActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -227,27 +262,37 @@ public final class ItemTopComponent extends NTopComponent {
                     .addComponent(jLabel1))
                 .addGap(28, 28, 28)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(brandField)
-                    .addComponent(supplierComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(supplierComboBox, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(brandField, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(descriptionField, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
+                                .addComponent(codeField, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jLabel2)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(itemTypeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(disableCheckBox)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel5))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, 16, Short.MAX_VALUE)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(quantityTextField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 75, Short.MAX_VALUE)
+                            .addComponent(sellingPriceTextField, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(costTextField, javax.swing.GroupLayout.Alignment.LEADING)))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(minimumLimitTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 182, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(updateButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(deleteButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(clearButton))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(codeField, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(itemTypeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(disableCheckBox)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(descriptionField))
-                .addContainerGap())
+                        .addComponent(clearButton)))
+                .addGap(61, 61, 61))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -262,15 +307,21 @@ public final class ItemTopComponent extends NTopComponent {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(descriptionLabel)
-                    .addComponent(descriptionField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(descriptionField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3)
+                    .addComponent(costTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(brandLabel)
-                    .addComponent(brandField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(brandField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4)
+                    .addComponent(sellingPriceTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(supplierLabel)
-                    .addComponent(supplierComboBox))
+                    .addComponent(supplierComboBox)
+                    .addComponent(jLabel5)
+                    .addComponent(quantityTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
@@ -291,7 +342,7 @@ public final class ItemTopComponent extends NTopComponent {
                     .addComponent(masterScrollPane)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 83, Short.MAX_VALUE)))
+                        .addGap(0, 79, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -344,6 +395,7 @@ public final class ItemTopComponent extends NTopComponent {
     private void supplierComboBoxKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_supplierComboBoxKeyPressed
         if (evt.getKeyCode() == 10) {
             minimumLimitTextField.requestFocus();
+            minimumLimitTextField.selectAll();
         }
     }//GEN-LAST:event_supplierComboBoxKeyPressed
 
@@ -368,7 +420,8 @@ public final class ItemTopComponent extends NTopComponent {
     }//GEN-LAST:event_clearButtonActionPerformed
 
     private void minimumLimitTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_minimumLimitTextFieldActionPerformed
-        updateButton.requestFocus();
+        costTextField.requestFocus();
+        costTextField.selectAll();
     }//GEN-LAST:event_minimumLimitTextFieldActionPerformed
 
     private void itemTypeComboBoxKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_itemTypeComboBoxKeyPressed
@@ -376,12 +429,28 @@ public final class ItemTopComponent extends NTopComponent {
             descriptionField.requestFocus();
         }
     }//GEN-LAST:event_itemTypeComboBoxKeyPressed
+
+    private void costTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_costTextFieldActionPerformed
+        sellingPriceTextField.requestFocus();
+        sellingPriceTextField.selectAll();
+    }//GEN-LAST:event_costTextFieldActionPerformed
+
+    private void sellingPriceTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sellingPriceTextFieldActionPerformed
+        quantityTextField.requestFocus();
+        quantityTextField.selectAll();
+    }//GEN-LAST:event_sellingPriceTextFieldActionPerformed
+
+    private void quantityTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_quantityTextFieldActionPerformed
+        updateButton.requestFocus();
+    }//GEN-LAST:event_quantityTextFieldActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField brandField;
     private javax.swing.JLabel brandLabel;
     private javax.swing.JButton clearButton;
     private javax.swing.JTextField codeField;
     private javax.swing.JLabel codeLabel;
+    private javax.swing.JTextField costTextField;
     private javax.swing.JButton deleteButton;
     private javax.swing.JTextField descriptionField;
     private javax.swing.JLabel descriptionLabel;
@@ -389,11 +458,16 @@ public final class ItemTopComponent extends NTopComponent {
     private javax.swing.JComboBox itemTypeComboBox;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane masterScrollPane;
     private javax.swing.JTable masterTable;
     private javax.swing.JTextField minimumLimitTextField;
+    private javax.swing.JTextField quantityTextField;
+    private javax.swing.JTextField sellingPriceTextField;
     private javax.swing.JComboBox supplierComboBox;
     private javax.swing.JLabel supplierLabel;
     private javax.swing.JButton updateButton;
@@ -426,9 +500,22 @@ public final class ItemTopComponent extends NTopComponent {
             String minLimText = minimumLimitTextField.getText().trim();
             minLimText = minLimText.isEmpty() ? "0.0" : minLimText;
             double minimumLimit = Double.parseDouble(minLimText);
+
+            String costString = costTextField.getText().trim();
+            costString = costString.isEmpty() ? "0.0" : costString;
+            double cost = Double.parseDouble(costString);
+
+            String sellingPriceString = sellingPriceTextField.getText().trim();
+            sellingPriceString = sellingPriceString.isEmpty() ? "0.0" : sellingPriceString;
+            double sellingPrice = Double.parseDouble(sellingPriceString);
+
+            String quantityString = quantityTextField.getText().trim();
+            quantityString = quantityString.isEmpty() ? "0.0" : quantityString;
+            double quantity = Double.parseDouble(quantityString);
+
             Supplier supplier = (Supplier) supplierComboBox.getSelectedItem();
             Item item = manager.find(Item.class, code);
-            List<Serializable> serializables = new ArrayList<Serializable>();
+            List<Serializable> serializables = new ArrayList<>();
             if (item == null) {
                 item = new Item(code);
                 LastCode lastCode = manager.find(LastCode.class, "Item");
@@ -436,7 +523,7 @@ public final class ItemTopComponent extends NTopComponent {
                 lastCode.setCode(code);
                 serializables.add(lastCode);
             }
-            item.setDisable(disableCheckBox.isSelected()?1:0);
+            item.setDisable(disableCheckBox.isSelected() ? 1 : 0);
             item.setDescription(description);
             item.setBrand(brand);
             item.setSupplier(supplier);
@@ -447,18 +534,17 @@ public final class ItemTopComponent extends NTopComponent {
                 stock = new Stock(code);
                 stock.setBundles(0.0);
                 stock.setItem(item);
-                stock.setQuantity(0.0);
-                stock.setMinLimit(minimumLimit);
                 item.setStock(stock);
-                serializables.add(stock);
             }
+            stock.setQuantity(quantity);
+            stock.setMinLimit(minimumLimit);
+            serializables.add(stock);
             supplier.getItemCollection().add(item);
             PriceList priceList = manager.find(PriceList.class, code);
             priceList = priceList == null ? new PriceList(code) : priceList;
-            priceList.setCostPack(0.0);
+            priceList.setCostPack(cost);
             priceList.setItem(item);
-            priceList.setSellingPack(0.0);
-            priceList.setCostPack(0.0);
+            priceList.setSellingPack(sellingPrice);
             item.setPriceList(priceList);
             serializables.add(supplier);
             serializables.add(item);
@@ -472,8 +558,6 @@ public final class ItemTopComponent extends NTopComponent {
             showError("Unable to update " + code);
         } catch (NumberFormatException e) {
             showError("Check values again");
-        } catch (Exception e) {
-            Loggings.logError(getName(), e);
         }
     }
 
@@ -509,6 +593,9 @@ public final class ItemTopComponent extends NTopComponent {
         descriptionField.setText("");
         brandField.setText("");
         minimumLimitTextField.setText("");
+        costTextField.setText("");
+        sellingPriceTextField.setText("");
+        quantityTextField.setText("");
         disableCheckBox.setSelected(false);
         if (supplierComboBox.getItemCount() > 0) {
             supplierComboBox.setSelectedIndex(0);
@@ -528,7 +615,7 @@ public final class ItemTopComponent extends NTopComponent {
                         p.start();
 
                         int i = 0;
-                        List<Serializable> serializables = new ArrayList<Serializable>();
+                        List<Serializable> serializables = new ArrayList<>();
                         List<Item> items = manager.find(Item.class);
                         Collections.sort(items);
                         for (Item item : items) {
@@ -554,7 +641,7 @@ public final class ItemTopComponent extends NTopComponent {
                                 serializables.add(priceList);
                             }
                             manager.update(serializables);
-                            double paymentAmount = Double.valueOf(priceList.getSellingPack() != null ? priceList.getSellingPack() : 0);
+                            double paymentAmount = priceList.getSellingPack() != null ? priceList.getSellingPack() : 0;
                             Object[] row = {++i, item.getCode(), item.getDescription(), stock.getQuantity(), nf2d.format(paymentAmount)};
                             publish(row);
                         }
@@ -625,13 +712,17 @@ public final class ItemTopComponent extends NTopComponent {
             return;
         }
         codeField.setText(item.getCode());
-        disableCheckBox.setSelected(item.getDisable()==1);
+        disableCheckBox.setSelected(item.getDisable() != null ? item.getDisable() == 1 : false);
         descriptionField.setText(item.getDescription());
         brandField.setText(item.getBrand());
         supplierComboBox.setSelectedItem(item.getSupplier());
         itemTypeComboBox.setSelectedItem(item.getItemTypeType());
         Stock stock = item.getStock();
         minimumLimitTextField.setText(stock != null ? stock.getMinLimit() != null ? stock.getMinLimit() + "" : "" : "0");
+        quantityTextField.setText(stock != null ? stock.getQuantity() != null ? stock.getQuantity() + "" : "" : "0");
+        PriceList priceList = item.getPriceList();
+        costTextField.setText(priceList != null ? priceList.getCostPack() != null ? priceList.getCostPack() + "" : "" : "0");
+        sellingPriceTextField.setText(priceList != null ? priceList.getSellingPack() != null ? priceList.getSellingPack() + "" : "" : "0");
     }
 
     @Override

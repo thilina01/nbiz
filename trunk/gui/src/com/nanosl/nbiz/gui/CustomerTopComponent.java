@@ -404,7 +404,7 @@ public final class CustomerTopComponent extends NTopComponent {
 
     private void nicTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nicTextFieldActionPerformed
         if (!nicTextField.getText().trim().equals("")) {
-            addressNumberField.requestFocus();
+            nameField.requestFocus();
         }
     }//GEN-LAST:event_nicTextFieldActionPerformed
 

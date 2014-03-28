@@ -591,7 +591,7 @@ public final class SaleInvoicePaymentTopComponent extends NTopComponent {
     @Override
     public void setVisible(boolean b) {
         super.setVisible(b);
-        clearAll();
+//        clearAll();
     }
 
     private void fillInvoiceTable() {
@@ -617,6 +617,7 @@ public final class SaleInvoicePaymentTopComponent extends NTopComponent {
     }
 
     public void fill(SaleInvoice saleInvoice) {
+        System.out.println("filling "+saleInvoice);
         clearAll();
         customer = saleInvoice.getCustomer();
         invoiceNumberField.setText(saleInvoice.getInvNo());
@@ -695,6 +696,7 @@ public final class SaleInvoicePaymentTopComponent extends NTopComponent {
         amountField.setText("");
         remainingAmountField.setText("");
         paidTextField.setText("");
+        receiptNumberTextField.setText("");
         clearPaymentFields();
         paymentDtm.setRowCount(0);
         customer = null;
@@ -710,7 +712,7 @@ public final class SaleInvoicePaymentTopComponent extends NTopComponent {
         try {
             List<Serializable> serializables = new ArrayList<Serializable>();
             String invoiceNumber = invoiceNumberField.getText().trim();
-            SaleInvoice saleInvoice = manager.find(SaleInvoice.class, invoiceNumber);
+            saleInvoice = manager.find(SaleInvoice.class, invoiceNumber);
             String receiptNumber = receiptNumberTextField.getText().trim();
             double paidAmount = Double.parseDouble(paidTextField.getText().trim());
             if (receiptNumber.isEmpty()) {
@@ -728,6 +730,7 @@ public final class SaleInvoicePaymentTopComponent extends NTopComponent {
             collectionReceipt.setCollectedTime(collectedTime);
             collectionReceipt.setSaleInvoice(saleInvoice);
             collectionReceipt.setCash(collectedAmount);
+            collectionReceipt.setAmount(collectedAmount);
 
             List<SaleCheque> saleCheques = new ArrayList<SaleCheque>();
             for (int i = 0; i < rowCount; i++) {
@@ -759,6 +762,7 @@ public final class SaleInvoicePaymentTopComponent extends NTopComponent {
             serializables.add(collectionReceipt);
             double remainingAmount = Double.valueOf(remainingAmountField.getText().trim());
             saleInvoice.setCredit(remainingAmount);
+            saleInvoice.getCollectionReceiptCollection().add(collectionReceipt);
             saleInvoice.setReceivedAmount(saleInvoice.getAmount() - remainingAmount);
             serializables.add(saleInvoice);
             if (manager.update(serializables)) {
