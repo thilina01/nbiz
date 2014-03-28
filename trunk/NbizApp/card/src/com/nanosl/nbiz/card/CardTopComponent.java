@@ -5,13 +5,13 @@
  */
 package com.nanosl.nbiz.card;
 
+import com.nanosl.nbiz.gui.SaleInvoicePaymentTopComponent;
 import com.nanosl.nbiz.util.NTopComponent;
 import entity.CollectionReceipt;
 import entity.Customer;
 import entity.SaleInvoice;
 import entity.SaleInvoiceHasItem;
 import java.awt.Window;
-import java.awt.event.FocusListener;
 import java.util.Collection;
 import java.util.Date;
 import javax.persistence.Query;
@@ -25,6 +25,7 @@ import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
+import org.openide.windows.WindowManager;
 import query.Find;
 
 /**
@@ -74,7 +75,7 @@ public final class CardTopComponent extends NTopComponent {
         jPanel1 = new javax.swing.JPanel();
         cardOrNicNumberTextField = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox();
+        cardTypeComboBox = new javax.swing.JComboBox<>();
         jLabel3 = new javax.swing.JLabel();
         purchaseDatePicker = new JXDatePicker();
         jPanel2 = new javax.swing.JPanel();
@@ -112,6 +113,7 @@ public final class CardTopComponent extends NTopComponent {
         jLabel18 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         paymentsTable = new javax.swing.JTable();
+        payButton = new javax.swing.JButton();
         jLabel19 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         clearButton = new javax.swing.JButton();
@@ -127,7 +129,12 @@ public final class CardTopComponent extends NTopComponent {
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel2, org.openide.util.NbBundle.getMessage(CardTopComponent.class, "CardTopComponent.jLabel2.text")); // NOI18N
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "S", "T" }));
+        cardTypeComboBox.setModel(new javax.swing.DefaultComboBoxModel<String>(new String[] { "S", "T" }));
+        cardTypeComboBox.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                cardTypeComboBoxKeyPressed(evt);
+            }
+        });
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel3, org.openide.util.NbBundle.getMessage(CardTopComponent.class, "CardTopComponent.jLabel3.text")); // NOI18N
 
@@ -339,8 +346,10 @@ public final class CardTopComponent extends NTopComponent {
             invoiceTable.getColumnModel().getColumn(0).setHeaderValue(org.openide.util.NbBundle.getMessage(CardTopComponent.class, "CardTopComponent.invoiceTable.columnModel.title0")); // NOI18N
             invoiceTable.getColumnModel().getColumn(1).setPreferredWidth(50);
             invoiceTable.getColumnModel().getColumn(1).setHeaderValue(org.openide.util.NbBundle.getMessage(CardTopComponent.class, "CardTopComponent.invoiceTable.columnModel.title1")); // NOI18N
+            invoiceTable.getColumnModel().getColumn(1).setCellRenderer(null);
             invoiceTable.getColumnModel().getColumn(2).setPreferredWidth(50);
             invoiceTable.getColumnModel().getColumn(2).setHeaderValue(org.openide.util.NbBundle.getMessage(CardTopComponent.class, "CardTopComponent.invoiceTable.columnModel.title2")); // NOI18N
+            invoiceTable.getColumnModel().getColumn(2).setCellRenderer(null);
         }
 
         installmentDatePicker.setName("datePicker"); // NOI18N
@@ -359,14 +368,31 @@ public final class CardTopComponent extends NTopComponent {
 
             },
             new String [] {
-                "Date", "Amount"
+                "Receipt", "Date", "Amount"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane2.setViewportView(paymentsTable);
         if (paymentsTable.getColumnModel().getColumnCount() > 0) {
-            paymentsTable.getColumnModel().getColumn(0).setHeaderValue(org.openide.util.NbBundle.getMessage(CardTopComponent.class, "CardTopComponent.paymentsTable.columnModel.title0")); // NOI18N
-            paymentsTable.getColumnModel().getColumn(1).setHeaderValue(org.openide.util.NbBundle.getMessage(CardTopComponent.class, "CardTopComponent.paymentsTable.columnModel.title1")); // NOI18N
+            paymentsTable.getColumnModel().getColumn(0).setHeaderValue(org.openide.util.NbBundle.getMessage(CardTopComponent.class, "CardTopComponent.paymentsTable.columnModel.title2")); // NOI18N
+            paymentsTable.getColumnModel().getColumn(1).setHeaderValue(org.openide.util.NbBundle.getMessage(CardTopComponent.class, "CardTopComponent.paymentsTable.columnModel.title0")); // NOI18N
+            paymentsTable.getColumnModel().getColumn(2).setHeaderValue(org.openide.util.NbBundle.getMessage(CardTopComponent.class, "CardTopComponent.paymentsTable.columnModel.title1")); // NOI18N
+            paymentsTable.getColumnModel().getColumn(2).setCellRenderer(rightAlignCell);
         }
+
+        org.openide.awt.Mnemonics.setLocalizedText(payButton, org.openide.util.NbBundle.getMessage(CardTopComponent.class, "CardTopComponent.payButton.text")); // NOI18N
+        payButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                payButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -375,15 +401,20 @@ public final class CardTopComponent extends NTopComponent {
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel18)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addComponent(jLabel18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 89, Short.MAX_VALUE)
+                        .addComponent(payButton)))
+                .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel18)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel18)
+                    .addComponent(payButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 246, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -416,7 +447,7 @@ public final class CardTopComponent extends NTopComponent {
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel2)
                                 .addGap(18, 18, 18)
-                                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(cardTypeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
                                 .addComponent(jLabel7)
                                 .addGap(25, 25, 25)
@@ -448,7 +479,7 @@ public final class CardTopComponent extends NTopComponent {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(cardOrNicNumberTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel2)
-                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cardTypeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel3)
                             .addComponent(purchaseDatePicker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(installmentDatePicker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -496,12 +527,12 @@ public final class CardTopComponent extends NTopComponent {
             Collection<SaleInvoice> saleInvoices = Find.saleInvoicesAsActiveCardsByNic(cardOrNicNumberText);
             if (saleInvoices == null) {
                 return;
-            }
+            }            
             if (saleInvoices.size() == 1) {
                 saleInvoice = saleInvoices.iterator().next();
                 cardOrNicNumberTextField.setText(saleInvoice.getCardNumber());
             } else {
-                final JComboBox jcb = new JComboBox(saleInvoices.toArray());
+                final JComboBox<SaleInvoice> jcb = new JComboBox<>(saleInvoices.toArray(new SaleInvoice[0]));
                 jcb.requestFocus();
 
                 jcb.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -515,12 +546,12 @@ public final class CardTopComponent extends NTopComponent {
                         }
                     }
                 });
-                JOptionPane.showOptionDialog(null, jcb, "select system", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, new Object[]{}, null);
+                JOptionPane.showOptionDialog(null, jcb, "select card", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, new Object[]{}, null);
                 saleInvoice = (SaleInvoice) jcb.getSelectedItem();
                 cardOrNicNumberTextField.setText(saleInvoice.getCardNumber());
             }
         } else {
-            cardOrNicNumberText = jComboBox1.getSelectedItem().toString() + cardOrNicNumberText;
+            cardOrNicNumberText = cardTypeComboBox.getSelectedItem().toString() + cardOrNicNumberText;
             Query qry = manager.getEm().createNamedQuery("SaleInvoice.findByCardNumber");
             qry.setParameter("cardNumber", cardOrNicNumberText);
             saleInvoice = manager.exNamedQueryParamResult(qry, SaleInvoice.class);
@@ -553,7 +584,19 @@ public final class CardTopComponent extends NTopComponent {
         invoiceNumberTextField.setText(saleInvoice.getInvNo());
         totalAmountTextField.setText(nf2d.format(saleInvoice.getAmount()));
         initialPaymentTextField.setText(nf2d.format(saleInvoice.getInitialPayment() != null ? saleInvoice.getInitialPayment() : 0));
-        numberOfTermsTextField.setText(saleInvoice.getNumberOfTerms() + "");
+        int numberOfTerms = saleInvoice.getNumberOfTerms();
+        if (numberOfTerms == 0) {
+            String text = JOptionPane.showInputDialog(this, "Enter number of terms:", "Terms", JOptionPane.OK_CANCEL_OPTION);
+            numberOfTerms = Integer.parseInt(text);
+            saleInvoice.setNumberOfTerms(numberOfTerms);
+            double termAmount = saleInvoice.getCredit() / numberOfTerms;
+            String text2 = JOptionPane.showInputDialog(this, "Enter Term Amount : (" + nf2d.format(termAmount) + ")", "Term Aount", JOptionPane.OK_CANCEL_OPTION);
+            termAmount = Double.parseDouble(text2);
+            saleInvoice.setTermAmount(termAmount);
+            manager.update(saleInvoice);
+        }
+
+        numberOfTermsTextField.setText(numberOfTerms + "");
         termAmountTextField.setText(nf2d.format(saleInvoice.getTermAmount() != null ? saleInvoice.getTermAmount() : 0));
         alreadyPaidTextField.setText(nf2d.format(saleInvoice.getReceivedAmount() != null ? saleInvoice.getReceivedAmount() : 0));
         remainingAmountTextField.setText(nf2d.format(saleInvoice.getCredit()));
@@ -567,7 +610,7 @@ public final class CardTopComponent extends NTopComponent {
         paymentsTableModel.setRowCount(0);
         Collection<CollectionReceipt> collectionReceipts = saleInvoice.getCollectionReceiptCollection();
         for (CollectionReceipt collectionReceipt : collectionReceipts) {
-            Object[] row = {yyyy_MM_dd.format(collectionReceipt.getCollectedTime()), nf2d.format(collectionReceipt.getAmount() != null ? collectionReceipt.getAmount() : 0)};
+            Object[] row = {collectionReceipt.getReceiptNumber(), yyyy_MM_dd.format(collectionReceipt.getCollectedTime()), nf2d.format(collectionReceipt.getAmount() != null ? collectionReceipt.getAmount() : 0)};
             paymentsTableModel.addRow(row);
         }
 
@@ -581,10 +624,28 @@ public final class CardTopComponent extends NTopComponent {
         clear();
     }//GEN-LAST:event_clearButtonActionPerformed
 
+    private void payButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_payButtonActionPerformed
+        TopComponent tc = WindowManager.getDefault().findTopComponent("SaleInvoicePaymentTopComponent");
+        SaleInvoicePaymentTopComponent saleInvoicePaymentTopComponent;
+        if (tc != null) {
+            saleInvoicePaymentTopComponent = (SaleInvoicePaymentTopComponent) tc;
+            saleInvoicePaymentTopComponent.fill(manager.find(SaleInvoice.class, invoiceNumberTextField.getText().trim()));
+            saleInvoicePaymentTopComponent.open();
+            saleInvoicePaymentTopComponent.requestActive();
+        }
+    }//GEN-LAST:event_payButtonActionPerformed
+
+    private void cardTypeComboBoxKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cardTypeComboBoxKeyPressed
+        if (evt.getKeyCode() == 10) {
+            cardOrNicNumberTextField.requestFocus();
+        }
+    }//GEN-LAST:event_cardTypeComboBoxKeyPressed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField addressTextField;
     private javax.swing.JTextField alreadyPaidTextField;
     private javax.swing.JTextField cardOrNicNumberTextField;
+    private javax.swing.JComboBox<String> cardTypeComboBox;
     private javax.swing.JTextField cityTextField;
     private javax.swing.JButton clearButton;
     private javax.swing.JTextField fixedPhoneTextField;
@@ -592,7 +653,6 @@ public final class CardTopComponent extends NTopComponent {
     private org.jdesktop.swingx.JXDatePicker installmentDatePicker;
     private javax.swing.JTextField invoiceNumberTextField;
     private javax.swing.JTable invoiceTable;
-    private javax.swing.JComboBox jComboBox1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
@@ -621,6 +681,7 @@ public final class CardTopComponent extends NTopComponent {
     private javax.swing.JTextField nameTextField;
     private javax.swing.JTextField nicTextField;
     private javax.swing.JTextField numberOfTermsTextField;
+    private javax.swing.JButton payButton;
     private javax.swing.JTable paymentsTable;
     private org.jdesktop.swingx.JXDatePicker purchaseDatePicker;
     private javax.swing.JTextField remainingAmountTextField;
@@ -672,5 +733,5 @@ public final class CardTopComponent extends NTopComponent {
         invoiceTableModel.setRowCount(0);
         paymentsTableModel.setRowCount(0);
     }
-   
+
 }
