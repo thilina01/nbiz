@@ -118,18 +118,23 @@ public final class PurchaseInvoiceTopComponent extends NTopComponent {
             }
         });
 
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(PurchaseInvoiceTopComponent.class, "PurchaseInvoiceTopComponent.jLabel1.text")); // NOI18N
 
+        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(jLabel2, org.openide.util.NbBundle.getMessage(PurchaseInvoiceTopComponent.class, "PurchaseInvoiceTopComponent.jLabel2.text")); // NOI18N
 
+        invoiceNumberField.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         invoiceNumberField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 invoiceNumberFieldActionPerformed(evt);
             }
         });
 
+        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(jLabel3, org.openide.util.NbBundle.getMessage(PurchaseInvoiceTopComponent.class, "PurchaseInvoiceTopComponent.jLabel3.text")); // NOI18N
 
+        supplierComboBox.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         supplierComboBox.setName("supplierComboBox"); // NOI18N
         supplierComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -150,8 +155,10 @@ public final class PurchaseInvoiceTopComponent extends NTopComponent {
             }
         });
 
+        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(jLabel4, org.openide.util.NbBundle.getMessage(PurchaseInvoiceTopComponent.class, "PurchaseInvoiceTopComponent.jLabel4.text")); // NOI18N
 
+        itemComboBox.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         itemComboBox.setName("itemComboBox"); // NOI18N
         itemComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -167,8 +174,10 @@ public final class PurchaseInvoiceTopComponent extends NTopComponent {
             }
         });
 
+        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(jLabel5, org.openide.util.NbBundle.getMessage(PurchaseInvoiceTopComponent.class, "PurchaseInvoiceTopComponent.jLabel5.text")); // NOI18N
 
+        quantityField.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         quantityField.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 quantityFieldMouseClicked(evt);
@@ -190,8 +199,10 @@ public final class PurchaseInvoiceTopComponent extends NTopComponent {
             }
         });
 
+        jLabel6.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(jLabel6, org.openide.util.NbBundle.getMessage(PurchaseInvoiceTopComponent.class, "PurchaseInvoiceTopComponent.jLabel6.text")); // NOI18N
 
+        costField.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         costField.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 costFieldMouseClicked(evt);
@@ -213,6 +224,7 @@ public final class PurchaseInvoiceTopComponent extends NTopComponent {
             }
         });
 
+        table.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -256,14 +268,16 @@ public final class PurchaseInvoiceTopComponent extends NTopComponent {
             table.getColumnModel().getColumn(9).setHeaderValue(org.openide.util.NbBundle.getMessage(PurchaseInvoiceTopComponent.class, "PurchaseInvoiceTopComponent.table.columnModel.title9")); // NOI18N
         }
 
+        jLabel8.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(jLabel8, org.openide.util.NbBundle.getMessage(PurchaseInvoiceTopComponent.class, "PurchaseInvoiceTopComponent.jLabel8.text")); // NOI18N
 
-        totalAmountLabel.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        totalAmountLabel.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         totalAmountLabel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         totalAmountLabel.setMaximumSize(new java.awt.Dimension(6, 20));
         totalAmountLabel.setMinimumSize(new java.awt.Dimension(6, 20));
         totalAmountLabel.setPreferredSize(null);
 
+        processButton.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(processButton, org.openide.util.NbBundle.getMessage(PurchaseInvoiceTopComponent.class, "PurchaseInvoiceTopComponent.processButton.text")); // NOI18N
         processButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -271,6 +285,7 @@ public final class PurchaseInvoiceTopComponent extends NTopComponent {
             }
         });
 
+        clearButton.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(clearButton, org.openide.util.NbBundle.getMessage(PurchaseInvoiceTopComponent.class, "PurchaseInvoiceTopComponent.clearButton.text")); // NOI18N
         clearButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -278,23 +293,29 @@ public final class PurchaseInvoiceTopComponent extends NTopComponent {
             }
         });
 
+        jLabel7.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(jLabel7, org.openide.util.NbBundle.getMessage(PurchaseInvoiceTopComponent.class, "PurchaseInvoiceTopComponent.jLabel7.text")); // NOI18N
 
+        discountField.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         discountField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 discountFieldActionPerformed(evt);
             }
         });
 
+        jLabel9.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(jLabel9, org.openide.util.NbBundle.getMessage(PurchaseInvoiceTopComponent.class, "PurchaseInvoiceTopComponent.jLabel9.text")); // NOI18N
 
-        totalDiscountLabel.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        totalDiscountLabel.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         totalDiscountLabel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
+        stockLabel.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(stockLabel, org.openide.util.NbBundle.getMessage(PurchaseInvoiceTopComponent.class, "PurchaseInvoiceTopComponent.stockLabel.text")); // NOI18N
 
+        jLabel10.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(jLabel10, org.openide.util.NbBundle.getMessage(PurchaseInvoiceTopComponent.class, "PurchaseInvoiceTopComponent.jLabel10.text")); // NOI18N
 
+        sellingTextField.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         sellingTextField.setText(org.openide.util.NbBundle.getMessage(PurchaseInvoiceTopComponent.class, "PurchaseInvoiceTopComponent.sellingTextField.text")); // NOI18N
         sellingTextField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -551,7 +572,7 @@ public final class PurchaseInvoiceTopComponent extends NTopComponent {
     }//GEN-LAST:event_sellingTextFieldActionPerformed
 
     private void supplierComboBoxFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_supplierComboBoxFocusGained
-        searchSupplier();
+//        searchSupplier();
     }//GEN-LAST:event_supplierComboBoxFocusGained
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

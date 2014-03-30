@@ -105,7 +105,7 @@ public class Data {
     }
 
     public static Map<String, Object> getParams() {
-        Map<String, Object> params = new LinkedHashMap<String, Object>();
+        Map<String, Object> params = new LinkedHashMap<>();
         try {
             Company company = m.find(Company.class).get(0);
             params.put("company", company.getName());

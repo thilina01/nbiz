@@ -4,22 +4,36 @@
  */
 package com.nanosl.nbiz.gui;
 
+import com.nanosl.nbiz.util.Combo;
+import com.nanosl.nbiz.util.Data;
 import static com.nanosl.nbiz.util.Format.nf2d;
 import query.Find;
 import com.nanosl.nbiz.util.NTopComponent;
-import com.nanosl.nbiz.util.Printer;
 import entity.Item;
+import entity.ItemType;
 import entity.Stock;
 import entity.Supplier;
+import java.awt.Component;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.net.URL;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JComboBox;
 import javax.swing.SwingWorker;
 import javax.swing.table.DefaultTableModel;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.util.JRLoader;
+import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.netbeans.api.progress.ProgressHandle;
 import org.netbeans.api.progress.ProgressHandleFactory;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
+import org.openide.util.Exceptions;
 import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
 
@@ -70,7 +84,10 @@ public final class StockTopComponent extends NTopComponent {
         allRadioButton = new javax.swing.JRadioButton();
         minimumRadioButton = new javax.swing.JRadioButton();
         printButton = new javax.swing.JButton();
-        supplierRadioButton = new javax.swing.JRadioButton();
+        typeCheckBox = new javax.swing.JCheckBox();
+        itemTypeComboBox = new javax.swing.JComboBox();
+        supplierCheckBox = new javax.swing.JCheckBox();
+        supplierComboBox = new javax.swing.JComboBox();
 
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
@@ -80,14 +97,14 @@ public final class StockTopComponent extends NTopComponent {
 
             },
             new String [] {
-                "#", "Code", "Description", "Quantity", "Rate", "Value"
+                "#", "Code", "Description", "Quantity", "Cost", "Total Cost", "Selling", "Total Selling", "Profit"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Double.class
+                java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Double.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false
+                false, false, false, false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -116,7 +133,7 @@ public final class StockTopComponent extends NTopComponent {
             table.getColumnModel().getColumn(0).setPreferredWidth(30);
             table.getColumnModel().getColumn(0).setHeaderValue(org.openide.util.NbBundle.getMessage(StockTopComponent.class, "StockTopComponent.table.columnModel.title0")); // NOI18N
             table.getColumnModel().getColumn(1).setHeaderValue(org.openide.util.NbBundle.getMessage(StockTopComponent.class, "StockTopComponent.table.columnModel.title1")); // NOI18N
-            table.getColumnModel().getColumn(2).setPreferredWidth(500);
+            table.getColumnModel().getColumn(2).setPreferredWidth(300);
             table.getColumnModel().getColumn(2).setHeaderValue(org.openide.util.NbBundle.getMessage(StockTopComponent.class, "StockTopComponent.table.columnModel.title2")); // NOI18N
             table.getColumnModel().getColumn(3).setHeaderValue(org.openide.util.NbBundle.getMessage(StockTopComponent.class, "StockTopComponent.table.columnModel.title3")); // NOI18N
             table.getColumnModel().getColumn(3).setCellRenderer(rightAlignCell);
@@ -124,6 +141,12 @@ public final class StockTopComponent extends NTopComponent {
             table.getColumnModel().getColumn(4).setCellRenderer(rightAlignCell);
             table.getColumnModel().getColumn(5).setHeaderValue(org.openide.util.NbBundle.getMessage(StockTopComponent.class, "StockTopComponent.table.columnModel.title5")); // NOI18N
             table.getColumnModel().getColumn(5).setCellRenderer(rightAlignCell);
+            table.getColumnModel().getColumn(6).setHeaderValue(org.openide.util.NbBundle.getMessage(StockTopComponent.class, "StockTopComponent.table.columnModel.title6")); // NOI18N
+            table.getColumnModel().getColumn(6).setCellRenderer(rightAlignCell);
+            table.getColumnModel().getColumn(7).setHeaderValue(org.openide.util.NbBundle.getMessage(StockTopComponent.class, "StockTopComponent.table.columnModel.title7")); // NOI18N
+            table.getColumnModel().getColumn(7).setCellRenderer(rightAlignCell);
+            table.getColumnModel().getColumn(8).setHeaderValue(org.openide.util.NbBundle.getMessage(StockTopComponent.class, "StockTopComponent.table.columnModel.title8")); // NOI18N
+            table.getColumnModel().getColumn(8).setCellRenderer(rightAlignCell);
         }
 
         org.openide.awt.Mnemonics.setLocalizedText(reloadButton, org.openide.util.NbBundle.getMessage(StockTopComponent.class, "StockTopComponent.reloadButton.text")); // NOI18N
@@ -138,6 +161,7 @@ public final class StockTopComponent extends NTopComponent {
 
         buttonGroup1.add(allRadioButton);
         org.openide.awt.Mnemonics.setLocalizedText(allRadioButton, org.openide.util.NbBundle.getMessage(StockTopComponent.class, "StockTopComponent.allRadioButton.text")); // NOI18N
+        allRadioButton.setEnabled(false);
         allRadioButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 allRadioButtonActionPerformed(evt);
@@ -146,6 +170,7 @@ public final class StockTopComponent extends NTopComponent {
 
         buttonGroup1.add(minimumRadioButton);
         org.openide.awt.Mnemonics.setLocalizedText(minimumRadioButton, org.openide.util.NbBundle.getMessage(StockTopComponent.class, "StockTopComponent.minimumRadioButton.text")); // NOI18N
+        minimumRadioButton.setEnabled(false);
         minimumRadioButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 minimumRadioButtonActionPerformed(evt);
@@ -159,11 +184,35 @@ public final class StockTopComponent extends NTopComponent {
             }
         });
 
-        buttonGroup1.add(supplierRadioButton);
-        org.openide.awt.Mnemonics.setLocalizedText(supplierRadioButton, org.openide.util.NbBundle.getMessage(StockTopComponent.class, "StockTopComponent.supplierRadioButton.text")); // NOI18N
-        supplierRadioButton.addActionListener(new java.awt.event.ActionListener() {
+        org.openide.awt.Mnemonics.setLocalizedText(typeCheckBox, org.openide.util.NbBundle.getMessage(StockTopComponent.class, "StockTopComponent.typeCheckBox.text")); // NOI18N
+        typeCheckBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                supplierRadioButtonActionPerformed(evt);
+                typeCheckBoxActionPerformed(evt);
+            }
+        });
+
+        itemTypeComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itemTypeComboBoxActionPerformed(evt);
+            }
+        });
+        itemTypeComboBox.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                itemTypeComboBoxKeyPressed(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(supplierCheckBox, org.openide.util.NbBundle.getMessage(StockTopComponent.class, "StockTopComponent.supplierCheckBox.text")); // NOI18N
+
+        supplierComboBox.setName("supplierComboBox"); // NOI18N
+        supplierComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                supplierComboBoxActionPerformed(evt);
+            }
+        });
+        supplierComboBox.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                supplierComboBoxKeyPressed(evt);
             }
         });
 
@@ -174,19 +223,24 @@ public final class StockTopComponent extends NTopComponent {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(masterScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 624, Short.MAX_VALUE)
+                    .addComponent(masterScrollPane)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(allRadioButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(minimumRadioButton)
-                        .addGap(18, 18, 18)
-                        .addComponent(supplierRadioButton)
-                        .addGap(0, 0, Short.MAX_VALUE))
+                        .addGap(99, 99, 99)
+                        .addComponent(supplierCheckBox)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(supplierComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(typeCheckBox)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(itemTypeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(reloadButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(printButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 656, Short.MAX_VALUE)
                         .addComponent(totalLabel)))
                 .addContainerGap())
         );
@@ -197,9 +251,12 @@ public final class StockTopComponent extends NTopComponent {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(allRadioButton)
                     .addComponent(minimumRadioButton)
-                    .addComponent(supplierRadioButton))
+                    .addComponent(typeCheckBox)
+                    .addComponent(itemTypeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(supplierCheckBox)
+                    .addComponent(supplierComboBox))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(masterScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 471, Short.MAX_VALUE)
+                .addComponent(masterScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 466, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(reloadButton)
@@ -248,38 +305,60 @@ public final class StockTopComponent extends NTopComponent {
     }//GEN-LAST:event_minimumRadioButtonActionPerformed
 
     private void printButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_printButtonActionPerformed
-        Printer.printStock();
+        printStock();
     }//GEN-LAST:event_printButtonActionPerformed
 
-    private void supplierRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_supplierRadioButtonActionPerformed
-        if (supplierRadioButton.isSelected()) {
-            searchSupplier();
-        }
-    }//GEN-LAST:event_supplierRadioButtonActionPerformed
-    private void searchSupplier() {
-        SearchSupplierDialog searchSupplierDialog = new SearchSupplierDialog(null, true);
-        supplier = searchSupplierDialog.suppllier;
-        if (supplier != null) {
-            fillTable();
-        }
-    }
-    Supplier supplier = null;
+    private void typeCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_typeCheckBoxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_typeCheckBoxActionPerformed
+
+    private void itemTypeComboBoxKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_itemTypeComboBoxKeyPressed
+//        if (evt.getKeyCode() == 10) {
+//            fillTable();
+//        }
+    }//GEN-LAST:event_itemTypeComboBoxKeyPressed
+
+    private void itemTypeComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemTypeComboBoxActionPerformed
+        fillTable();
+    }//GEN-LAST:event_itemTypeComboBoxActionPerformed
+
+    private void supplierComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_supplierComboBoxActionPerformed
+        fillTable();
+    }//GEN-LAST:event_supplierComboBoxActionPerformed
+
+    private void supplierComboBoxKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_supplierComboBoxKeyPressed
+//        if (evt.getKeyCode() == 10) {
+//            fillTable();
+//        }
+    }//GEN-LAST:event_supplierComboBoxKeyPressed
+//    private void searchSupplier() {
+//        SearchSupplierDialog searchSupplierDialog = new SearchSupplierDialog(null, true);
+//        supplier = searchSupplierDialog.suppllier;
+//        if (supplier != null) {
+//            fillTable();
+//        }
+//    }
+//    Supplier supplier = null;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JRadioButton allRadioButton;
     private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JComboBox itemTypeComboBox;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane masterScrollPane;
     private javax.swing.JRadioButton minimumRadioButton;
     private javax.swing.JButton printButton;
     private javax.swing.JButton reloadButton;
-    private javax.swing.JRadioButton supplierRadioButton;
+    private javax.swing.JCheckBox supplierCheckBox;
+    private javax.swing.JComboBox supplierComboBox;
     private javax.swing.JTable table;
     private javax.swing.JLabel totalLabel;
+    private javax.swing.JCheckBox typeCheckBox;
     // End of variables declaration//GEN-END:variables
 
     @Override
     public void componentOpened() {
-        // TODO add custom code on component opening
+        fillItemTypes();
+        Combo.fillSuppliers(supplierComboBox);
     }
 
     @Override
@@ -302,8 +381,9 @@ public final class StockTopComponent extends NTopComponent {
 
     private void fillTable() {
         tableModel.setRowCount(0);
+        totalLabel.setText("0.00");
         SwingWorker<DefaultTableModel, Object[]> worker = new SwingWorker<DefaultTableModel, Object[]>() {
-            double total = 0;
+            double totalCost = 0, totalSelling = 0;
 
             @Override
             protected DefaultTableModel doInBackground() throws Exception {
@@ -317,27 +397,61 @@ public final class StockTopComponent extends NTopComponent {
                         int i = 0;
                         manager.clearCache();
                         List<Stock> stocks = null;
-                        if (allRadioButton.isSelected()) {
-                            stocks = manager.find(Stock.class);
-                        } else if (minimumRadioButton.isSelected()) {
-                            stocks = Find.stockLessMinLimit();
-                        } else if (supplierRadioButton.isSelected()) {
-
-                            stocks = Find.stockBySupplier(supplier);
+//                        if (allRadioButton.isSelected()) {                            
+//                            stocks = manager.find(Stock.class);
+//                        } else if (minimumRadioButton.isSelected()) {
+//                            stocks = Find.stockLessMinLimit();
+//                        }                         
+                        if (supplierCheckBox.isSelected()) {
+                            Object o = supplierComboBox.getSelectedItem();
+                            Supplier supplier;
+                            if (o instanceof Supplier) {
+                                supplier = (Supplier) o;
+                            } else {
+                                p.finish();
+                                return;
+                            }
+                            if (typeCheckBox.isSelected()) {
+                                o = itemTypeComboBox.getSelectedItem();
+                                ItemType itemType;
+                                if (o instanceof ItemType) {
+                                    itemType = (ItemType) o;
+                                } else {
+                                    p.finish();
+                                    return;
+                                }
+                                stocks = Find.stockBySupplierAndItemType(supplier, itemType);
+                            } else {
+                                stocks = Find.stockBySupplier(supplier);
+                            }
                         }
                         if (stocks == null) {
+                            p.finish();
                             return;
                         }
                         for (Stock stock : stocks) {
                             Item item = stock.getItem();
                             if (item == null) {
                                 showError("Item Not Found!");
+                                p.finish();
                                 return;
                             }
                             double quantity = stock.getQuantity();
-                            double rate = item.getPriceList() != null ? item.getPriceList().getCostPack() != null ? item.getPriceList().getCostPack() : 0.0 : 0.0;
-                            total += (quantity * rate);
-                            Object[] row = {++i, item.getCode(), item.getDescription(), nf2d.format(quantity), nf2d.format(rate), nf2d.format(quantity * rate)};
+                            double cost = item.getPriceList() != null ? item.getPriceList().getCostPack() != null ? item.getPriceList().getCostPack() : 0.0 : 0.0;
+                            totalCost += (quantity * cost);
+                            double selling = item.getPriceList() != null ? item.getPriceList().getSellingPack() != null ? item.getPriceList().getSellingPack() : 0.0 : 0.0;
+                            totalSelling += (quantity * selling);
+                            Object[] row = {
+                                ++i,
+                                item.getCode(),
+                                item.getDescription(),
+                                nf2d.format(quantity),
+                                nf2d.format(cost),
+                                nf2d.format(quantity * cost),
+                                nf2d.format(selling),
+                                nf2d.format(quantity * selling),
+                                nf2d.format((quantity * selling) - (quantity * cost))
+                            };
                             publish(row);
                         }
                         p.finish();
@@ -354,19 +468,73 @@ public final class StockTopComponent extends NTopComponent {
                 for (Iterator<Object[]> it = chunks.iterator(); it.hasNext();) {
                     tableModel.addRow(it.next());
                 }
-                totalLabel.setText(nf2d.format(total));
+                totalLabel.setText(nf2d.format(totalSelling)+" - "+ nf2d.format(totalCost) + " = "+nf2d.format(totalSelling - totalCost)  );
             }
         };
         worker.execute();
+    }
+
+    private void KeyAdapter() {
+        AutoCompleteDecorator.decorate(supplierComboBox);
+        setComboBoxKeyAdapters(supplierComboBox);
+    }
+
+    private void setComboBoxKeyAdapters(JComboBox supp) {
+        String compName = supp.getName();
+        Component component[] = supp.getComponents();
+        for (Component component1 : component) {
+            if (compName.equals("supplierComboBox")) {
+                component1.addKeyListener(supplierComboBoxKeyAdapter);
+            }
+        }
+    }
+    KeyAdapter supplierComboBoxKeyAdapter = new java.awt.event.KeyAdapter() {
+        @Override
+        public void keyPressed(KeyEvent evt) {
+            supplierComboBoxKeyPressed(evt);
+        }
+    };
+
+    private void fillItemTypes() {
+        List<ItemType> itemTypes = manager.find(ItemType.class);
+        if (itemTypes.isEmpty()) {
+            manager.update(new ItemType("ITEM"));
+            manager.update(new ItemType("METERIAL"));
+        }
+        itemTypes = manager.find(ItemType.class);
+        itemTypeComboBox.setModel(new DefaultComboBoxModel(itemTypes.toArray()));
     }
 
     protected void onLoad() {
         initComponents();
         tableModel = (DefaultTableModel) table.getModel();
         table.setDefaultRenderer(Object.class, coloredCellRenderer);
+        fillItemTypes();
+        KeyAdapter();
     }
 
-    private void fillTable(Supplier supplier) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    private void printStock() {
+        try {
+            String fileName = supplierCheckBox.isSelected() ? "stockBySupplier" : "stock";
+            URL url = getClass().getResource("/com/nanosl/nbiz/gui/jrxml/" + fileName + ".jasper");
+            Object object = JRLoader.loadObject(url);//"src/com/nanosl/nbiz/gui/jrxml/report1.jasper"
+            if (object == null) {
+                showError("Unable to print");
+                return;
+            }
+            JasperReport report = (JasperReport) object;
+            Map<String, Object> params = Data.getParams();
+            if (supplierCheckBox.isSelected()) {
+                Object o = supplierComboBox.getSelectedItem();
+                if (o instanceof Supplier) {
+                    Supplier supplier = (Supplier) o;
+                    params.put("supplierCode", supplier.getCode());
+                }
+            }
+            printViewTopComponent.print(report, params);
+
+        } catch (JRException ex) {
+            Exceptions.printStackTrace(ex);
+        }
     }
 }

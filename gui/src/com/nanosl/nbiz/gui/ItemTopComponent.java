@@ -677,9 +677,9 @@ public final class ItemTopComponent extends NTopComponent {
         setComboBoxKeyAdapters(supplierComboBox);
     }
 
-    private void fillSuppliers() {
-        supplierComboBox.setModel(new DefaultComboBoxModel(manager.find(Supplier.class).toArray()));
-    }
+//    private void fillSuppliers() {
+//        supplierComboBox.setModel(new DefaultComboBoxModel(manager.find(Supplier.class).toArray()));
+//    }
 
     private void fillItemTypes() {
         List<ItemType> itemTypes = manager.find(ItemType.class);
@@ -700,9 +700,9 @@ public final class ItemTopComponent extends NTopComponent {
     private void setComboBoxKeyAdapters(JComboBox supp) {
         String compName = supp.getName();
         Component component[] = supp.getComponents();
-        for (int i = 0; i < component.length; i++) {
+        for (Component component1 : component) {
             if (compName.equals("supplierComboBox")) {
-                component[i].addKeyListener(supplierComboBoxKeyAdapter);
+                component1.addKeyListener(supplierComboBoxKeyAdapter);
             }
         }
     }

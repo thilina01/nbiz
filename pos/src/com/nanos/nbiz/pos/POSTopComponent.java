@@ -887,20 +887,21 @@ public final class POSTopComponent extends NTopComponent {
         }
 
         if (quantity > availableQuantity) {
-//            showError("Quantity not applicable!");
-            int option = JOptionPane.showConfirmDialog(null, "Change Stock?", "Quantity Not Enough", JOptionPane.OK_CANCEL_OPTION);
-            if (option == JOptionPane.OK_OPTION) {
-                String newQuantityString = JOptionPane.showInputDialog("Stock for " + item.getCode() + " " + item.getDescription());
-                try {
-                    double newQuantity = Double.parseDouble(newQuantityString);
-                    Stock stock = manager.find(Stock.class, item.getCode());
-                    stock.setQuantity(newQuantity);
-                    manager.update(stock);
-                } catch (NumberFormatException numberFormatException) {
-                }
-            }
+            showError("Out of stock!");
 
-            return;
+//            int option = JOptionPane.showConfirmDialog(null, "Change Stock?", "Quantity Not Enough", JOptionPane.OK_CANCEL_OPTION);
+//            if (option == JOptionPane.OK_OPTION) {
+//                String newQuantityString = JOptionPane.showInputDialog("Stock for " + item.getCode() + " " + item.getDescription());
+//                try {
+//                    double newQuantity = Double.parseDouble(newQuantityString);
+//                    Stock stock = manager.find(Stock.class, item.getCode());
+//                    stock.setQuantity(newQuantity);
+//                    manager.update(stock);
+//                } catch (NumberFormatException numberFormatException) {
+//                }
+//            }
+//
+//            return;
         }
 
 //        if (price == 0) {
@@ -950,12 +951,14 @@ public final class POSTopComponent extends NTopComponent {
 
         String invoiceNumber = invoiceNumberField.getText();
         boolean edit = false;
+        SaleInvoice saleInvoice = null;
         if (!invoiceNumber.equalsIgnoreCase("AUTO")) {
-            SaleInvoice saleInvoice = manager.find(SaleInvoice.class, invoiceNumber);
+            saleInvoice = manager.find(SaleInvoice.class, invoiceNumber);
             if (saleInvoice != null) {
                 int option = JOptionPane.showConfirmDialog(null, "Sure to edit Invoice: " + invoiceNumber + " ?", "Edit " + invoiceNumber, JOptionPane.OK_CANCEL_OPTION);
                 if (option == JOptionPane.OK_OPTION) {
                     edit = true;
+                    removeOldItems((List<SaleInvoiceHasItem>) saleInvoice.getSaleInvoiceHasItemCollection());
                 } else {
                     return;
                 }
@@ -1020,18 +1023,20 @@ public final class POSTopComponent extends NTopComponent {
 
         paidAmount = paidAmount > amount ? amount : paidAmount;
 //        double discount = Double.valueOf(totalDiscountText);
-        SaleInvoice saleInvoice = new SaleInvoice(invoiceNumber);
+        saleInvoice = saleInvoice == null ? new SaleInvoice(invoiceNumber) : saleInvoice;
+
         saleInvoice.setCustomer(customer);
         saleInvoice.setCustomerName(customerName);
         saleInvoice.setAmount(amount);
         saleInvoice.setCredit(credit);
         saleInvoice.setDiscount(discount);
-        saleInvoice.setInvTime(date);
+        saleInvoice.setInvTime(edit ? saleInvoice.getInvTime() : date);
         saleInvoice.setReceivedAmount(0.0);
         saleInvoice.setInitialPayment(paidAmount);
         saleInvoice.setEmployee(Data.getOperator().getEmployee());
         List<Serializable> serializables = new ArrayList<>();
         int temp = 0;
+
         for (int i = 0; i < rowCount; i++) {
             String code = table.getValueAt(i, 1).toString();
             double quantity = Double.valueOf(table.getValueAt(i, 4).toString());
@@ -1058,6 +1063,21 @@ public final class POSTopComponent extends NTopComponent {
 //*******************************************Please correct wrong stock update while editing past invoice 
             SaleInvoiceHasItemPK saleInvoiceHasItemPK = new SaleInvoiceHasItemPK(invoiceNumber, item.getCode());
             SaleInvoiceHasItem sihi = new SaleInvoiceHasItem(saleInvoiceHasItemPK);
+//            if (edit) {
+//                sihi = manager.find(SaleInvoiceHasItem.class, saleInvoiceHasItemPK);
+//                if (sihi != null) {
+//                    double oldQuantity = sihi.getQuantity();
+//                    double oldCost = sihi.getCost();
+//                    double oldDiscount = sihi.getDiscount();
+//                    double oldRate = sihi.getRate();
+//                    double deference = oldQuantity - quantity;
+//
+//                } else {
+//                    sihi = new SaleInvoiceHasItem(saleInvoiceHasItemPK);
+//                }
+//            } else {
+//                sihi = new SaleInvoiceHasItem(saleInvoiceHasItemPK);
+//            }
             sihi.setSaleInvoice(saleInvoice);
             sihi.setQuantity(quantity);
             sihi.setDiscount(itemDiscount);
@@ -1102,7 +1122,6 @@ public final class POSTopComponent extends NTopComponent {
             if (printCheckBox.isSelected()) {
                 try {
                     URL url = getClass().getResource("/com/nanos/nbiz/pos/jrxml/PosInvoice.jasper");
-                    System.out.println(url);
                     Object object = JRLoader.loadObject(url);//"src/com/nanosl/nbiz/gui/jrxml/report1.jasper"
                     if (object == null) {
                         showError("Unable to print");
@@ -1189,7 +1208,7 @@ public final class POSTopComponent extends NTopComponent {
         if (saleInvoice != null) {
             fillInvoice(saleInvoice);
         } else {
-
+            clear();
         }
     }
 
@@ -1238,5 +1257,16 @@ public final class POSTopComponent extends NTopComponent {
                 tableModel.addRow(row);
             }
         }
+    }
+
+    private void removeOldItems(List<SaleInvoiceHasItem> saleInvoiceHasItemCollection) {
+        List<Serializable> toEdit = new ArrayList<>();
+        for (SaleInvoiceHasItem saleInvoiceHasItem : saleInvoiceHasItemCollection) {
+            Stock stock = saleInvoiceHasItem.getItem().getStock();
+            stock.setQuantity(stock.getQuantity() + saleInvoiceHasItem.getQuantity());
+            toEdit.add(stock);
+        }
+        manager.update(toEdit);
+        manager.delete(saleInvoiceHasItemCollection);
     }
 }

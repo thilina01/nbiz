@@ -58,7 +58,7 @@ public final class PrintViewTopComponent extends TopComponent {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jScrollPane1 = new javax.swing.JScrollPane();
+        scrollPane = new javax.swing.JScrollPane();
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -66,22 +66,22 @@ public final class PrintViewTopComponent extends TopComponent {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE)
+                .addComponent(scrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 278, Short.MAX_VALUE)
+                .addComponent(scrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 278, Short.MAX_VALUE)
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane scrollPane;
     // End of variables declaration//GEN-END:variables
 
-    public void print(String fileName, Map<String,Object> parameters) {
+    public void print(String fileName, Map<String, Object> parameters) {
         try {
 //            URL url = getClass().getResource("/com/nanosl/nbiz/gui/jrxml/" + "report1" + ".jasper");
             URL url = getClass().getResource("/com/nanosl/nbiz/gui/jrxml/" + fileName + ".jasper");
@@ -93,13 +93,15 @@ public final class PrintViewTopComponent extends TopComponent {
         }
     }
 
-    public void print(JasperReport report, Map<String,Object> parameters) {
+    public void print(JasperReport report, Map<String, Object> parameters) {
         try {
             if (report == null) {
                 return;
             }
             JasperPrint jasperPrint = JasperFillManager.fillReport(report, parameters, Manager.getInstance().getConnection());
-            jScrollPane1.setViewportView(new JRViewer(jasperPrint));
+            scrollPane.setViewportView(new JRViewer(jasperPrint));
+            this.open();
+            this.requestActive();
         } catch (JRException ex) {
             Exceptions.printStackTrace(ex);
         }
