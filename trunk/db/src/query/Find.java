@@ -9,6 +9,7 @@ import entity.Expenses;
 import entity.IssuedCash;
 import entity.IssuedCheque;
 import entity.Item;
+import entity.ItemType;
 import entity.Menu;
 import entity.PurchaseInvoice;
 import entity.PurchaseInvoiceHasItem;
@@ -58,6 +59,7 @@ import javax.persistence.Table;
     @NamedQuery(name = "MenuItem.findByMenuAndStatus", query = "SELECT m FROM MenuItem m WHERE m.menu = :menu AND m.status = :status"),
     @NamedQuery(name = "Stock.findLessMinLimit", query = "SELECT s FROM Stock s WHERE s.minLimit > s.quantity"),
     @NamedQuery(name = "Stock.findBySupplier", query = "SELECT s FROM Stock s WHERE s.item.supplier = :supplier"),
+    @NamedQuery(name = "Stock.findBySupplierAndItemType", query = "SELECT s FROM Stock s WHERE s.item.supplier = :supplier AND s.item.itemTypeType = :itemType"),    
     @NamedQuery(name = "IssuedCash.findByDates", query = "SELECT i FROM IssuedCash i WHERE i.issuedTime BETWEEN :startDate AND :endDate"),
     @NamedQuery(name = "Expenses.findByDates", query = "SELECT e FROM Expenses e WHERE e.paidTime BETWEEN :startDate AND :endDate"),
     @NamedQuery(name = "CollectionReceipt.findByDates", query = "SELECT c FROM CollectionReceipt c WHERE c.collectedTime BETWEEN :startDate AND :endDate"),
@@ -181,6 +183,12 @@ public class Find implements Serializable {
     public static List<Stock> stockBySupplier(Supplier supplier) {
         Query qry = man.getEm().createNamedQuery("Stock.findBySupplier");
         qry.setParameter("supplier", supplier);
+        return man.exNamedQueryParamResult(qry);
+    }
+    public static List<Stock> stockBySupplierAndItemType(Supplier supplier,ItemType itemType) {
+        Query qry = man.getEm().createNamedQuery("Stock.findBySupplierAndItemType");
+        qry.setParameter("supplier", supplier);
+        qry.setParameter("itemType", itemType);
         return man.exNamedQueryParamResult(qry);
     }
 

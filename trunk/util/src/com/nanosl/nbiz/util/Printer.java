@@ -17,7 +17,6 @@ import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperPrintManager;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.util.JRLoader;
-import org.openide.util.Exceptions;
 import org.openide.windows.WindowManager;
 
 /**
@@ -27,18 +26,16 @@ import org.openide.windows.WindowManager;
 public class Printer {
 
     static Manager m = Manager.getInstance();
+    static PrintViewTopComponent printViewTopComponent = (PrintViewTopComponent) WindowManager.getDefault().findTopComponent("PrintViewTopComponent");
 
-    public static void printInvoice(final JasperReport report,final Map<String, Object> params) {
+    public static void printInvoice(final JasperReport report, final Map<String, Object> params) {
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                PrintViewTopComponent tc = (PrintViewTopComponent) WindowManager.getDefault().findTopComponent("PrintViewTopComponent");
-                HashMap<String,Object> parameters = new HashMap<>();
+                HashMap<String, Object> parameters = new HashMap<>();
                 parameters.put("first_date", " 00:00:00");
                 parameters.put("last_date", " 23:59:59");
-                tc.print(report, parameters);
-                tc.open();
-                tc.requestActive();
+                printViewTopComponent.print(report, parameters);
             }
         });
     }
@@ -71,7 +68,7 @@ public class Printer {
                 try {
 //                    String reportSource = "src/com/nanos/nbiz/pos/jrxml/posInvoice.jrxml";
 //                    JasperReport jasperReport = JasperCompileManager.compileReport(reportSource);
-                    
+
                     URL url = getClass().getResource("/com/nanosl/nbiz/gui/jrxml/" + "posInvoice" + ".jasper");
                     JasperReport report = (JasperReport) JRLoader.loadObject(url);
                     printPosInvoice(report, params);
@@ -86,14 +83,14 @@ public class Printer {
         });
     }
 
-    public static void printReceipt(final JasperReport report,final Map<String, Object> params) {
+    public static void printReceipt(final JasperReport report, final Map<String, Object> params) {
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
                 try {
 //                    String reportSource = "src/rpt/receipt.jrxml";
 //                    JasperReport jasperReport = JasperCompileManager.compileReport(reportSource);
-                    
+
 //                    URL url = getClass().getResource("/com/nanosl/nbiz/gui/jrxml/" + "receipt" + ".jasper");
 //                    JasperReport report = (JasperReport) JRLoader.loadObject(url);
                     Connection con = m.getConnection();
@@ -106,23 +103,24 @@ public class Printer {
         });
     }
 
-    public static void printStock() {
+    public static void printStock(final JasperReport report, final Map<String, Object> params) {
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                try {
-                    Map<String, Object> params = Data.getParams();
+//                try {
+//                    Map<String, Object> params = Data.getParams();
+                printViewTopComponent.print(report, params);
 //                    String reportSource = "src/rpt/stock.jrxml";
-                    
-                    URL url = getClass().getResource("/com/nanosl/nbiz/gui/jrxml/" + "stock" + ".jasper");
-                    JasperReport report = (JasperReport) JRLoader.loadObject(url);
+
+//                    URL url = getClass().getResource("/com/nanosl/nbiz/gui/jrxml/" + "stock" + ".jasper");                    
+//                    JasperReport report = (JasperReport) JRLoader.loadObject(url);
 //                    JasperReport jasperReport = JasperCompileManager.compileReport(reportSource);
-                    Connection con = m.getConnection();
-                    JasperPrint jasperPrint = JasperFillManager.fillReport(report, params, con);
-                    JRViewer jRViewer = new JRViewer(jasperPrint, "Stock");
-                } catch (Exception ex) {
-                    Loggings.logError(Printer.class.getName(), ex);
-                }
+//                    Connection con = m.getConnection();
+//                    JasperPrint jasperPrint = JasperFillManager.fillReport(report, params, con);
+//                    JRViewer jRViewer = new JRViewer(jasperPrint, "Stock");
+//                } catch (JRException ex) {
+//                    Loggings.logError(Printer.class.getName(), ex);
+//                }
             }
         });
     }

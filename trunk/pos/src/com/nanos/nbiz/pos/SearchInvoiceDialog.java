@@ -60,6 +60,8 @@ public class SearchInvoiceDialog extends javax.swing.JDialog {
         invoiceTable = new javax.swing.JTable();
         datePicker = new JXDatePicker();
         closeButton = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
+        invoiceNumberTextField = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -105,7 +107,6 @@ public class SearchInvoiceDialog extends javax.swing.JDialog {
             invoiceTable.getColumnModel().getColumn(2).setHeaderValue(org.openide.util.NbBundle.getMessage(SearchInvoiceDialog.class, "SearchInvoiceDialog.invoiceTable.columnModel.title2")); // NOI18N
             invoiceTable.getColumnModel().getColumn(3).setPreferredWidth(70);
             invoiceTable.getColumnModel().getColumn(3).setHeaderValue(org.openide.util.NbBundle.getMessage(SearchInvoiceDialog.class, "SearchInvoiceDialog.invoiceTable.columnModel.title3")); // NOI18N
-            invoiceTable.getColumnModel().getColumn(3).setCellRenderer(null);
             invoiceTable.getColumnModel().getColumn(4).setPreferredWidth(200);
             invoiceTable.getColumnModel().getColumn(4).setHeaderValue(org.openide.util.NbBundle.getMessage(SearchInvoiceDialog.class, "SearchInvoiceDialog.invoiceTable.columnModel.title4_1")); // NOI18N
         }
@@ -124,6 +125,15 @@ public class SearchInvoiceDialog extends javax.swing.JDialog {
             }
         });
 
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel2, org.openide.util.NbBundle.getMessage(SearchInvoiceDialog.class, "SearchInvoiceDialog.jLabel2.text")); // NOI18N
+
+        invoiceNumberTextField.setText(org.openide.util.NbBundle.getMessage(SearchInvoiceDialog.class, "SearchInvoiceDialog.invoiceNumberTextField.text")); // NOI18N
+        invoiceNumberTextField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                invoiceNumberTextFieldActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -138,6 +148,10 @@ public class SearchInvoiceDialog extends javax.swing.JDialog {
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(datePicker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(invoiceNumberTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(closeButton)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -149,7 +163,9 @@ public class SearchInvoiceDialog extends javax.swing.JDialog {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(datePicker, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(closeButton))
+                    .addComponent(closeButton)
+                    .addComponent(jLabel2)
+                    .addComponent(invoiceNumberTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -219,6 +235,9 @@ public class SearchInvoiceDialog extends javax.swing.JDialog {
             Date d = cal.getTime();
             if (firstDate != null) {
                 Collection<SaleInvoice> saleInvoices = Find.saleInvoicesByDates(firstDate, cal.getTime());
+                if (saleInvoices == null) {
+                    return;
+                }
                 int i = 0;
                 for (SaleInvoice saleInvoice1 : saleInvoices) {
                     Object[] row = {
@@ -237,6 +256,11 @@ public class SearchInvoiceDialog extends javax.swing.JDialog {
     private void closeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeButtonActionPerformed
         dispose();
     }//GEN-LAST:event_closeButtonActionPerformed
+
+    private void invoiceNumberTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_invoiceNumberTextFieldActionPerformed
+        saleInvoice = Manager.getInstance().find(SaleInvoice.class, invoiceNumberTextField.getText().trim());
+        dispose();
+    }//GEN-LAST:event_invoiceNumberTextFieldActionPerformed
     /**
      * @param args the command line arguments
      */
@@ -283,8 +307,10 @@ public class SearchInvoiceDialog extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton closeButton;
     private org.jdesktop.swingx.JXDatePicker datePicker;
+    private javax.swing.JTextField invoiceNumberTextField;
     private javax.swing.JTable invoiceTable;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables

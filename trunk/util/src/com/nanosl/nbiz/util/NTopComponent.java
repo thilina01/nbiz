@@ -8,6 +8,7 @@ import com.nanosl.lib.db.Manager;
 import org.openide.DialogDisplayer;
 import org.openide.NotifyDescriptor;
 import org.openide.windows.TopComponent;
+import org.openide.windows.WindowManager;
 
 /**
  *
@@ -16,6 +17,7 @@ import org.openide.windows.TopComponent;
 public class NTopComponent extends TopComponent implements Format, Cell {
 
     public Manager manager;
+    protected static PrintViewTopComponent printViewTopComponent = (PrintViewTopComponent) WindowManager.getDefault().findTopComponent("PrintViewTopComponent");
 
     public NTopComponent() {
         this.manager = Manager.getInstance();
@@ -44,6 +46,7 @@ public class NTopComponent extends TopComponent implements Format, Cell {
                 = new NotifyDescriptor.Message(string, NotifyDescriptor.INFORMATION_MESSAGE);
         DialogDisplayer.getDefault().notify(d);
     }
+
     protected void showMessage(String string) {
         NotifyDescriptor d
                 = new NotifyDescriptor.Message(string, NotifyDescriptor.PLAIN_MESSAGE);

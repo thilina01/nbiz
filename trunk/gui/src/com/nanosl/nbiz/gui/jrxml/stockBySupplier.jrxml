@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="361a42ca-5cd7-4e53-9d0f-710f81c11f04">
+	<property name="ireport.zoom" value="6.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="312"/>
+	<parameter name="company" class="java.lang.String"/>
+	<parameter name="address" class="java.lang.String"/>
+	<parameter name="phone" class="java.lang.String"/>
+	<parameter name="supplierCode" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT
+     stock.`quantity` AS stock_quantity,
+     item.`code` AS item_code,
+     item.`description` AS item_description,
+     item.`item_type_type` AS item_type,
+     supplier.`name` AS supplier_name
+FROM
+     `item` item 
+        INNER JOIN `stock` stock ON item.`code` = stock.`item_code` 
+        INNER JOIN `supplier` supplier ON item.`supplier_code` = supplier.`code`
+WHERE 
+	item.`supplier_code` = $P{supplierCode}
+ORDER BY item.item_type_type]]>
+	</queryString>
+	<field name="stock_quantity" class="java.lang.Double"/>
+	<field name="item_code" class="java.lang.String"/>
+	<field name="item_description" class="java.lang.String"/>
+	<field name="item_type" class="java.lang.String"/>
+	<field name="supplier_name" class="java.lang.String"/>
+	<group name="Item Type">
+		<groupExpression><![CDATA[$F{item_type}]]></groupExpression>
+		<groupHeader>
+			<band height="14">
+				<textField>
+					<reportElement x="1" y="1" width="100" height="13" uuid="c5365530-1dbd-4b04-a289-332268cfcb9f"/>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{item_type}]]></textFieldExpression>
+				</textField>
+				<line>
+					<reportElement x="0" y="1" width="555" height="1" uuid="64d2c557-9b61-4969-bf23-d26bf3c7d447"/>
+				</line>
+			</band>
+		</groupHeader>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="40" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="555" height="20" uuid="b4ae14be-401f-4c4f-aa24-b17139cbe8b2"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{company}]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="431" y="20" width="124" height="13" uuid="49949109-4e1a-43b3-a0d9-153d2e4910bf"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1" y="20" width="430" height="13" uuid="f9e1473c-9489-4f93-a0b7-c89a26d73332"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Stock Report For: "+$F{supplier_name}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="17" splitType="Stretch">
+			<staticText>
+				<reportElement x="301" y="3" width="130" height="13" uuid="0e927c28-99ce-45b3-8951-c317fc1d7a09"/>
+				<textElement textAlignment="Right">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[QUANTITY]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="3" width="75" height="13" uuid="5489a4d3-acc9-4fa9-9f48-b20edee08102"/>
+				<textElement>
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ITEM]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="77" y="3" width="130" height="13" uuid="d3c007ff-8e07-44da-ab8b-78baed8b249f"/>
+				<textElement>
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DESCRIPTION]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="0" width="555" height="1" uuid="516630d3-daeb-4b05-a53f-69485ac1044b"/>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="14" splitType="Stretch">
+			<line>
+				<reportElement x="0" y="0" width="555" height="1" uuid="516630d3-daeb-4b05-a53f-69485ac1044b"/>
+			</line>
+			<textField>
+				<reportElement x="0" y="1" width="72" height="13" uuid="f8b5b131-4228-4600-9a47-e9cd56a37908"/>
+				<textFieldExpression><![CDATA[$F{item_code}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="72" y="1" width="229" height="13" uuid="d78168aa-03ee-4d92-ba3f-5f9bd89be7fd"/>
+				<textFieldExpression><![CDATA[$F{item_description}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.000">
+				<reportElement x="301" y="1" width="130" height="13" uuid="6868d7bf-3d21-4e25-b82d-64d5019f518a"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{stock_quantity}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>
