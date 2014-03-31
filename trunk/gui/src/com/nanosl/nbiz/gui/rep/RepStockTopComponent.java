@@ -8,7 +8,6 @@ import com.nanosl.nbiz.util.NTopComponent;
 import entity.Employee;
 import entity.Item;
 import entity.SrStock;
-import java.util.Iterator;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.table.DefaultTableModel;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
@@ -212,7 +211,7 @@ public final class RepStockTopComponent extends NTopComponent {
         tableModel.setRowCount(0);
         int i = tableModel.getRowCount();
         Employee employee = (Employee) repComboBox.getSelectedItem();
-        if (employee != null) {
+        if (employee == null) {
             return;
         }
         manager.clearCache();
