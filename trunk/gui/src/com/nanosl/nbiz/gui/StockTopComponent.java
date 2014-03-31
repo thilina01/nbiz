@@ -358,7 +358,7 @@ public final class StockTopComponent extends NTopComponent {
     @Override
     public void componentOpened() {
         fillItemTypes();
-        Combo.fillSuppliers(supplierComboBox);
+        Combo.fillSuppliers(supplierComboBox, null);
     }
 
     @Override
@@ -468,7 +468,7 @@ public final class StockTopComponent extends NTopComponent {
                 for (Iterator<Object[]> it = chunks.iterator(); it.hasNext();) {
                     tableModel.addRow(it.next());
                 }
-                totalLabel.setText(nf2d.format(totalSelling)+" - "+ nf2d.format(totalCost) + " = "+nf2d.format(totalSelling - totalCost)  );
+                totalLabel.setText(nf2d.format(totalSelling) + " - " + nf2d.format(totalCost) + " = " + nf2d.format(totalSelling - totalCost));
             }
         };
         worker.execute();

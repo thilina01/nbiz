@@ -585,7 +585,7 @@ public final class ItemTopComponent extends NTopComponent {
 
     private void clear() {
         fillTable();
-        Combo.fillSuppliers(supplierComboBox);
+        Combo.fillSuppliers(supplierComboBox,null);
 //        fillSuppliers();
         fillItemTypes();
         clearFields();

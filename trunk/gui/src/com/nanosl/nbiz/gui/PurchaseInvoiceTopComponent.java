@@ -34,8 +34,6 @@ import org.openide.util.NbBundle.Messages;
 import com.nanosl.nbiz.util.Combo;
 import com.nanosl.nbiz.util.FindMySql;
 import static com.nanosl.nbiz.util.Format.nf2d;
-import java.util.concurrent.ExecutionException;
-import javax.swing.SwingWorker;
 import org.openide.awt.StatusDisplayer;
 
 /**
@@ -612,34 +610,34 @@ public final class PurchaseInvoiceTopComponent extends NTopComponent {
     DefaultTableModel dtm;
     DefaultComboBoxModel<Supplier> supplierComboBoxModel;
     DefaultComboBoxModel<Supplier> itemComboBoxModel;
-    SwingWorker<DefaultComboBoxModel, Supplier> supplierComboBoxWorker = new SwingWorker<DefaultComboBoxModel, Supplier>() {
-        @Override
-        protected DefaultComboBoxModel doInBackground() throws Exception {
-            return Combo.getSupplierComboBoxModel();
-        }
-
-        @Override
-        protected void done() {
-            try {
-                supplierComboBox.setModel(get());
-            } catch (InterruptedException | ExecutionException ignore) {
-            }
-        }
-    };
-    SwingWorker<DefaultComboBoxModel, Supplier> itemComboBoxWorker = new SwingWorker<DefaultComboBoxModel, Supplier>() {
-        @Override
-        protected DefaultComboBoxModel doInBackground() throws Exception {
-            return Combo.getSupplierComboBoxModel();
-        }
-
-        @Override
-        protected void done() {
-            try {
-                supplierComboBox.setModel(get());
-            } catch (InterruptedException | ExecutionException ignore) {
-            }
-        }
-    };
+//    SwingWorker<DefaultComboBoxModel, Supplier> supplierComboBoxWorker = new SwingWorker<DefaultComboBoxModel, Supplier>() {
+//        @Override
+//        protected DefaultComboBoxModel doInBackground() throws Exception {
+//            return Combo.getSupplierComboBoxModel();
+//        }
+//
+//        @Override
+//        protected void done() {
+//            try {
+//                supplierComboBox.setModel(get());
+//            } catch (InterruptedException | ExecutionException ignore) {
+//            }
+//        }
+//    };
+//    SwingWorker<DefaultComboBoxModel, Supplier> itemComboBoxWorker = new SwingWorker<DefaultComboBoxModel, Supplier>() {
+//        @Override
+//        protected DefaultComboBoxModel doInBackground() throws Exception {
+//            return Combo.getSupplierComboBoxModel();
+//        }
+//
+//        @Override
+//        protected void done() {
+//            try {
+//                supplierComboBox.setModel(get());
+//            } catch (InterruptedException | ExecutionException ignore) {
+//            }
+//        }
+//    };
 
     protected void onLoad() {
         initComponents();
@@ -664,7 +662,7 @@ public final class PurchaseInvoiceTopComponent extends NTopComponent {
     private void clear() {
         dtm.setRowCount(0);
 //        Combo.fillSuppliers(supplierComboBox);
-        supplierComboBoxWorker.execute();
+//        supplierComboBoxWorker.execute();
         clearFields();
     }
 
@@ -901,19 +899,20 @@ public final class PurchaseInvoiceTopComponent extends NTopComponent {
             supplierComboBox.requestFocus();
         }
     }
+    Supplier supplier;
 
     @Override
     public void setVisible(boolean b) {
         super.setVisible(b);
-        Object o = supplierComboBox.getSelectedItem();
-        Supplier supplier = o instanceof Supplier ? (Supplier) o : null;
-        Combo.fillSuppliers(supplierComboBox);
+        if (!b) {
+            Object o = supplierComboBox.getSelectedItem();
+            supplier = o instanceof Supplier ? (Supplier) o : null;
+        }
+        Combo.fillSuppliers(supplierComboBox,supplier);
         if (supplier != null) {
-            supplierComboBox.setSelectedItem(supplier);
-            manager.clearCache();
             supplier = manager.find(Supplier.class, supplier.getCode());
+            supplierComboBox.setSelectedItem(supplier);
             itemComboBox.setModel(new DefaultComboBoxModel(supplier.getItemCollection().toArray()));
-
         }
     }
 
