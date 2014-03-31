@@ -26,7 +26,7 @@ public class Combo {
 
     private static final Manager manager = Manager.getInstance();
 
-    public static void fillSuppliers(final JComboBox<Supplier> comboBox) {
+    public static void fillSuppliers(final JComboBox<Supplier> comboBox,final Supplier toSelect) {
         SwingWorker<DefaultComboBoxModel<Supplier>, Supplier> comboBoxWorker = new SwingWorker<DefaultComboBoxModel<Supplier>, Supplier>() {
             @Override
             protected DefaultComboBoxModel<Supplier> doInBackground() throws Exception {
@@ -36,9 +36,11 @@ public class Combo {
             @Override
             protected void done() {
                 try {
-                    comboBox.setModel(get());
-                } catch (InterruptedException ignore) {
-                } catch (ExecutionException ignore) {
+                    comboBox.setModel(get());   
+                    if(toSelect != null){
+                        comboBox.setSelectedItem(toSelect);
+                    }
+                } catch (InterruptedException | ExecutionException ignore) {
                 }
             }
         };

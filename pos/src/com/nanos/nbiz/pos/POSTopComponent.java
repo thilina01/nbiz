@@ -620,15 +620,7 @@ public final class POSTopComponent extends NTopComponent {
         } else if (evt.getKeyCode() == KeyEvent.VK_F2) {
             searchItem();
         } else if (evt.getKeyCode() == 192 || evt.getKeyCode() == KeyEvent.VK_ADD || evt.getKeyCode() == KeyEvent.VK_RIGHT) {
-            for (int i = 0; i < table.getRowCount(); i++) {
-                if (Double.parseDouble(table.getValueAt(i, 6).toString()) > 0) {
-                    paidAmountField.requestFocus();
-                    paidAmountField.selectAll();
-                    return;
-                }
-            }
-            totalDiscountField.requestFocus();
-            totalDiscountField.selectAll();
+            employeeComboBox.requestFocus();
         }
     }//GEN-LAST:event_itemComboBoxKeyPressed
 
@@ -752,7 +744,17 @@ public final class POSTopComponent extends NTopComponent {
     }//GEN-LAST:event_employeeComboBoxActionPerformed
 
     private void employeeComboBoxKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_employeeComboBoxKeyPressed
-        // TODO add your handling code here:
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            for (int i = 0; i < table.getRowCount(); i++) {
+                if (Double.parseDouble(table.getValueAt(i, 6).toString()) > 0) {
+                    paidAmountField.requestFocus();
+                    paidAmountField.selectAll();
+                    return;
+                }
+            }
+            totalDiscountField.requestFocus();
+            totalDiscountField.selectAll();
+        }
     }//GEN-LAST:event_employeeComboBoxKeyPressed
 
     private void itemComboBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_itemComboBoxMouseClicked
@@ -1061,20 +1063,17 @@ public final class POSTopComponent extends NTopComponent {
 
         String paidAmountText = paidAmountField.getText().trim();
         paidAmountText = paidAmountText.equals("") ? "0" : paidAmountText;
-        double paidAmount;
-        try {
-            paidAmount = Double.parseDouble(paidAmountText);
-        } catch (NumberFormatException e) {
-            showError("Invalid Amount");
-            paidAmountField.selectAll();
-            return;
-        }
+
         double amount = Double.valueOf(totalAmountText);
         double credit = Double.valueOf(remainingAmountText);
 
         Customer customer = (Customer) customerComboBox.getSelectedItem();
         String customerName;
-        if (customer == null) {
+        if (paidAmountText.equalsIgnoreCase("FREE")) {
+            paidAmountText = "0.0";
+            amount = 0;
+            customerName = "FREE";
+        } else if (customer == null) {
             if (credit > 0) {
                 showError("No Customer for credit");
                 return;
@@ -1089,7 +1088,14 @@ public final class POSTopComponent extends NTopComponent {
         } else {
             customerName = customer.getName();
         }
-
+        double paidAmount;
+        try {
+            paidAmount = Double.parseDouble(paidAmountText);
+        } catch (NumberFormatException e) {
+            showError("Invalid Amount");
+            paidAmountField.selectAll();
+            return;
+        }
         paidAmount = paidAmount > amount ? amount : paidAmount;
 //        double discount = Double.valueOf(totalDiscountText);
         saleInvoice = saleInvoice == null ? new SaleInvoice(invoiceNumber) : saleInvoice;
