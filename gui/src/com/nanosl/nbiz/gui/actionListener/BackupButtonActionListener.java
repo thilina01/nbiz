@@ -54,7 +54,7 @@ public final class BackupButtonActionListener implements ActionListener {
                 jDialog.setTitle("Backup To:");
                 jDialog.setSize(200, 70);
                 jDialog.setLocationRelativeTo(null);
-                comboBox = new JComboBox<File>(File.listRoots());
+                comboBox = new JComboBox<>(File.listRoots());
                 comboBox.removeItem(source.toPath().getRoot().toFile());
                 comboBox.setSelectedIndex(comboBox.getItemCount() - 1);
                 comboBox.addKeyListener(itemComboBoxKeyAdapter);
@@ -75,6 +75,6 @@ public final class BackupButtonActionListener implements ActionListener {
                 NotificationDisplayer.getDefault().notify("Backup Complete", imageIcon, "", null);
             }
         }
-        System.out.println(destination);
+//        System.out.println(destination);
     }
 }

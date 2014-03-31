@@ -47,7 +47,8 @@ import javax.persistence.Table;
     @NamedQuery(name = "DamageNotes.findByDateTimeAndEmployeeCode", query = "SELECT d FROM DamageNotes d WHERE d.damageNotesPK.dateTime = :dateTime AND d.damageNotesPK.employeeCode = :employeeCode"),
     @NamedQuery(name = "Item.findBy$", query = "SELECT i FROM Item i WHERE  UPPER(i.code) LIKE UPPER(:text) OR UPPER(i.description) LIKE UPPER(:text) OR UPPER(i.brand) LIKE UPPER(:text) "),
     @NamedQuery(name = "PurchaseInvoice.findByInvDates", query = "SELECT p FROM PurchaseInvoice p WHERE p.invDate BETWEEN :startDate AND :endDate"),
-    @NamedQuery(name = "SaleInvoice.findByInvDates", query = "SELECT s FROM SaleInvoice s WHERE s.invTime BETWEEN :startDate AND :endDate"),
+    @NamedQuery(name = "SaleInvoice.findByInvDates", query = "SELECT s FROM SaleInvoice s WHERE s.invTime BETWEEN :startDate AND :endDate ORDER BY s.invTime"),
+    @NamedQuery(name = "SaleInvoice.findByInvDatesAndEmployee", query = "SELECT s FROM SaleInvoice s WHERE s.employee = :employee AND s.invTime BETWEEN :startDate AND :endDate ORDER BY s.invTime"),
     @NamedQuery(name = "SaleInvoice.findByCard", query = "SELECT s FROM SaleInvoice s WHERE s.cardNumber = :card"),
     @NamedQuery(name = "SaleInvoice.findAllCards", query = "SELECT s FROM SaleInvoice s WHERE s.cardNumber IS NOT NULL"),
     @NamedQuery(name = "SaleInvoice.findActiveCardsByNic", query = "SELECT s FROM SaleInvoice s WHERE s.customer.nic = :nic AND s.cardNumber IS NOT NULL AND s.amount> s.receivedAmount"),
@@ -59,7 +60,7 @@ import javax.persistence.Table;
     @NamedQuery(name = "MenuItem.findByMenuAndStatus", query = "SELECT m FROM MenuItem m WHERE m.menu = :menu AND m.status = :status"),
     @NamedQuery(name = "Stock.findLessMinLimit", query = "SELECT s FROM Stock s WHERE s.minLimit > s.quantity"),
     @NamedQuery(name = "Stock.findBySupplier", query = "SELECT s FROM Stock s WHERE s.item.supplier = :supplier"),
-    @NamedQuery(name = "Stock.findBySupplierAndItemType", query = "SELECT s FROM Stock s WHERE s.item.supplier = :supplier AND s.item.itemTypeType = :itemType"),    
+    @NamedQuery(name = "Stock.findBySupplierAndItemType", query = "SELECT s FROM Stock s WHERE s.item.supplier = :supplier AND s.item.itemTypeType = :itemType"),
     @NamedQuery(name = "IssuedCash.findByDates", query = "SELECT i FROM IssuedCash i WHERE i.issuedTime BETWEEN :startDate AND :endDate"),
     @NamedQuery(name = "Expenses.findByDates", query = "SELECT e FROM Expenses e WHERE e.paidTime BETWEEN :startDate AND :endDate"),
     @NamedQuery(name = "CollectionReceipt.findByDates", query = "SELECT c FROM CollectionReceipt c WHERE c.collectedTime BETWEEN :startDate AND :endDate"),
@@ -87,6 +88,14 @@ public class Find implements Serializable {
         Query qry = man.getEm().createNamedQuery("SaleInvoice.findByInvDates");
         qry.setParameter("startDate", startDate);
         qry.setParameter("endDate", endDate);
+        return man.exNamedQueryParamResult(qry);
+    }
+
+    public static Collection<SaleInvoice> saleInvoicesByDatesAndEmployee(Date startDate, Date endDate, Employee employee) {
+        Query qry = man.getEm().createNamedQuery("SaleInvoice.findByInvDatesAndEmployee");
+        qry.setParameter("startDate", startDate);
+        qry.setParameter("endDate", endDate);
+        qry.setParameter("employee", employee);
         return man.exNamedQueryParamResult(qry);
     }
 
@@ -185,7 +194,8 @@ public class Find implements Serializable {
         qry.setParameter("supplier", supplier);
         return man.exNamedQueryParamResult(qry);
     }
-    public static List<Stock> stockBySupplierAndItemType(Supplier supplier,ItemType itemType) {
+
+    public static List<Stock> stockBySupplierAndItemType(Supplier supplier, ItemType itemType) {
         Query qry = man.getEm().createNamedQuery("Stock.findBySupplierAndItemType");
         qry.setParameter("supplier", supplier);
         qry.setParameter("itemType", itemType);
@@ -197,7 +207,6 @@ public class Find implements Serializable {
 //        qry.setParameter("date", date);
 //        return man.exNamedQueryParamResult(qry);
 //    }
-
     public static List<SaleInvoiceHasItem> saleInvoiceItemsByItemAndDates(Item item, Date startDate, Date endDate) {
         Query qry = man.getEm().createNamedQuery("SaleInvoiceHasItem.findByItemAndInvDates");
         qry.setParameter("item", item);
