@@ -773,6 +773,7 @@ public final class POSTopComponent extends NTopComponent {
             }
             totalDiscountField.requestFocus();
             totalDiscountField.selectAll();
+            enterCount = 0;
         }
     }//GEN-LAST:event_employeeComboBoxKeyPressed
 
@@ -880,7 +881,8 @@ public final class POSTopComponent extends NTopComponent {
 
             @Override
             public int compare(SaleInvoice o1, SaleInvoice o2) {
-                return o2.getInvTime().compareTo(o1.getInvTime());
+                Date o2Date = o2.getInvTime() == null ? new Date() : o2.getInvTime();
+                return o2Date.compareTo(o1.getInvTime() == null ? new Date() : o1.getInvTime());
             }
         };
         Arrays.sort(saleInvoicesArray, comparator);
