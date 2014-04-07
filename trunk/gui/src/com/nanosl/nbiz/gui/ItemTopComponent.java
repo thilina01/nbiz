@@ -5,6 +5,7 @@
 package com.nanosl.nbiz.gui;
 
 import com.nanosl.nbiz.util.Combo;
+import com.nanosl.nbiz.util.Format;
 import static com.nanosl.nbiz.util.Format.nf2d;
 import com.nanosl.nbiz.util.NTopComponent;
 import entity.Item;
@@ -34,6 +35,8 @@ import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
+import org.openide.windows.WindowManager;
+import query.Find;
 
 /**
  * Top component which displays something.
@@ -99,6 +102,9 @@ public final class ItemTopComponent extends NTopComponent {
         costTextField = new javax.swing.JTextField();
         sellingPriceTextField = new javax.swing.JTextField();
         quantityTextField = new javax.swing.JTextField();
+        newTypeButton = new javax.swing.JButton();
+        searchTextField = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
 
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
@@ -107,11 +113,11 @@ public final class ItemTopComponent extends NTopComponent {
 
             },
             new String [] {
-                "#", "Code", "Description", "Quantity", "Price"
+                "#", "Code", "Description", "Cost", "Selling", "Quantity"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
+                false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -133,12 +139,14 @@ public final class ItemTopComponent extends NTopComponent {
             masterTable.getColumnModel().getColumn(0).setPreferredWidth(30);
             masterTable.getColumnModel().getColumn(0).setHeaderValue(org.openide.util.NbBundle.getMessage(ItemTopComponent.class, "ItemTopComponent.masterTable.columnModel.title0")); // NOI18N
             masterTable.getColumnModel().getColumn(1).setHeaderValue(org.openide.util.NbBundle.getMessage(ItemTopComponent.class, "ItemTopComponent.masterTable.columnModel.title1")); // NOI18N
-            masterTable.getColumnModel().getColumn(2).setPreferredWidth(500);
+            masterTable.getColumnModel().getColumn(2).setPreferredWidth(400);
             masterTable.getColumnModel().getColumn(2).setHeaderValue(org.openide.util.NbBundle.getMessage(ItemTopComponent.class, "ItemTopComponent.masterTable.columnModel.title2")); // NOI18N
-            masterTable.getColumnModel().getColumn(3).setHeaderValue(org.openide.util.NbBundle.getMessage(ItemTopComponent.class, "ItemTopComponent.masterTable.columnModel.title3")); // NOI18N
+            masterTable.getColumnModel().getColumn(3).setHeaderValue(org.openide.util.NbBundle.getMessage(ItemTopComponent.class, "ItemTopComponent.masterTable.columnModel.title5")); // NOI18N
             masterTable.getColumnModel().getColumn(3).setCellRenderer(rightAlignCell);
-            masterTable.getColumnModel().getColumn(4).setHeaderValue(org.openide.util.NbBundle.getMessage(ItemTopComponent.class, "ItemTopComponent.masterTable.columnModel.title4")); // NOI18N
+            masterTable.getColumnModel().getColumn(4).setHeaderValue(org.openide.util.NbBundle.getMessage(ItemTopComponent.class, "ItemTopComponent.masterTable.columnModel.title6")); // NOI18N
             masterTable.getColumnModel().getColumn(4).setCellRenderer(rightAlignCell);
+            masterTable.getColumnModel().getColumn(5).setHeaderValue(org.openide.util.NbBundle.getMessage(ItemTopComponent.class, "ItemTopComponent.masterTable.columnModel.title3")); // NOI18N
+            masterTable.getColumnModel().getColumn(5).setCellRenderer(rightAlignCell);
         }
 
         brandField.addActionListener(new java.awt.event.ActionListener() {
@@ -210,6 +218,7 @@ public final class ItemTopComponent extends NTopComponent {
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel2, org.openide.util.NbBundle.getMessage(ItemTopComponent.class, "ItemTopComponent.jLabel2.text")); // NOI18N
 
+        itemTypeComboBox.setName("itemTypeComboBox"); // NOI18N
         itemTypeComboBox.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 itemTypeComboBoxKeyPressed(evt);
@@ -248,54 +257,63 @@ public final class ItemTopComponent extends NTopComponent {
             }
         });
 
+        org.openide.awt.Mnemonics.setLocalizedText(newTypeButton, org.openide.util.NbBundle.getMessage(ItemTopComponent.class, "ItemTopComponent.newTypeButton.text")); // NOI18N
+        newTypeButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                newTypeButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(410, 410, 410)
-                        .addComponent(disableCheckBox))
-                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
-                            .addComponent(jLabel1)
-                            .addGap(28, 28, 28)
-                            .addComponent(minimumLimitTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(updateButton)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                            .addComponent(deleteButton)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(clearButton))
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
-                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(codeLabel)
-                                .addComponent(descriptionLabel)
-                                .addComponent(supplierLabel)
-                                .addComponent(brandLabel))
-                            .addGap(39, 39, 39)
-                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(descriptionField, javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
-                                    .addComponent(codeField, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addComponent(jLabel2)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(itemTypeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addComponent(supplierComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(brandField))
-                            .addGap(18, 18, 18)
-                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel3)
-                                .addComponent(jLabel4)
-                                .addComponent(jLabel5))
-                            .addGap(18, 18, 18)
-                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(costTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(sellingPriceTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(quantityTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(28, 28, 28)
+                        .addComponent(minimumLimitTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(updateButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(deleteButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(clearButton))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(codeLabel)
+                            .addComponent(descriptionLabel)
+                            .addComponent(supplierLabel)
+                            .addComponent(brandLabel))
+                        .addGap(39, 39, 39)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
+                                .addComponent(codeField, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(disableCheckBox)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel2)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(itemTypeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(brandField, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(supplierComboBox, javax.swing.GroupLayout.Alignment.LEADING, 0, 259, Short.MAX_VALUE)
+                                .addComponent(descriptionField, javax.swing.GroupLayout.Alignment.LEADING)))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel3)
+                                    .addComponent(jLabel4)
+                                    .addComponent(jLabel5))
+                                .addGap(18, 18, 18)
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(costTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(sellingPriceTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(quantityTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(newTypeButton))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
@@ -307,7 +325,8 @@ public final class ItemTopComponent extends NTopComponent {
                     .addComponent(codeField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2)
                     .addComponent(itemTypeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(disableCheckBox))
+                    .addComponent(disableCheckBox)
+                    .addComponent(newTypeButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(descriptionLabel)
@@ -336,6 +355,15 @@ public final class ItemTopComponent extends NTopComponent {
                 .addContainerGap())
         );
 
+        searchTextField.setText(org.openide.util.NbBundle.getMessage(ItemTopComponent.class, "ItemTopComponent.searchTextField.text")); // NOI18N
+        searchTextField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                searchTextFieldKeyReleased(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel6, org.openide.util.NbBundle.getMessage(ItemTopComponent.class, "ItemTopComponent.jLabel6.text")); // NOI18N
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -346,15 +374,24 @@ public final class ItemTopComponent extends NTopComponent {
                     .addComponent(masterScrollPane)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 79, Short.MAX_VALUE)))
+                        .addGap(0, 24, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jLabel6)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(searchTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(masterScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 337, Short.MAX_VALUE)
+                .addComponent(masterScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 301, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(searchTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel6))
+                .addGap(13, 13, 13)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -386,11 +423,12 @@ public final class ItemTopComponent extends NTopComponent {
     }//GEN-LAST:event_masterTableKeyReleased
 
     private void brandFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_brandFieldActionPerformed
-        supplierComboBox.requestFocus();
+        minimumLimitTextField.requestFocus();
+        minimumLimitTextField.selectAll();
     }//GEN-LAST:event_brandFieldActionPerformed
 
     private void descriptionFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_descriptionFieldActionPerformed
-        brandField.requestFocus();
+        supplierComboBox.requestFocus();
     }//GEN-LAST:event_descriptionFieldActionPerformed
 
     private void supplierComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_supplierComboBoxActionPerformed
@@ -398,8 +436,7 @@ public final class ItemTopComponent extends NTopComponent {
 
     private void supplierComboBoxKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_supplierComboBoxKeyPressed
         if (evt.getKeyCode() == 10) {
-            minimumLimitTextField.requestFocus();
-            minimumLimitTextField.selectAll();
+            brandField.requestFocus();
         }
     }//GEN-LAST:event_supplierComboBoxKeyPressed
 
@@ -440,13 +477,43 @@ public final class ItemTopComponent extends NTopComponent {
     }//GEN-LAST:event_costTextFieldActionPerformed
 
     private void sellingPriceTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sellingPriceTextFieldActionPerformed
-        codeField.requestFocus();
-        codeField.selectAll();
+        costTextField.requestFocus();
+        costTextField.selectAll();
     }//GEN-LAST:event_sellingPriceTextFieldActionPerformed
 
     private void quantityTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_quantityTextFieldActionPerformed
         updateButton.requestFocus();
     }//GEN-LAST:event_quantityTextFieldActionPerformed
+
+    private void newTypeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newTypeButtonActionPerformed
+        TopComponent tc = WindowManager.getDefault().findTopComponent("ItemTypeTopComponent");
+        if (tc != null) {
+            tc.open();
+            tc.requestActive();
+        }
+    }//GEN-LAST:event_newTypeButtonActionPerformed
+
+    private void searchTextFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchTextFieldKeyReleased
+        String text = searchTextField.getText().trim();
+        tableModel.setRowCount(0);
+        if (text.length() > 2) {
+            List<Item> items = Find.itemBy$(text);
+            int i = 0;
+            for (Item item1 : items) {
+                Object[] row = {
+                    ++i,
+                    item1.getCode(),
+                    item1.getDescription(),
+                    Format.nf2d.format(item1.getPriceList().getCostPack()),
+                    Format.nf2d.format(item1.getPriceList().getSellingPack()),
+                    Format.nf2d.format(item1.getStock().getQuantity())
+                };
+                tableModel.addRow(row);
+            }
+        } else if (text.length() == 0) {
+            fillTable();
+        }
+    }//GEN-LAST:event_searchTextFieldKeyReleased
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField brandField;
@@ -465,12 +532,15 @@ public final class ItemTopComponent extends NTopComponent {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane masterScrollPane;
     private javax.swing.JTable masterTable;
     private javax.swing.JTextField minimumLimitTextField;
+    private javax.swing.JButton newTypeButton;
     private javax.swing.JTextField quantityTextField;
+    private javax.swing.JTextField searchTextField;
     private javax.swing.JTextField sellingPriceTextField;
     private javax.swing.JComboBox supplierComboBox;
     private javax.swing.JLabel supplierLabel;
@@ -585,7 +655,7 @@ public final class ItemTopComponent extends NTopComponent {
 
     private void clear() {
         fillTable();
-        Combo.fillSuppliers(supplierComboBox,null);
+        Combo.fillSuppliers(supplierComboBox, null);
 //        fillSuppliers();
         fillItemTypes();
         clearFields();
@@ -645,8 +715,9 @@ public final class ItemTopComponent extends NTopComponent {
                                 serializables.add(priceList);
                             }
                             manager.update(serializables);
-                            double paymentAmount = priceList.getSellingPack() != null ? priceList.getSellingPack() : 0;
-                            Object[] row = {++i, item.getCode(), item.getDescription(), stock.getQuantity(), nf2d.format(paymentAmount)};
+                            double selling = priceList.getSellingPack() != null ? priceList.getSellingPack() : 0;
+                            double cost = priceList.getCostPack() != null ? priceList.getCostPack() : 0;
+                            Object[] row = {++i, item.getCode(), item.getDescription(), nf2d.format(cost), nf2d.format(selling), nf2d.format(item.getStock().getQuantity())};
                             publish(row);
                         }
                         p.finish();
@@ -684,7 +755,6 @@ public final class ItemTopComponent extends NTopComponent {
 //    private void fillSuppliers() {
 //        supplierComboBox.setModel(new DefaultComboBoxModel(manager.find(Supplier.class).toArray()));
 //    }
-
     private void fillItemTypes() {
         List<ItemType> itemTypes = manager.find(ItemType.class);
         if (itemTypes.isEmpty()) {
@@ -749,5 +819,24 @@ public final class ItemTopComponent extends NTopComponent {
     void readProperties(java.util.Properties p) {
         String version = p.getProperty("version");
         // TODO read your settings according to their version
+    }
+    Supplier supplier;
+    ItemType itemType;
+
+    @Override
+    public void setVisible(boolean b) {
+        super.setVisible(b);
+        if (!b) {
+            Object o = supplierComboBox.getSelectedItem();
+            supplier = o instanceof Supplier ? (Supplier) o : null;
+            o = itemTypeComboBox.getSelectedItem();
+            itemType = o instanceof ItemType ? (ItemType) o : null;
+        }
+        Combo.fillSuppliers(supplierComboBox, supplier);
+        Combo.fillItemTypes(itemTypeComboBox, itemType);
+//        if (supplier != null) {
+//            supplier = manager.find(Supplier.class, supplier.getCode());
+//            supplierComboBox.setSelectedItem(supplier);
+//        }
     }
 }

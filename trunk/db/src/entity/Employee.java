@@ -311,7 +311,7 @@ public class Employee implements Serializable, Comparable<Employee> {
 
     @Override
     public String toString() {
-        return firstName + " " + lastName;
+        return util.ToString.get(this);
     }
 
     @Override

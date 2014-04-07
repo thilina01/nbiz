@@ -28,14 +28,15 @@ import java.awt.event.MouseEvent;
 import java.io.Serializable;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
-import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-import javax.swing.JPopupMenu;
 import javax.swing.table.DefaultTableModel;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperReport;
@@ -122,6 +123,7 @@ public final class POSTopComponent extends NTopComponent {
         lastInvoiceNumberField = new javax.swing.JTextField();
         searchItemButton = new javax.swing.JButton();
         employeeComboBox = new javax.swing.JComboBox();
+        historyComboBox = new javax.swing.JComboBox();
 
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
@@ -424,6 +426,14 @@ public final class POSTopComponent extends NTopComponent {
             }
         });
 
+        historyComboBox.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
+        historyComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "a", "b", "c", "d" }));
+        historyComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                historyComboBoxActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -437,9 +447,12 @@ public final class POSTopComponent extends NTopComponent {
                                 .addComponent(processButton)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(clearButton))
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(lastInvoiceNumberField, javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(anotherButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(lastInvoiceNumberField, javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(anotherButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGap(18, 18, 18)
+                                .addComponent(historyComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(printCheckBox))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
@@ -538,7 +551,9 @@ public final class POSTopComponent extends NTopComponent {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(anotherButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lastInvoiceNumberField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lastInvoiceNumberField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(historyComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(totalDiscountField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -742,9 +757,13 @@ public final class POSTopComponent extends NTopComponent {
     private void employeeComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_employeeComboBoxActionPerformed
 
     }//GEN-LAST:event_employeeComboBoxActionPerformed
-
+    int enterCount = 0;
     private void employeeComboBoxKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_employeeComboBoxKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            enterCount++;
+            if (enterCount < 2) {
+                return;
+            }
             for (int i = 0; i < table.getRowCount(); i++) {
                 if (Double.parseDouble(table.getValueAt(i, 6).toString()) > 0) {
                     paidAmountField.requestFocus();
@@ -776,6 +795,10 @@ public final class POSTopComponent extends NTopComponent {
 
     }//GEN-LAST:event_employeeComboBoxMouseClicked
 
+    private void historyComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_historyComboBoxActionPerformed
+        fillInvoice(historyComboBox.getSelectedItem().toString());
+    }//GEN-LAST:event_historyComboBoxActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton anotherButton;
     private javax.swing.JButton clearButton;
@@ -783,6 +806,7 @@ public final class POSTopComponent extends NTopComponent {
     private org.jdesktop.swingx.JXDatePicker datePicker;
     private javax.swing.JTextField discountField;
     private javax.swing.JComboBox employeeComboBox;
+    private javax.swing.JComboBox historyComboBox;
     private javax.swing.JTextField invoiceNumberField;
     private javax.swing.JComboBox<Item> itemComboBox;
     private javax.swing.JLabel jLabel1;
@@ -825,8 +849,7 @@ public final class POSTopComponent extends NTopComponent {
         datePicker.setFormats(yyyy_MM_dd);
 //        KeyAdapter();
         tableModel = (DefaultTableModel) table.getModel();
-        table
-                .setDefaultRenderer(Object.class, coloredCellRenderer);
+        table.setDefaultRenderer(Object.class, coloredCellRenderer);
         clear();
     }
 
@@ -850,7 +873,18 @@ public final class POSTopComponent extends NTopComponent {
         tableModel.setRowCount(0);
         Combo.fillCustomers(customerComboBox);
         Combo.fillItems(itemComboBox);
+        List<SaleInvoice> saleInvoices = manager.find(SaleInvoice.class);
+        SaleInvoice[] saleInvoicesArray = new SaleInvoice[saleInvoices.size()];
+        saleInvoices.toArray(saleInvoicesArray);
+        Comparator<SaleInvoice> comparator = new Comparator<SaleInvoice>() {
 
+            @Override
+            public int compare(SaleInvoice o1, SaleInvoice o2) {
+                return o2.getInvTime().compareTo(o1.getInvTime());
+            }
+        };
+        Arrays.sort(saleInvoicesArray, comparator);
+        historyComboBox.setModel(new DefaultComboBoxModel(saleInvoicesArray));
 //        itemComboBoxWorker.execute();
         clearFields();
     }
@@ -1295,8 +1329,7 @@ public final class POSTopComponent extends NTopComponent {
         }
     }
 
-    public
-            void fillInvoice(String invoiceNumber) {
+    public void fillInvoice(String invoiceNumber) {
         SaleInvoice saleInvoice = manager.find(SaleInvoice.class, invoiceNumber);
         fillInvoice(saleInvoice);
     }
@@ -1306,6 +1339,7 @@ public final class POSTopComponent extends NTopComponent {
             invoiceNumberField.setText(saleInvoice.getInvNo());
             datePicker.setDate(saleInvoice.getInvTime());
             customerComboBox.setSelectedItem(saleInvoice.getCustomer());
+            employeeComboBox.setSelectedItem(saleInvoice.getEmployee());
             totalAmountField.setText(nf2d.format(saleInvoice.getAmount()));
             totalDiscountField.setText(nf2d.format(saleInvoice.getDiscount()));
             paidAmountField.setText(nf2d.format(saleInvoice.getInitialPayment()));

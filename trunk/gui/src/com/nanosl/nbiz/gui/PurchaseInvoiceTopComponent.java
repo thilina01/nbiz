@@ -417,7 +417,7 @@ public final class PurchaseInvoiceTopComponent extends NTopComponent {
                         .addComponent(jLabel6)
                         .addComponent(costField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 407, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 407, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(totalAmountLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -786,8 +786,17 @@ public final class PurchaseInvoiceTopComponent extends NTopComponent {
         Item item = (Item) itemComboBox.getSelectedItem();
         try {
             quantity = Double.valueOf(quantityField.getText());
+        } catch (NumberFormatException e) {
+        }
+        try {
             cost = Double.valueOf(costField.getText().trim());
+        } catch (NumberFormatException e) {
+        }
+        try {
             discount = Double.valueOf(discountField.getText().trim());
+        } catch (NumberFormatException e) {
+        }
+        try {
             sellingPrice = Double.valueOf(sellingTextField.getText().trim());
         } catch (NumberFormatException e) {
         }
@@ -908,7 +917,7 @@ public final class PurchaseInvoiceTopComponent extends NTopComponent {
             Object o = supplierComboBox.getSelectedItem();
             supplier = o instanceof Supplier ? (Supplier) o : null;
         }
-        Combo.fillSuppliers(supplierComboBox,supplier);
+        Combo.fillSuppliers(supplierComboBox, supplier);
         if (supplier != null) {
             supplier = manager.find(Supplier.class, supplier.getCode());
             supplierComboBox.setSelectedItem(supplier);

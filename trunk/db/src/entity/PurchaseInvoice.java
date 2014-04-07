@@ -174,7 +174,7 @@ public class PurchaseInvoice implements Serializable {
 
     @Override
     public String toString() {
-        return purchaseInvoicePK.getInvNo();
+        return util.ToString.get(this);
     }
 
 }

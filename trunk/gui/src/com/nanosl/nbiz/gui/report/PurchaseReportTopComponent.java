@@ -65,6 +65,7 @@ public final class PurchaseReportTopComponent extends NTopComponent {
         jLabel3 = new javax.swing.JLabel();
         totalLabel = new javax.swing.JLabel();
         endDatePicker = new org.jdesktop.swingx.JXDatePicker();
+        fillButton = new javax.swing.JButton();
 
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
@@ -86,11 +87,11 @@ public final class PurchaseReportTopComponent extends NTopComponent {
             }
         });
         masterTable.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseReleased(java.awt.event.MouseEvent evt) {
-                masterTableMouseReleased(evt);
-            }
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 masterTableMouseClicked(evt);
+            }
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                masterTableMouseReleased(evt);
             }
         });
         masterTable.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -99,15 +100,17 @@ public final class PurchaseReportTopComponent extends NTopComponent {
             }
         });
         masterScrollPane.setViewportView(masterTable);
-        masterTable.getColumnModel().getColumn(0).setPreferredWidth(30);
-        masterTable.getColumnModel().getColumn(0).setHeaderValue(org.openide.util.NbBundle.getMessage(PurchaseReportTopComponent.class, "PurchaseReportTopComponent.masterTable.columnModel.title0")); // NOI18N
-        masterTable.getColumnModel().getColumn(1).setHeaderValue(org.openide.util.NbBundle.getMessage(PurchaseReportTopComponent.class, "PurchaseReportTopComponent.masterTable.columnModel.title1")); // NOI18N
-        masterTable.getColumnModel().getColumn(2).setHeaderValue(org.openide.util.NbBundle.getMessage(PurchaseReportTopComponent.class, "PurchaseReportTopComponent.masterTable.columnModel.title2")); // NOI18N
-        masterTable.getColumnModel().getColumn(3).setPreferredWidth(150);
-        masterTable.getColumnModel().getColumn(3).setHeaderValue(org.openide.util.NbBundle.getMessage(PurchaseReportTopComponent.class, "PurchaseReportTopComponent.masterTable.columnModel.title3")); // NOI18N
-        masterTable.getColumnModel().getColumn(4).setHeaderValue(org.openide.util.NbBundle.getMessage(PurchaseReportTopComponent.class, "PurchaseReportTopComponent.masterTable.columnModel.title4")); // NOI18N
-        masterTable.getColumnModel().getColumn(5).setHeaderValue(org.openide.util.NbBundle.getMessage(PurchaseReportTopComponent.class, "PurchaseReportTopComponent.masterTable.columnModel.title5")); // NOI18N
-        masterTable.getColumnModel().getColumn(5).setCellRenderer(rightAlignCell);
+        if (masterTable.getColumnModel().getColumnCount() > 0) {
+            masterTable.getColumnModel().getColumn(0).setPreferredWidth(30);
+            masterTable.getColumnModel().getColumn(0).setHeaderValue(org.openide.util.NbBundle.getMessage(PurchaseReportTopComponent.class, "PurchaseReportTopComponent.masterTable.columnModel.title0")); // NOI18N
+            masterTable.getColumnModel().getColumn(1).setHeaderValue(org.openide.util.NbBundle.getMessage(PurchaseReportTopComponent.class, "PurchaseReportTopComponent.masterTable.columnModel.title1")); // NOI18N
+            masterTable.getColumnModel().getColumn(2).setHeaderValue(org.openide.util.NbBundle.getMessage(PurchaseReportTopComponent.class, "PurchaseReportTopComponent.masterTable.columnModel.title2")); // NOI18N
+            masterTable.getColumnModel().getColumn(3).setPreferredWidth(150);
+            masterTable.getColumnModel().getColumn(3).setHeaderValue(org.openide.util.NbBundle.getMessage(PurchaseReportTopComponent.class, "PurchaseReportTopComponent.masterTable.columnModel.title3")); // NOI18N
+            masterTable.getColumnModel().getColumn(4).setHeaderValue(org.openide.util.NbBundle.getMessage(PurchaseReportTopComponent.class, "PurchaseReportTopComponent.masterTable.columnModel.title4")); // NOI18N
+            masterTable.getColumnModel().getColumn(5).setHeaderValue(org.openide.util.NbBundle.getMessage(PurchaseReportTopComponent.class, "PurchaseReportTopComponent.masterTable.columnModel.title5")); // NOI18N
+            masterTable.getColumnModel().getColumn(5).setCellRenderer(rightAlignCell);
+        }
 
         startDatePicker.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -127,6 +130,13 @@ public final class PurchaseReportTopComponent extends NTopComponent {
             }
         });
 
+        org.openide.awt.Mnemonics.setLocalizedText(fillButton, org.openide.util.NbBundle.getMessage(PurchaseReportTopComponent.class, "PurchaseReportTopComponent.fillButton.text")); // NOI18N
+        fillButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                fillButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -140,6 +150,8 @@ public final class PurchaseReportTopComponent extends NTopComponent {
                         .addComponent(startDatePicker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(endDatePicker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(fillButton)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(masterScrollPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 812, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
@@ -154,9 +166,10 @@ public final class PurchaseReportTopComponent extends NTopComponent {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(startDatePicker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3)
-                    .addComponent(endDatePicker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(endDatePicker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(fillButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(masterScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 415, Short.MAX_VALUE)
+                .addComponent(masterScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 414, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(totalLabel)
                 .addContainerGap())
@@ -186,14 +199,14 @@ public final class PurchaseReportTopComponent extends NTopComponent {
             String invoiceNumber = masterTable.getValueAt(row, 4).toString();
             String supperCode = masterTable.getValueAt(row, 2).toString();
             PurchaseInvoice purchaseInvoice = manager.find(PurchaseInvoice.class, new PurchaseInvoicePK(invoiceNumber, supperCode));
-            String message = "<html><table >";   
+            String message = "<html><table >";
             message += "<tr><td> Item </td><td align = 'right'> Quantity </td></tr>";
-                       
+
             for (PurchaseInvoiceHasItem purchaseInvoiceHasItem : purchaseInvoice.getPurchaseInvoiceHasItemCollection()) {
-                message += "<tr><td>" + purchaseInvoiceHasItem.getItem() + " </td><td align = 'right'>" + nf2d.format(purchaseInvoiceHasItem.getQuantity())+"</td></tr>";
+                message += "<tr><td>" + purchaseInvoiceHasItem.getItem() + " </td><td align = 'right'>" + nf2d.format(purchaseInvoiceHasItem.getQuantity()) + "</td></tr>";
             }
             message += "</table> </html>";
-            JOptionPane.showMessageDialog(null, message, "Invoice Data: "+supperCode+" - "+invoiceNumber, JOptionPane.PLAIN_MESSAGE, null);
+            JOptionPane.showMessageDialog(null, message, "Invoice Data: " + supperCode + " - " + invoiceNumber, JOptionPane.PLAIN_MESSAGE, null);
 //            new PurchaseInvoiceView(invoiceNumber, supperCode);
         }
     }//GEN-LAST:event_masterTableMouseClicked
@@ -207,15 +220,20 @@ public final class PurchaseReportTopComponent extends NTopComponent {
     }//GEN-LAST:event_masterTableKeyReleased
 
     private void startDatePickerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startDatePickerActionPerformed
-
+        fill();
     }//GEN-LAST:event_startDatePickerActionPerformed
 
     private void endDatePickerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_endDatePickerActionPerformed
         fill();
     }//GEN-LAST:event_endDatePickerActionPerformed
 
+    private void fillButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fillButtonActionPerformed
+        fill();
+    }//GEN-LAST:event_fillButtonActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.jdesktop.swingx.JXDatePicker endDatePicker;
+    private javax.swing.JButton fillButton;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane masterScrollPane;

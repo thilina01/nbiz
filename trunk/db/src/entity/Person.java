@@ -151,7 +151,7 @@ public class Person implements Serializable {
 
     @Override
     public String toString() {
-        return "com.nanosl.app5.entities.Person[ nic=" + nic + " ]";
+        return util.ToString.get(this);
     }
     
 }

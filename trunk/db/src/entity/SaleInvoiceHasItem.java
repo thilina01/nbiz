@@ -139,7 +139,7 @@ public class SaleInvoiceHasItem implements Serializable {
 
     @Override
     public String toString() {
-        return "ent.SaleInvoiceHasItem[ saleInvoiceHasItemPK=" + saleInvoiceHasItemPK + " ]";
+        return util.ToString.get(this);
     }
     
 }

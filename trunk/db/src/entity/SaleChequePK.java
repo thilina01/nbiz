@@ -89,7 +89,7 @@ public class SaleChequePK implements Serializable {
 
     @Override
     public String toString() {
-        return "ent.SaleChequePK[chequeNumber=" + chequeNumber + ", bankCode=" + bankCode + ", collectionReceiptReceiptNumber=" + collectionReceiptReceiptNumber + "]";
+        return util.ToString.get(this);
     }
 
 }

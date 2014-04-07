@@ -91,7 +91,7 @@ public class SaleCash implements Serializable {
 
     @Override
     public String toString() {
-        return "ent.SaleCash[collectionReceiptReceiptNumber=" + collectionReceiptReceiptNumber + "]";
+        return util.ToString.get(this);
     }
 
 }

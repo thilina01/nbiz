@@ -131,7 +131,7 @@ public class SaleCheque implements Serializable {
 
     @Override
     public String toString() {
-        return "ent.SaleCheque[saleChequePK=" + saleChequePK + "]";
+        return util.ToString.get(this);
     }
 
 }

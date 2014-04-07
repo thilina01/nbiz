@@ -205,7 +205,7 @@ public class Customer implements Serializable, Comparable<Customer> {
 
     @Override
     public String toString() {
-        return code + " " + name;
+        return util.ToString.get(this);
     }
 
     @Override

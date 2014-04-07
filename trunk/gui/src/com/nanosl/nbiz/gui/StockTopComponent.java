@@ -17,6 +17,8 @@ import java.awt.Component;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.net.URL;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -97,14 +99,14 @@ public final class StockTopComponent extends NTopComponent {
 
             },
             new String [] {
-                "#", "Code", "Description", "Quantity", "Cost", "Total Cost", "Selling", "Total Selling", "Profit"
+                "#", "Code", "Description", "Type", "Quantity", "Cost", "Total Cost", "Selling", "Total Selling", "Profit"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Double.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
+                java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Double.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false, false
+                false, false, false, false, false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -116,11 +118,11 @@ public final class StockTopComponent extends NTopComponent {
             }
         });
         table.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseReleased(java.awt.event.MouseEvent evt) {
-                tableMouseReleased(evt);
-            }
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tableMouseClicked(evt);
+            }
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                tableMouseReleased(evt);
             }
         });
         table.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -135,18 +137,20 @@ public final class StockTopComponent extends NTopComponent {
             table.getColumnModel().getColumn(1).setHeaderValue(org.openide.util.NbBundle.getMessage(StockTopComponent.class, "StockTopComponent.table.columnModel.title1")); // NOI18N
             table.getColumnModel().getColumn(2).setPreferredWidth(300);
             table.getColumnModel().getColumn(2).setHeaderValue(org.openide.util.NbBundle.getMessage(StockTopComponent.class, "StockTopComponent.table.columnModel.title2")); // NOI18N
-            table.getColumnModel().getColumn(3).setHeaderValue(org.openide.util.NbBundle.getMessage(StockTopComponent.class, "StockTopComponent.table.columnModel.title3")); // NOI18N
-            table.getColumnModel().getColumn(3).setCellRenderer(rightAlignCell);
-            table.getColumnModel().getColumn(4).setHeaderValue(org.openide.util.NbBundle.getMessage(StockTopComponent.class, "StockTopComponent.table.columnModel.title4")); // NOI18N
+            table.getColumnModel().getColumn(3).setPreferredWidth(150);
+            table.getColumnModel().getColumn(3).setHeaderValue(org.openide.util.NbBundle.getMessage(StockTopComponent.class, "StockTopComponent.table.columnModel.title9")); // NOI18N
+            table.getColumnModel().getColumn(4).setHeaderValue(org.openide.util.NbBundle.getMessage(StockTopComponent.class, "StockTopComponent.table.columnModel.title3")); // NOI18N
             table.getColumnModel().getColumn(4).setCellRenderer(rightAlignCell);
-            table.getColumnModel().getColumn(5).setHeaderValue(org.openide.util.NbBundle.getMessage(StockTopComponent.class, "StockTopComponent.table.columnModel.title5")); // NOI18N
+            table.getColumnModel().getColumn(5).setHeaderValue(org.openide.util.NbBundle.getMessage(StockTopComponent.class, "StockTopComponent.table.columnModel.title4")); // NOI18N
             table.getColumnModel().getColumn(5).setCellRenderer(rightAlignCell);
-            table.getColumnModel().getColumn(6).setHeaderValue(org.openide.util.NbBundle.getMessage(StockTopComponent.class, "StockTopComponent.table.columnModel.title6")); // NOI18N
+            table.getColumnModel().getColumn(6).setHeaderValue(org.openide.util.NbBundle.getMessage(StockTopComponent.class, "StockTopComponent.table.columnModel.title5")); // NOI18N
             table.getColumnModel().getColumn(6).setCellRenderer(rightAlignCell);
-            table.getColumnModel().getColumn(7).setHeaderValue(org.openide.util.NbBundle.getMessage(StockTopComponent.class, "StockTopComponent.table.columnModel.title7")); // NOI18N
+            table.getColumnModel().getColumn(7).setHeaderValue(org.openide.util.NbBundle.getMessage(StockTopComponent.class, "StockTopComponent.table.columnModel.title6")); // NOI18N
             table.getColumnModel().getColumn(7).setCellRenderer(rightAlignCell);
-            table.getColumnModel().getColumn(8).setHeaderValue(org.openide.util.NbBundle.getMessage(StockTopComponent.class, "StockTopComponent.table.columnModel.title8")); // NOI18N
+            table.getColumnModel().getColumn(8).setHeaderValue(org.openide.util.NbBundle.getMessage(StockTopComponent.class, "StockTopComponent.table.columnModel.title7")); // NOI18N
             table.getColumnModel().getColumn(8).setCellRenderer(rightAlignCell);
+            table.getColumnModel().getColumn(9).setHeaderValue(org.openide.util.NbBundle.getMessage(StockTopComponent.class, "StockTopComponent.table.columnModel.title8")); // NOI18N
+            table.getColumnModel().getColumn(9).setCellRenderer(rightAlignCell);
         }
 
         org.openide.awt.Mnemonics.setLocalizedText(reloadButton, org.openide.util.NbBundle.getMessage(StockTopComponent.class, "StockTopComponent.reloadButton.text")); // NOI18N
@@ -429,6 +433,16 @@ public final class StockTopComponent extends NTopComponent {
                             p.finish();
                             return;
                         }
+                        Comparator<Stock> c = new Comparator<Stock>() {
+
+                            @Override
+                            public int compare(Stock o1, Stock o2) {
+                                String typeOne = o1.getItem().getItemTypeType() == null ? "" : o1.getItem().getItemTypeType().getType();
+                                String typeTwo = o2.getItem().getItemTypeType() == null ? "" : o2.getItem().getItemTypeType().getType();
+                                return typeOne.compareTo(typeTwo);
+                            }
+                        };
+                        Collections.sort(stocks, c);
                         for (Stock stock : stocks) {
                             Item item = stock.getItem();
                             if (item == null) {
@@ -445,6 +459,7 @@ public final class StockTopComponent extends NTopComponent {
                                 ++i,
                                 item.getCode(),
                                 item.getDescription(),
+                                item.getItemTypeType() == null ? "" : item.getItemTypeType().getType(),
                                 nf2d.format(quantity),
                                 nf2d.format(cost),
                                 nf2d.format(quantity * cost),

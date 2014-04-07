@@ -144,7 +144,7 @@ public class Operator implements Serializable, Comparable<Operator> {
 
     @Override
     public String toString() {
-        return username;
+        return util.ToString.get(this);
     }
 
     @Override

@@ -94,7 +94,7 @@ public class RepSaleValue implements Serializable {
 
     @Override
     public String toString() {
-        return "ent.RepSaleValue[repSaleValuePK=" + repSaleValuePK + "]";
+        return util.ToString.get(this);
     }
 
 }

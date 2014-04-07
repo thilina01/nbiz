@@ -73,7 +73,7 @@ public class MenuItemPK implements Serializable {
 
     @Override
     public String toString() {
-        return "ent.MenuItemPK[menuMenu=" + menuMenu + ", menuItem=" + menuItem + "]";
+        return util.ToString.get(this);
     }
 
 }

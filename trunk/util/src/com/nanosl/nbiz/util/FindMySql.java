@@ -276,7 +276,6 @@ public class FindMySql {
             }
             close();
         } catch (SQLException ex) {
-            ex.printStackTrace();
         }
         return totals;
     }

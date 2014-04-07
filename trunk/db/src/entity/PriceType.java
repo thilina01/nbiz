@@ -83,7 +83,7 @@ public class PriceType implements Serializable {
 
     @Override
     public String toString() {
-        return "ent.PriceType[ type=" + type + " ]";
+        return util.ToString.get(this);
     }
     
 }

@@ -121,7 +121,7 @@ public class Bank implements Serializable, Comparable<Bank> {
 
     @Override
     public String toString() {
-        return code;
+        return util.ToString.get(this);
     }
 
     @Override

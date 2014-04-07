@@ -116,10 +116,11 @@
               <Properties>
                 <Property name="autoCreateRowSorter" type="boolean" value="true"/>
                 <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                  <Table columnCount="9" rowCount="0">
+                  <Table columnCount="10" rowCount="0">
                     <Column editable="false" title="#" type="java.lang.Object"/>
                     <Column editable="false" title="Code" type="java.lang.Object"/>
                     <Column editable="false" title="Description" type="java.lang.Object"/>
+                    <Column editable="false" title="Type" type="java.lang.Object"/>
                     <Column editable="false" title="Quantity" type="java.lang.Object"/>
                     <Column editable="false" title="Cost" type="java.lang.Object"/>
                     <Column editable="false" title="Total Cost" type="java.lang.Double"/>
@@ -147,6 +148,13 @@
                     <Column maxWidth="-1" minWidth="-1" prefWidth="300" resizable="true">
                       <Title editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                         <ResourceString bundle="com/nanosl/nbiz/gui/Bundle.properties" key="StockTopComponent.table.columnModel.title2" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                      </Title>
+                      <Editor/>
+                      <Renderer/>
+                    </Column>
+                    <Column maxWidth="-1" minWidth="-1" prefWidth="150" resizable="true">
+                      <Title editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                        <ResourceString bundle="com/nanosl/nbiz/gui/Bundle.properties" key="StockTopComponent.table.columnModel.title9" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                       </Title>
                       <Editor/>
                       <Renderer/>
@@ -212,8 +220,8 @@
                 </Property>
               </Properties>
               <Events>
-                <EventHandler event="mouseReleased" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tableMouseReleased"/>
                 <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tableMouseClicked"/>
+                <EventHandler event="mouseReleased" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tableMouseReleased"/>
                 <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="tableKeyReleased"/>
               </Events>
               <AuxValues>

@@ -147,7 +147,7 @@ public class CollectionReceipt implements Serializable {
 
     @Override
     public String toString() {
-        return "ent.CollectionReceipt[ receiptNumber=" + receiptNumber + " ]";
+        return util.ToString.get(this);
     }
 
     public Double getAmount() {

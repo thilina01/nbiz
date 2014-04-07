@@ -106,7 +106,7 @@ public class Expenses implements Serializable {
 
     @Override
     public String toString() {
-        return "ent.Expenses[paidTime=" + paidTime + "]";
+        return util.ToString.get(this);
     }
 
 }

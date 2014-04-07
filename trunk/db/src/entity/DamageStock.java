@@ -91,7 +91,7 @@ public class DamageStock implements Serializable {
 
     @Override
     public String toString() {
-        return "ent.DamageStock[itemCode=" + itemCode + "]";
+        return util.ToString.get(this);
     }
 
 }

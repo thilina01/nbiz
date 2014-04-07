@@ -41,7 +41,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "SaleInvoice.findByCardNumber", query = "SELECT s FROM SaleInvoice s WHERE s.cardNumber = :cardNumber"),
     @NamedQuery(name = "SaleInvoice.findByPrinted", query = "SELECT s FROM SaleInvoice s WHERE s.printed = :printed"),
     @NamedQuery(name = "SaleInvoice.findByOperator", query = "SELECT s FROM SaleInvoice s WHERE s.operator = :operator")})
-public class SaleInvoice implements Serializable {
+public class SaleInvoice implements Serializable, Comparable<SaleInvoice> {
+
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -106,7 +107,7 @@ public class SaleInvoice implements Serializable {
     public void setCardNumber(String cardNumber) {
         this.cardNumber = cardNumber;
     }
-    
+
     public Date getInvTime() {
         return invTime;
     }
@@ -219,7 +220,7 @@ public class SaleInvoice implements Serializable {
 
     @Override
     public String toString() {
-        return "ent.SaleInvoice[ invNo=" + invNo + " ]";
+        return util.ToString.get(this);
     }
 
     public String getCustomerName() {
@@ -258,6 +259,11 @@ public class SaleInvoice implements Serializable {
 
     public void setTermAmount(Double termAmount) {
         this.termAmount = termAmount;
+    }
+
+    @Override
+    public int compareTo(SaleInvoice o) {
+        return toString().compareTo(o.toString());
     }
 
 }

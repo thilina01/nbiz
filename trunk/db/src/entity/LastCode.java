@@ -78,7 +78,7 @@ public class LastCode implements Serializable {
 
     @Override
     public String toString() {
-        return "ent.LastCode[type=" + type + "]";
+        return util.ToString.get(this);
     }
 
 }

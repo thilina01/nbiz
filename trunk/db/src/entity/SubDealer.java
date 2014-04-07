@@ -135,7 +135,7 @@ public class SubDealer implements Serializable, Comparable<SubDealer> {
 
     @Override
     public String toString() {
-        return "ent.SubDealer[code=" + code + "]";
+        return util.ToString.get(this);
     }
 
     @Override

@@ -130,7 +130,7 @@ public class DamageNotes implements Serializable {
 
     @Override
     public String toString() {
-        return "ent.DamageNotes[damageNotesPK=" + damageNotesPK + "]";
+        return util.ToString.get(this);
     }
 
     /**

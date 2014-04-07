@@ -150,7 +150,7 @@ public class RepSale implements Serializable {
 
     @Override
     public String toString() {
-        return "ent.RepSale[repSalePK=" + repSalePK + "]";
+        return util.ToString.get(this);
     }
 
 }
