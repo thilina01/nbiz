@@ -112,7 +112,7 @@ public class Stock implements Serializable, Comparable<Stock> {
 
     @Override
     public String toString() {
-        return "ent.Stock[itemCode=" + itemCode + "]";
+        return util.ToString.get(this);
     }
 
     @Override

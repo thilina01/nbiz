@@ -92,6 +92,6 @@ public class EmployeePosition implements Serializable {
 
     @Override
     public String toString() {
-        return code;
+        return util.ToString.get(this);
     }
 }

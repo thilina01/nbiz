@@ -93,7 +93,7 @@ public class DamageNotesPK implements Serializable {
 
     @Override
     public String toString() {
-        return "ent.DamageNotesPK[dateTime=" + dateTime + ", itemCode=" + itemCode + ", employeeCode=" + employeeCode + "]";
+        return util.ToString.get(this);
     }
 
 }

@@ -137,7 +137,7 @@ public class SrStock implements Serializable {
 
     @Override
     public String toString() {
-        return "ent.SrStock[srStockPK=" + srStockPK + "]";
+        return util.ToString.get(this);
     }
 
 }

@@ -126,7 +126,7 @@ public class CanceledInvoiceHasItem implements Serializable {
 
     @Override
     public String toString() {
-        return "ent.CanceledInvoiceHasItem[canceledInvoiceHasItemPK=" + canceledInvoiceHasItemPK + "]";
+        return util.ToString.get(this);
     }
 
 }

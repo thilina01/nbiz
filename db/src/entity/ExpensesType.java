@@ -91,7 +91,7 @@ public class ExpensesType implements Serializable, Comparable<ExpensesType> {
 
     @Override
     public String toString() {
-        return getCode();
+        return util.ToString.get(this);
     }
 
     @Override

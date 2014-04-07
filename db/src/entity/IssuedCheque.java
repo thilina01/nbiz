@@ -154,7 +154,7 @@ public class IssuedCheque implements Serializable {
 
     @Override
     public String toString() {
-        return "ent.IssuedCheque[chequeNumber=" + chequeNumber + "]";
+        return util.ToString.get(this);
     }
 
 }

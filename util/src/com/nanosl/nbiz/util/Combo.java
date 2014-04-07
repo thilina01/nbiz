@@ -9,6 +9,7 @@ import entity.Bank;
 import entity.Customer;
 import entity.Employee;
 import entity.Item;
+import entity.ItemType;
 import entity.Supplier;
 import entity.Town;
 import java.util.Arrays;
@@ -26,7 +27,7 @@ public class Combo {
 
     private static final Manager manager = Manager.getInstance();
 
-    public static void fillSuppliers(final JComboBox<Supplier> comboBox,final Supplier toSelect) {
+    public static void fillSuppliers(final JComboBox<Supplier> comboBox, final Supplier toSelect) {
         SwingWorker<DefaultComboBoxModel<Supplier>, Supplier> comboBoxWorker = new SwingWorker<DefaultComboBoxModel<Supplier>, Supplier>() {
             @Override
             protected DefaultComboBoxModel<Supplier> doInBackground() throws Exception {
@@ -36,8 +37,8 @@ public class Combo {
             @Override
             protected void done() {
                 try {
-                    comboBox.setModel(get());   
-                    if(toSelect != null){
+                    comboBox.setModel(get());
+                    if (toSelect != null) {
                         comboBox.setSelectedItem(toSelect);
                     }
                 } catch (InterruptedException | ExecutionException ignore) {
@@ -48,17 +49,17 @@ public class Combo {
     }
 
     public static void fillCustomers(final JComboBox<Customer> comboBox) {
-        SwingWorker<DefaultComboBoxModel<Customer> , Customer> comboBoxWorker = new SwingWorker<DefaultComboBoxModel<Customer> , Customer>() {
+        SwingWorker<DefaultComboBoxModel<Customer>, Customer> comboBoxWorker = new SwingWorker<DefaultComboBoxModel<Customer>, Customer>() {
             @Override
             protected DefaultComboBoxModel<Customer> doInBackground() throws Exception {
                 return getCustomerComboBoxModel();
             }
+
             @Override
             protected void done() {
                 try {
                     comboBox.setModel(get());
-                } catch (InterruptedException ignore) {
-                } catch (ExecutionException ignore) {
+                } catch (InterruptedException | ExecutionException ignore) {
                 }
             }
         };
@@ -70,14 +71,14 @@ public class Combo {
         if (employees != null) {
             Employee[] es = employees.toArray(new Employee[0]);
             Arrays.sort(es);
-            jcb.setModel(new DefaultComboBoxModel<Employee>(es));
+            jcb.setModel(new DefaultComboBoxModel<>(es));
         }
     }
 
     public static void fillItems(final JComboBox<Item> itemComboBox) {
         SwingWorker<DefaultComboBoxModel<Item>, Item> comboBoxWorker = new SwingWorker<DefaultComboBoxModel<Item>, Item>() {
             @Override
-            protected DefaultComboBoxModel<Item> doInBackground() throws Exception {                
+            protected DefaultComboBoxModel<Item> doInBackground() throws Exception {
                 return getItemComboBoxModel();
             }
 
@@ -85,8 +86,28 @@ public class Combo {
             protected void done() {
                 try {
                     itemComboBox.setModel(get());
-                } catch (InterruptedException ignore) {
-                } catch (ExecutionException ignore) {
+                } catch (InterruptedException | ExecutionException ignore) {
+                }
+            }
+        };
+        comboBoxWorker.execute();
+    }
+
+    public static void fillItemTypes(final JComboBox<ItemType> comboBox,final ItemType toSelect) {
+        SwingWorker<DefaultComboBoxModel<ItemType>, ItemType> comboBoxWorker = new SwingWorker<DefaultComboBoxModel<ItemType>, ItemType>() {
+            @Override
+            protected DefaultComboBoxModel<ItemType> doInBackground() throws Exception {
+                return getItemTypeComboBoxModel();
+            }
+
+            @Override
+            protected void done() {
+                try {
+                    comboBox.setModel(get());
+                    if (toSelect != null) {
+                        comboBox.setSelectedItem(toSelect);
+                    }
+                } catch (InterruptedException | ExecutionException ignore) {
                 }
             }
         };
@@ -107,7 +128,7 @@ public class Combo {
         if (banks != null) {
             Bank[] bs = banks.toArray(new Bank[0]);
             Arrays.sort(bs);
-            jcb.setModel(new DefaultComboBoxModel<> (bs));
+            jcb.setModel(new DefaultComboBoxModel<>(bs));
         }
     }
 
@@ -135,6 +156,17 @@ public class Combo {
         List<Item> items = manager.find(Item.class);
         if (items != null) {
             Item[] ses = items.toArray(new Item[0]);
+            Arrays.sort(ses);
+            return new DefaultComboBoxModel<>(ses);
+        }
+        return new DefaultComboBoxModel<>();
+
+    }
+
+    public static DefaultComboBoxModel<ItemType> getItemTypeComboBoxModel() {
+        List<ItemType> itemTypes = manager.find(ItemType.class);
+        if (itemTypes != null) {
+            ItemType[] ses = itemTypes.toArray(new ItemType[0]);
             Arrays.sort(ses);
             return new DefaultComboBoxModel<>(ses);
         }

@@ -107,7 +107,7 @@ public class General implements Serializable {
 
     @Override
     public String toString() {
-        return "ent.General[id=" + id + "]";
+        return util.ToString.get(this);
     }
 
     /**

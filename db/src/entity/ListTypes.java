@@ -78,7 +78,7 @@ public class ListTypes implements Serializable {
 
     @Override
     public String toString() {
-        return "ent.ListTypes[code=" + code + "]";
+        return util.ToString.get(this);
     }
 
 }

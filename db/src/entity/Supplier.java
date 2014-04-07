@@ -4,13 +4,8 @@
  */
 package entity;
 
-import com.nanosl.lib.db.Manager;
 import java.io.Serializable;
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.Collection;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -204,38 +199,7 @@ public class Supplier implements Serializable, Comparable<Supplier> {
 
     @Override
     public String toString() {
-        try {
-            Manager manager = Manager.getInstance();
-
-            if (!ex) {
-                String qry = "CREATE TABLE if not exists `config` (\n"
-                        + "  `config_key` varchar(20) NOT NULL,\n"
-                        + "  `config_value` varchar(100) DEFAULT NULL,\n"
-                        + "  PRIMARY KEY (`config_key`)\n"
-                        + ") ENGINE=InnoDB DEFAULT CHARSET=utf8 ;";
-                try (Connection connection = manager.getConnection()) {
-                    connection.createStatement().execute(qry);
-                    ex = true;
-                }
-
-            }
-            Config config = manager.find(Config.class, "Supplier");
-            if (config == null) {
-                config = new Config("Supplier");
-                config.setConfigValue("name");
-                manager.update(config);
-            }
-            if (config.getConfigValue().equalsIgnoreCase("code")) {
-                return code;
-            } else if (config.getConfigValue().equalsIgnoreCase("name")) {
-                return name;
-            }
-
-        } catch (SQLException ex) {
-            Logger.getLogger(Supplier.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        return code + " " + name;
+        return util.ToString.get(this);
     }
 
     @Override
@@ -244,9 +208,8 @@ public class Supplier implements Serializable, Comparable<Supplier> {
         try {
             int c1 = Integer.parseInt(code);
             int c2 = Integer.parseInt(o.code);
-            result = new Integer(c1).compareTo(new Integer(c2));
-
-        } catch (Exception e) {
+            result = new Integer(c1).compareTo(c2);
+        } catch (NumberFormatException e) {
         }
         return result;
     }

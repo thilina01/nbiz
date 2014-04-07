@@ -111,7 +111,7 @@ public class OldPrice implements Serializable {
 
     @Override
     public String toString() {
-        return "ent.OldPrice[oldPricePK=" + oldPricePK + "]";
+        return util.ToString.get(this);
     }
 
     public ItemHasPrice getItemHasPrice() {

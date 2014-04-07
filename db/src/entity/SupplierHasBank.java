@@ -104,7 +104,7 @@ public class SupplierHasBank implements Serializable {
 
     @Override
     public String toString() {
-        return "ent.SupplierHasBank[supplierHasBankPK=" + supplierHasBankPK + "]";
+        return util.ToString.get(this);
     }
 
 }

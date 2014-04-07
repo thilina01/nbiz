@@ -77,7 +77,7 @@ public class OldPricePK implements Serializable {
 
     @Override
     public String toString() {
-        return "ent.OldPricePK[changeDate=" + changeDate + ", itemCode=" + itemCode + "]";
+        return util.ToString.get(this);
     }
 
 }

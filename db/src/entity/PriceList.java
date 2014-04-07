@@ -116,15 +116,12 @@ public class PriceList implements Serializable {
             return false;
         }
         PriceList other = (PriceList) object;
-        if ((this.itemCode == null && other.itemCode != null) || (this.itemCode != null && !this.itemCode.equals(other.itemCode))) {
-            return false;
-        }
-        return true;
+        return (this.itemCode != null || other.itemCode == null) && (this.itemCode == null || this.itemCode.equals(other.itemCode));
     }
 
     @Override
     public String toString() {
-        return "ent.PriceList[itemCode=" + itemCode + "]";
+        return util.ToString.get(this);
     }
 
 }

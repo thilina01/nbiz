@@ -157,7 +157,7 @@ public class OperatorDeleted implements Serializable, Comparable<OperatorDeleted
 
     @Override
     public String toString() {
-        return "ent.OperatorDeleted[deletedDate=" + deletedDate + "]";
+        return util.ToString.get(this);
     }
 
     @Override

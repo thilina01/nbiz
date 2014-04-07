@@ -93,7 +93,7 @@ public class RepSalePK implements Serializable {
 
     @Override
     public String toString() {
-        return "ent.RepSalePK[saleDate=" + saleDate + ", itemCode=" + itemCode + ", employeeCode=" + employeeCode + "]";
+        return util.ToString.get(this);
     }
 
 }

@@ -77,7 +77,7 @@ public class SrSalesPaymentsPK implements Serializable {
 
     @Override
     public String toString() {
-        return "ent.SrSalesPaymentsPK[paymentDate=" + paymentDate + ", employeeCode=" + employeeCode + "]";
+        return util.ToString.get(this);
     }
 
 }

@@ -126,7 +126,7 @@ public class IssuedCash implements Serializable {
 
     @Override
     public String toString() {
-        return "ent.IssuedCash[issuedTime=" + issuedTime + "]";
+        return util.ToString.get(this);
     }
 
 }

@@ -93,7 +93,7 @@ public class StockTransferPK implements Serializable {
 
     @Override
     public String toString() {
-        return "ent.StockTransferPK[employeeCode=" + employeeCode + ", itemCode=" + itemCode + ", transferDate=" + transferDate + "]";
+        return util.ToString.get(this);
     }
 
 }

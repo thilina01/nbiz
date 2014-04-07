@@ -328,7 +328,7 @@ public class Item implements Serializable, Comparable<Item> {
 
     @Override
     public String toString() {
-        return code + " " + description + "\t [" + getPriceList().getSellingPack() + " | " + getPriceList().getCostPack() + "]";
+        return util.ToString.get(this);
     }
 
     @Override

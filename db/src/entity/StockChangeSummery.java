@@ -95,7 +95,7 @@ public class StockChangeSummery implements Serializable {
 
     @Override
     public String toString() {
-        return "ent.StockChangeSummery[changeDate=" + changeDate + "]";
+        return util.ToString.get(this);
     }
 
 }

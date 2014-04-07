@@ -102,7 +102,7 @@ public class RootArea implements Serializable, Comparable<RootArea> {
 
     @Override
     public String toString() {
-        return name;
+        return util.ToString.get(this);
     }
 
     @Override

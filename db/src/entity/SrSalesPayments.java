@@ -127,7 +127,7 @@ public class SrSalesPayments implements Serializable {
 
     @Override
     public String toString() {
-        return "ent.SrSalesPayments[srSalesPaymentsPK=" + srSalesPaymentsPK + "]";
+        return util.ToString.get(this);
     }
 
 }

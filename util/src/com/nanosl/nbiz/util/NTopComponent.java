@@ -37,6 +37,15 @@ public class NTopComponent extends TopComponent implements Format, Cell {
         calendar.set(Calendar.MILLISECOND, 900);
         return calendar.getTime();
     }
+    public Date makeStartDate(Date startDate) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(startDate);
+        calendar.set(Calendar.HOUR_OF_DAY, 00);
+        calendar.set(Calendar.MINUTE, 00);
+        calendar.set(Calendar.SECOND, 00);
+        calendar.set(Calendar.MILLISECOND, 00);
+        return calendar.getTime();
+    }
     /*
      public static final DateFormat dd_MMMM_yyyy = new SimpleDateFormat("dd - MMMM - yyyy");
      public static final DateFormat dd_MM_yyyy = new SimpleDateFormat("dd-MM-yyyy");

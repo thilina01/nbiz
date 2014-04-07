@@ -81,7 +81,7 @@ public class Config implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.Config[ configKey=" + configKey + " ]";
+        return util.ToString.get(this);
     }
     
 }

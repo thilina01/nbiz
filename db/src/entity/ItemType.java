@@ -84,6 +84,6 @@ public class ItemType implements Serializable {
 
     @Override
     public String toString() {
-        return type;
+        return util.ToString.get(this);
     }
 }

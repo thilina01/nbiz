@@ -140,7 +140,7 @@ public class ItemHasPrice implements Serializable {
 
     @Override
     public String toString() {
-        return "ent.ItemHasPrice[ itemHasPricePK=" + itemHasPricePK + " ]";
+        return util.ToString.get(this);
     }
     
 }

@@ -73,7 +73,7 @@ public class SupplierHasBankPK implements Serializable {
 
     @Override
     public String toString() {
-        return "ent.SupplierHasBankPK[supplierCode=" + supplierCode + ", bankCode=" + bankCode + "]";
+        return util.ToString.get(this);
     }
 
 }

@@ -114,7 +114,7 @@ public class Town implements Serializable,Comparable<Town> {
 
     @Override
     public String toString() {
-        return name;
+        return util.ToString.get(this);
     }
 
     @Override

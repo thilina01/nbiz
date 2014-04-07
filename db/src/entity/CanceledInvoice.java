@@ -163,7 +163,7 @@ public class CanceledInvoice implements Serializable {
 
     @Override
     public String toString() {
-        return "ent.CanceledInvoice[invNo=" + invNo + "]";
+        return util.ToString.get(this);
     }
 
 }
