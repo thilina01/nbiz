@@ -7,7 +7,6 @@ package com.nanosl.nbiz.gui.tool;
 
 import com.nanosl.nbiz.util.NTopComponent;
 import entity.Config;
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.List;
 import javax.swing.DefaultListModel;
@@ -15,8 +14,9 @@ import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.util.Exceptions;
-import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
+import org.openide.windows.TopComponent;
+import util.ToString;
 
 /**
  * Top component which displays something.
@@ -336,6 +336,7 @@ public final class ConfigTopComponent extends NTopComponent {
         Config config = manager.find(Config.class, className);
         config.setConfigValue(pattern);
         manager.update(config);
+        ToString.remove(className);
         fillSample(className);
     }
 }

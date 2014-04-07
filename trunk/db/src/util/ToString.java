@@ -17,9 +17,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.AbstractMap;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -46,52 +47,52 @@ public class ToString {
             Logger.getLogger(ToString.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    static Map<Class, String> map = new HashMap<>();
+//    static Map<Class, String> map = new HashMap<>();
+    static Map<Class, ArrayList<Method>> methodMap = new HashMap<>();
 
     public static String get(Object o) {
-        try {
-            Class c = o.getClass();
-            String configValueFull;
-            if (!map.containsKey(c)) {
-                System.out.println("called " + ++times + "at: " + System.currentTimeMillis());
-                Config config = getConfig(o);
-                configValueFull = config.getConfigValue();
-                map.put(c, configValueFull);
-            } else {
-                configValueFull = map.get(c);
-            }
-            String[] configValues = configValueFull.split(",");
-            List<String> strings = Arrays.asList(configValues);
-            String toString = "";
-            BeanInfo beanInfo = Introspector.getBeanInfo(c);
-            PropertyDescriptor[] propertyDescriptors = beanInfo.getPropertyDescriptors();
-            for (String string : strings) {
-                if (string.equalsIgnoreCase("t")) {
-                    toString = toString.concat("      ");
-                } else {
-                    for (PropertyDescriptor pd : propertyDescriptors) {
-                        String propertyName = pd.getName();
-                        if (pd.getReadMethod() != null && !"class".equals(propertyName) && string.equalsIgnoreCase(propertyName)) {//propertyName.equalsIgnoreCase(configValue)
-                            Method method = pd.getReadMethod();
-                            if (method == null) {
-                                continue;
-                            }
-                            Object result = method.invoke(o);
-                            if (result == null) {
-                                continue;
-                            }
-                            toString += result.toString() + ((strings.get(strings.size() - 1).equals(string)) ? "" : " ~ ");
-                        }
-                    }
-                }
-            }
-            return toString;
-        } catch (IntrospectionException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
-            Logger.getLogger(ToString.class.getName()).log(Level.SEVERE, null, ex);
+        Class c = o.getClass();
+        if (!methodMap.containsKey(c)) {
+            methodMap.put(c, getMethods(o));
         }
-        return "not found";
+        return getToReturn(o);
     }
 
+    public static void remove(String className) {
+        try {
+            methodMap.remove(Class.forName("entity." + className));
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ToString.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+//        try {
+//        } catch (IllegalArgumentException ex) {
+//            Logger.getLogger(ToString.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        return "not found";
+//            String configValueFull;
+//            if (!map.containsKey(c)) {
+//                System.out.println("called " + ++times + "at: " + System.currentTimeMillis());
+//                Config config = getConfig(o);
+//                configValueFull = config.getConfigValue();
+//                map.put(c, configValueFull);
+//            } else {
+//                configValueFull = map.get(c);
+//            }
+//                return getToReturn(o);
+//            } else {
+//                String toString = "";
+
+//                return toString;
+//    public static void updateMap(Config config) {
+//
+//        try {
+//            Class<?> c = Class.forName("entity." + config.getConfigKey());
+//            map.put(c, config.getConfigValue());
+//        } catch (ClassNotFoundException ex) {
+//            Logger.getLogger(ToString.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//    }
     private static Config getConfig(Object o) {
         Class c = o.getClass();
         String canonicalName = c.getName();
@@ -115,4 +116,55 @@ public class ToString {
         return config;
     }
 
+    private static String getToReturn(Object o) {
+        ArrayList<Method> methods = methodMap.get(o.getClass());
+        String toReturn = "";
+        for (Method method : methods) {
+            try {
+                Object result = method.invoke(o);
+                if (result == null) {
+                    continue;
+                }
+                toReturn += result.toString() + ((methods.get(methods.size() - 1).equals(method)) ? "" : " | ");
+            } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+                Logger.getLogger(ToString.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return toReturn;
+    }
+
+    private static ArrayList<Method> getMethods(Object o) {
+        ArrayList<Method> methods = new ArrayList<>();
+        try {
+            Config config = getConfig(o);
+            String configValueFull = config.getConfigValue();
+            String[] configValues = configValueFull.split(",");
+            List<String> strings = Arrays.asList(configValues);
+            BeanInfo beanInfo = Introspector.getBeanInfo(o.getClass());
+            PropertyDescriptor[] propertyDescriptors = beanInfo.getPropertyDescriptors();
+            for (String string : strings) {
+//            if (string.equalsIgnoreCase("t")) {
+//                toString = toString.concat("      ");
+//            } else {
+                for (PropertyDescriptor pd : propertyDescriptors) {
+                    String propertyName = pd.getName();
+                    if (pd.getReadMethod() != null && !"class".equals(propertyName) && string.equalsIgnoreCase(propertyName)) {//propertyName.equalsIgnoreCase(configValue)
+                        Method method = pd.getReadMethod();
+                        if (method == null) {
+                            continue;
+                        }
+                        methods.add(method);
+//                Object result = method.invoke(o);
+//                if (result == null) {
+//                    continue;
+//                }
+//                        toString += result.toString() + ((strings.get(strings.size() - 1).equals(string)) ? "" : " ~ ");
+                    }
+//            }
+                }
+            }
+        } catch (IntrospectionException ex) {
+        }
+        return methods;
+    }
 }

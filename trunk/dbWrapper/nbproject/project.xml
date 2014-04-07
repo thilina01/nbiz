@@ -26,6 +26,7 @@
             <public-packages>
                 <package>entity</package>
                 <package>query</package>
+                <package>util</package>
             </public-packages>
             <class-path-extension>
                 <runtime-relative-path>ext/db.jar</runtime-relative-path>
