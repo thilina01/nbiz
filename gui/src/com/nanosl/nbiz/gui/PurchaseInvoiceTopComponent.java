@@ -35,6 +35,7 @@ import com.nanosl.nbiz.util.Combo;
 import com.nanosl.nbiz.util.FindMySql;
 import static com.nanosl.nbiz.util.Format.nf2d;
 import org.openide.awt.StatusDisplayer;
+import org.openide.util.Exceptions;
 
 /**
  * Top component which displays something.
@@ -61,8 +62,54 @@ public final class PurchaseInvoiceTopComponent extends NTopComponent {
 
     static PurchaseInvoiceTopComponent instance;
 
+//    public static PurchaseInvoiceTopComponent getInstance() {
+//        if (instance == null) {
+//            instance = new PurchaseInvoiceTopComponent();
+//        }
+//        return instance;
+//    }
     static void display() {
         instance.setVisible(true);
+    }
+
+    public void fill(String invoiceNumber, String supperCode) {
+        PurchaseInvoice purchaseInvoice = manager.find(PurchaseInvoice.class, new PurchaseInvoicePK(invoiceNumber, supperCode));
+        supplier = purchaseInvoice.getSupplier();
+//
+//        System.out.println("at fill " + supplier);
+        supplierComboBox.setSelectedItem(supplier);
+//        System.out.println("at fill after set " + supplier);
+//        System.out.println("at fill after set confirm " + supplierComboBox.getSelectedItem());
+        dtm.setRowCount(0);
+        clearFields();
+        for (PurchaseInvoiceHasItem purchaseInvoiceHasItem : purchaseInvoice.getPurchaseInvoiceHasItemCollection()) {
+            Item item = purchaseInvoiceHasItem.getItem();
+            double cost = purchaseInvoiceHasItem.getCost();
+            double quantity = purchaseInvoiceHasItem.getQuantity();
+            double discount = purchaseInvoiceHasItem.getDiscount();
+            double sellingPrice = item.getPriceList().getSellingPack();
+            double net = cost * quantity;
+            double discountAmount = net * discount / 100;
+            double amount = net - discountAmount;
+            int i = dtm.getRowCount();
+            Object[] rowData = {++i,
+                item.getCode(),
+                item.getDescription(),
+                nf2d.format(cost),
+                nf3d.format(quantity),
+                nf2d.format(net),
+                nf2d.format(discountAmount),
+                nf2d.format(discount),
+                nf2d.format(amount),
+                nf2d.format(sellingPrice)};
+            dtm.addRow(rowData);
+        }
+
+        invoiceNumberField.setText(invoiceNumber);
+        totalAmountLabel.setText(nf2d.format(purchaseInvoice.getAmount()));
+        totalDiscountLabel.setText(nf2d.format(purchaseInvoice.getDiscount()));
+//        supplierComboBox.setSelectedItem(supplier);
+
     }
 
     public PurchaseInvoiceTopComponent() {
@@ -82,6 +129,7 @@ public final class PurchaseInvoiceTopComponent extends NTopComponent {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        buttonGroup1 = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
         datePicker = new JXDatePicker();
         jLabel1 = new javax.swing.JLabel();
@@ -108,6 +156,10 @@ public final class PurchaseInvoiceTopComponent extends NTopComponent {
         stockLabel = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         sellingTextField = new javax.swing.JTextField();
+        jLabel11 = new javax.swing.JLabel();
+        addToExistingRadioButton = new javax.swing.JRadioButton();
+        setNewValueRadioButton = new javax.swing.JRadioButton();
+        jRadioButton1 = new javax.swing.JRadioButton();
 
         datePicker.setName("datePicker"); // NOI18N
         datePicker.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -321,6 +373,22 @@ public final class PurchaseInvoiceTopComponent extends NTopComponent {
             }
         });
 
+        jLabel11.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel11, org.openide.util.NbBundle.getMessage(PurchaseInvoiceTopComponent.class, "PurchaseInvoiceTopComponent.jLabel11.text")); // NOI18N
+
+        buttonGroup1.add(addToExistingRadioButton);
+        addToExistingRadioButton.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(addToExistingRadioButton, org.openide.util.NbBundle.getMessage(PurchaseInvoiceTopComponent.class, "PurchaseInvoiceTopComponent.addToExistingRadioButton.text")); // NOI18N
+
+        buttonGroup1.add(setNewValueRadioButton);
+        setNewValueRadioButton.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(setNewValueRadioButton, org.openide.util.NbBundle.getMessage(PurchaseInvoiceTopComponent.class, "PurchaseInvoiceTopComponent.setNewValueRadioButton.text")); // NOI18N
+
+        buttonGroup1.add(jRadioButton1);
+        jRadioButton1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(jRadioButton1, org.openide.util.NbBundle.getMessage(PurchaseInvoiceTopComponent.class, "PurchaseInvoiceTopComponent.jRadioButton1.text")); // NOI18N
+        jRadioButton1.setEnabled(false);
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -351,8 +419,10 @@ public final class PurchaseInvoiceTopComponent extends NTopComponent {
                                 .addGap(334, 334, 334)))
                         .addGap(277, 277, 277))
                     .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel11)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(processButton)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(clearButton)
@@ -363,9 +433,16 @@ public final class PurchaseInvoiceTopComponent extends NTopComponent {
                                 .addGap(18, 18, 18)
                                 .addComponent(jLabel8)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(totalAmountLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jScrollPane1))
-                        .addContainerGap())
+                                .addComponent(totalAmountLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap())
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(22, 22, 22)
+                                .addComponent(addToExistingRadioButton)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(setNewValueRadioButton)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jRadioButton1)
+                                .addGap(0, 0, Short.MAX_VALUE))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -382,7 +459,8 @@ public final class PurchaseInvoiceTopComponent extends NTopComponent {
                         .addComponent(jLabel7)
                         .addGap(18, 18, 18)
                         .addComponent(discountField, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1)))
         );
 
         jPanel1Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {discountField, sellingTextField});
@@ -416,8 +494,14 @@ public final class PurchaseInvoiceTopComponent extends NTopComponent {
                         .addComponent(quantityField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel6)
                         .addComponent(costField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 407, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel11)
+                    .addComponent(addToExistingRadioButton)
+                    .addComponent(setNewValueRadioButton)
+                    .addComponent(jRadioButton1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 391, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(totalAmountLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -462,6 +546,10 @@ public final class PurchaseInvoiceTopComponent extends NTopComponent {
 
     private void supplierComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_supplierComboBoxActionPerformed
         fillItems();
+        Object o = supplierComboBox.getSelectedItem();
+        if (o instanceof Supplier) {
+            supplier = (Supplier) o;
+        }
     }//GEN-LAST:event_supplierComboBoxActionPerformed
 
     private void supplierComboBoxKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_supplierComboBoxKeyPressed
@@ -580,6 +668,8 @@ public final class PurchaseInvoiceTopComponent extends NTopComponent {
     }//GEN-LAST:event_supplierComboBoxFocusGained
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JRadioButton addToExistingRadioButton;
+    private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JButton clearButton;
     private javax.swing.JTextField costField;
     private org.jdesktop.swingx.JXDatePicker datePicker;
@@ -588,6 +678,7 @@ public final class PurchaseInvoiceTopComponent extends NTopComponent {
     private javax.swing.JComboBox itemComboBox;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -597,10 +688,12 @@ public final class PurchaseInvoiceTopComponent extends NTopComponent {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JRadioButton jRadioButton1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton processButton;
     private javax.swing.JTextField quantityField;
     private javax.swing.JTextField sellingTextField;
+    private javax.swing.JRadioButton setNewValueRadioButton;
     private javax.swing.JLabel stockLabel;
     private javax.swing.JComboBox supplierComboBox;
     private javax.swing.JTable table;
@@ -661,7 +754,7 @@ public final class PurchaseInvoiceTopComponent extends NTopComponent {
 
     private void clear() {
         dtm.setRowCount(0);
-//        Combo.fillSuppliers(supplierComboBox);
+//        Combo.fillSuppliers(supplierComboBox, null);
 //        supplierComboBoxWorker.execute();
         clearFields();
     }
@@ -784,6 +877,12 @@ public final class PurchaseInvoiceTopComponent extends NTopComponent {
         double discount = 0;
         double sellingPrice = 0;
         Item item = (Item) itemComboBox.getSelectedItem();
+
+        if (item == null) {
+            return;
+        }
+        String code = item.getCode();
+        String description = item.getDescription();
         try {
             quantity = Double.valueOf(quantityField.getText());
         } catch (NumberFormatException e) {
@@ -791,6 +890,27 @@ public final class PurchaseInvoiceTopComponent extends NTopComponent {
         try {
             cost = Double.valueOf(costField.getText().trim());
         } catch (NumberFormatException e) {
+        }
+        for (int i = 0; i < table.getRowCount(); i++) {
+
+            if (description.equalsIgnoreCase("OTHER")) {
+                break;
+            }
+            if (code.equals(table.getValueAt(i, 1))) {
+                if (setNewValueRadioButton.isSelected()) {
+                    dtm.removeRow(i);
+                } else if (addToExistingRadioButton.isSelected()) {
+                    double existingCost = Double.parseDouble(table.getValueAt(i, 3).toString());
+                    double existingQuantity = Double.parseDouble(table.getValueAt(i, 4).toString());
+                    cost = ((existingCost * existingQuantity) + (cost * quantity)) / (quantity + existingQuantity);
+                    quantity += existingQuantity;
+                    dtm.removeRow(i);
+                } else {
+                    showError("Select option for duplictes");
+                    return;
+                }
+                break;
+            }
         }
         try {
             discount = Double.valueOf(discountField.getText().trim());
@@ -913,13 +1033,15 @@ public final class PurchaseInvoiceTopComponent extends NTopComponent {
     @Override
     public void setVisible(boolean b) {
         super.setVisible(b);
-        if (!b) {
-            Object o = supplierComboBox.getSelectedItem();
-            supplier = o instanceof Supplier ? (Supplier) o : null;
-        }
+//        if (!b) {
+//            Object o = supplierComboBox.getSelectedItem();
+//            supplier = o instanceof Supplier ? (Supplier) o : null;
+//            System.out.println("at setvisible !b " + supplier);
+//        }
+//        System.out.println("at setvisible " + supplier);
         Combo.fillSuppliers(supplierComboBox, supplier);
         if (supplier != null) {
-            supplier = manager.find(Supplier.class, supplier.getCode());
+//            supplier = manager.find(Supplier.class, supplier.getCode());
             supplierComboBox.setSelectedItem(supplier);
             itemComboBox.setModel(new DefaultComboBoxModel(supplier.getItemCollection().toArray()));
         }

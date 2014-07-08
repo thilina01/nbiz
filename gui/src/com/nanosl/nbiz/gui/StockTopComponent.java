@@ -207,6 +207,11 @@ public final class StockTopComponent extends NTopComponent {
         });
 
         org.openide.awt.Mnemonics.setLocalizedText(supplierCheckBox, org.openide.util.NbBundle.getMessage(StockTopComponent.class, "StockTopComponent.supplierCheckBox.text")); // NOI18N
+        supplierCheckBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                supplierCheckBoxActionPerformed(evt);
+            }
+        });
 
         supplierComboBox.setName("supplierComboBox"); // NOI18N
         supplierComboBox.addActionListener(new java.awt.event.ActionListener() {
@@ -313,7 +318,7 @@ public final class StockTopComponent extends NTopComponent {
     }//GEN-LAST:event_printButtonActionPerformed
 
     private void typeCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_typeCheckBoxActionPerformed
-        // TODO add your handling code here:
+        fillTable();
     }//GEN-LAST:event_typeCheckBoxActionPerformed
 
     private void itemTypeComboBoxKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_itemTypeComboBoxKeyPressed
@@ -335,6 +340,10 @@ public final class StockTopComponent extends NTopComponent {
 //            fillTable();
 //        }
     }//GEN-LAST:event_supplierComboBoxKeyPressed
+
+    private void supplierCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_supplierCheckBoxActionPerformed
+        fillTable();
+    }//GEN-LAST:event_supplierCheckBoxActionPerformed
 //    private void searchSupplier() {
 //        SearchSupplierDialog searchSupplierDialog = new SearchSupplierDialog(null, true);
 //        supplier = searchSupplierDialog.suppllier;
@@ -428,6 +437,18 @@ public final class StockTopComponent extends NTopComponent {
                             } else {
                                 stocks = Find.stockBySupplier(supplier);
                             }
+                        } else if (typeCheckBox.isSelected()) {
+                            Object o = itemTypeComboBox.getSelectedItem();
+                            ItemType itemType;
+                            if (o instanceof ItemType) {
+                                itemType = (ItemType) o;
+                            } else {
+                                p.finish();
+                                return;
+                            }
+                            stocks = Find.stockByItemType(itemType);
+                        } else {
+                            stocks = null;
                         }
                         if (stocks == null) {
                             p.finish();
