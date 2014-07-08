@@ -51,7 +51,7 @@ import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
 
 /**
- * Top component which displays something.
+ * POSTop component which displays Point of sales input form.
  */
 @ConvertAsProperties(
         dtd = "-//com.nanos.nbiz.pos//POS//EN",
@@ -75,6 +75,7 @@ public final class POSTopComponent extends NTopComponent {
 
     public POSTopComponent() {
         onLoad();
+        System.currentTimeMillis();
         setName(Bundle.CTL_POSTopComponent());
         setToolTipText(Bundle.HINT_POSTopComponent());
     }
@@ -631,6 +632,10 @@ public final class POSTopComponent extends NTopComponent {
 
     private void itemComboBoxKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_itemComboBoxKeyPressed
         if (evt.getKeyCode() == 10) {
+            Item item = (Item) itemComboBox.getSelectedItem();
+            if (item == null) {
+                return;
+            }
             quantityField.requestFocus();
         } else if (evt.getKeyCode() == KeyEvent.VK_F2) {
             searchItem();
@@ -640,8 +645,13 @@ public final class POSTopComponent extends NTopComponent {
     }//GEN-LAST:event_itemComboBoxKeyPressed
 
     private void quantityFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_quantityFieldActionPerformed
-        priceField.setSelectionStart(0);
-        priceField.requestFocus();
+        String quantityString = quantityField.getText().trim();
+        try {
+            double quantity = Double.parseDouble(quantityString);
+            priceField.setSelectionStart(0);
+            priceField.requestFocus();
+        } catch (NumberFormatException e) {
+        }
     }//GEN-LAST:event_quantityFieldActionPerformed
 
     private void priceFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_priceFieldActionPerformed
@@ -956,20 +966,7 @@ public final class POSTopComponent extends NTopComponent {
         }
         String code = item.getCode();
         String description = item.getDescription();
-        for (int i = 0; i < table.getRowCount(); i++) {
-
-            if (description.equalsIgnoreCase("OTHER")) {
-                break;
-            }
-            if (code.equals(table.getValueAt(i, 1))) {
-                tableModel.removeRow(i);
-                break;
-
-            }
-        }
-        item = manager.find(Item.class, item.getCode());
         double availableQuantity = 0.0;
-
         try {
             availableQuantity = FindMySql.quantityByItemCode(item.getCode());
             quantity = Double.valueOf(quantityField.getText());
@@ -977,6 +974,19 @@ public final class POSTopComponent extends NTopComponent {
             discount = Double.valueOf(discountField.getText().trim());
         } catch (NumberFormatException e) {
         }
+        for (int i = 0; i < table.getRowCount(); i++) {
+
+            if (description.equalsIgnoreCase("OTHER")) {
+                break;
+            }
+            if (code.equals(table.getValueAt(i, 1))) {
+                quantity = quantity + Double.parseDouble(table.getValueAt(i, 4).toString());
+                tableModel.removeRow(i);
+                break;
+
+            }
+        }
+        item = manager.find(Item.class, item.getCode());
 
         if (quantity
                 == 0) {
@@ -1078,11 +1088,20 @@ public final class POSTopComponent extends NTopComponent {
             return;
         }
         Date date = datePicker.getDate();
+        String today = yyyy_MM_dd.format(new Date());
+        String invoiceDay = yyyy_MM_dd.format(date);
         if (date == null) {
             datePicker.requestFocus();
             return;
-        } else if (yyyy_MM_dd.format(date).equals(yyyy_MM_dd.format(new Date()))) {
+        } else if (invoiceDay.equals(today)) {
             date = new Date();
+        } else {
+            String[] choices = {"Yes", "No"};
+            int option = JOptionPane.showOptionDialog(datePicker, "Is this a time travel ???", "Sure?", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, choices, "No");
+//            int option = JOptionPane.showConfirmDialog(datePicker, "Is this a time travel ???", "Sure?", JOptionPane.YES_NO_OPTION);
+            if (option != 0) {
+                return;
+            }
         }
 
         String totalAmountText = totalAmountField.getText().trim();

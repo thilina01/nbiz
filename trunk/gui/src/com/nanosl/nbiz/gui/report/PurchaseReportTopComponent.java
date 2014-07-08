@@ -4,6 +4,7 @@
  */
 package com.nanosl.nbiz.gui.report;
 
+import com.nanosl.nbiz.gui.PurchaseInvoiceTopComponent;
 import query.Find;
 import com.nanosl.nbiz.util.NTopComponent;
 import entity.PurchaseInvoice;
@@ -19,6 +20,7 @@ import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
+import org.openide.windows.WindowManager;
 
 /**
  * Top component which displays something.
@@ -198,16 +200,23 @@ public final class PurchaseReportTopComponent extends NTopComponent {
             int row = masterTable.getSelectedRow();
             String invoiceNumber = masterTable.getValueAt(row, 4).toString();
             String supperCode = masterTable.getValueAt(row, 2).toString();
-            PurchaseInvoice purchaseInvoice = manager.find(PurchaseInvoice.class, new PurchaseInvoicePK(invoiceNumber, supperCode));
-            String message = "<html><table >";
-            message += "<tr><td> Item </td><td align = 'right'> Quantity </td></tr>";
-
-            for (PurchaseInvoiceHasItem purchaseInvoiceHasItem : purchaseInvoice.getPurchaseInvoiceHasItemCollection()) {
-                message += "<tr><td>" + purchaseInvoiceHasItem.getItem() + " </td><td align = 'right'>" + nf2d.format(purchaseInvoiceHasItem.getQuantity()) + "</td></tr>";
+            TopComponent tc = WindowManager.getDefault().findTopComponent("PurchaseInvoiceTopComponent");
+            if (tc != null) {
+                ((PurchaseInvoiceTopComponent) tc).fill(invoiceNumber, supperCode);
+                tc.open();
+                tc.requestActive();
             }
-            message += "</table> </html>";
-            JOptionPane.showMessageDialog(null, message, "Invoice Data: " + supperCode + " - " + invoiceNumber, JOptionPane.PLAIN_MESSAGE, null);
-//            new PurchaseInvoiceView(invoiceNumber, supperCode);
+//            PurchaseInvoiceTopComponent.getInstance().
+//            PurchaseInvoice purchaseInvoice = manager.find(PurchaseInvoice.class, new PurchaseInvoicePK(invoiceNumber, supperCode));
+//            String message = "<html><table >";
+//            message += "<tr><td> Item </td><td align = 'right'> Quantity </td></tr>";
+//
+//            for (PurchaseInvoiceHasItem purchaseInvoiceHasItem : purchaseInvoice.getPurchaseInvoiceHasItemCollection()) {
+//                message += "<tr><td>" + purchaseInvoiceHasItem.getItem() + " </td><td align = 'right'>" + nf2d.format(purchaseInvoiceHasItem.getQuantity()) + "</td></tr>";
+//            }
+//            message += "</table> </html>";
+//            JOptionPane.showMessageDialog(null, message, "Invoice Data: " + supperCode + " - " + invoiceNumber, JOptionPane.PLAIN_MESSAGE, null);
+////            new PurchaseInvoiceView(invoiceNumber, supperCode);
         }
     }//GEN-LAST:event_masterTableMouseClicked
 
