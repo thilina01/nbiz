@@ -19,7 +19,6 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import javax.swing.JComponent;
 import javax.swing.table.DefaultTableModel;
@@ -99,16 +98,17 @@ public final class PurchaseInvoicePaymentTopComponent extends NTopComponent {
 
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
+        invoiceTable.setAutoCreateRowSorter(true);
         invoiceTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Invoice"
+                "Invoice", "Supplier"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false
+                false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -126,6 +126,10 @@ public final class PurchaseInvoicePaymentTopComponent extends NTopComponent {
             }
         });
         jScrollPane1.setViewportView(invoiceTable);
+        if (invoiceTable.getColumnModel().getColumnCount() > 0) {
+            invoiceTable.getColumnModel().getColumn(0).setHeaderValue(org.openide.util.NbBundle.getMessage(PurchaseInvoicePaymentTopComponent.class, "PurchaseInvoicePaymentTopComponent.invoiceTable.columnModel.title0")); // NOI18N
+            invoiceTable.getColumnModel().getColumn(1).setHeaderValue(org.openide.util.NbBundle.getMessage(PurchaseInvoicePaymentTopComponent.class, "PurchaseInvoicePaymentTopComponent.invoiceTable.columnModel.title1")); // NOI18N
+        }
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(org.openide.util.NbBundle.getMessage(PurchaseInvoicePaymentTopComponent.class, "PurchaseInvoicePaymentTopComponent.jPanel2.border.title"))); // NOI18N
 
@@ -253,11 +257,13 @@ public final class PurchaseInvoicePaymentTopComponent extends NTopComponent {
             }
         });
         jScrollPane2.setViewportView(paymentTable);
-        paymentTable.getColumnModel().getColumn(0).setHeaderValue(org.openide.util.NbBundle.getMessage(PurchaseInvoicePaymentTopComponent.class, "PurchaseInvoicePaymentTopComponent.paymentTable.columnModel.title0")); // NOI18N
-        paymentTable.getColumnModel().getColumn(0).setCellRenderer(rightAlignCell);
-        paymentTable.getColumnModel().getColumn(1).setHeaderValue(org.openide.util.NbBundle.getMessage(PurchaseInvoicePaymentTopComponent.class, "PurchaseInvoicePaymentTopComponent.paymentTable.columnModel.title1")); // NOI18N
-        paymentTable.getColumnModel().getColumn(2).setHeaderValue(org.openide.util.NbBundle.getMessage(PurchaseInvoicePaymentTopComponent.class, "PurchaseInvoicePaymentTopComponent.paymentTable.columnModel.title2")); // NOI18N
-        paymentTable.getColumnModel().getColumn(3).setHeaderValue(org.openide.util.NbBundle.getMessage(PurchaseInvoicePaymentTopComponent.class, "PurchaseInvoicePaymentTopComponent.paymentTable.columnModel.title3")); // NOI18N
+        if (paymentTable.getColumnModel().getColumnCount() > 0) {
+            paymentTable.getColumnModel().getColumn(0).setHeaderValue(org.openide.util.NbBundle.getMessage(PurchaseInvoicePaymentTopComponent.class, "PurchaseInvoicePaymentTopComponent.paymentTable.columnModel.title0")); // NOI18N
+            paymentTable.getColumnModel().getColumn(0).setCellRenderer(rightAlignCell);
+            paymentTable.getColumnModel().getColumn(1).setHeaderValue(org.openide.util.NbBundle.getMessage(PurchaseInvoicePaymentTopComponent.class, "PurchaseInvoicePaymentTopComponent.paymentTable.columnModel.title1")); // NOI18N
+            paymentTable.getColumnModel().getColumn(2).setHeaderValue(org.openide.util.NbBundle.getMessage(PurchaseInvoicePaymentTopComponent.class, "PurchaseInvoicePaymentTopComponent.paymentTable.columnModel.title2")); // NOI18N
+            paymentTable.getColumnModel().getColumn(3).setHeaderValue(org.openide.util.NbBundle.getMessage(PurchaseInvoicePaymentTopComponent.class, "PurchaseInvoicePaymentTopComponent.paymentTable.columnModel.title3")); // NOI18N
+        }
 
         bankComboBox.setName("bankComboBox"); // NOI18N
         bankComboBox.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -334,15 +340,15 @@ public final class PurchaseInvoicePaymentTopComponent extends NTopComponent {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 266, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
                         .addComponent(clearButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(processButton)))
@@ -478,11 +484,10 @@ public final class PurchaseInvoicePaymentTopComponent extends NTopComponent {
         invoiceDtm.setRowCount(0);
         paymentDtm.setRowCount(0);
         purchaseInvoices = manager.find(PurchaseInvoice.class);
-        for (Iterator<PurchaseInvoice> it = purchaseInvoices.iterator(); it.hasNext();) {
-            PurchaseInvoice pi = it.next();
+        for (PurchaseInvoice pi : purchaseInvoices) {
             double credit = pi.getCredit() == null ? 0 : pi.getCredit();
             if (credit > 0) {
-                Object[] rowData = {pi};
+                Object[] rowData = {pi,pi.getSupplier()};
                 invoiceDtm.addRow(rowData);
             }
         }
@@ -521,8 +526,7 @@ public final class PurchaseInvoicePaymentTopComponent extends NTopComponent {
                 clearPaymentFields();
                 calcRemaining();
             }
-        } catch (NumberFormatException e) {
-        } catch (Exception e) {
+        } catch (NumberFormatException  e) {
             Loggings.logError(getName(), e);
         }
     }
@@ -572,7 +576,7 @@ public final class PurchaseInvoicePaymentTopComponent extends NTopComponent {
         if (purchaseInvoice == null || rowCount == 0) {
             return;
         }
-        List<Serializable> serializables = new ArrayList<Serializable>();
+        List<Serializable> serializables = new ArrayList<>();
         try {
             for (int i = 0; i < rowCount; i++) {
                 Object o = paymentTable.getValueAt(i, 1);
@@ -606,7 +610,7 @@ public final class PurchaseInvoicePaymentTopComponent extends NTopComponent {
         } catch (ParseException ex) {
             showError("Problem with one of cheque banking date!");
             return;
-        } catch (Exception ex) {
+        } catch (NumberFormatException ex) {
             showError("Unable to complete payment");
             return;
         }
@@ -629,11 +633,14 @@ public final class PurchaseInvoicePaymentTopComponent extends NTopComponent {
     private void setComboBoxKeyAdapters(JComponent comp) {
         String compName = comp.getName();
         Component component[] = comp.getComponents();
-        for (int i = 0; i < component.length; i++) {
-            if (compName.equals("bankComboBox")) {
-                component[i].addKeyListener(bankComboBoxKeyAdapter);
-            } else if (compName.equals("bankingDatePicker")) {
-                component[i].addKeyListener(bankingDatePickerKeyAdapter);
+        for (Component component1 : component) {
+            switch (compName) {
+                case "bankComboBox":
+                    component1.addKeyListener(bankComboBoxKeyAdapter);
+                    break;
+                case "bankingDatePicker":
+                    component1.addKeyListener(bankingDatePickerKeyAdapter);
+                    break;
             }
         }
     }
