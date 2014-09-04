@@ -9,6 +9,7 @@ import com.nanosl.nbiz.util.NTopComponent;
 import entity.Customer;
 import entity.SaleInvoice;
 import java.util.Collection;
+import javax.persistence.Query;
 import javax.swing.table.DefaultTableModel;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
@@ -63,6 +64,11 @@ public final class CardListTopComponent extends NTopComponent {
         jScrollPane1 = new javax.swing.JScrollPane();
         cardTable = new javax.swing.JTable();
         loadButton = new javax.swing.JButton();
+        outstandingCheckBox = new javax.swing.JCheckBox();
+        totalRemainingTextField = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
+        totalAmountTextField = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
 
         cardTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -78,7 +84,9 @@ public final class CardListTopComponent extends NTopComponent {
             cardTable.getColumnModel().getColumn(1).setHeaderValue(org.openide.util.NbBundle.getMessage(CardListTopComponent.class, "CardListTopComponent.cardTable.columnModel.title1")); // NOI18N
             cardTable.getColumnModel().getColumn(2).setHeaderValue(org.openide.util.NbBundle.getMessage(CardListTopComponent.class, "CardListTopComponent.cardTable.columnModel.title2")); // NOI18N
             cardTable.getColumnModel().getColumn(3).setHeaderValue(org.openide.util.NbBundle.getMessage(CardListTopComponent.class, "CardListTopComponent.cardTable.columnModel.title3")); // NOI18N
+            cardTable.getColumnModel().getColumn(3).setCellRenderer(rightAlignCell);
             cardTable.getColumnModel().getColumn(4).setHeaderValue(org.openide.util.NbBundle.getMessage(CardListTopComponent.class, "CardListTopComponent.cardTable.columnModel.title4")); // NOI18N
+            cardTable.getColumnModel().getColumn(4).setCellRenderer(rightAlignCell);
         }
 
         org.openide.awt.Mnemonics.setLocalizedText(loadButton, org.openide.util.NbBundle.getMessage(CardListTopComponent.class, "CardListTopComponent.loadButton.text")); // NOI18N
@@ -88,25 +96,61 @@ public final class CardListTopComponent extends NTopComponent {
             }
         });
 
+        org.openide.awt.Mnemonics.setLocalizedText(outstandingCheckBox, org.openide.util.NbBundle.getMessage(CardListTopComponent.class, "CardListTopComponent.outstandingCheckBox.text")); // NOI18N
+
+        totalRemainingTextField.setEditable(false);
+        totalRemainingTextField.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        totalRemainingTextField.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
+        totalRemainingTextField.setText(org.openide.util.NbBundle.getMessage(CardListTopComponent.class, "CardListTopComponent.totalRemainingTextField.text")); // NOI18N
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(CardListTopComponent.class, "CardListTopComponent.jLabel1.text")); // NOI18N
+
+        totalAmountTextField.setEditable(false);
+        totalAmountTextField.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        totalAmountTextField.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
+        totalAmountTextField.setText(org.openide.util.NbBundle.getMessage(CardListTopComponent.class, "CardListTopComponent.totalAmountTextField.text")); // NOI18N
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel2, org.openide.util.NbBundle.getMessage(CardListTopComponent.class, "CardListTopComponent.jLabel2.text")); // NOI18N
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 787, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(loadButton))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 787, Short.MAX_VALUE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(loadButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(outstandingCheckBox)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(totalAmountTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(totalRemainingTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
         );
+
+        jPanel1Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {totalAmountTextField, totalRemainingTextField});
+
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(loadButton)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(loadButton)
+                    .addComponent(outstandingCheckBox)
+                    .addComponent(totalRemainingTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1)
+                    .addComponent(totalAmountTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 442, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -128,25 +172,39 @@ public final class CardListTopComponent extends NTopComponent {
     }// </editor-fold>//GEN-END:initComponents
 
     private void loadButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadButtonActionPerformed
-        Collection<SaleInvoice> saleInvoices = Find.saleInvoicesAsCard();
+        Query query = manager.getEm().createQuery("SELECT s FROM SaleInvoice s WHERE s.cardNumber IS NOT NULL AND s.credit > 0");
+        Collection<SaleInvoice> saleInvoices = outstandingCheckBox.isSelected() ? query.getResultList() : Find.saleInvoicesAsCard();
         tableModel.setRowCount(0);
+        totalAmountTextField.setText("0.00");
+        totalRemainingTextField.setText("0.00");
         if (saleInvoices == null) {
             return;
         }
+        double totalAmount = 0, totalRemaining = 0;
         for (SaleInvoice saleInvoice : saleInvoices) {
             Customer customer = saleInvoice.getCustomer();
+            totalAmount += saleInvoice.getAmount();
+            totalRemaining += saleInvoice.getCredit();
             Object[] row = {
-                saleInvoice.getCardNumber(), customer.getNic(), customer.getName(), saleInvoice.getAmount(), saleInvoice.getCredit()
+                saleInvoice.getCardNumber(), customer.getNic(), customer.getName(), nf2d.format(saleInvoice.getAmount()), nf2d.format(saleInvoice.getCredit())
             };
             tableModel.addRow(row);
         }
+
+        totalAmountTextField.setText(nf2d.format(totalAmount));
+        totalRemainingTextField.setText(nf2d.format(totalRemaining));
     }//GEN-LAST:event_loadButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable cardTable;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton loadButton;
+    private javax.swing.JCheckBox outstandingCheckBox;
+    private javax.swing.JTextField totalAmountTextField;
+    private javax.swing.JTextField totalRemainingTextField;
     // End of variables declaration//GEN-END:variables
     DefaultTableModel tableModel;
 

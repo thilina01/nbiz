@@ -13,7 +13,6 @@ import entity.SaleCheque;
 import entity.SaleInvoice;
 import java.util.Collection;
 import java.util.Date;
-import java.util.Iterator;
 import javax.swing.table.DefaultTableModel;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
@@ -282,14 +281,18 @@ public final class CollectionReportTopComponent extends NTopComponent {
         for (CollectionReceipt collectionReceipt : collectionReceipts) {
             SaleInvoice saleInvoice = collectionReceipt.getSaleInvoice();
             Customer customer = saleInvoice.getCustomer();
+            Date collectedTime = collectionReceipt.getCollectedTime();
+            String invoiceNumber = saleInvoice.getInvNo();
+            double amount = collectionReceipt.getSaleCash().getAmount();
+            String receiptNumber = collectionReceipt.getReceiptNumber();
             Object[] row = {
                 ++i1,
-                yyyy_MM_dd.format(collectionReceipt.getCollectedTime()),
+                yyyy_MM_dd.format(collectedTime),
                 customer != null ? customer.getCode() : "",
                 customer != null ? customer.getName() : "",
-                saleInvoice.getInvNo(),
-                nf2d.format(collectionReceipt.getSaleCash().getAmount()),
-                collectionReceipt.getReceiptNumber()
+                invoiceNumber,
+                nf2d.format(amount),
+                receiptNumber
             };
             cashTableModel.addRow(row);
             Collection<SaleCheque> saleCheques = collectionReceipt.getSaleChequeCollection();

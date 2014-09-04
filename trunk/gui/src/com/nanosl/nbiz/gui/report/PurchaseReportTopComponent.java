@@ -5,22 +5,29 @@
 package com.nanosl.nbiz.gui.report;
 
 import com.nanosl.nbiz.gui.PurchaseInvoiceTopComponent;
-import query.Find;
+import com.nanosl.nbiz.util.Combo;
 import com.nanosl.nbiz.util.NTopComponent;
 import entity.PurchaseInvoice;
 import entity.PurchaseInvoiceHasItem;
 import entity.PurchaseInvoicePK;
+import entity.Supplier;
+import java.awt.Component;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
+import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
-import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
+import org.openide.windows.TopComponent;
 import org.openide.windows.WindowManager;
+import query.Find;
 
 /**
  * Top component which displays something.
@@ -68,6 +75,8 @@ public final class PurchaseReportTopComponent extends NTopComponent {
         totalLabel = new javax.swing.JLabel();
         endDatePicker = new org.jdesktop.swingx.JXDatePicker();
         fillButton = new javax.swing.JButton();
+        supplierCheckBox = new javax.swing.JCheckBox();
+        supplierComboBox = new javax.swing.JComboBox();
 
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
@@ -139,6 +148,15 @@ public final class PurchaseReportTopComponent extends NTopComponent {
             }
         });
 
+        org.openide.awt.Mnemonics.setLocalizedText(supplierCheckBox, org.openide.util.NbBundle.getMessage(PurchaseReportTopComponent.class, "PurchaseReportTopComponent.supplierCheckBox.text")); // NOI18N
+
+        supplierComboBox.setName("supplierComboBox"); // NOI18N
+        supplierComboBox.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                supplierComboBoxKeyPressed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -154,6 +172,10 @@ public final class PurchaseReportTopComponent extends NTopComponent {
                         .addComponent(endDatePicker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(fillButton)
+                        .addGap(18, 18, 18)
+                        .addComponent(supplierCheckBox)
+                        .addGap(18, 18, 18)
+                        .addComponent(supplierComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(masterScrollPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 812, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
@@ -169,7 +191,9 @@ public final class PurchaseReportTopComponent extends NTopComponent {
                     .addComponent(startDatePicker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3)
                     .addComponent(endDatePicker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(fillButton))
+                    .addComponent(fillButton)
+                    .addComponent(supplierCheckBox)
+                    .addComponent(supplierComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(masterScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 414, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -240,6 +264,12 @@ public final class PurchaseReportTopComponent extends NTopComponent {
         fill();
     }//GEN-LAST:event_fillButtonActionPerformed
 
+    private void supplierComboBoxKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_supplierComboBoxKeyPressed
+        if (evt.getKeyCode() == 10) {
+            fill();
+        }
+    }//GEN-LAST:event_supplierComboBoxKeyPressed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.jdesktop.swingx.JXDatePicker endDatePicker;
     private javax.swing.JButton fillButton;
@@ -248,6 +278,8 @@ public final class PurchaseReportTopComponent extends NTopComponent {
     private javax.swing.JScrollPane masterScrollPane;
     private javax.swing.JTable masterTable;
     private org.jdesktop.swingx.JXDatePicker startDatePicker;
+    private javax.swing.JCheckBox supplierCheckBox;
+    private javax.swing.JComboBox supplierComboBox;
     private javax.swing.JLabel totalLabel;
     // End of variables declaration//GEN-END:variables
      DefaultTableModel tableModel;
@@ -256,9 +288,11 @@ public final class PurchaseReportTopComponent extends NTopComponent {
         tableModel.setRowCount(0);
         Date startDate = startDatePicker.getDate();
         Date endDate = endDatePicker.getDate();
+        Supplier supplier = (Supplier) supplierComboBox.getSelectedItem();
         //ALTER TABLE `sgm`.`purchase_invoice` CHANGE COLUMN `inv_time` `inv_date` DATE NULL DEFAULT NULL  ;
 
-        Collection<PurchaseInvoice> purchaseInvoices = Find.purchaseInvoicesByDates(startDate, endDate);
+        Collection<PurchaseInvoice> purchaseInvoices;
+        purchaseInvoices = supplierCheckBox.isSelected() ? Find.purchaseInvoicesByDatesAndSupplier(startDate, endDate, supplier) : Find.purchaseInvoicesByDates(startDate, endDate);
         if (purchaseInvoices == null) {
             showError("No Record Found!");
             return;
@@ -276,12 +310,37 @@ public final class PurchaseReportTopComponent extends NTopComponent {
         initComponents();
         tableModel = (DefaultTableModel) masterTable.getModel();
         masterTable.setDefaultRenderer(Object.class, coloredCellRenderer);
+        AutoCompleteDecorator.decorate(supplierComboBox);
+        setComboBoxKeyAdapters(supplierComboBox);
 
     }
+
+    private void setComboBoxKeyAdapters(JComponent comp) {
+        String compName = comp.getName();
+        if (compName == null) {
+            return;
+        }
+        Component component[] = comp.getComponents();
+        for (Component component1 : component) {
+            switch (compName) {
+                case "supplierComboBox":
+                    component1.addKeyListener(supplierComboBoxKeyAdapter);
+                    break;
+
+            }
+        }
+    }
+    KeyAdapter supplierComboBoxKeyAdapter = new java.awt.event.KeyAdapter() {
+        @Override
+        public void keyPressed(KeyEvent evt) {
+            supplierComboBoxKeyPressed(evt);
+        }
+    };
 
     @Override
     public void setVisible(boolean b) {
         super.setVisible(b);
+        Combo.fillSuppliers(supplierComboBox, null);
     }
 
     private void fill() {
