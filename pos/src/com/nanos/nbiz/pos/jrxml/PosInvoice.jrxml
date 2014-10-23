@@ -24,6 +24,7 @@
      sale_invoice.`discount` AS sale_invoice_discount,
      sale_invoice.`received_amount` AS sale_invoice_received_amount,
      sale_invoice.`amount` AS sale_invoice_amount,
+     sale_invoice.`paid_amount` AS sale_invoice_paid_amount,
 sale_invoice.`amount` - sale_invoice.`received_amount` AS remaining
 
 FROM
@@ -58,6 +59,7 @@ WHERE
 	<field name="sale_invoice_discount" class="java.lang.Double"/>
 	<field name="sale_invoice_received_amount" class="java.lang.Double"/>
 	<field name="sale_invoice_amount" class="java.lang.Double"/>
+	<field name="sale_invoice_paid_amount" class="java.lang.Double"/>
 	<field name="remaining" class="java.lang.Double">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
@@ -175,23 +177,9 @@ WHERE
 				</textElement>
 				<text><![CDATA[AMOUNT]]></text>
 			</staticText>
-			<staticText>
-				<reportElement x="245" y="0" width="53" height="12" uuid="5517d47f-0593-48de-878b-3aa296c4fc8f"/>
-				<textElement textAlignment="Right">
-					<font size="8"/>
-				</textElement>
-				<text><![CDATA[DISCOUNT]]></text>
-			</staticText>
 			<line>
 				<reportElement x="0" y="23" width="183" height="1" uuid="0dc7f16e-8d16-4cec-9707-e84aaee55b24"/>
 			</line>
-			<staticText>
-				<reportElement x="301" y="0" width="28" height="11" uuid="8d36b950-b792-4858-aaed-81da892ba580"/>
-				<textElement textAlignment="Right">
-					<font size="8"/>
-				</textElement>
-				<text><![CDATA[%]]></text>
-			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
@@ -224,24 +212,10 @@ WHERE
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Code} + " " +$F{Description}]]></textFieldExpression>
 			</textField>
-			<textField pattern="###0.00" isBlankWhenNull="true">
-				<reportElement x="245" y="0" width="53" height="12" uuid="6fdfba0e-edee-4be0-a3cb-282e1be7227b"/>
-				<textElement textAlignment="Right">
-					<font size="8" isBold="false"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{discount}]]></textFieldExpression>
-			</textField>
-			<textField pattern="###0.00">
-				<reportElement x="301" y="0" width="28" height="12" uuid="08ba238a-e3d4-408d-a62a-0f04525ddfc8"/>
-				<textElement textAlignment="Right">
-					<font size="8" isBold="false"/>
-				</textElement>
-				<textFieldExpression><![CDATA[($F{discount}/$F{Amount})*100+"%"]]></textFieldExpression>
-			</textField>
 		</band>
 	</detail>
 	<columnFooter>
-		<band height="67" splitType="Stretch">
+		<band height="88" splitType="Stretch">
 			<staticText>
 				<reportElement x="57" y="25" width="78" height="12" uuid="17ecf383-653a-4910-8d12-b1134b56a692"/>
 				<textElement textAlignment="Right">
@@ -263,39 +237,11 @@ WHERE
 				</textElement>
 				<text><![CDATA[DISCOUNT:]]></text>
 			</staticText>
-			<textField pattern="###0.00">
-				<reportElement x="315" y="12" width="87" height="12" uuid="596e97e7-8d36-4834-9a5c-a3377c23f613"/>
-				<textElement textAlignment="Right">
-					<font size="8" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{sale_invoice_received_amount}]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement x="215" y="12" width="100" height="12" uuid="e5c3196e-a45a-493a-a2b3-4c32371d13d3"/>
-				<textElement textAlignment="Right">
-					<font size="8" isBold="true"/>
-				</textElement>
-				<text><![CDATA[PAID:]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="215" y="24" width="100" height="12" uuid="a41689e5-ddd4-45d8-9de9-f2671cd6d9be"/>
-				<textElement textAlignment="Right">
-					<font size="8" isBold="true"/>
-				</textElement>
-				<text><![CDATA[REMAINING:]]></text>
-			</staticText>
-			<textField pattern="###0.00">
-				<reportElement x="315" y="24" width="87" height="12" uuid="c6269bec-6931-42aa-ad9c-ffc4ef04fe28"/>
-				<textElement textAlignment="Right">
-					<font size="8" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{remaining}]]></textFieldExpression>
-			</textField>
 			<line>
 				<reportElement x="0" y="0" width="183" height="1" uuid="b35cd422-46b5-4182-bc12-9ea6c4076f58"/>
 			</line>
 			<line>
-				<reportElement x="0" y="38" width="183" height="1" uuid="fac54a52-e63f-4e2b-bd40-69c163e86165"/>
+				<reportElement x="0" y="59" width="183" height="1" uuid="fac54a52-e63f-4e2b-bd40-69c163e86165"/>
 			</line>
 			<textField pattern="###0.00">
 				<reportElement x="135" y="25" width="47" height="12" uuid="72279f33-eaca-4f10-9573-6f84ee2445be"/>
@@ -305,21 +251,21 @@ WHERE
 				<textFieldExpression><![CDATA[$F{sale_invoice_amount}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="3" y="39" width="180" height="12" uuid="f8ba2f9d-374a-4c1a-b66f-faf87eb10e8f"/>
+				<reportElement x="3" y="60" width="180" height="12" uuid="f8ba2f9d-374a-4c1a-b66f-faf87eb10e8f"/>
 				<textElement textAlignment="Center">
 					<font size="8"/>
 				</textElement>
 				<text><![CDATA[THANK YOU, COME AGAIN]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="3" y="50" width="180" height="8" uuid="c95d02d7-0843-4432-a4d7-f7c6303e5b9c"/>
+				<reportElement x="3" y="71" width="180" height="8" uuid="c95d02d7-0843-4432-a4d7-f7c6303e5b9c"/>
 				<textElement textAlignment="Center">
 					<font size="6"/>
 				</textElement>
 				<text><![CDATA[Billing system by:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="3" y="56" width="180" height="11" uuid="2e8716c5-4363-48a0-95c7-a1ba72ea2ffb"/>
+				<reportElement x="3" y="77" width="180" height="11" uuid="2e8716c5-4363-48a0-95c7-a1ba72ea2ffb"/>
 				<textElement textAlignment="Center">
 					<font size="8"/>
 				</textElement>
@@ -353,6 +299,34 @@ WHERE
 				</textElement>
 				<text><![CDATA[ITEMS:]]></text>
 			</staticText>
+			<textField pattern="###0.00">
+				<reportElement x="135" y="37" width="47" height="12" uuid="74531aaa-e02e-44f8-ba38-26c59f807699"/>
+				<textElement textAlignment="Right">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{sale_invoice_paid_amount}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="57" y="37" width="78" height="12" uuid="e0fb6b59-9d78-4f17-8929-b183d0e33610"/>
+				<textElement textAlignment="Right">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[PAID AMOUNT:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="57" y="47" width="78" height="12" uuid="58f6d6f6-9c57-45e7-8e73-6cc3bf4d60cf"/>
+				<textElement textAlignment="Right">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[BALANCE]]></text>
+			</staticText>
+			<textField pattern="###0.00">
+				<reportElement x="135" y="47" width="47" height="12" uuid="a7821b6e-c970-472c-9e56-7fbd8b6b6d2c"/>
+				<textElement textAlignment="Right">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{sale_invoice_paid_amount} - $F{sale_invoice_amount}]]></textFieldExpression>
+			</textField>
 		</band>
 	</columnFooter>
 	<pageFooter>

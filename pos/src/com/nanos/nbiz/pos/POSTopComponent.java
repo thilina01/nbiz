@@ -123,7 +123,7 @@ public final class POSTopComponent extends NTopComponent {
         anotherButton = new javax.swing.JButton();
         lastInvoiceNumberField = new javax.swing.JTextField();
         searchItemButton = new javax.swing.JButton();
-        employeeComboBox = new javax.swing.JComboBox();
+        employeeComboBox = new javax.swing.JComboBox<Employee>();
         historyComboBox = new javax.swing.JComboBox();
 
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -1151,7 +1151,7 @@ public final class POSTopComponent extends NTopComponent {
             paidAmountField.selectAll();
             return;
         }
-        paidAmount = paidAmount > amount ? amount : paidAmount;
+        double initialPayment = paidAmount > amount ? amount : paidAmount;
 //        double discount = Double.valueOf(totalDiscountText);
         saleInvoice = saleInvoice == null ? new SaleInvoice(invoiceNumber) : saleInvoice;
 
@@ -1162,7 +1162,8 @@ public final class POSTopComponent extends NTopComponent {
         saleInvoice.setDiscount(discount);
         saleInvoice.setInvTime(edit ? saleInvoice.getInvTime() : date);
         saleInvoice.setReceivedAmount(0.0);
-        saleInvoice.setInitialPayment(paidAmount);
+        saleInvoice.setPaidAmount(paidAmount);
+        saleInvoice.setInitialPayment(initialPayment);
         Object o = employeeComboBox.getSelectedItem();
         Employee employee = o instanceof Employee ? (Employee) o : Data.getOperator().getEmployee();
         saleInvoice.setOperator(Data.getOperator().getUsername());
@@ -1363,8 +1364,9 @@ public final class POSTopComponent extends NTopComponent {
             employeeComboBox.setSelectedItem(saleInvoice.getEmployee());
             totalAmountField.setText(nf2d.format(saleInvoice.getAmount()));
             totalDiscountField.setText(nf2d.format(saleInvoice.getDiscount()));
-            paidAmountField.setText(nf2d.format(saleInvoice.getInitialPayment()));
-            remainingAmountField.setText(nf2d.format(saleInvoice.getAmount() - saleInvoice.getReceivedAmount()));
+            double paidAmount = saleInvoice.getPaidAmount() != null ? saleInvoice.getPaidAmount() : saleInvoice.getAmount();
+            paidAmountField.setText(nf2d.format(paidAmount));
+            remainingAmountField.setText(nf2d.format(saleInvoice.getAmount() - paidAmount));
             Collection<SaleInvoiceHasItem> saleInvoiceHasItems = saleInvoice.getSaleInvoiceHasItemCollection();
             tableModel.setRowCount(0);
             int r = 0;

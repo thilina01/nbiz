@@ -90,6 +90,9 @@ public final class StockTopComponent extends NTopComponent {
         itemTypeComboBox = new javax.swing.JComboBox();
         supplierCheckBox = new javax.swing.JCheckBox();
         supplierComboBox = new javax.swing.JComboBox();
+        selectedRadioButton = new javax.swing.JRadioButton();
+        countTextField = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
 
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
@@ -165,7 +168,6 @@ public final class StockTopComponent extends NTopComponent {
 
         buttonGroup1.add(allRadioButton);
         org.openide.awt.Mnemonics.setLocalizedText(allRadioButton, org.openide.util.NbBundle.getMessage(StockTopComponent.class, "StockTopComponent.allRadioButton.text")); // NOI18N
-        allRadioButton.setEnabled(false);
         allRadioButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 allRadioButtonActionPerformed(evt);
@@ -174,7 +176,6 @@ public final class StockTopComponent extends NTopComponent {
 
         buttonGroup1.add(minimumRadioButton);
         org.openide.awt.Mnemonics.setLocalizedText(minimumRadioButton, org.openide.util.NbBundle.getMessage(StockTopComponent.class, "StockTopComponent.minimumRadioButton.text")); // NOI18N
-        minimumRadioButton.setEnabled(false);
         minimumRadioButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 minimumRadioButtonActionPerformed(evt);
@@ -225,6 +226,13 @@ public final class StockTopComponent extends NTopComponent {
             }
         });
 
+        buttonGroup1.add(selectedRadioButton);
+        org.openide.awt.Mnemonics.setLocalizedText(selectedRadioButton, org.openide.util.NbBundle.getMessage(StockTopComponent.class, "StockTopComponent.selectedRadioButton.text")); // NOI18N
+
+        countTextField.setText(org.openide.util.NbBundle.getMessage(StockTopComponent.class, "StockTopComponent.countTextField.text")); // NOI18N
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(StockTopComponent.class, "StockTopComponent.jLabel1.text")); // NOI18N
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -237,14 +245,20 @@ public final class StockTopComponent extends NTopComponent {
                         .addComponent(allRadioButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(minimumRadioButton)
-                        .addGap(99, 99, 99)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(selectedRadioButton)
+                        .addGap(6, 6, 6)
                         .addComponent(supplierCheckBox)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(supplierComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(typeCheckBox)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(itemTypeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(itemTypeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(countTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(reloadButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -263,7 +277,10 @@ public final class StockTopComponent extends NTopComponent {
                     .addComponent(typeCheckBox)
                     .addComponent(itemTypeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(supplierCheckBox)
-                    .addComponent(supplierComboBox))
+                    .addComponent(supplierComboBox)
+                    .addComponent(selectedRadioButton)
+                    .addComponent(countTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(masterScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 466, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -306,6 +323,8 @@ public final class StockTopComponent extends NTopComponent {
     }//GEN-LAST:event_reloadButtonActionPerformed
 
     private void allRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_allRadioButtonActionPerformed
+        supplierCheckBox.setSelected(false);
+        typeCheckBox.setSelected(false);
         fillTable();
     }//GEN-LAST:event_allRadioButtonActionPerformed
 
@@ -318,6 +337,7 @@ public final class StockTopComponent extends NTopComponent {
     }//GEN-LAST:event_printButtonActionPerformed
 
     private void typeCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_typeCheckBoxActionPerformed
+        selectedRadioButton.setSelected(true);
         fillTable();
     }//GEN-LAST:event_typeCheckBoxActionPerformed
 
@@ -342,6 +362,7 @@ public final class StockTopComponent extends NTopComponent {
     }//GEN-LAST:event_supplierComboBoxKeyPressed
 
     private void supplierCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_supplierCheckBoxActionPerformed
+        selectedRadioButton.setSelected(true);
         fillTable();
     }//GEN-LAST:event_supplierCheckBoxActionPerformed
 //    private void searchSupplier() {
@@ -355,12 +376,15 @@ public final class StockTopComponent extends NTopComponent {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JRadioButton allRadioButton;
     private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JTextField countTextField;
     private javax.swing.JComboBox itemTypeComboBox;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane masterScrollPane;
     private javax.swing.JRadioButton minimumRadioButton;
     private javax.swing.JButton printButton;
     private javax.swing.JButton reloadButton;
+    private javax.swing.JRadioButton selectedRadioButton;
     private javax.swing.JCheckBox supplierCheckBox;
     private javax.swing.JComboBox supplierComboBox;
     private javax.swing.JTable table;
@@ -410,12 +434,11 @@ public final class StockTopComponent extends NTopComponent {
                         int i = 0;
                         manager.clearCache();
                         List<Stock> stocks = null;
-//                        if (allRadioButton.isSelected()) {                            
-//                            stocks = manager.find(Stock.class);
-//                        } else if (minimumRadioButton.isSelected()) {
-//                            stocks = Find.stockLessMinLimit();
-//                        }                         
-                        if (supplierCheckBox.isSelected()) {
+                        if (allRadioButton.isSelected()) {
+                            stocks = manager.find(Stock.class);
+                        } else if (minimumRadioButton.isSelected()) {
+                            stocks = Find.stockLessMinLimit();
+                        } else if (supplierCheckBox.isSelected()) {
                             Object o = supplierComboBox.getSelectedItem();
                             Supplier supplier;
                             if (o instanceof Supplier) {
