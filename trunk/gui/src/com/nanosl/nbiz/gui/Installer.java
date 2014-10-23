@@ -24,6 +24,7 @@ public class Installer extends ModuleInstall {
         addButton("Stock", "StockTopComponent", "box");
         addButton("Supplier", "SupplierTopComponent", "company");
         addButton("Item", "ItemTopComponent", "tv");
+        
     }
 
     private void addButton(String text, final String componentName, String icon) {

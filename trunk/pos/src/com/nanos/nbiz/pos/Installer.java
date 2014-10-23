@@ -15,11 +15,12 @@ public class Installer extends ModuleInstall {
 
     @Override
     public void restored() {
-        initializeToolbar();
+            initializeToolbar();
+//            Fix.e20140911();
     }
 
     private void initializeToolbar() {
-        addButton("POS", "POSTopComponent","specials-offers-save-sale");
+        addButton("POS", "POSTopComponent", "specials-offers-save-sale");
     }
 
     private void addButton(String text, final String componentName, String icon) {

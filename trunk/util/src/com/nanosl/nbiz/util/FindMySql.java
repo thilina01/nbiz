@@ -40,8 +40,8 @@ public class FindMySql {
             + "INNER JOIN customer ON sale_invoice.customer_code = customer.`code` "
             + "WHERE collection_receipt.collected_time BETWEEN ? AND ? "
             + "AND collection_receipt.cash < sale_invoice.amount";
-    private static final String saleItemProfitBetweenDates =
-            "SELECT "
+    private static final String saleItemProfitBetweenDates
+            = "SELECT "
             + "item.`code` as 'Code', "
             + "item.description as 'Item', "
             + "Sum(sale_invoice_has_item.quantity) AS Quantity, "
@@ -71,8 +71,8 @@ public class FindMySql {
             + "WHERE "
             + "sale_invoice.inv_time BETWEEN ? AND ? "
             + "GROUP BY sale_invoice_has_item.item_code ";
-    private static final String totalSaleProfitBetweenDates =
-            "SELECT SUM(Profit) as Profit"
+    private static final String totalSaleProfitBetweenDates
+            = "SELECT SUM(Profit) as Profit"
             + "FROM ( "
             + "SELECT "
             + "((sale_invoice_has_item.rate *  SUM(sale_invoice_has_item.quantity) ) "
@@ -84,8 +84,8 @@ public class FindMySql {
             + "WHERE "
             + "sale_invoice.inv_time BETWEEN ? AND ? "
             + "GROUP BY sale_invoice_has_item.item_code,sale_invoice_has_item.rate ) AS Profit";
-    private static final String totalSaleSummeryBetweenDates =
-            "SELECT SUM(Income) as Income, SUM(Cost) as Cost, SUM(Profit) as Profit "
+    private static final String totalSaleSummeryBetweenDates
+            = "SELECT SUM(Income) as Income, SUM(Cost) as Cost, SUM(Profit) as Profit "
             + "FROM "
             + "(SELECT "
             + "(sale_invoice_has_item.rate *  SUM(sale_invoice_has_item.quantity) ) AS Income, "
@@ -96,20 +96,20 @@ public class FindMySql {
             + "INNER JOIN sale_invoice ON sale_invoice.inv_no = sale_invoice_has_item.sale_invoice_inv_no "
             + "WHERE sale_invoice.inv_time BETWEEN ? AND ? "
             + "GROUP BY sale_invoice_has_item.item_code,sale_invoice_has_item.rate) AS R";
-    private static final String totalExpensesBetweenDates =
-            "SELECT SUM( expenses.amount) AS Total "
+    private static final String totalExpensesBetweenDates
+            = "SELECT SUM( expenses.amount) AS Total "
             + "FROM expenses "
             + "WHERE expenses.paid_time  BETWEEN ? AND ? ";
-    private static final String totalPaymentsBetweenDates =
-            "SELECT SUM(issued_cash.amount) AS Total "
+    private static final String totalPaymentsBetweenDates
+            = "SELECT SUM(issued_cash.amount) AS Total "
             + "FROM issued_cash "
             + "WHERE issued_cash.issued_time BETWEEN ? AND ? ";
-    private static final String totalChequesBetweenDates =
-            "SELECT SUM(issued_cheque.amount) AS Total "
+    private static final String totalChequesBetweenDates
+            = "SELECT SUM(issued_cheque.amount) AS Total "
             + "FROM issued_cheque "
             + "WHERE issued_cheque.issued_date BETWEEN ? AND ?";
-    private static final String quantityByItem =
-            "SELECT quantity "
+    private static final String quantityByItem
+            = "SELECT quantity "
             + "FROM stock "
             + "WHERE item_code = ?";
     private static Manager man;
@@ -163,7 +163,7 @@ public class FindMySql {
         return res;
     }
 
-    public static ResultSet itemTotalSaleBetweenDates(Date startDate,Date endDate) {
+    public static ResultSet itemTotalSaleBetweenDates(Date startDate, Date endDate) {
         connect();
         try {
             preparedStatement = con.prepareStatement(itemTotalSaleBetweenDates);
@@ -300,13 +300,14 @@ public class FindMySql {
         }
     }
 //
+
     public static double quantityByItemCode(String code) {
-        
+
         connect();
         double quantity = 0;
         try {
             preparedStatement = con.prepareStatement(quantityByItem);
-            preparedStatement.setString(1,code);
+            preparedStatement.setString(1, code);
             res = preparedStatement.executeQuery();
             if (res.next()) {
                 quantity = res.getDouble("quantity");
