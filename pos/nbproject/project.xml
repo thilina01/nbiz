@@ -128,7 +128,9 @@
                     </run-dependency>
                 </dependency>
             </module-dependencies>
-            <public-packages/>
+            <public-packages>
+                <package>com.nanos.nbiz.pos</package>
+            </public-packages>
         </data>
     </configuration>
 </project>

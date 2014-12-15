@@ -9,6 +9,7 @@ import query.Find;
 import com.nanosl.nbiz.util.NTopComponent;
 import entity.CollectionReceipt;
 import entity.Customer;
+import entity.SaleCash;
 import entity.SaleCheque;
 import entity.SaleInvoice;
 import java.util.Collection;
@@ -283,7 +284,8 @@ public final class CollectionReportTopComponent extends NTopComponent {
             Customer customer = saleInvoice.getCustomer();
             Date collectedTime = collectionReceipt.getCollectedTime();
             String invoiceNumber = saleInvoice.getInvNo();
-            double amount = collectionReceipt.getSaleCash().getAmount();
+            SaleCash saleCash = collectionReceipt.getSaleCash();
+            double amount = saleCash != null ? saleCash.getAmount() : 0.0;
             String receiptNumber = collectionReceipt.getReceiptNumber();
             Object[] row = {
                 ++i1,
