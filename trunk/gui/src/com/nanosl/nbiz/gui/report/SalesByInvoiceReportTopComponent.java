@@ -12,8 +12,6 @@ import static com.nanosl.nbiz.util.Format.nf2d;
 import com.nanosl.nbiz.util.NTopComponent;
 import entity.Employee;
 import entity.SaleInvoice;
-import java.sql.SQLException;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import javax.swing.table.DefaultTableModel;
@@ -22,6 +20,7 @@ import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
+import org.openide.windows.WindowManager;
 import query.Find;
 
 /**
@@ -94,6 +93,11 @@ public final class SalesByInvoiceReportTopComponent extends NTopComponent {
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
+            }
+        });
+        table.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tableMouseClicked(evt);
             }
         });
         jScrollPane1.setViewportView(table);
@@ -234,6 +238,20 @@ public final class SalesByInvoiceReportTopComponent extends NTopComponent {
         // TODO add your handling code here:
     }//GEN-LAST:event_employeeComboBoxKeyPressed
 
+    private void tableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableMouseClicked
+        if (evt.getClickCount() > 1) {
+            TopComponent tc = WindowManager.getDefault().findTopComponent("POSTopComponent");
+            if (tc != null) {
+                if (tc instanceof com.nanos.nbiz.pos.POSTopComponent) {
+                    com.nanos.nbiz.pos.POSTopComponent ptc = (com.nanos.nbiz.pos.POSTopComponent) tc;
+                    ptc.fillInvoice(table.getValueAt(table.getSelectedRow(), 2).toString());
+                    ptc.open();
+                    ptc.requestActive();
+                }
+            }
+        }
+    }//GEN-LAST:event_tableMouseClicked
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox employeeCheckBox;
     private javax.swing.JComboBox employeeComboBox;
@@ -256,9 +274,9 @@ public final class SalesByInvoiceReportTopComponent extends NTopComponent {
         double totalSale = 0;
         Collection<SaleInvoice> saleInvoices;
         Object o = employeeComboBox.getSelectedItem();
-        Employee employee = o instanceof Employee?(Employee)o:null;
-        if (employeeCheckBox.isSelected()&&employee!=null) {
-            saleInvoices = Find.saleInvoicesByDatesAndEmployee(startDate, makeEndDate(endDate),employee);
+        Employee employee = o instanceof Employee ? (Employee) o : null;
+        if (employeeCheckBox.isSelected() && employee != null) {
+            saleInvoices = Find.saleInvoicesByDatesAndEmployee(startDate, makeEndDate(endDate), employee);
         } else {
             saleInvoices = Find.saleInvoicesByDates(startDate, makeEndDate(endDate));
         }
