@@ -3,5 +3,5 @@ OpenIDE-Module: com.nanosl.nbiz.gui
 OpenIDE-Module-Install: com/nanosl/nbiz/gui/Installer.class
 OpenIDE-Module-Localizing-Bundle: com/nanosl/nbiz/gui/Bundle.properties
 OpenIDE-Module-Requires: org.openide.windows.WindowManager
-OpenIDE-Module-Specification-Version: 1.9.9.8.6
+OpenIDE-Module-Specification-Version: 1.9.9.8.6.1
 
