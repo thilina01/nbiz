@@ -34,11 +34,7 @@ import org.openide.util.NbBundle.Messages;
 import com.nanosl.nbiz.util.Combo;
 import com.nanosl.nbiz.util.FindMySql;
 import static com.nanosl.nbiz.util.Format.nf2d;
-import static com.nanosl.nbiz.util.Format.nf3p;
-import entity.SaleInvoiceHasItem;
-import java.util.Collection;
 import org.openide.awt.StatusDisplayer;
-import org.openide.util.Exceptions;
 
 /**
  * Top component which displays something.
@@ -77,6 +73,9 @@ public final class PurchaseInvoiceTopComponent extends NTopComponent {
 
     public void fill(String invoiceNumber, String supperCode) {
         PurchaseInvoice purchaseInvoice = manager.find(PurchaseInvoice.class, new PurchaseInvoicePK(invoiceNumber, supperCode));
+        if (purchaseInvoice == null) {
+            return;
+        }
         supplier = purchaseInvoice.getSupplier();
 //
 //        System.out.println("at fill " + supplier);
@@ -1047,7 +1046,6 @@ public final class PurchaseInvoiceTopComponent extends NTopComponent {
         Combo.fillSuppliers(supplierComboBox, supplier);
         if (supplier != null) {
 //            supplier = manager.find(Supplier.class, supplier.getCode());
-            supplier = manager.merge(supplier);
             supplierComboBox.setSelectedItem(supplier);
             itemComboBox.setModel(new DefaultComboBoxModel(supplier.getItemCollection().toArray()));
         }
