@@ -5,6 +5,8 @@
 package com.nanosl.nbiz.util;
 
 import com.nanosl.lib.db.Manager;
+import entity.ViewPanel;
+import java.lang.annotation.Annotation;
 import java.util.Calendar;
 import java.util.Date;
 import javax.swing.ImageIcon;
@@ -25,7 +27,24 @@ public class NTopComponent extends TopComponent implements Format, Cell {
 
     public NTopComponent() {
         this.manager = Manager.getInstance();
-//        rightAlignCell.setHorizontalAlignment(javax.swing.JLabel.RIGHT);
+        Annotation annotation = this.getClass().getAnnotation(Description.class);
+        if (annotation instanceof Description) {
+            Description description = (Description) annotation;
+            manager.update(new ViewPanel(description.preferredID()));
+        }
+    }
+
+    @Override
+    public void setVisible(boolean bln) {
+        if (bln) {
+            Annotation annotation = this.getClass().getAnnotation(Description.class);
+            if (annotation instanceof Description) {
+                Description description = (Description) annotation;
+                super.setVisible(Data.getOperator().getViewPanelCollection().contains(new ViewPanel(description.preferredID())));
+                return;
+            }
+        }
+        super.setVisible(false);
     }
 
     public Date makeEndDate(Date endDate) {
@@ -37,6 +56,7 @@ public class NTopComponent extends TopComponent implements Format, Cell {
         calendar.set(Calendar.MILLISECOND, 900);
         return calendar.getTime();
     }
+
     public Date makeStartDate(Date startDate) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(startDate);

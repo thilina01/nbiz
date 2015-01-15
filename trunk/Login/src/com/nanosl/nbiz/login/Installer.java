@@ -9,11 +9,10 @@ import org.openide.modules.ModuleInstall;
 
 public class Installer extends ModuleInstall {
 
-    private LoginPanel loginPanel = new LoginPanel();
+    private final LoginPanel loginPanel = new LoginPanel();
 
     @Override
     public void restored() {
-//        loginPanel.createLoginDialog();
-
+        loginPanel.createLoginDialog();
     }
 }

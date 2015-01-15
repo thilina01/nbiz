@@ -73,6 +73,7 @@ public final class CardListTopComponent extends NTopComponent {
         rangeStartTextField = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         rangeEndTextField = new javax.swing.JTextField();
+        clearButton = new javax.swing.JButton();
 
         cardTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -124,6 +125,13 @@ public final class CardListTopComponent extends NTopComponent {
 
         rangeEndTextField.setText(org.openide.util.NbBundle.getMessage(CardListTopComponent.class, "CardListTopComponent.rangeEndTextField.text")); // NOI18N
 
+        org.openide.awt.Mnemonics.setLocalizedText(clearButton, org.openide.util.NbBundle.getMessage(CardListTopComponent.class, "CardListTopComponent.clearButton.text")); // NOI18N
+        clearButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                clearButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -133,8 +141,6 @@ public final class CardListTopComponent extends NTopComponent {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1081, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(loadButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(outstandingCheckBox)
                         .addGap(18, 18, 18)
                         .addComponent(jLabel3)
@@ -144,6 +150,10 @@ public final class CardListTopComponent extends NTopComponent {
                         .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(rangeEndTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(loadButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(clearButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -173,7 +183,8 @@ public final class CardListTopComponent extends NTopComponent {
                     .addComponent(jLabel3)
                     .addComponent(rangeStartTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4)
-                    .addComponent(rangeEndTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(rangeEndTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(clearButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 442, Short.MAX_VALUE)
                 .addContainerGap())
@@ -198,17 +209,25 @@ public final class CardListTopComponent extends NTopComponent {
     }// </editor-fold>//GEN-END:initComponents
 
     private void loadButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadButtonActionPerformed
+
+        String allCreditQuery = "SELECT s FROM SaleInvoice s WHERE s.cardNumber IS NOT NULL ";// ;// + rangeQuery;
+        allCreditQuery = outstandingCheckBox.isSelected() ? allCreditQuery + " AND s.credit > 0 " : allCreditQuery;
+//        System.out.println(allCreditQuery);
         String rangeStartText = rangeStartTextField.getText().trim();
         String rangeEndText = rangeEndTextField.getText().trim();
-        String rangeQuery = "";
+//        String rangeQuery = "";
         if (!rangeStartText.equals("")) {
             rangeEndText = rangeEndText.equals("") ? rangeStartText : rangeEndText;
-            rangeQuery = " AND s.cardNumber BETWEEN " + rangeStartText + " AND " + rangeEndText + " ";
+//            rangeQuery = " AND s.cardNumber BETWEEN '" + rangeStartText + "' AND '" + rangeEndText + "' ";
+//            rangeQuery = " AND s.cardNumber >=  '" + rangeStartText + "' AND s.cardNumber <=  '" + rangeEndText + "' ORDER BY s.cardNumber";
+            allCreditQuery += " AND s.cardNumber >=  '" + rangeStartText + "' AND s.cardNumber <=  '" + rangeEndText + "' ORDER BY s.cardNumber";
+            //sale_invoice.card_number >= 'T1000' AND sale_invoice.card_number <= 'T1100'
         }
-        String allCreditQuery = "SELECT s FROM SaleInvoice s WHERE s.cardNumber IS NOT NULL AND s.credit > 0" + rangeQuery;
 
+        clear();
         Query query = manager.getEm().createQuery(allCreditQuery);
-        Collection<SaleInvoice> saleInvoices = outstandingCheckBox.isSelected() ? query.getResultList() : Find.saleInvoicesAsCard();
+//        Collection<SaleInvoice> saleInvoices = outstandingCheckBox.isSelected() ? query.getResultList() : Find.saleInvoicesAsCard();
+        Collection<SaleInvoice> saleInvoices = query.getResultList();
         tableModel.setRowCount(0);
         totalAmountTextField.setText("0.00");
         totalRemainingTextField.setText("0.00");
@@ -230,8 +249,13 @@ public final class CardListTopComponent extends NTopComponent {
         totalRemainingTextField.setText(nf2d.format(totalRemaining));
     }//GEN-LAST:event_loadButtonActionPerformed
 
+    private void clearButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearButtonActionPerformed
+        clear();
+    }//GEN-LAST:event_clearButtonActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable cardTable;
+    private javax.swing.JButton clearButton;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -267,5 +291,13 @@ public final class CardListTopComponent extends NTopComponent {
     void readProperties(java.util.Properties p) {
         String version = p.getProperty("version");
         // TODO read your settings according to their version
+    }
+
+    private void clear() {
+        tableModel.setRowCount(0);
+        rangeStartTextField.setText("");
+        rangeEndTextField.setText("");
+        totalAmountTextField.setText("");
+        totalRemainingTextField.setText("");
     }
 }
