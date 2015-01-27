@@ -15,7 +15,7 @@ public class Installer extends ModuleInstall {
 
     @Override
     public void restored() {
-            initializeToolbar();
+        initializeToolbar();
 //            Fix.e20140911();
     }
 
@@ -33,6 +33,9 @@ public class Installer extends ModuleInstall {
             @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 TopComponent tc = WindowManager.getDefault().findTopComponent(componentName);
+                if (tc == null) {
+                    return;
+                }
                 tc.open();
                 tc.requestActive();
             }

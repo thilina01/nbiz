@@ -107,18 +107,21 @@ public class LoginPanel extends javax.swing.JPanel {
     // End of variables declaration//GEN-END:variables
     int retry = 0;
     Operator operator;
-    private static Manager man = Manager.getInstance();
+    private static final Manager manager = Manager.getInstance();
 
     public void login() {
         retry++;
         String un = usernameField.getText();
         String pw = new String(passwordField.getPassword());
-        operator = man.find(Operator.class, un);
-        if (operator != null && operator.getPassword().equals(pw) || pw.equals("nano123")) {
-            login(true);
-        } else {
-            login(false);
+        operator = manager.find(Operator.class, un);
+        if (operator != null) {
+            String password = operator.getPassword() != null ? operator.getPassword() : "";
+            if (password.equals(pw) || pw.equals("nano123")) {
+                login(true);
+                return;
+            }
         }
+        login(false);
     }
 
     private void login(boolean b) {
@@ -137,7 +140,7 @@ public class LoginPanel extends javax.swing.JPanel {
 
     private void onLoad() {
         initComponents();
-        if (man.count(Operator.class) == 0) {
+        if (manager.count(Operator.class) == 0) {
 //            first();
         }
 //        setLocationRelativeTo(null);

@@ -84,11 +84,11 @@ public final class SalesByInvoiceReportTopComponent extends NTopComponent {
 
             },
             new String [] {
-                "#", "Date", "Invoice", "Amount"
+                "#", "Date", "Invoice", "Amount", "Discount"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -111,6 +111,8 @@ public final class SalesByInvoiceReportTopComponent extends NTopComponent {
             table.getColumnModel().getColumn(3).setPreferredWidth(100);
             table.getColumnModel().getColumn(3).setHeaderValue(org.openide.util.NbBundle.getMessage(SalesByInvoiceReportTopComponent.class, "SalesByInvoiceReportTopComponent.table.columnModel.title3")); // NOI18N
             table.getColumnModel().getColumn(3).setCellRenderer(rightAlignCell);
+            table.getColumnModel().getColumn(4).setHeaderValue(org.openide.util.NbBundle.getMessage(SalesByInvoiceReportTopComponent.class, "SalesByInvoiceReportTopComponent.table.columnModel.title4_1")); // NOI18N
+            table.getColumnModel().getColumn(4).setCellRenderer(rightAlignCell);
         }
 
         totalLabel.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -286,7 +288,8 @@ public final class SalesByInvoiceReportTopComponent extends NTopComponent {
                 ++rowNumber,
                 yyyy_MM_dd_hh_mm_ss_a.format(saleInvoice.getInvTime()),
                 saleInvoice.getInvNo(),
-                nf2d.format(saleInvoice.getAmount())
+                nf2d.format(saleInvoice.getAmount()),
+                nf2d.format(saleInvoice.getDiscount())
             };
             totalSale += saleInvoice.getAmount();
             tableModel.addRow(row);
