@@ -5,11 +5,14 @@
 package com.nanosl.nbiz.util;
 
 import com.nanosl.lib.db.Manager;
+import entity.OptionalComponent;
+import entity.OptionalComponentPK;
 import entity.ViewPanel;
-import java.lang.annotation.Annotation;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import javax.swing.ImageIcon;
+import javax.swing.JComponent;
 import org.openide.DialogDisplayer;
 import org.openide.NotifyDescriptor;
 import org.openide.awt.NotificationDisplayer;
@@ -24,25 +27,30 @@ public class NTopComponent extends TopComponent implements Format, Cell {
 
     public Manager manager;
     protected static PrintViewTopComponent printViewTopComponent = (PrintViewTopComponent) WindowManager.getDefault().findTopComponent("PrintViewTopComponent");
+    protected final ArrayList<JComponent> optionalComponents = new ArrayList<>();
+//    private String preferredID;
 
     public NTopComponent() {
         this.manager = Manager.getInstance();
-        Annotation annotation = this.getClass().getAnnotation(Description.class);
-        if (annotation instanceof Description) {
-            Description description = (Description) annotation;
-            manager.update(new ViewPanel(description.preferredID()));
-        }
+//        Annotation annotation = this.getClass().getAnnotation(Description.class);
+//        if (annotation instanceof Description) {
+//            Description description = (Description) annotation;
+//            preferredID = description.preferredID();
+        manager.update(new ViewPanel(preferredID()));
+//        }
     }
 
     @Override
     public void setVisible(boolean bln) {
         if (bln) {
-            Annotation annotation = this.getClass().getAnnotation(Description.class);
-            if (annotation instanceof Description) {
-                Description description = (Description) annotation;
-                super.setVisible(Data.getOperator().getViewPanelCollection().contains(new ViewPanel(description.preferredID())));
-                return;
-            }
+
+//            Annotation annotation = this.getClass().getAnnotation(Description.class);
+//            if (annotation instanceof Description) {
+//                Description description = (Description) annotation;
+            super.setVisible(Data.getOperator().getViewPanelCollection().contains(new ViewPanel(preferredID())));
+            removeOptionals();
+            return;
+//            }
         }
         super.setVisible(false);
     }
@@ -99,5 +107,20 @@ public class NTopComponent extends TopComponent implements Format, Cell {
     protected void showNotification(String title, String details) {
         ImageIcon imageIcon = new javax.swing.ImageIcon(NTopComponent.class.getResource("/com/nanosl/nbiz/util/resources/accept16.png"));
         NotificationDisplayer.getDefault().notify(title, imageIcon, details, null);
+    }
+
+    private void removeOptionals() {
+        for (JComponent optionalComponent : optionalComponents) {
+            System.out.println(optionalComponent.getName());
+            OptionalComponentPK optionalComponentPK = new OptionalComponentPK(optionalComponent.getName(), preferredID());
+            OptionalComponent component = manager.find(OptionalComponent.class, optionalComponentPK);
+            if (component == null) {
+                component = new OptionalComponent(optionalComponentPK);
+                component.setStatus(1);
+                component.setViewPanel(manager.find(ViewPanel.class, preferredID()));
+                manager.update(component);
+            }
+            optionalComponent.setVisible(component.getStatus() == 1);
+        }
     }
 }

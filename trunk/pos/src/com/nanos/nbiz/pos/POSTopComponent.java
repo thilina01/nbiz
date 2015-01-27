@@ -36,6 +36,7 @@ import java.util.List;
 import java.util.Map;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import net.sf.jasperreports.engine.JRException;
@@ -117,14 +118,15 @@ public final class POSTopComponent extends NTopComponent {
         jLabel11 = new javax.swing.JLabel();
         remainingAmountField = new javax.swing.JTextField();
         searchCustomerButton = new javax.swing.JButton();
-        jLabel12 = new javax.swing.JLabel();
-        receiptNumberField = new javax.swing.JTextField();
         printCheckBox = new javax.swing.JCheckBox();
         anotherButton = new javax.swing.JButton();
         lastInvoiceNumberField = new javax.swing.JTextField();
         searchItemButton = new javax.swing.JButton();
         employeeComboBox = new javax.swing.JComboBox<Employee>();
         historyComboBox = new javax.swing.JComboBox();
+        receiptPanel = new javax.swing.JPanel();
+        jLabel12 = new javax.swing.JLabel();
+        receiptNumberField = new javax.swing.JTextField();
 
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
@@ -367,21 +369,6 @@ public final class POSTopComponent extends NTopComponent {
             }
         });
 
-        jLabel12.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel12, org.openide.util.NbBundle.getMessage(POSTopComponent.class, "POSTopComponent.jLabel12.text")); // NOI18N
-
-        receiptNumberField.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
-        receiptNumberField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                receiptNumberFieldActionPerformed(evt);
-            }
-        });
-        receiptNumberField.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                receiptNumberFieldKeyReleased(evt);
-            }
-        });
-
         printCheckBox.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(printCheckBox, org.openide.util.NbBundle.getMessage(POSTopComponent.class, "POSTopComponent.printCheckBox.text")); // NOI18N
 
@@ -411,6 +398,7 @@ public final class POSTopComponent extends NTopComponent {
         });
 
         employeeComboBox.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
+        employeeComboBox.setName("employeeComboBox"); // NOI18N
         employeeComboBox.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 employeeComboBoxMouseClicked(evt);
@@ -435,6 +423,44 @@ public final class POSTopComponent extends NTopComponent {
             }
         });
 
+        receiptPanel.setName("receiptPanel"); // NOI18N
+
+        jLabel12.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel12, org.openide.util.NbBundle.getMessage(POSTopComponent.class, "POSTopComponent.jLabel12.text")); // NOI18N
+
+        receiptNumberField.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
+        receiptNumberField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                receiptNumberFieldActionPerformed(evt);
+            }
+        });
+        receiptNumberField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                receiptNumberFieldKeyReleased(evt);
+            }
+        });
+
+        javax.swing.GroupLayout receiptPanelLayout = new javax.swing.GroupLayout(receiptPanel);
+        receiptPanel.setLayout(receiptPanelLayout);
+        receiptPanelLayout.setHorizontalGroup(
+            receiptPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(receiptPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel12)
+                .addGap(18, 18, 18)
+                .addComponent(receiptNumberField, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+        receiptPanelLayout.setVerticalGroup(
+            receiptPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(receiptPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(receiptPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(receiptNumberField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel12))
+                .addContainerGap())
+        );
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -456,19 +482,19 @@ public final class POSTopComponent extends NTopComponent {
                                 .addComponent(historyComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(printCheckBox))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel8)
+                            .addComponent(jLabel11)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel12)
-                                .addGap(18, 18, 18)
-                                .addComponent(receiptNumberField, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(receiptPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGap(10, 10, 10)
+                                        .addComponent(employeeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jLabel9))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(employeeComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jLabel8))
-                            .addComponent(jLabel10)
-                            .addComponent(jLabel11))
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel9, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel10, javax.swing.GroupLayout.Alignment.TRAILING))))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(totalDiscountField)
@@ -556,20 +582,21 @@ public final class POSTopComponent extends NTopComponent {
                             .addComponent(lastInvoiceNumberField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(historyComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(totalDiscountField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel9)
-                            .addComponent(receiptNumberField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel12))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(totalAmountField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel8)
-                            .addComponent(employeeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(totalDiscountField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel9))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(totalAmountField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel8)))
+                            .addComponent(receiptPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(4, 4, 4)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(paidAmountField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel10))
+                            .addComponent(jLabel10)
+                            .addComponent(employeeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(remainingAmountField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -842,6 +869,7 @@ public final class POSTopComponent extends NTopComponent {
     private javax.swing.JTextField quantityField;
     private javax.swing.JLabel quantityLabel;
     private javax.swing.JTextField receiptNumberField;
+    private javax.swing.JPanel receiptPanel;
     private javax.swing.JTextField remainingAmountField;
     private javax.swing.JButton searchCustomerButton;
     private javax.swing.JButton searchItemButton;
@@ -854,6 +882,8 @@ public final class POSTopComponent extends NTopComponent {
 
     private void onLoad() {
         initComponents();
+        optionalComponents.add(receiptPanel);
+        optionalComponents.add(employeeComboBox);
         setVisible(true);
         AutoCompleteDecorator.decorate(itemComboBox);
         setComboBoxKeyAdapters(itemComboBox);
@@ -1033,16 +1063,11 @@ public final class POSTopComponent extends NTopComponent {
 
         tableModel.addRow(rowData);
 
-        quantityField.setText(
-                "");
-        priceField.setText(
-                "");
-        quantityLabel.setText(
-                "");
-        discountField.setText(
-                "");
-        itemComboBox.setSelectedItem(
-                "");
+        quantityField.setText("");
+        priceField.setText("");
+        quantityLabel.setText("");
+        discountField.setText("");
+        itemComboBox.setSelectedItem("");
         calcTotal();
     }
 
@@ -1403,5 +1428,12 @@ public final class POSTopComponent extends NTopComponent {
         }
         manager.update(toEdit);
         manager.delete(saleInvoiceHasItemCollection);
+    }
+
+    /**
+     * @return the optionalComponents
+     */
+    public ArrayList<JComponent> getOptionalComponents() {
+        return optionalComponents;
     }
 }

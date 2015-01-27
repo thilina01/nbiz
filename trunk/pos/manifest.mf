@@ -3,5 +3,5 @@ OpenIDE-Module: com.nanos.nbiz.pos
 OpenIDE-Module-Install: com/nanos/nbiz/pos/Installer.class
 OpenIDE-Module-Localizing-Bundle: com/nanos/nbiz/pos/Bundle.properties
 OpenIDE-Module-Requires: org.openide.windows.WindowManager
-OpenIDE-Module-Specification-Version: 1.5.9.9.1
+OpenIDE-Module-Specification-Version: 1.6
 

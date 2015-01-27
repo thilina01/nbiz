@@ -7,13 +7,17 @@ package com.nanosl.nbiz.main;
 import com.nanosl.lib.db.Manager;
 import entity.Operator;
 import java.io.File;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import org.openide.modules.ModuleInstall;
+import org.openide.util.Exceptions;
 
 public class Installer extends ModuleInstall {
 
     private static final String confFileName = "NconfN";
     private static final File file = new File(confFileName);
     int round = 0;
+    Manager manager;
 
     @Override
     public void restored() {
@@ -22,7 +26,10 @@ public class Installer extends ModuleInstall {
             Config config = Configuration.read();
             dbName = config == null ? dbName : config.getDatabase().equals("") ? dbName : config.getDatabase();
             Manager.init("dbPU", config.getServer(), dbName);//cbis_batik
-            System.out.println(dbName);
+            manager = Manager.getInstance();
+//            manager.describe();
+            System.out.println(manager.getDatabase());
+            applyFix();
         } else {
             Configuration.display();
         }
@@ -142,4 +149,20 @@ public class Installer extends ModuleInstall {
 //        }
 //        return "localhost";
 //    }
+    String x = "CREATE TABLE IF NOT EXISTS`optional_component` ("
+            + "  `name` varchar(100) NOT NULL,"
+            + "  `status` int(11) DEFAULT NULL,"
+            + "  `view_panel_view_panel` varchar(100) NOT NULL,"
+            + "  PRIMARY KEY (`name`,`view_panel_view_panel`),"
+            + "  KEY `fk_optional_component_view_panel1_idx` (`view_panel_view_panel`),"
+            + "  CONSTRAINT `fk_optional_component_view_panel1` FOREIGN KEY (`view_panel_view_panel`) REFERENCES `view_panel` (`view_panel`) ON DELETE NO ACTION ON UPDATE NO ACTION"
+            + ") ENGINE=InnoDB DEFAULT CHARSET=latin1;";
+
+    private void applyFix() {
+        try (PreparedStatement ps = manager.getConnection().prepareStatement(x)) {
+            ps.executeUpdate();
+        } catch (SQLException ex) {
+            Exceptions.printStackTrace(ex);
+        }
+    }
 }
