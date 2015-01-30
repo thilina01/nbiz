@@ -111,7 +111,7 @@ public class NTopComponent extends TopComponent implements Format, Cell {
 
     private void removeOptionals() {
         for (JComponent optionalComponent : optionalComponents) {
-            System.out.println(optionalComponent.getName());
+//            System.out.println(optionalComponent.getName());
             OptionalComponentPK optionalComponentPK = new OptionalComponentPK(optionalComponent.getName(), preferredID());
             OptionalComponent component = manager.find(OptionalComponent.class, optionalComponentPK);
             if (component == null) {

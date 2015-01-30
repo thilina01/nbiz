@@ -288,6 +288,7 @@ public final class POSTopComponent extends NTopComponent {
         totalAmountField.setEditable(false);
         totalAmountField.setBackground(new java.awt.Color(255, 255, 255));
         totalAmountField.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
+        totalAmountField.setForeground(new java.awt.Color(51, 0, 102));
         totalAmountField.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
         totalAmountField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -359,6 +360,7 @@ public final class POSTopComponent extends NTopComponent {
         remainingAmountField.setEditable(false);
         remainingAmountField.setBackground(new java.awt.Color(255, 255, 255));
         remainingAmountField.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
+        remainingAmountField.setForeground(new java.awt.Color(51, 0, 102));
         remainingAmountField.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
 
         searchCustomerButton.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
@@ -884,14 +886,14 @@ public final class POSTopComponent extends NTopComponent {
         initComponents();
         optionalComponents.add(receiptPanel);
         optionalComponents.add(employeeComboBox);
-        setVisible(true);
+//        setVisible(true);
         AutoCompleteDecorator.decorate(itemComboBox);
         setComboBoxKeyAdapters(itemComboBox);
         datePicker.setFormats(yyyy_MM_dd);
 //        KeyAdapter();
         tableModel = (DefaultTableModel) table.getModel();
         table.setDefaultRenderer(Object.class, coloredCellRenderer);
-        clear();
+        fillHistory();
     }
 
     private void setComboBoxKeyAdapters(JComboBox<? extends Object> comboBox) {
@@ -912,21 +914,8 @@ public final class POSTopComponent extends NTopComponent {
 
     private void clear() {
         tableModel.setRowCount(0);
-        Combo.fillCustomers(customerComboBox);
-        Combo.fillItems(itemComboBox);
-        List<SaleInvoice> saleInvoices = manager.find(SaleInvoice.class);
-        SaleInvoice[] saleInvoicesArray = new SaleInvoice[saleInvoices.size()];
-        saleInvoices.toArray(saleInvoicesArray);
-        Comparator<SaleInvoice> comparator = new Comparator<SaleInvoice>() {
-
-            @Override
-            public int compare(SaleInvoice o1, SaleInvoice o2) {
-                Date o2Date = o2.getInvTime() == null ? new Date() : o2.getInvTime();
-                return o2Date.compareTo(o1.getInvTime() == null ? new Date() : o1.getInvTime());
-            }
-        };
-        Arrays.sort(saleInvoicesArray, comparator);
-        historyComboBox.setModel(new DefaultComboBoxModel(saleInvoicesArray));
+        fillCombo();
+        fillHistory();
 //        itemComboBoxWorker.execute();
         clearFields();
     }
@@ -1076,8 +1065,7 @@ public final class POSTopComponent extends NTopComponent {
         super.setVisible(b);
 //        Rectangle rectangle = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
 //        setBounds(0, 50, rectangle.width, rectangle.height - 50);
-        Combo.fillCustomers(customerComboBox);
-        Combo.fillEmployees(employeeComboBox);
+        fillCombo();
 //        Combo.fillItems(itemComboBox);
 //        customerComboBox.requestFocus();
         itemComboBox.requestFocus();
@@ -1435,5 +1423,27 @@ public final class POSTopComponent extends NTopComponent {
      */
     public ArrayList<JComponent> getOptionalComponents() {
         return optionalComponents;
+    }
+
+    private void fillHistory() {
+
+        List<SaleInvoice> saleInvoices = manager.find(SaleInvoice.class);
+        SaleInvoice[] saleInvoicesArray = new SaleInvoice[saleInvoices.size()];
+        saleInvoices.toArray(saleInvoicesArray);
+        Comparator<SaleInvoice> comparator = new Comparator<SaleInvoice>() {
+
+            @Override
+            public int compare(SaleInvoice o1, SaleInvoice o2) {
+                Date o2Date = o2.getInvTime() == null ? new Date() : o2.getInvTime();
+                return o2Date.compareTo(o1.getInvTime() == null ? new Date() : o1.getInvTime());
+            }
+        };
+        Arrays.sort(saleInvoicesArray, comparator);
+        historyComboBox.setModel(new DefaultComboBoxModel(saleInvoicesArray));
+    }
+
+    private void fillCombo() {
+        Combo.fillCustomers(customerComboBox);
+        Combo.fillItems(itemComboBox);
     }
 }

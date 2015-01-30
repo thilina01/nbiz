@@ -3,5 +3,5 @@ OpenIDE-Module: com.nanosl.nbiz.main
 OpenIDE-Module-Install: com/nanosl/nbiz/main/Installer.class
 OpenIDE-Module-Layer: com/nanosl/nbiz/main/layer.xml
 OpenIDE-Module-Localizing-Bundle: com/nanosl/nbiz/main/Bundle.properties
-OpenIDE-Module-Specification-Version: 1.3
+OpenIDE-Module-Specification-Version: 1.3.2
 
