@@ -29,7 +29,7 @@ public class Installer extends ModuleInstall {
             manager = Manager.getInstance();
 //            manager.describe();
             System.out.println(manager.getDatabase());
-            applyFix();
+//            applyFix();
         } else {
             Configuration.display();
         }

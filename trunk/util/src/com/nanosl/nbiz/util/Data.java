@@ -25,6 +25,7 @@ public class Data {
         m.clearCache();
         if (operator == null) {
             operator = new Operator("admin");
+            operator.setPassword("n");
             m.update(operator);
         }
         return m.find(Operator.class, operator.getUsername());
