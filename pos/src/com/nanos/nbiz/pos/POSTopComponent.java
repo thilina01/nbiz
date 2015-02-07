@@ -4,7 +4,6 @@
  */
 package com.nanos.nbiz.pos;
 
-import com.nanosl.lib.date.JXDatePicker;
 import com.nanosl.nbiz.util.Combo;
 import com.nanosl.nbiz.util.Data;
 import com.nanosl.nbiz.util.FindMySql;
@@ -90,7 +89,7 @@ public final class POSTopComponent extends NTopComponent {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        datePicker = new JXDatePicker();
+        datePicker = new com.nanosl.lib.date.JXDatePicker();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         invoiceNumberField = new javax.swing.JTextField();
@@ -127,6 +126,8 @@ public final class POSTopComponent extends NTopComponent {
         receiptPanel = new javax.swing.JPanel();
         jLabel12 = new javax.swing.JLabel();
         receiptNumberField = new javax.swing.JTextField();
+        paidByCCField = new javax.swing.JTextField();
+        jLabel13 = new javax.swing.JLabel();
 
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
@@ -178,6 +179,11 @@ public final class POSTopComponent extends NTopComponent {
 
         itemComboBox.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         itemComboBox.setName("itemComboBox"); // NOI18N
+        itemComboBox.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                itemComboBoxFocusGained(evt);
+            }
+        });
         itemComboBox.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 itemComboBoxMouseClicked(evt);
@@ -186,11 +192,6 @@ public final class POSTopComponent extends NTopComponent {
         itemComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 itemComboBoxActionPerformed(evt);
-            }
-        });
-        itemComboBox.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                itemComboBoxFocusGained(evt);
             }
         });
         itemComboBox.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -338,14 +339,14 @@ public final class POSTopComponent extends NTopComponent {
 
         paidAmountField.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         paidAmountField.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
-        paidAmountField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                paidAmountFieldActionPerformed(evt);
-            }
-        });
         paidAmountField.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 paidAmountFieldFocusGained(evt);
+            }
+        });
+        paidAmountField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                paidAmountFieldActionPerformed(evt);
             }
         });
         paidAmountField.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -463,6 +464,27 @@ public final class POSTopComponent extends NTopComponent {
                 .addContainerGap())
         );
 
+        paidByCCField.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
+        paidByCCField.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
+        paidByCCField.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                paidByCCFieldFocusGained(evt);
+            }
+        });
+        paidByCCField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                paidByCCFieldActionPerformed(evt);
+            }
+        });
+        paidByCCField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                paidByCCFieldKeyReleased(evt);
+            }
+        });
+
+        jLabel13.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel13, org.openide.util.NbBundle.getMessage(POSTopComponent.class, "POSTopComponent.jLabel13.text")); // NOI18N
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -474,29 +496,31 @@ public final class POSTopComponent extends NTopComponent {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(processButton)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(clearButton))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(clearButton)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(anotherButton)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(printCheckBox))
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(lastInvoiceNumberField, javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(anotherButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addComponent(lastInvoiceNumberField, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
                                 .addComponent(historyComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(printCheckBox))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel8)
-                            .addComponent(jLabel11)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(receiptPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addGap(10, 10, 10)
-                                        .addComponent(employeeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(receiptPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 6, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel9, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel13)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(paidByCCField, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel10))
+                            .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(employeeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel9, javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel10, javax.swing.GroupLayout.Alignment.TRAILING))))
+                                .addComponent(jLabel11)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(totalDiscountField)
@@ -572,37 +596,36 @@ public final class POSTopComponent extends NTopComponent {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(processButton)
-                            .addComponent(clearButton))
+                            .addComponent(clearButton)
+                            .addComponent(anotherButton)
+                            .addComponent(printCheckBox))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(printCheckBox)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(anotherButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(receiptPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(14, 14, 14)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(lastInvoiceNumberField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(historyComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(totalDiscountField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel9))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(totalAmountField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel8)))
-                            .addComponent(receiptPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(totalDiscountField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel9))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(totalAmountField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel8))
                         .addGap(4, 4, 4)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(paidAmountField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel10)
-                            .addComponent(employeeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(paidByCCField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel13))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(remainingAmountField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel11))))
+                            .addComponent(jLabel11)
+                            .addComponent(employeeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap())
         );
 
@@ -669,7 +692,11 @@ public final class POSTopComponent extends NTopComponent {
         } else if (evt.getKeyCode() == KeyEvent.VK_F2) {
             searchItem();
         } else if (evt.getKeyCode() == 192 || evt.getKeyCode() == KeyEvent.VK_ADD || evt.getKeyCode() == KeyEvent.VK_RIGHT) {
-            employeeComboBox.requestFocus();
+            if (employeeComboBox.isVisible()) {
+                employeeComboBox.requestFocus();
+            } else {
+                totalDiscountField.requestFocus();
+            }
         }
     }//GEN-LAST:event_itemComboBoxKeyPressed
 
@@ -839,6 +866,18 @@ public final class POSTopComponent extends NTopComponent {
         fillInvoice(historyComboBox.getSelectedItem().toString());
     }//GEN-LAST:event_historyComboBoxActionPerformed
 
+    private void paidByCCFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_paidByCCFieldActionPerformed
+        paidAmountField.requestFocus();
+    }//GEN-LAST:event_paidByCCFieldActionPerformed
+
+    private void paidByCCFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_paidByCCFieldFocusGained
+        // TODO add your handling code here:
+    }//GEN-LAST:event_paidByCCFieldFocusGained
+
+    private void paidByCCFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_paidByCCFieldKeyReleased
+        calcRemaining();
+    }//GEN-LAST:event_paidByCCFieldKeyReleased
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton anotherButton;
     private javax.swing.JButton clearButton;
@@ -853,6 +892,7 @@ public final class POSTopComponent extends NTopComponent {
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -865,6 +905,7 @@ public final class POSTopComponent extends NTopComponent {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField lastInvoiceNumberField;
     private javax.swing.JTextField paidAmountField;
+    private javax.swing.JTextField paidByCCField;
     private javax.swing.JTextField priceField;
     private javax.swing.JCheckBox printCheckBox;
     private javax.swing.JButton processButton;
@@ -929,6 +970,7 @@ public final class POSTopComponent extends NTopComponent {
         totalAmountField.setText("");
         totalDiscountField.setText("");
         paidAmountField.setText("");
+        paidByCCField.setText("");
         remainingAmountField.setText("");
         itemComboBox.requestFocus();
 //        receiptNumberField.setText(Data.getReceiptNo());
@@ -955,10 +997,11 @@ public final class POSTopComponent extends NTopComponent {
 
     private void calcRemaining() {
         String totalAmountText = totalAmountField.getText().trim();
+        String paidByCCText = paidByCCField.getText().trim();
         totalAmountText = totalAmountText.equals("") ? "0" : totalAmountText;
         String paidAmountText = paidAmountField.getText().trim();
         paidAmountText = paidAmountText.equals("") ? "0" : paidAmountText;
-        double totalAmount1 = 0, paidAmount = 0, remainingAmount;
+        double totalAmount1 = 0, paidAmount = 0, paidByCC = 0, remainingAmount;
         try {
             totalAmount1 = Double.parseDouble(totalAmountText);
         } catch (NumberFormatException e) {
@@ -970,7 +1013,11 @@ public final class POSTopComponent extends NTopComponent {
             paidAmount = Double.parseDouble(paidAmountText);
         } catch (NumberFormatException e) {
         }
-        remainingAmount = totalAmount1 - paidAmount;
+        try {
+            paidByCC = Double.parseDouble(paidByCCText);
+        } catch (NumberFormatException e) {
+        }
+        remainingAmount = totalAmount1 - (paidAmount + paidByCC);
         remainingAmountField.setText(nf2d.format(remainingAmount));
     }
 
@@ -1131,6 +1178,8 @@ public final class POSTopComponent extends NTopComponent {
 
         String paidAmountText = paidAmountField.getText().trim();
         paidAmountText = paidAmountText.equals("") ? "0" : paidAmountText;
+        String paidByCCText = paidByCCField.getText().trim();
+        paidByCCText = paidByCCText.equals("") ? "0" : paidByCCText;
 
         double amount = Double.valueOf(totalAmountText);
         double credit = Double.valueOf(remainingAmountText);
@@ -1156,7 +1205,7 @@ public final class POSTopComponent extends NTopComponent {
         } else {
             customerName = customer.getName();
         }
-        double paidAmount;
+        double paidAmount, paidByCC;
         try {
             paidAmount = Double.parseDouble(paidAmountText);
         } catch (NumberFormatException e) {
@@ -1164,7 +1213,15 @@ public final class POSTopComponent extends NTopComponent {
             paidAmountField.selectAll();
             return;
         }
-        double initialPayment = paidAmount > amount ? amount : paidAmount;
+        try {
+            paidByCC = Double.parseDouble(paidByCCText);
+        } catch (NumberFormatException e) {
+            showError("Invalid Amount");
+            paidByCCField.selectAll();
+            return;
+        }
+        double totalPaid = paidAmount + paidByCC;
+        double initialPayment = totalPaid > amount ? amount : totalPaid;
 //        double discount = Double.valueOf(totalDiscountText);
         saleInvoice = saleInvoice == null ? new SaleInvoice(invoiceNumber) : saleInvoice;
 
@@ -1175,7 +1232,8 @@ public final class POSTopComponent extends NTopComponent {
         saleInvoice.setDiscount(discount);
         saleInvoice.setInvTime(edit ? saleInvoice.getInvTime() : date);
         saleInvoice.setReceivedAmount(0.0);
-        saleInvoice.setPaidAmount(paidAmount);
+        saleInvoice.setPaidAmount(totalPaid);
+        saleInvoice.setPaidByCreditCard(paidByCC);
         saleInvoice.setInitialPayment(initialPayment);
         Object o = employeeComboBox.getSelectedItem();
         Employee employee = o instanceof Employee ? (Employee) o : Data.getOperator().getEmployee();
@@ -1379,6 +1437,8 @@ public final class POSTopComponent extends NTopComponent {
             totalDiscountField.setText(nf2d.format(saleInvoice.getDiscount()));
             double paidAmount = saleInvoice.getPaidAmount() != null ? saleInvoice.getPaidAmount() : saleInvoice.getAmount();
             paidAmountField.setText(nf2d.format(paidAmount));
+            double paidByCC = saleInvoice.getPaidByCreditCard() != null ? saleInvoice.getPaidByCreditCard() : 0.0;
+            paidByCCField.setText(nf2d.format(paidByCC));
             remainingAmountField.setText(nf2d.format(saleInvoice.getAmount() - paidAmount));
             Collection<SaleInvoiceHasItem> saleInvoiceHasItems = saleInvoice.getSaleInvoiceHasItemCollection();
             tableModel.setRowCount(0);
@@ -1426,8 +1486,7 @@ public final class POSTopComponent extends NTopComponent {
     }
 
     private void fillHistory() {
-
-        List<SaleInvoice> saleInvoices = manager.find(SaleInvoice.class);
+        List<SaleInvoice> saleInvoices = find(SaleInvoice.class);
         SaleInvoice[] saleInvoicesArray = new SaleInvoice[saleInvoices.size()];
         saleInvoices.toArray(saleInvoicesArray);
         Comparator<SaleInvoice> comparator = new Comparator<SaleInvoice>() {

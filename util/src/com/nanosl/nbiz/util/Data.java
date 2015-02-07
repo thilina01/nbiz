@@ -54,7 +54,7 @@ public class Data {
             m.update(general);
             general = m.find(General.class, 1);
         }
-        return general.getReceiptNo();
+        return general == null ? "000" : general.getReceiptNo();
     }
 
     public static void setReceiptNo(String lastReceiptNo) {

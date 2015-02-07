@@ -1,0 +1,999 @@
+-- MySQL dump 10.13  Distrib 5.6.22, for Win64 (x86_64)
+--
+-- Host: localhost    Database: eis_batik
+-- ------------------------------------------------------
+-- Server version	5.6.22-log
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `bank`
+--
+
+-- DROP TABLE IF EXISTS `bank`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `bank` (
+  `code` varchar(255) NOT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `canceled_invoice`
+--
+
+-- DROP TABLE IF EXISTS `canceled_invoice`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `canceled_invoice` (
+  `inv_no` varchar(255) NOT NULL,
+  `amount` double DEFAULT NULL,
+  `credit` double DEFAULT NULL,
+  `discount` double DEFAULT NULL,
+  `inv_time` datetime DEFAULT NULL,
+  `operator` varchar(255) DEFAULT NULL,
+  `received_amount` double DEFAULT NULL,
+  `customer_code` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`inv_no`),
+  KEY `FK_canceled_invoice_customer_code` (`customer_code`),
+  CONSTRAINT `FK_canceled_invoice_customer_code` FOREIGN KEY (`customer_code`) REFERENCES `customer` (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `canceled_invoice_has_item`
+--
+
+-- DROP TABLE IF EXISTS `canceled_invoice_has_item`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `canceled_invoice_has_item` (
+  `discount` double DEFAULT NULL,
+  `quantity` double DEFAULT NULL,
+  `rate` double DEFAULT NULL,
+  `canceled_invoice_inv_no` varchar(255) NOT NULL,
+  `item_code` varchar(255) NOT NULL,
+  PRIMARY KEY (`canceled_invoice_inv_no`,`item_code`),
+  KEY `FK_canceled_invoice_has_item_item_code` (`item_code`),
+  CONSTRAINT `FK_canceled_invoice_has_item_item_code` FOREIGN KEY (`item_code`) REFERENCES `item` (`code`),
+  CONSTRAINT `canceled_invoice_has_item_canceled_invoice_inv_no` FOREIGN KEY (`canceled_invoice_inv_no`) REFERENCES `canceled_invoice` (`inv_no`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `collection_receipt`
+--
+
+-- DROP TABLE IF EXISTS `collection_receipt`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `collection_receipt` (
+  `receipt_number` varchar(255) NOT NULL,
+  `collected_time` datetime DEFAULT NULL,
+  `operator` varchar(255) DEFAULT NULL,
+  `sale_invoice_inv_no` varchar(255) DEFAULT NULL,
+  `cash` double DEFAULT NULL,
+  `amount` double DEFAULT NULL,
+  PRIMARY KEY (`receipt_number`),
+  KEY `FK_collection_receipt_sale_invoice_inv_no` (`sale_invoice_inv_no`),
+  CONSTRAINT `FK_collection_receipt_sale_invoice_inv_no` FOREIGN KEY (`sale_invoice_inv_no`) REFERENCES `sale_invoice` (`inv_no`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `company`
+--
+
+-- DROP TABLE IF EXISTS `company`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `company` (
+  `code` varchar(255) NOT NULL,
+  `address_city` varchar(255) DEFAULT NULL,
+  `address_number` varchar(255) DEFAULT NULL,
+  `address_street` varchar(255) DEFAULT NULL,
+  `contact_one` varchar(255) DEFAULT NULL,
+  `contact_two` varchar(255) DEFAULT NULL,
+  `email` varchar(255) DEFAULT NULL,
+  `fax` varchar(255) DEFAULT NULL,
+  `Name` varchar(255) DEFAULT NULL,
+  `slogan_one` varchar(255) DEFAULT NULL,
+  `slogan_two` varchar(255) DEFAULT NULL,
+  `web` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `config`
+--
+
+-- DROP TABLE IF EXISTS `config`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `config` (
+  `config_key` varchar(20) NOT NULL,
+  `config_value` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`config_key`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `customer`
+--
+
+-- DROP TABLE IF EXISTS `customer`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `customer` (
+  `code` varchar(255) NOT NULL,
+  `addressNumber` varchar(255) DEFAULT NULL,
+  `addressStreet` varchar(255) DEFAULT NULL,
+  `city` varchar(255) DEFAULT NULL,
+  `fax` varchar(255) DEFAULT NULL,
+  `fixedLine` varchar(255) DEFAULT NULL,
+  `mobile` varchar(255) DEFAULT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `notes` varchar(255) DEFAULT NULL,
+  `operator` varchar(255) DEFAULT NULL,
+  `person_nic` varchar(10) DEFAULT NULL,
+  PRIMARY KEY (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `damage_notes`
+--
+
+-- DROP TABLE IF EXISTS `damage_notes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `damage_notes` (
+  `operator` varchar(255) DEFAULT NULL,
+  `quantity` double DEFAULT NULL,
+  `rate` double DEFAULT NULL,
+  `reason` varchar(255) DEFAULT NULL,
+  `date_Time` datetime NOT NULL,
+  `employee_code` varchar(255) NOT NULL,
+  `item_code` varchar(255) NOT NULL,
+  PRIMARY KEY (`date_Time`,`employee_code`,`item_code`),
+  KEY `FK_damage_notes_employee_code` (`employee_code`),
+  KEY `FK_damage_notes_item_code` (`item_code`),
+  CONSTRAINT `FK_damage_notes_employee_code` FOREIGN KEY (`employee_code`) REFERENCES `employee` (`code`),
+  CONSTRAINT `FK_damage_notes_item_code` FOREIGN KEY (`item_code`) REFERENCES `item` (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `damage_stock`
+--
+
+-- DROP TABLE IF EXISTS `damage_stock`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `damage_stock` (
+  `item_code` varchar(255) NOT NULL,
+  `quantity` double DEFAULT NULL,
+  PRIMARY KEY (`item_code`),
+  CONSTRAINT `FK_damage_stock_item_code` FOREIGN KEY (`item_code`) REFERENCES `item` (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `employee`
+--
+
+-- DROP TABLE IF EXISTS `employee`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `employee` (
+  `code` varchar(255) NOT NULL,
+  `address_Number` varchar(255) DEFAULT NULL,
+  `address_Street` varchar(255) DEFAULT NULL,
+  `city` varchar(255) DEFAULT NULL,
+  `first_Name` varchar(255) DEFAULT NULL,
+  `Fixed_Line` varchar(255) DEFAULT NULL,
+  `last_Name` varchar(255) DEFAULT NULL,
+  `Mobile` varchar(255) DEFAULT NULL,
+  `notes` varchar(255) DEFAULT NULL,
+  `source` int(11) DEFAULT NULL,
+  `employee_position_code` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`code`),
+  KEY `FK_employee_employee_position_code` (`employee_position_code`),
+  CONSTRAINT `FK_employee_employee_position_code` FOREIGN KEY (`employee_position_code`) REFERENCES `employee_position` (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `employee_has_root_area`
+--
+
+-- DROP TABLE IF EXISTS `employee_has_root_area`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `employee_has_root_area` (
+  `employee_code` varchar(255) NOT NULL,
+  `root_area_code` varchar(255) NOT NULL,
+  PRIMARY KEY (`employee_code`,`root_area_code`),
+  KEY `FK_employee_has_root_area_root_area_code` (`root_area_code`),
+  CONSTRAINT `FK_employee_has_root_area_employee_code` FOREIGN KEY (`employee_code`) REFERENCES `employee` (`code`),
+  CONSTRAINT `FK_employee_has_root_area_root_area_code` FOREIGN KEY (`root_area_code`) REFERENCES `root_area` (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `employee_position`
+--
+
+-- DROP TABLE IF EXISTS `employee_position`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `employee_position` (
+  `code` varchar(255) NOT NULL,
+  `description` longtext,
+  PRIMARY KEY (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `expenses`
+--
+
+-- DROP TABLE IF EXISTS `expenses`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `expenses` (
+  `paid_time` datetime NOT NULL,
+  `amount` double DEFAULT NULL,
+  `notes` varchar(255) DEFAULT NULL,
+  `expenses_type_code` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`paid_time`),
+  KEY `FK_expenses_expenses_type_code` (`expenses_type_code`),
+  CONSTRAINT `FK_expenses_expenses_type_code` FOREIGN KEY (`expenses_type_code`) REFERENCES `expenses_type` (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `expenses_type`
+--
+
+-- DROP TABLE IF EXISTS `expenses_type`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `expenses_type` (
+  `code` varchar(255) NOT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `find`
+--
+
+-- DROP TABLE IF EXISTS `find`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `find` (
+  `ID` bigint(20) NOT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `general`
+--
+
+-- DROP TABLE IF EXISTS `general`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `general` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `profitPresentage` double DEFAULT NULL,
+  `strike` int(11) DEFAULT NULL,
+  `strikeRate` double DEFAULT NULL,
+  `invoice_no` varchar(10) DEFAULT NULL,
+  `receipt_no` varchar(10) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `issued_cash`
+--
+
+-- DROP TABLE IF EXISTS `issued_cash`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `issued_cash` (
+  `issued_time` datetime NOT NULL,
+  `amount` double DEFAULT NULL,
+  `operator` varchar(255) DEFAULT NULL,
+  `bank_code` varchar(255) DEFAULT NULL,
+  `purchase_invoice_supplier_code` varchar(255) DEFAULT NULL,
+  `purchase_invoice_inv_no` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`issued_time`),
+  KEY `FK_issued_cash_purchase_invoice_inv_no` (`purchase_invoice_inv_no`,`purchase_invoice_supplier_code`),
+  KEY `FK_issued_cash_bank_code` (`bank_code`),
+  CONSTRAINT `FK_issued_cash_bank_code` FOREIGN KEY (`bank_code`) REFERENCES `bank` (`code`),
+  CONSTRAINT `FK_issued_cash_purchase_invoice_inv_no` FOREIGN KEY (`purchase_invoice_inv_no`, `purchase_invoice_supplier_code`) REFERENCES `purchase_invoice` (`inv_no`, `supplier_code`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `issued_cheque`
+--
+
+-- DROP TABLE IF EXISTS `issued_cheque`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `issued_cheque` (
+  `cheque_number` varchar(255) NOT NULL,
+  `amount` double DEFAULT NULL,
+  `banking_date` date DEFAULT NULL,
+  `issued_date` date DEFAULT NULL,
+  `operator` varchar(255) DEFAULT NULL,
+  `status` int(11) DEFAULT NULL,
+  `bank_code` varchar(255) DEFAULT NULL,
+  `purchase_invoice_supplier_code` varchar(255) DEFAULT NULL,
+  `purchase_invoice_inv_no` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`cheque_number`),
+  KEY `FK_issued_cheque_purchase_invoice_inv_no` (`purchase_invoice_inv_no`,`purchase_invoice_supplier_code`),
+  KEY `FK_issued_cheque_bank_code` (`bank_code`),
+  CONSTRAINT `FK_issued_cheque_bank_code` FOREIGN KEY (`bank_code`) REFERENCES `bank` (`code`),
+  CONSTRAINT `FK_issued_cheque_purchase_invoice_inv_no` FOREIGN KEY (`purchase_invoice_inv_no`, `purchase_invoice_supplier_code`) REFERENCES `purchase_invoice` (`inv_no`, `supplier_code`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `item`
+--
+
+-- DROP TABLE IF EXISTS `item`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `item` (
+  `code` varchar(255) NOT NULL,
+  `brand` varchar(255) DEFAULT NULL,
+  `customerProfitPersantage` double DEFAULT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  `itemRefresh` int(11) DEFAULT NULL,
+  `operator` varchar(255) DEFAULT NULL,
+  `packSize` int(11) DEFAULT NULL,
+  `profitPersantage` double DEFAULT NULL,
+  `retailProfitPersantage` double DEFAULT NULL,
+  `supplier_code` varchar(255) DEFAULT NULL,
+  `item_type_type` varchar(200) DEFAULT NULL,
+  `qkey` int(11) DEFAULT NULL,
+  `note` varchar(100) DEFAULT NULL,
+  `disable` int(11) DEFAULT '0',
+  PRIMARY KEY (`code`),
+  UNIQUE KEY `qkey_unique` (`qkey`),
+  KEY `FK_item_supplier_code` (`supplier_code`),
+  CONSTRAINT `FK_item_supplier_code` FOREIGN KEY (`supplier_code`) REFERENCES `supplier` (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `item_type`
+--
+
+-- DROP TABLE IF EXISTS `item_type`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `item_type` (
+  `type` varchar(100) NOT NULL,
+  PRIMARY KEY (`type`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `last_code`
+--
+
+-- DROP TABLE IF EXISTS `last_code`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `last_code` (
+  `type` varchar(255) NOT NULL,
+  `code` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`type`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `list_types`
+--
+
+-- DROP TABLE IF EXISTS `list_types`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `list_types` (
+  `code` varchar(255) NOT NULL,
+  `type` int(11) DEFAULT NULL,
+  PRIMARY KEY (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `menu`
+--
+
+-- DROP TABLE IF EXISTS `menu`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `menu` (
+  `menu` varchar(255) NOT NULL,
+  `status` int(11) DEFAULT NULL,
+  PRIMARY KEY (`menu`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `menu_item`
+--
+
+-- DROP TABLE IF EXISTS `menu_item`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `menu_item` (
+  `status` int(11) DEFAULT NULL,
+  `menu_item` varchar(255) NOT NULL,
+  `menu_menu` varchar(255) NOT NULL,
+  PRIMARY KEY (`menu_item`,`menu_menu`),
+  KEY `FK_menu_item_menu_menu` (`menu_menu`),
+  CONSTRAINT `FK_menu_item_menu_menu` FOREIGN KEY (`menu_menu`) REFERENCES `menu` (`menu`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `old_price`
+--
+
+-- DROP TABLE IF EXISTS `old_price`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `old_price` (
+  `new_price` double DEFAULT NULL,
+  `old_price` double DEFAULT NULL,
+  `change_date` datetime NOT NULL,
+  `item_code` varchar(255) NOT NULL,
+  `item_has_price_price_type_type` varchar(255) DEFAULT NULL,
+  `item_has_price_item_code` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`change_date`,`item_code`),
+  KEY `FK_old_price_item_code` (`item_code`),
+  CONSTRAINT `FK_old_price_item_code` FOREIGN KEY (`item_code`) REFERENCES `item` (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `operator`
+--
+
+-- DROP TABLE IF EXISTS `operator`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `operator` (
+  `username` varchar(255) NOT NULL,
+  `created_By` varchar(255) DEFAULT NULL,
+  `created_date` datetime DEFAULT NULL,
+  `password` varchar(255) DEFAULT NULL,
+  `power` int(11) DEFAULT NULL,
+  `employee_code` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`username`),
+  KEY `FK_operator_employee_code` (`employee_code`),
+  CONSTRAINT `FK_operator_employee_code` FOREIGN KEY (`employee_code`) REFERENCES `employee` (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `operator_deleted`
+--
+
+-- DROP TABLE IF EXISTS `operator_deleted`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `operator_deleted` (
+  `deleted_date` datetime NOT NULL,
+  `created_By` varchar(255) DEFAULT NULL,
+  `created_date` datetime DEFAULT NULL,
+  `deleted_by` varchar(255) DEFAULT NULL,
+  `password` varchar(255) DEFAULT NULL,
+  `power` int(11) DEFAULT NULL,
+  `username` varchar(255) DEFAULT NULL,
+  `employee_code` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`deleted_date`),
+  KEY `FK_operator_deleted_employee_code` (`employee_code`),
+  CONSTRAINT `FK_operator_deleted_employee_code` FOREIGN KEY (`employee_code`) REFERENCES `employee` (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `operator_has_view_panel`
+--
+
+-- DROP TABLE IF EXISTS `operator_has_view_panel`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `operator_has_view_panel` (
+  `operator_username` varchar(255) NOT NULL,
+  `view_panel_view_panel` varchar(255) NOT NULL,
+  PRIMARY KEY (`operator_username`,`view_panel_view_panel`),
+  KEY `FK_operator_has_view_panel_view_panel_view_panel` (`view_panel_view_panel`),
+  CONSTRAINT `FK_operator_has_view_panel_operator_username` FOREIGN KEY (`operator_username`) REFERENCES `operator` (`username`),
+  CONSTRAINT `FK_operator_has_view_panel_view_panel_view_panel` FOREIGN KEY (`view_panel_view_panel`) REFERENCES `view_panel` (`view_panel`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `optional_component`
+--
+
+-- DROP TABLE IF EXISTS `optional_component`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `optional_component` (
+  `name` varchar(100) NOT NULL,
+  `status` int(11) DEFAULT NULL,
+  `view_panel_view_panel` varchar(100) NOT NULL,
+  PRIMARY KEY (`name`,`view_panel_view_panel`),
+  KEY `fk_optional_component_view_panel1_idx` (`view_panel_view_panel`),
+  CONSTRAINT `fk_optional_component_view_panel1` FOREIGN KEY (`view_panel_view_panel`) REFERENCES `view_panel` (`view_panel`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `price_list`
+--
+
+-- DROP TABLE IF EXISTS `price_list`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `price_list` (
+  `item_code` varchar(255) NOT NULL,
+  `cost_Pack` double DEFAULT NULL,
+  `cost_Unit` double DEFAULT NULL,
+  `selling_Pack` double DEFAULT NULL,
+  `selling_Unit` double DEFAULT NULL,
+  PRIMARY KEY (`item_code`),
+  CONSTRAINT `FK_price_list_item_code` FOREIGN KEY (`item_code`) REFERENCES `item` (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `purchase_invoice`
+--
+
+-- DROP TABLE IF EXISTS `purchase_invoice`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `purchase_invoice` (
+  `amount` double DEFAULT NULL,
+  `credit` double DEFAULT NULL,
+  `discount` double DEFAULT NULL,
+  `inv_date` date DEFAULT NULL,
+  `operator` varchar(255) DEFAULT NULL,
+  `inv_no` varchar(255) NOT NULL,
+  `supplier_code` varchar(255) NOT NULL,
+  PRIMARY KEY (`inv_no`,`supplier_code`),
+  KEY `FK_purchase_invoice_supplier_code` (`supplier_code`),
+  CONSTRAINT `FK_purchase_invoice_supplier_code` FOREIGN KEY (`supplier_code`) REFERENCES `supplier` (`code`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `purchase_invoice_has_item`
+--
+
+-- DROP TABLE IF EXISTS `purchase_invoice_has_item`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `purchase_invoice_has_item` (
+  `cost` double DEFAULT NULL,
+  `discount` double DEFAULT NULL,
+  `quantity` double DEFAULT NULL,
+  `purchase_invoice_supplier_code` varchar(255) NOT NULL,
+  `purchase_invoice_inv_no` varchar(255) NOT NULL,
+  `item_code` varchar(255) NOT NULL,
+  PRIMARY KEY (`purchase_invoice_supplier_code`,`purchase_invoice_inv_no`,`item_code`),
+  KEY `purchase_invoice_has_item_purchase_invoice_inv_no` (`purchase_invoice_inv_no`,`purchase_invoice_supplier_code`),
+  KEY `FK_purchase_invoice_has_item_item_code` (`item_code`),
+  CONSTRAINT `FK_purchase_invoice_has_item_item_code` FOREIGN KEY (`item_code`) REFERENCES `item` (`code`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `purchase_invoice_has_item_purchase_invoice_inv_no` FOREIGN KEY (`purchase_invoice_inv_no`, `purchase_invoice_supplier_code`) REFERENCES `purchase_invoice` (`inv_no`, `supplier_code`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `rep_sale`
+--
+
+-- DROP TABLE IF EXISTS `rep_sale`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `rep_sale` (
+  `loaded` double DEFAULT NULL,
+  `loaded_Bundles` double DEFAULT NULL,
+  `rate` double DEFAULT NULL,
+  `remaining` double DEFAULT NULL,
+  `remaining_Bundles` double DEFAULT NULL,
+  `sale_date` date NOT NULL,
+  `employee_code` varchar(255) NOT NULL,
+  `item_code` varchar(255) NOT NULL,
+  PRIMARY KEY (`sale_date`,`employee_code`,`item_code`),
+  KEY `FK_rep_sale_employee_code` (`employee_code`),
+  KEY `FK_rep_sale_item_code` (`item_code`),
+  CONSTRAINT `FK_rep_sale_employee_code` FOREIGN KEY (`employee_code`) REFERENCES `employee` (`code`),
+  CONSTRAINT `FK_rep_sale_item_code` FOREIGN KEY (`item_code`) REFERENCES `item` (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `rep_sale_value`
+--
+
+-- DROP TABLE IF EXISTS `rep_sale_value`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `rep_sale_value` (
+  `amount` double DEFAULT NULL,
+  `sale_date` datetime NOT NULL,
+  `employee_code` varchar(255) NOT NULL,
+  PRIMARY KEY (`sale_date`,`employee_code`),
+  KEY `FK_rep_sale_value_employee_code` (`employee_code`),
+  CONSTRAINT `FK_rep_sale_value_employee_code` FOREIGN KEY (`employee_code`) REFERENCES `employee` (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `rep_stock_change`
+--
+
+-- DROP TABLE IF EXISTS `rep_stock_change`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `rep_stock_change` (
+  `actual_quantity` double DEFAULT NULL,
+  `old_quantity` double DEFAULT NULL,
+  `operator` varchar(255) DEFAULT NULL,
+  `rate` double DEFAULT NULL,
+  `change_date` date NOT NULL,
+  `employee_code` varchar(255) NOT NULL,
+  `item_code` varchar(255) NOT NULL,
+  PRIMARY KEY (`change_date`,`employee_code`,`item_code`),
+  KEY `FK_rep_stock_change_employee_code` (`employee_code`),
+  KEY `FK_rep_stock_change_item_code` (`item_code`),
+  CONSTRAINT `FK_rep_stock_change_employee_code` FOREIGN KEY (`employee_code`) REFERENCES `employee` (`code`),
+  CONSTRAINT `FK_rep_stock_change_item_code` FOREIGN KEY (`item_code`) REFERENCES `item` (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `root_area`
+--
+
+-- DROP TABLE IF EXISTS `root_area`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `root_area` (
+  `code` varchar(255) NOT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `sale_cash`
+--
+
+-- DROP TABLE IF EXISTS `sale_cash`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `sale_cash` (
+  `collection_receipt_receipt_number` varchar(255) NOT NULL,
+  `amount` double DEFAULT NULL,
+  PRIMARY KEY (`collection_receipt_receipt_number`),
+  CONSTRAINT `FK_sale_cash_collection_receipt_receipt_number` FOREIGN KEY (`collection_receipt_receipt_number`) REFERENCES `collection_receipt` (`receipt_number`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `sale_cheque`
+--
+
+-- DROP TABLE IF EXISTS `sale_cheque`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `sale_cheque` (
+  `amount` double DEFAULT NULL,
+  `banking_date` date DEFAULT NULL,
+  `status` int(11) DEFAULT NULL,
+  `cheque_number` varchar(255) NOT NULL,
+  `collection_receipt_receipt_number` varchar(255) NOT NULL,
+  `bank_code` varchar(255) NOT NULL,
+  PRIMARY KEY (`cheque_number`,`collection_receipt_receipt_number`,`bank_code`),
+  KEY `FK_sale_cheque_bank_code` (`bank_code`),
+  KEY `FK_sale_cheque_collection_receipt_receipt_number` (`collection_receipt_receipt_number`),
+  CONSTRAINT `FK_sale_cheque_bank_code` FOREIGN KEY (`bank_code`) REFERENCES `bank` (`code`),
+  CONSTRAINT `FK_sale_cheque_collection_receipt_receipt_number` FOREIGN KEY (`collection_receipt_receipt_number`) REFERENCES `collection_receipt` (`receipt_number`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `sale_invoice`
+--
+
+-- DROP TABLE IF EXISTS `sale_invoice`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `sale_invoice` (
+  `inv_no` varchar(255) NOT NULL,
+  `amount` double DEFAULT NULL,
+  `credit` double DEFAULT NULL,
+  `discount` double DEFAULT NULL,
+  `inv_time` datetime DEFAULT NULL,
+  `operator` varchar(255) DEFAULT NULL,
+  `printed` int(11) DEFAULT NULL,
+  `received_amount` double DEFAULT NULL,
+  `customer_code` varchar(255) DEFAULT NULL,
+  `employee_code` varchar(255) DEFAULT NULL,
+  `customer_name` varchar(150) DEFAULT NULL,
+  `card_number` varchar(10) DEFAULT NULL,
+  `initial_payment` double DEFAULT NULL,
+  `number_of_terms` int(2) DEFAULT NULL,
+  `term_amount` double DEFAULT NULL,
+  `paid_amount` double DEFAULT NULL,
+  PRIMARY KEY (`inv_no`),
+  KEY `FK_sale_invoice_customer_code` (`customer_code`),
+  CONSTRAINT `FK_sale_invoice_customer_code` FOREIGN KEY (`customer_code`) REFERENCES `customer` (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `sale_invoice_has_item`
+--
+
+-- DROP TABLE IF EXISTS `sale_invoice_has_item`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `sale_invoice_has_item` (
+  `cost` double DEFAULT NULL,
+  `discount` double DEFAULT NULL,
+  `quantity` double DEFAULT NULL,
+  `rate` double NOT NULL,
+  `sale_invoice_inv_no` varchar(255) NOT NULL,
+  `item_code` varchar(255) NOT NULL,
+  PRIMARY KEY (`rate`,`sale_invoice_inv_no`,`item_code`),
+  KEY `FK_sale_invoice_has_item_item_code` (`item_code`),
+  KEY `FK_sale_invoice_has_item_sale_invoice_inv_no` (`sale_invoice_inv_no`),
+  CONSTRAINT `FK_sale_invoice_has_item_item_code` FOREIGN KEY (`item_code`) REFERENCES `item` (`code`),
+  CONSTRAINT `FK_sale_invoice_has_item_sale_invoice_inv_no` FOREIGN KEY (`sale_invoice_inv_no`) REFERENCES `sale_invoice` (`inv_no`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `sr_sales_payments`
+--
+
+-- DROP TABLE IF EXISTS `sr_sales_payments`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `sr_sales_payments` (
+  `amount` double DEFAULT NULL,
+  `notes` varchar(255) DEFAULT NULL,
+  `settled_Amount` double DEFAULT NULL,
+  `status` int(11) DEFAULT NULL,
+  `payment_date` date NOT NULL,
+  `employee_code` varchar(255) NOT NULL,
+  PRIMARY KEY (`payment_date`,`employee_code`),
+  KEY `FK_sr_sales_payments_employee_code` (`employee_code`),
+  CONSTRAINT `FK_sr_sales_payments_employee_code` FOREIGN KEY (`employee_code`) REFERENCES `employee` (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `sr_stock`
+--
+
+-- DROP TABLE IF EXISTS `sr_stock`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `sr_stock` (
+  `bundles` double DEFAULT NULL,
+  `pack_price` double DEFAULT NULL,
+  `quantity` double DEFAULT NULL,
+  `unit_price` double DEFAULT NULL,
+  `employee_code` varchar(255) NOT NULL,
+  `item_code` varchar(255) NOT NULL,
+  PRIMARY KEY (`employee_code`,`item_code`),
+  KEY `FK_sr_stock_item_code` (`item_code`),
+  CONSTRAINT `FK_sr_stock_employee_code` FOREIGN KEY (`employee_code`) REFERENCES `employee` (`code`),
+  CONSTRAINT `FK_sr_stock_item_code` FOREIGN KEY (`item_code`) REFERENCES `item` (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `stock`
+--
+
+-- DROP TABLE IF EXISTS `stock`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `stock` (
+  `item_code` varchar(255) NOT NULL,
+  `bundles` double DEFAULT NULL,
+  `min_limit` double DEFAULT NULL,
+  `quantity` double DEFAULT NULL,
+  PRIMARY KEY (`item_code`),
+  CONSTRAINT `FK_stock_item_code` FOREIGN KEY (`item_code`) REFERENCES `item` (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `stock_change`
+--
+
+-- DROP TABLE IF EXISTS `stock_change`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `stock_change` (
+  `actual_quantity` double DEFAULT NULL,
+  `old_quantity` double DEFAULT NULL,
+  `rate` double DEFAULT NULL,
+  `stock_change_summery_change_date` datetime NOT NULL,
+  `item_code` varchar(255) NOT NULL,
+  PRIMARY KEY (`stock_change_summery_change_date`,`item_code`),
+  KEY `FK_stock_change_item_code` (`item_code`),
+  CONSTRAINT `FK_stock_change_item_code` FOREIGN KEY (`item_code`) REFERENCES `item` (`code`),
+  CONSTRAINT `FK_stock_change_stock_change_summery_change_date` FOREIGN KEY (`stock_change_summery_change_date`) REFERENCES `stock_change_summery` (`change_date`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `stock_change_summery`
+--
+
+-- DROP TABLE IF EXISTS `stock_change_summery`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `stock_change_summery` (
+  `change_date` datetime NOT NULL,
+  `deferent` double DEFAULT NULL,
+  PRIMARY KEY (`change_date`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `stock_transfer`
+--
+
+-- DROP TABLE IF EXISTS `stock_transfer`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `stock_transfer` (
+  `quantity` double DEFAULT NULL,
+  `rate` double DEFAULT NULL,
+  `transfer_date` datetime NOT NULL,
+  `employee_code` varchar(255) NOT NULL,
+  `item_code` varchar(255) NOT NULL,
+  PRIMARY KEY (`transfer_date`,`employee_code`,`item_code`),
+  KEY `FK_stock_transfer_employee_code` (`employee_code`),
+  KEY `FK_stock_transfer_item_code` (`item_code`),
+  CONSTRAINT `FK_stock_transfer_employee_code` FOREIGN KEY (`employee_code`) REFERENCES `employee` (`code`),
+  CONSTRAINT `FK_stock_transfer_item_code` FOREIGN KEY (`item_code`) REFERENCES `item` (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `sub_dealer`
+--
+
+-- DROP TABLE IF EXISTS `sub_dealer`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `sub_dealer` (
+  `code` varchar(255) NOT NULL,
+  `address` varchar(255) DEFAULT NULL,
+  `contact` varchar(255) DEFAULT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `owner` varchar(255) DEFAULT NULL,
+  `street` varchar(255) DEFAULT NULL,
+  `town_code` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`code`),
+  KEY `FK_sub_dealer_town_code` (`town_code`),
+  CONSTRAINT `FK_sub_dealer_town_code` FOREIGN KEY (`town_code`) REFERENCES `town` (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `supplier`
+--
+
+-- DROP TABLE IF EXISTS `supplier`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `supplier` (
+  `code` varchar(255) NOT NULL,
+  `address_Number` varchar(255) DEFAULT NULL,
+  `address_Street` varchar(255) DEFAULT NULL,
+  `city` varchar(255) DEFAULT NULL,
+  `fax` varchar(255) DEFAULT NULL,
+  `fixed_Line` varchar(255) DEFAULT NULL,
+  `mobile` varchar(255) DEFAULT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `notes` varchar(255) DEFAULT NULL,
+  `town_code` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`code`),
+  KEY `FK_supplier_town_code` (`town_code`),
+  CONSTRAINT `FK_supplier_town_code` FOREIGN KEY (`town_code`) REFERENCES `town` (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `supplier_has_bank`
+--
+
+-- DROP TABLE IF EXISTS `supplier_has_bank`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `supplier_has_bank` (
+  `account_number` varchar(255) DEFAULT NULL,
+  `supplier_code` varchar(255) NOT NULL,
+  `bank_code` varchar(255) NOT NULL,
+  PRIMARY KEY (`supplier_code`,`bank_code`),
+  KEY `FK_supplier_has_bank_bank_code` (`bank_code`),
+  CONSTRAINT `FK_supplier_has_bank_bank_code` FOREIGN KEY (`bank_code`) REFERENCES `bank` (`code`),
+  CONSTRAINT `FK_supplier_has_bank_supplier_code` FOREIGN KEY (`supplier_code`) REFERENCES `supplier` (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `town`
+--
+
+-- DROP TABLE IF EXISTS `town`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `town` (
+  `code` varchar(255) NOT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `root_area_code` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`code`),
+  KEY `FK_town_root_area_code` (`root_area_code`),
+  CONSTRAINT `FK_town_root_area_code` FOREIGN KEY (`root_area_code`) REFERENCES `root_area` (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `view_panel`
+--
+
+-- DROP TABLE IF EXISTS `view_panel`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `view_panel` (
+  `view_panel` varchar(255) NOT NULL,
+  PRIMARY KEY (`view_panel`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2015-02-01  9:03:49

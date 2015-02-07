@@ -18,7 +18,6 @@ import java.awt.event.KeyEvent;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComponent;
@@ -307,7 +306,7 @@ public final class RepRemainingStockTopComponent extends NTopComponent {
         Employee employee = (Employee) repComboBox.getSelectedItem();
         int i = 0;
         tableModel.setRowCount(i);
-        if (employee != null) {
+        if (employee == null) {
             return;
         }
         for (SrStock srStock : employee.getSrStockCollection()) {

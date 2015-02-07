@@ -46,13 +46,6 @@ public class Configuration extends javax.swing.JDialog {
     public static void display() {
 
         getInstance().setVisible(true);
-//        /* Create and display the dialog */
-//        java.awt.EventQueue.invokeLater(new Runnable() {
-//            public void run() {
-////                Configuration instance = new Configuration(new javax.swing.JFrame(), true);
-//
-//            }
-//        });
     }
 
     /**
@@ -271,8 +264,7 @@ public class Configuration extends javax.swing.JDialog {
             try {
                 if (fout != null) {
                     fout.close();
-                    System.exit(0);
-//                    read();
+                    dispose();
                 }
             } catch (IOException ex) {
                 Logger.getLogger(Installer.class.getName()).log(Level.SEVERE, null, ex);
@@ -337,47 +329,13 @@ public class Configuration extends javax.swing.JDialog {
             JOptionPane.showOptionDialog(null, jcb, "select system", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, new Object[]{}, null);
 
             return (Config) jcb.getSelectedItem();
-            //********************************************************************************/
-//            config.describe();
-//            return config;
-//            Map<String, String> readObjects = (Map) ois.readObject();
-////                for (Object object : readObjects) {
-////                    // prove we have read them successfully
-////                    System.out.println(object);
-////                }
-//            if (readObjects.size() == 1) {
-//
-////                System.out.println(readObjects.values().iterator().next());
-//                return readObjects.values().iterator().next();
-//            }
-//            final JComboBox jcb = new JComboBox(readObjects.keySet().toArray());
-//            jcb.requestFocus();
-//
-//            jcb.addKeyListener(new java.awt.event.KeyAdapter() {
-//                @Override
-//                public void keyPressed(java.awt.event.KeyEvent evt) {
-//                    if (evt.getKeyCode() == 10) {
-//                        Window w = SwingUtilities.getWindowAncestor(jcb);
-//
-//                        if (w != null) {
-//                            w.setVisible(false);
-//                        }
-//                    }
-//                }
-//            });
-//            JOptionPane.showOptionDialog(null, jcb, "select system", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, new Object[]{}, null);
-//
-//            return readObjects.get(jcb.getSelectedItem().toString());
         } catch (StreamCorruptedException sce) {
-//            getInstance().write();
             return read();
         } catch (FileNotFoundException ex) {
             Logger.getLogger(Installer.class.getName()).log(Level.SEVERE, null, ex);
-//            getInstance().write();
             return read();
         } catch (IOException ex) {
             Logger.getLogger(Installer.class.getName()).log(Level.SEVERE, null, ex);
-//            getInstance().write();
             return read();
         } catch (ClassNotFoundException ex) {
             Exceptions.printStackTrace(ex);
