@@ -303,7 +303,7 @@ public final class RepSaleTopComponent extends NTopComponent {
         Employee employee = (Employee) repComboBox.getSelectedItem();
         int i = 0;
         tableModel.setRowCount(i);
-        if (employee != null) {
+        if (employee == null) {
             return;
         }
         for (SrStock srStock : employee.getSrStockCollection()) {

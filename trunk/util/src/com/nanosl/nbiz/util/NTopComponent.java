@@ -5,12 +5,15 @@
 package com.nanosl.nbiz.util;
 
 import com.nanosl.lib.db.Manager;
+import entity.Operator;
 import entity.OptionalComponent;
 import entity.OptionalComponentPK;
+import entity.SaleInvoice;
 import entity.ViewPanel;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import org.openide.DialogDisplayer;
@@ -28,29 +31,25 @@ public class NTopComponent extends TopComponent implements Format, Cell {
     public Manager manager;
     protected static PrintViewTopComponent printViewTopComponent = (PrintViewTopComponent) WindowManager.getDefault().findTopComponent("PrintViewTopComponent");
     protected final ArrayList<JComponent> optionalComponents = new ArrayList<>();
-//    private String preferredID;
 
     public NTopComponent() {
         this.manager = Manager.getInstance();
-//        Annotation annotation = this.getClass().getAnnotation(Description.class);
-//        if (annotation instanceof Description) {
-//            Description description = (Description) annotation;
-//            preferredID = description.preferredID();
-        manager.update(new ViewPanel(preferredID()));
-//        }
+        ViewPanel viewPanel = manager.find(ViewPanel.class, preferredID());
+        if (viewPanel == null) {
+            manager.update(new ViewPanel(preferredID()));
+        }
     }
 
     @Override
     public void setVisible(boolean bln) {
         if (bln) {
-
-//            Annotation annotation = this.getClass().getAnnotation(Description.class);
-//            if (annotation instanceof Description) {
-//                Description description = (Description) annotation;
-            super.setVisible(Data.getOperator().getViewPanelCollection().contains(new ViewPanel(preferredID())));
+            Operator operator = Data.getOperator();
+            if (operator == null) {
+                return;
+            }
+            super.setVisible(operator.getViewPanelCollection().contains(new ViewPanel(preferredID())));
             removeOptionals();
             return;
-//            }
         }
         super.setVisible(false);
     }
@@ -74,17 +73,6 @@ public class NTopComponent extends TopComponent implements Format, Cell {
         calendar.set(Calendar.MILLISECOND, 00);
         return calendar.getTime();
     }
-    /*
-     public static final DateFormat dd_MMMM_yyyy = new SimpleDateFormat("dd - MMMM - yyyy");
-     public static final DateFormat dd_MM_yyyy = new SimpleDateFormat("dd-MM-yyyy");
-     public static final DateFormat yyyy_MM_dd = new SimpleDateFormat("yyyy-MM-dd");
-     public static final NumberFormat nf3p = new DecimalFormat("#000");
-     public static final NumberFormat nf4p = new DecimalFormat("#00000");
-     public static final NumberFormat nf0d = new DecimalFormat("#0");
-     public static final NumberFormat nf1d = new DecimalFormat("#0.0");
-     public static final NumberFormat nf2d = new DecimalFormat("#0.00");
-     public static final NumberFormat nf3d = new DecimalFormat("#0.000");
-     */
 
     protected void showError(String string) {
         NotifyDescriptor d
@@ -111,7 +99,6 @@ public class NTopComponent extends TopComponent implements Format, Cell {
 
     private void removeOptionals() {
         for (JComponent optionalComponent : optionalComponents) {
-//            System.out.println(optionalComponent.getName());
             OptionalComponentPK optionalComponentPK = new OptionalComponentPK(optionalComponent.getName(), preferredID());
             OptionalComponent component = manager.find(OptionalComponent.class, optionalComponentPK);
             if (component == null) {
@@ -121,6 +108,17 @@ public class NTopComponent extends TopComponent implements Format, Cell {
                 manager.update(component);
             }
             optionalComponent.setVisible(component.getStatus() == 1);
+        }
+    }
+
+    public <X extends Object> List<X> find(Class<X> entityClass) {
+        try {
+            return manager.find(entityClass);
+        } catch (Exception e) {
+            if (e.getMessage().contains("Unknown column 'paid_by_credit_card'")) {
+                manager.executeSqlUpdate(SQL.ADD_paid_by_credit_card_TO_sale_invoice);
+            }
+            return manager.find(entityClass);
         }
     }
 }

@@ -59,6 +59,11 @@ public class LoginPanel extends javax.swing.JPanel {
                 passwordFieldActionPerformed(evt);
             }
         });
+        passwordField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                passwordFieldKeyPressed(evt);
+            }
+        });
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel4, org.openide.util.NbBundle.getMessage(LoginPanel.class, "LoginPanel.jLabel4.text")); // NOI18N
 
@@ -97,8 +102,15 @@ public class LoginPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_usernameFieldActionPerformed
 
     private void passwordFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_passwordFieldActionPerformed
-        login();
+        loginButton.requestFocus();
     }//GEN-LAST:event_passwordFieldActionPerformed
+
+    private void passwordFieldKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_passwordFieldKeyPressed
+        if (evt.getKeyCode() == 10) {
+            loginButton.requestFocus();
+        }
+    }//GEN-LAST:event_passwordFieldKeyPressed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -150,8 +162,9 @@ public class LoginPanel extends javax.swing.JPanel {
         LifecycleManager.getDefault().exit();
     }
 
+    JButton loginButton = new JButton();
+
     public void createLoginDialog() {
-        JButton loginButton = new JButton();
         loginButton.setText("Login");
 
         JButton exitButton = new JButton();

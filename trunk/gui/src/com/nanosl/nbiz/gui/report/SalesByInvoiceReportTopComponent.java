@@ -74,6 +74,7 @@ public final class SalesByInvoiceReportTopComponent extends NTopComponent {
         fillButton = new javax.swing.JButton();
         employeeCheckBox = new javax.swing.JCheckBox();
         employeeComboBox = new javax.swing.JComboBox();
+        freeCheckBox = new javax.swing.JCheckBox();
 
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
@@ -84,11 +85,11 @@ public final class SalesByInvoiceReportTopComponent extends NTopComponent {
 
             },
             new String [] {
-                "#", "Date", "Invoice", "Amount", "Discount"
+                "#", "Date", "Invoice", "Amount", "Discount", "Credit Card"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
+                false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -113,6 +114,8 @@ public final class SalesByInvoiceReportTopComponent extends NTopComponent {
             table.getColumnModel().getColumn(3).setCellRenderer(rightAlignCell);
             table.getColumnModel().getColumn(4).setHeaderValue(org.openide.util.NbBundle.getMessage(SalesByInvoiceReportTopComponent.class, "SalesByInvoiceReportTopComponent.table.columnModel.title4_1")); // NOI18N
             table.getColumnModel().getColumn(4).setCellRenderer(rightAlignCell);
+            table.getColumnModel().getColumn(5).setHeaderValue(org.openide.util.NbBundle.getMessage(SalesByInvoiceReportTopComponent.class, "SalesByInvoiceReportTopComponent.table.columnModel.title5_1")); // NOI18N
+            table.getColumnModel().getColumn(5).setCellRenderer(rightAlignCell);
         }
 
         totalLabel.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -155,6 +158,13 @@ public final class SalesByInvoiceReportTopComponent extends NTopComponent {
             }
         });
 
+        org.openide.awt.Mnemonics.setLocalizedText(freeCheckBox, org.openide.util.NbBundle.getMessage(SalesByInvoiceReportTopComponent.class, "SalesByInvoiceReportTopComponent.freeCheckBox.text")); // NOI18N
+        freeCheckBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                freeCheckBoxActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -165,7 +175,7 @@ public final class SalesByInvoiceReportTopComponent extends NTopComponent {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(totalLabel))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 740, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 822, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -174,10 +184,12 @@ public final class SalesByInvoiceReportTopComponent extends NTopComponent {
                         .addComponent(endDatePicker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(fillButton)
-                        .addGap(105, 105, 105)
+                        .addGap(18, 18, 18)
                         .addComponent(employeeCheckBox)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(employeeComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(employeeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(freeCheckBox)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -190,7 +202,8 @@ public final class SalesByInvoiceReportTopComponent extends NTopComponent {
                     .addComponent(endDatePicker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(fillButton)
                     .addComponent(employeeCheckBox)
-                    .addComponent(employeeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(employeeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(freeCheckBox))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -254,11 +267,16 @@ public final class SalesByInvoiceReportTopComponent extends NTopComponent {
         }
     }//GEN-LAST:event_tableMouseClicked
 
+    private void freeCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_freeCheckBoxActionPerformed
+        fill();
+    }//GEN-LAST:event_freeCheckBoxActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox employeeCheckBox;
     private javax.swing.JComboBox employeeComboBox;
     private org.jdesktop.swingx.JXDatePicker endDatePicker;
     private javax.swing.JButton fillButton;
+    private javax.swing.JCheckBox freeCheckBox;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
@@ -284,12 +302,16 @@ public final class SalesByInvoiceReportTopComponent extends NTopComponent {
         }
         int rowNumber = 0;
         for (SaleInvoice saleInvoice : saleInvoices) {
+            if (saleInvoice.getAmount() != 0 && freeCheckBox.isSelected()) {
+                continue;
+            }
             Object[] row = {
                 ++rowNumber,
                 yyyy_MM_dd_hh_mm_ss_a.format(saleInvoice.getInvTime()),
                 saleInvoice.getInvNo(),
                 nf2d.format(saleInvoice.getAmount()),
-                nf2d.format(saleInvoice.getDiscount())
+                nf2d.format(saleInvoice.getDiscount()),
+                nf2d.format(saleInvoice.getPaidByCreditCard() != null ? saleInvoice.getPaidByCreditCard() : 0)
             };
             totalSale += saleInvoice.getAmount();
             tableModel.addRow(row);
@@ -310,12 +332,13 @@ public final class SalesByInvoiceReportTopComponent extends NTopComponent {
 
     private void calcTotal() {
 //        double totalProfit = 0;
-        double totalIncome = 0;
+        double totalIncome = 0, totalCreditCardPayment = 0;
         for (int i = 0; i < tableModel.getRowCount(); i++) {
 //            totalProfit += Double.valueOf(tableModel.getValueAt(i, 6).toString());
             totalIncome += Double.valueOf(tableModel.getValueAt(i, 3).toString());
+            totalCreditCardPayment += Double.valueOf(tableModel.getValueAt(i, 5).toString());
         }
-        totalLabel.setText("Total: Income " + nf2d.format(totalIncome));//+ " & Profit " + nf2d.format(totalProfit));
+        totalLabel.setText("Total: Income " + nf2d.format(totalIncome) + " Credit Card: " + nf2d.format(totalCreditCardPayment));//+ " & Profit " + nf2d.format(totalProfit));
     }
 
     @Override

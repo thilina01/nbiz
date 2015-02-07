@@ -3,34 +3,32 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.nanosl.nbiz.gui;
+package com.nanosl.nbiz.gui.chart;
 
-import com.nanosl.lib.date.JXDatePicker;
+//import com.nanosl.nbiz.gui.Bundle;
 import com.nanosl.nbiz.util.NTopComponent;
 import java.awt.BorderLayout;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Calendar;
-import java.util.Date;
+import java.time.LocalDate;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
-import javafx.print.PageLayout;
-import javafx.print.PageOrientation;
-import javafx.print.Paper;
-import javafx.print.Printer;
-import javafx.print.PrinterJob;
-import javafx.scene.Node;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.DatePicker;
 import javafx.scene.effect.Reflection;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import javafx.scene.transform.Scale;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
@@ -52,7 +50,7 @@ import org.openide.util.NbBundle.Messages;
 )
 @TopComponent.Registration(mode = "editor", openAtStartup = false)
 @ActionID(category = "Window", id = "com.nanosl.nbiz.gui.MonthSalesChartTopComponent")
-@ActionReference(path = "Menu/Window" /*, position = 333 */)
+@ActionReference(path = "Menu/Chart" /*, position = 333 */)
 @TopComponent.OpenActionRegistration(
         displayName = "#CTL_MonthSalesChartAction",
         preferredID = "MonthSalesChartTopComponent"
@@ -69,10 +67,10 @@ public final class MonthSalesChartTopComponent extends NTopComponent {
 
     public MonthSalesChartTopComponent() {
         initComponents();
-        final Calendar c1 = Calendar.getInstance();
-        c1.setTime(new Date());
-        c1.set(Calendar.DATE, 1);
-        datePicker.setDate(c1.getTime());
+//        final Calendar c1 = Calendar.getInstance();
+//        c1.setTime(new java.util.Date());
+//        c1.set(Calendar.DATE, 1);
+//        datePicker.setDate(c1.getTime());
 //        datePicker.setMonthView(new JXMonthView());
         setName(Bundle.CTL_MonthSalesChartTopComponent());
         setToolTipText(Bundle.HINT_MonthSalesChartTopComponent());
@@ -81,6 +79,7 @@ public final class MonthSalesChartTopComponent extends NTopComponent {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
+                panel2.setScene(createCalenderScene());
                 panel.setScene(createChartScene());
             }
 
@@ -90,7 +89,47 @@ public final class MonthSalesChartTopComponent extends NTopComponent {
 //        });
 
         jPanel1.add(panel, BorderLayout.CENTER);
-        jPanel1.add(panel2, BorderLayout.SOUTH);
+        jPanel2.add(panel2, BorderLayout.SOUTH);
+    }
+
+    DatePicker endDatePicker = new DatePicker();
+    DatePicker startDatePicker = new DatePicker();
+
+    private Scene createCalenderScene() {
+        VBox vbox = new VBox(20);
+        vbox.setStyle("-fx-padding: 10;");
+//        Scene scene = new Scene(vbox, 400, 400);
+        EventHandler eventHandler = new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent event) {
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        panel.setScene(createChartScene());
+                    }
+
+                });
+                event.consume();
+            }
+        };
+        endDatePicker.setValue(LocalDate.now());
+        endDatePicker.setOnAction(eventHandler);
+        startDatePicker.setOnAction(eventHandler);
+        startDatePicker.setValue(endDatePicker.getValue().minusDays(endDatePicker.getValue().getDayOfMonth()-1));
+        GridPane gridPane = new GridPane();
+        gridPane.setHgap(10);
+        gridPane.setVgap(10);
+//
+//        Label checkInlabel = new Label("Check-In Date:");
+        gridPane.add(startDatePicker, 0, 0);
+        gridPane.add(endDatePicker, 1, 0);
+//
+//        GridPane.setHalignment(checkInlabel, HPos.LEFT);
+//        gridPane.add(checkInDatePicker, 0, 1);
+        vbox.getChildren().add(gridPane);
+        return new Scene(vbox);
+
     }
     LineChart<String, Number> lineChart;
 
@@ -101,7 +140,7 @@ public final class MonthSalesChartTopComponent extends NTopComponent {
         xAxis.setLabel("Date of Month");
         //creating the chart
 
-        lineChart.setTitle("Sales Monitoring - " + yyyy_MM_dd.format(makeStartDate(datePicker.getDate())) + " to " + yyyy_MM_dd.format(makeEndDate(datePicker1.getDate())));
+        lineChart.setTitle("Sales Monitoring - " + yyyy_MM_dd.format(makeStartDate(Date.valueOf(startDatePicker.getValue()))) + " to " + yyyy_MM_dd.format(makeEndDate(Date.valueOf(endDatePicker.getValue()))));
         //defining a series
         XYChart.Series series = new XYChart.Series();
         series.setName("Total Sales of the day");
@@ -115,11 +154,11 @@ public final class MonthSalesChartTopComponent extends NTopComponent {
                 + "sum(sale_invoice.amount) as date_sum "
                 + "FROM "
                 + "sale_invoice "
-                + "WHERE sale_invoice.inv_time BETWEEN '" + yyyy_MM_dd.format(makeStartDate(datePicker.getDate())) + " 00:00:00' AND '" + yyyy_MM_dd.format(makeEndDate(datePicker1.getDate())) + " 23:59:59'"
+                + "WHERE sale_invoice.inv_time BETWEEN '" + yyyy_MM_dd.format(makeStartDate(Date.valueOf(startDatePicker.getValue()))) + " 00:00:00' AND '" + yyyy_MM_dd.format(Date.valueOf(endDatePicker.getValue())) + " 23:59:59'"
                 + "GROUP BY "
                 + "date_only "
                 + "ORDER BY date_only;";
-        System.out.println(x);
+//        System.out.println(x);
         try (PreparedStatement ps = manager.getConnection().prepareStatement(x)) {
             ResultSet resultSet = ps.executeQuery();
             while (resultSet.next()) {
@@ -175,35 +214,11 @@ public final class MonthSalesChartTopComponent extends NTopComponent {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        datePicker = new JXDatePicker();
-        datePicker1 = new JXDatePicker();
+        jPanel2 = new javax.swing.JPanel();
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jPanel1.setLayout(new java.awt.BorderLayout());
 
-        datePicker.setName("datePicker"); // NOI18N
-        datePicker.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                datePickerActionPerformed(evt);
-            }
-        });
-        datePicker.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                datePickerKeyPressed(evt);
-            }
-        });
-
-        datePicker1.setName("datePicker"); // NOI18N
-        datePicker1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                datePicker1ActionPerformed(evt);
-            }
-        });
-        datePicker1.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                datePicker1KeyPressed(evt);
-            }
-        });
+        jPanel2.setLayout(new java.awt.BorderLayout());
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -212,60 +227,24 @@ public final class MonthSalesChartTopComponent extends NTopComponent {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(datePicker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(datePicker1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 166, Short.MAX_VALUE)))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 340, Short.MAX_VALUE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(datePicker, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(datePicker1, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 236, Short.MAX_VALUE)
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void datePickerKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_datePickerKeyPressed
-
-    }//GEN-LAST:event_datePickerKeyPressed
-
-    private void datePickerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_datePickerActionPerformed
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                panel.setScene(createChartScene());
-            }
-
-        });
-
-    }//GEN-LAST:event_datePickerActionPerformed
-
-    private void datePicker1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_datePicker1ActionPerformed
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                panel.setScene(createChartScene());
-            }
-
-        });
-    }//GEN-LAST:event_datePicker1ActionPerformed
-
-    private void datePicker1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_datePicker1KeyPressed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_datePicker1KeyPressed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private org.jdesktop.swingx.JXDatePicker datePicker;
-    private org.jdesktop.swingx.JXDatePicker datePicker1;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     // End of variables declaration//GEN-END:variables
     @Override
     public void componentOpened() {
