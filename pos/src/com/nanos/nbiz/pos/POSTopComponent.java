@@ -1345,7 +1345,8 @@ public final class POSTopComponent extends NTopComponent {
                 Data.setReceiptNo(ReceiptNumber);
             }
             clear();
-            lastInvoiceNumberField.setText("Last : " + invoiceNumber);
+            lastInvoiceNumberField.setText("Last : " + invoiceNumber);            
+            com.nanosl.nbiz.util.Data.updateSales();
         } else {
             showError("Update failed");
         }

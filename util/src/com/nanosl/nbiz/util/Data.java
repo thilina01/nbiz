@@ -4,6 +4,11 @@ import com.nanosl.lib.db.Manager;
 import entity.Company;
 import entity.General;
 import entity.Operator;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import javax.swing.JOptionPane;
@@ -104,6 +109,19 @@ public class Data {
     public static String getVersion() {
         return version;
     }
+    static Company company;
+
+    public static Company getCompany() {
+        if (company == null) {
+
+            company = m.findOne(Company.class);
+        }
+        return company;
+    }
+
+    public static String getCompanyCode() {
+        return getCompany() != null ? getCompany().getCode() : "unknown";
+    }
 
     public static Map<String, Object> getParams() {
         Map<String, Object> params = new LinkedHashMap<>();
@@ -123,5 +141,24 @@ public class Data {
 //            CompanyView.display();
         }
         return params;
+    }
+
+    public static void updateSales() {
+        new Thread(() -> {
+            try {
+                String companyCode = com.nanosl.nbiz.util.Data.getCompanyCode();
+                double total = com.nanosl.nbiz.util.FindMySql.totalSalesBetweenDates(new Date(), new Date());
+                String path = "http://nanosl.com/nbiz/updater.php?id=" + companyCode + "&amount=" + total;
+                URL url = new URL(path);
+                System.out.println(path);
+                URLConnection yc = url.openConnection();
+                yc.getInputStream();
+            } catch (MalformedURLException ex) {
+//            Exceptions.printStackTrace(ex);
+            } catch (IOException ex) {
+//            Exceptions.printStackTrace(ex);
+            }
+        }).start();
+
     }
 }

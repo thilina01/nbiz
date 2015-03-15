@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+AutoUpdate-Show-In-Client: true
+OpenIDE-Module: com.nanosl.nbiz.tracker
+OpenIDE-Module-Install: com/nanosl/nbiz/tracker/Installer.class
+OpenIDE-Module-Localizing-Bundle: com/nanosl/nbiz/tracker/Bundle.properties
+OpenIDE-Module-Specification-Version: 1.0
+

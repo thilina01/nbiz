@@ -112,6 +112,11 @@ public class FindMySql {
             = "SELECT quantity "
             + "FROM stock "
             + "WHERE item_code = ?";
+    private static final String totalSalesBetweenDates = "SELECT Sum(sale_invoice.amount) AS total "
+            + "FROM "
+            + "sale_invoice "
+            + "WHERE "
+            + "sale_invoice.inv_time BETWEEN ? AND ? ";
     private static Manager man;
     private static Connection con;
     private static Statement st;
@@ -253,6 +258,24 @@ public class FindMySql {
             res = preparedStatement.executeQuery();
             if (res.next()) {
                 totalPayments = res.getDouble("Total");
+            }
+            close();
+        } catch (SQLException ex) {
+            Errors.reportError(ex);
+        }
+        return totalPayments;
+    }
+
+    public static double totalSalesBetweenDates(Date startDate, Date endDate) {
+        connect();
+        double totalPayments = 0;
+        try {
+            preparedStatement = con.prepareStatement(totalSalesBetweenDates);
+            preparedStatement.setString(1, yyyy_MM_dd.format(startDate) + " 00:00:00");
+            preparedStatement.setString(2, yyyy_MM_dd.format(endDate) + " 23:59:59");
+            res = preparedStatement.executeQuery();
+            if (res.next()) {
+                totalPayments = res.getDouble("total");
             }
             close();
         } catch (SQLException ex) {
