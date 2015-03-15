@@ -1,0 +1,1 @@
+Java RCP for Sales Points
