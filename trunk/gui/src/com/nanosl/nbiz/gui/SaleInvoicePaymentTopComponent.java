@@ -627,6 +627,7 @@ public final class SaleInvoicePaymentTopComponent extends NTopComponent {
         double amount = saleInvoice.getAmount() == null ? 0 : saleInvoice.getAmount();
         double receivedAmount = saleInvoice.getReceivedAmount() == null ? 0 : saleInvoice.getReceivedAmount();
         remainingAmountField.setText(nf2d.format(amount - receivedAmount));
+        System.out.println("Filled "+saleInvoice);
     }
 
     private void addPay() {

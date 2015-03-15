@@ -527,7 +527,7 @@ public final class CardTopComponent extends NTopComponent {
             Collection<SaleInvoice> saleInvoices = Find.saleInvoicesAsActiveCardsByNic(cardOrNicNumberText);
             if (saleInvoices == null) {
                 return;
-            }            
+            }
             if (saleInvoices.size() == 1) {
                 saleInvoice = saleInvoices.iterator().next();
                 cardOrNicNumberTextField.setText(saleInvoice.getCardNumber());
@@ -632,7 +632,11 @@ public final class CardTopComponent extends NTopComponent {
             saleInvoicePaymentTopComponent.fill(manager.find(SaleInvoice.class, invoiceNumberTextField.getText().trim()));
             saleInvoicePaymentTopComponent.open();
             saleInvoicePaymentTopComponent.requestActive();
+        } else {
+            System.out.println("tc is null");
+            throw new NullPointerException();
         }
+        
     }//GEN-LAST:event_payButtonActionPerformed
 
     private void cardTypeComboBoxKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cardTypeComboBoxKeyPressed
