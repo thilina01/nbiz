@@ -625,7 +625,9 @@ public final class RepPaymentTopComponent extends NTopComponent {
                     issuedCheque.setBank(new Bank(paymentTable.getValueAt(i, 3).toString()));
                     issuedCheque.setBankingDate(bankingDate);
                     issuedCheque.setIssuedDate(new Date());
-                    issuedCheque.setPurchaseInvoice(purchaseInvoice);
+                    ArrayList<PurchaseInvoice> purchaseInvoicesOfCgeque = new ArrayList<>();
+                    purchaseInvoicesOfCgeque.add(purchaseInvoice);
+                    issuedCheque.setPurchaseInvoiceCollection(purchaseInvoicesOfCgeque);
                     issuedCheque.setStatus(0);
                     serializables.add(issuedCheque);
                     purchaseInvoice.getIssuedChequeCollection().add(issuedCheque);

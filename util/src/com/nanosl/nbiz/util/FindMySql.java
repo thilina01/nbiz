@@ -11,11 +11,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 
 /**
  *
@@ -28,9 +28,9 @@ public class FindMySql {
             + "DATE_FORMAT(collection_receipt.collected_time,'%d-%m-%Y') AS 'Collected Time', "
             + "sale_invoice.inv_no AS 'Invoice Number', "
             + "customer.`code` AS 'Customer Code', "
-            + "customer.`name` AS 'Customer Name', "
+            + "person.`name` AS 'Customer Name', "
             + "collection_receipt.receipt_number AS 'Receipt Number', "
-            + "collection_receipt.cash AS 'Receipt Amount', "
+            + "collection_receipt.amount AS 'Receipt Amount', "
             + "sale_invoice.amount AS 'Invoice Amount', "
             + "sale_invoice.received_amount AS 'Total Received', "
             + "sale_invoice.credit AS 'Remaining Credit'"
@@ -38,8 +38,9 @@ public class FindMySql {
             + "collection_receipt "
             + "INNER JOIN sale_invoice ON collection_receipt.sale_invoice_inv_no = sale_invoice.inv_no "
             + "INNER JOIN customer ON sale_invoice.customer_code = customer.`code` "
+            + "INNER JOIN person ON person.nic = customer.`person_nic` "
             + "WHERE collection_receipt.collected_time BETWEEN ? AND ? "
-            + "AND collection_receipt.cash < sale_invoice.amount";
+            + "AND collection_receipt.amount < sale_invoice.amount";
     private static final String saleItemProfitBetweenDates
             = "SELECT "
             + "item.`code` as 'Code', "
@@ -189,7 +190,8 @@ public class FindMySql {
             preparedStatement.setString(2, yyyy_MM_dd.format(endDate) + " 23:59:59");
             res = preparedStatement.executeQuery();
         } catch (SQLException ex) {
-            Errors.reportError(ex);
+            ex.printStackTrace();
+//            Errors.reportError(ex);
         }
         return res;
     }

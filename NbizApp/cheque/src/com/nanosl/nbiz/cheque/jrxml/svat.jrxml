@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="830" pageHeight="525" columnWidth="830" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="dde44651-f6a1-4940-8e01-a9aa686dc829">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="COMPANY" class="java.lang.String"/>
+	<parameter name="ISSUE_DATE" class="java.lang.String"/>
+	<parameter name="COMPANY_VAT" class="java.lang.String"/>
+	<parameter name="COMPANY_SVAT" class="java.lang.String"/>
+	<parameter name="SUPPLIER" class="java.lang.String"/>
+	<parameter name="SUPPLIER_VAT" class="java.lang.String"/>
+	<parameter name="SUPPLIER_SVAT" class="java.lang.String"/>
+	<parameter name="NET_SVAT" class="java.lang.String"/>
+	<parameter name="NET_SVAT_IN_TEXT" class="java.lang.String"/>
+	<parameter name="SUSPENDED_VAT" class="java.lang.String"/>
+	<parameter name="SUSPENDED_VAT_IN_TEXT" class="java.lang.String"/>
+	<parameter name="ENDING_DAY" class="java.lang.String"/>
+	<parameter name="ENDING_MONTH" class="java.lang.String"/>
+	<parameter name="ENDING_YEAR" class="java.lang.String"/>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="525" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement x="183" y="67" width="600" height="20" uuid="e178e427-c617-4fbb-9a73-c9b6938b8571"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{COMPANY}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="683" y="36" width="100" height="20" uuid="b84ba136-cbc6-4846-b283-ed44b024b4e4"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{ISSUE_DATE}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="183" y="99" width="600" height="20" uuid="47b3c46e-e259-462b-8d67-1a070d2b9d64"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{COMPANY_VAT}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="183" y="131" width="600" height="20" uuid="f5ee1532-2101-4853-8c55-f4e302618150"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{COMPANY_SVAT}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="183" y="163" width="600" height="20" uuid="94faaf2a-faa0-493a-864a-89917546f261"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{SUPPLIER}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="183" y="214" width="600" height="20" uuid="88ef4e02-eac0-4698-bf4a-67b7f38bb028"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{SUPPLIER_VAT}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="183" y="246" width="600" height="20" uuid="12e12114-2e14-4f5b-9d48-fd4a792203db"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{SUPPLIER_SVAT}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="688" y="293" width="100" height="20" uuid="045a2fdc-9344-48fa-8d97-540e25138459"/>
+				<textElement textAlignment="Right">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{NET_SVAT}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="182" y="279" width="463" height="45" uuid="87f6d196-df07-4ae3-ae6f-4b3caff42cf0"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{NET_SVAT_IN_TEXT}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="689" y="339" width="100" height="20" uuid="8eb685ac-3002-4318-aa46-85bb73288588"/>
+				<textElement textAlignment="Right">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{SUSPENDED_VAT}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="184" y="328" width="461" height="45" uuid="30d03e70-8e26-4773-9fd5-ef85cee616c6"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{SUSPENDED_VAT_IN_TEXT}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="267" y="410" width="50" height="20" uuid="c4777273-461d-469c-9bd9-ddb4df68741d"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{ENDING_DAY}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="366" y="410" width="100" height="20" uuid="082f5189-3e62-476f-a760-800d9bce874a"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{ENDING_MONTH}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="494" y="410" width="40" height="20" uuid="56dd715e-edcc-4007-aec8-8f774d7b2a96"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{ENDING_YEAR}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

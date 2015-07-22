@@ -4,11 +4,8 @@
  */
 package com.nanosl.nbiz.gui;
 
-import com.nanosl.nbiz.quicklaunch.SideBarPanel;
-import javax.swing.JButton;
+import com.nanosl.nbiz.quicklaunch.ToolBarManager;
 import org.openide.modules.ModuleInstall;
-import org.openide.windows.TopComponent;
-import org.openide.windows.WindowManager;
 
 public class Installer extends ModuleInstall {
 
@@ -18,29 +15,11 @@ public class Installer extends ModuleInstall {
     }
 
     private void initializeToolbar() {
-        addButton("Purchase", "PurchaseInvoiceTopComponent", "shopping_trolley");
-//        addButton("Sales", "SaleInvoiceTopComponent","specials-offers-save-sale");
-//        addButton("Transfer", "StockTransferTopComponent","wire-transfer-icon");
-        addButton("Stock", "StockTopComponent", "box");
-        addButton("Supplier", "SupplierTopComponent", "company");
-        addButton("Item", "ItemTopComponent", "tv");
-        
+        ToolBarManager.registerToolBarButton("Transfer", "StockTransferTopComponent", "com/nanosl/nbiz/gui/resources/wire-transfer-icon.png");
+        ToolBarManager.registerToolBarButton("Purchase", "PurchaseInvoiceTopComponent", "com/nanosl/nbiz/gui/resources/shopping_trolley.png");
+        ToolBarManager.registerToolBarButton("Stock", "StockTopComponent", "com/nanosl/nbiz/gui/resources/box.png");
+        ToolBarManager.registerToolBarButton("Supplier", "SupplierTopComponent", "com/nanosl/nbiz/gui/resources/company.png");
+        ToolBarManager.registerToolBarButton("Item", "ItemTopComponent", "com/nanosl/nbiz/gui/resources/tv.png");
     }
 
-    private void addButton(String text, final String componentName, String icon) {
-
-        JButton button = new JButton(text);
-        if (!icon.equals("")) {
-            button.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/nanosl/nbiz/gui/resources/" + icon + ".png"))); // NOI18N
-        }
-        button.addActionListener(new java.awt.event.ActionListener() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                TopComponent tc = WindowManager.getDefault().findTopComponent(componentName);
-                tc.open();
-                tc.requestActive();
-            }
-        });
-        SideBarPanel.addButton(button);
-    }
 }

@@ -17,18 +17,13 @@ public class Installer extends ModuleInstall {
     @Override
     public void restored() {
 
-        WindowManager.getDefault().invokeWhenUIReady(new Runnable() {
-            @Override
-            public void run() {
-                Frame mainWindow = WindowManager.getDefault().getMainWindow();
-                Container contentPane
-                        = ((JRootPane) mainWindow.getComponents()[0]).getContentPane();
-                SideBarPanel banner = SideBarPanel.getInstance();
-                contentPane.add(BorderLayout.WEST, banner);
-                ((BorderLayout) contentPane.getLayout()).
-                        invalidateLayout(contentPane);
-                mainWindow.validate();
-            }
+        WindowManager.getDefault().invokeWhenUIReady(() -> {
+            Frame mainWindow = WindowManager.getDefault().getMainWindow();
+            Container contentPane = ((JRootPane) mainWindow.getComponents()[0]).getContentPane();
+            SideBarPanel sideBarPanel = SideBarPanel.getInstance();
+            contentPane.add(BorderLayout.WEST, sideBarPanel);
+            ((BorderLayout) contentPane.getLayout()).invalidateLayout(contentPane);
+            mainWindow.validate();
         });
 
     }

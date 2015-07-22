@@ -204,7 +204,7 @@ public class SearchCustomerDialog extends javax.swing.JDialog {
         if (text.length() > 3) {
             List<Customer> customers = Find.customerBy$(text);
             for (Customer customer1 : customers) {
-                Object[] row = {customer1.getCode(), customer1.getNic(), customer1.getName()};
+                Object[] row = {customer1.getCode(), customer1.getPerson().getNic(), customer1.getPerson().getName()};
                 customerTableModel.addRow(row);
             }
         }

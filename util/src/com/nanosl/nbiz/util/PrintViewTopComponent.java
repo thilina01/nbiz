@@ -7,6 +7,7 @@ package com.nanosl.nbiz.util;
 import com.nanosl.lib.db.Manager;
 import java.net.URL;
 import java.util.Map;
+import net.sf.jasperreports.engine.JREmptyDataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -17,8 +18,8 @@ import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.util.Exceptions;
-import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
+import org.openide.windows.TopComponent;
 
 /**
  * Top component which displays something.
@@ -99,6 +100,20 @@ public final class PrintViewTopComponent extends TopComponent {
                 return;
             }
             JasperPrint jasperPrint = JasperFillManager.fillReport(report, parameters, Manager.getInstance().getConnection());
+            scrollPane.setViewportView(new JRViewer(jasperPrint));
+            this.open();
+            this.requestActive();
+        } catch (JRException ex) {
+            Exceptions.printStackTrace(ex);
+        }
+    }
+
+    public void printStatic(JasperReport report, Map<String, Object> parameters) {
+        try {
+            if (report == null) {
+                return;
+            }
+            JasperPrint jasperPrint = JasperFillManager.fillReport(report, parameters, new JREmptyDataSource());
             scrollPane.setViewportView(new JRViewer(jasperPrint));
             this.open();
             this.requestActive();

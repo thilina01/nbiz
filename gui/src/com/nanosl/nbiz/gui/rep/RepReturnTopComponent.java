@@ -26,8 +26,8 @@ import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
-import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
+import org.openide.windows.TopComponent;
 
 /**
  * Top component which displays something.
@@ -393,8 +393,8 @@ public final class RepReturnTopComponent extends NTopComponent {
             damageNotes.setEmployee(employee);
             damageNotes.setItem(item);
             damageNotes.setQuantity(returnQuantity);
-            damageNotes.setRate(srStock.getPackPrice());
-            damageNotes.setReason(employee.getCode() + " " + employee.getFirstName());
+            damageNotes.setRate(srStock == null ? 0.0 : srStock.getPackPrice());
+            damageNotes.setReason(employee.getCode() + " " + employee.getPerson().getName());
             serializables.add(damageNotes);
         }
         if (manager.update(serializables)) {

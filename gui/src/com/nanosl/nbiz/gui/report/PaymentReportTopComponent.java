@@ -8,6 +8,7 @@ import query.Find;
 import com.nanosl.nbiz.util.NTopComponent;
 import entity.IssuedCash;
 import entity.IssuedCheque;
+import entity.PurchaseInvoice;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
@@ -295,8 +296,19 @@ public final class PaymentReportTopComponent extends NTopComponent {
             showError("No Cheque Record Found!");
         }
         i = 0;
-        for (Iterator<IssuedCheque> it = issuedCheques.iterator(); it.hasNext();) {
-            IssuedCheque issuedCheque = it.next();
+        for (IssuedCheque issuedCheque : issuedCheques) {
+            String invoiceNumbers = "";
+            String supplierCode = "";
+            String supplierName = "";
+            Collection<PurchaseInvoice> purchaseInvoices = issuedCheque.getPurchaseInvoiceCollection();
+            for (PurchaseInvoice purchaseInvoice : purchaseInvoices) {
+                if (invoiceNumbers.length() > 0) {
+                    invoiceNumbers += ", ";
+                    supplierCode = purchaseInvoice.getSupplier().getCode();
+                    supplierName = purchaseInvoice.getSupplier().getName();
+                }
+                invoiceNumbers += purchaseInvoice.getPurchaseInvoicePK().getInvNo();
+            }
             Object[] row = {
                 ++i,
                 issuedCheque.getChequeNumber(),
@@ -304,9 +316,9 @@ public final class PaymentReportTopComponent extends NTopComponent {
                 yyyy_MM_dd.format(issuedCheque.getIssuedDate()),
                 yyyy_MM_dd.format(issuedCheque.getBankingDate()),
                 nf2d.format(issuedCheque.getAmount()),
-                issuedCheque.getPurchaseInvoice().getSupplier().getCode(),
-                issuedCheque.getPurchaseInvoice().getSupplier().getName(),
-                issuedCheque.getPurchaseInvoice().getPurchaseInvoicePK().getInvNo()
+                supplierCode,
+                supplierName,
+                invoiceNumbers
             };
             chequeTableModel.addRow(row);
         }

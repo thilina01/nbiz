@@ -124,4 +124,10 @@ public class Printer {
             }
         });
     }
+    
+    public static void printSatic(final JasperReport report, final Map<String, Object> params) {
+        java.awt.EventQueue.invokeLater(() -> {
+            printViewTopComponent.printStatic(report, params);
+        });
+    }
 }

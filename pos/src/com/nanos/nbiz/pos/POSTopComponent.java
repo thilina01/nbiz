@@ -47,8 +47,8 @@ import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.awt.StatusDisplayer;
 import org.openide.util.Exceptions;
-import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
+import org.openide.windows.TopComponent;
 
 /**
  * POSTop component which displays Point of sales input form.
@@ -1203,11 +1203,11 @@ public final class POSTopComponent extends NTopComponent {
             }
             customerName = JOptionPane.showInputDialog("Customer Name");
         } else {
-            customerName = customer.getName();
+            customerName = customer.getPerson().getName();
         }
-        double paidAmount, paidByCC;
+        double receivedAmount, paidByCC;
         try {
-            paidAmount = Double.parseDouble(paidAmountText);
+            receivedAmount = Double.parseDouble(paidAmountText);
         } catch (NumberFormatException e) {
             showError("Invalid Amount");
             paidAmountField.selectAll();
@@ -1220,8 +1220,8 @@ public final class POSTopComponent extends NTopComponent {
             paidByCCField.selectAll();
             return;
         }
-        double totalPaid = paidAmount + paidByCC;
-        double initialPayment = totalPaid > amount ? amount : totalPaid;
+        double totalReceivedAmount = receivedAmount + paidByCC;
+        double initialPayment = totalReceivedAmount > amount ? amount : totalReceivedAmount;
 //        double discount = Double.valueOf(totalDiscountText);
         saleInvoice = saleInvoice == null ? new SaleInvoice(invoiceNumber) : saleInvoice;
 
@@ -1231,8 +1231,8 @@ public final class POSTopComponent extends NTopComponent {
         saleInvoice.setCredit(credit);
         saleInvoice.setDiscount(discount);
         saleInvoice.setInvTime(edit ? saleInvoice.getInvTime() : date);
-        saleInvoice.setReceivedAmount(0.0);
-        saleInvoice.setPaidAmount(totalPaid);
+//        saleInvoice.setReceivedAmount(0.0);
+        saleInvoice.setReceivedAmount(totalReceivedAmount);
         saleInvoice.setPaidByCreditCard(paidByCC);
         saleInvoice.setInitialPayment(initialPayment);
         Object o = employeeComboBox.getSelectedItem();
@@ -1301,7 +1301,7 @@ public final class POSTopComponent extends NTopComponent {
             serializables.add(stock);
         }
         serializables.add(saleInvoice);
-        if (paidAmount > 0) {
+        if (receivedAmount > 0) {
             if (ReceiptNumber.equals("")) {
                 showError("Recipt Number Required!");
                 return;
@@ -1309,13 +1309,12 @@ public final class POSTopComponent extends NTopComponent {
             CollectionReceipt collectionReceipt = new CollectionReceipt(ReceiptNumber);
             collectionReceipt.setCollectedTime(date);
             collectionReceipt.setSaleInvoice(saleInvoice);
-            collectionReceipt.setCash(paidAmount);
-            collectionReceipt.setAmount(paidAmount);
+            collectionReceipt.setAmount(receivedAmount);
             SaleCash saleCash = new SaleCash(ReceiptNumber);
-            saleCash.setAmount(paidAmount);
+            saleCash.setAmount(receivedAmount);
             saleCash.setCollectionReceipt(collectionReceipt);
             collectionReceipt.setSaleCash(saleCash);
-            saleInvoice.setReceivedAmount(paidAmount);
+            saleInvoice.setReceivedAmount(receivedAmount);
             serializables.add(saleCash);
             serializables.add(collectionReceipt);
         }
@@ -1345,7 +1344,7 @@ public final class POSTopComponent extends NTopComponent {
                 Data.setReceiptNo(ReceiptNumber);
             }
             clear();
-            lastInvoiceNumberField.setText("Last : " + invoiceNumber);            
+            lastInvoiceNumberField.setText("Last : " + invoiceNumber);
             com.nanosl.nbiz.util.Data.updateSales();
         } else {
             showError("Update failed");
@@ -1436,7 +1435,7 @@ public final class POSTopComponent extends NTopComponent {
             employeeComboBox.setSelectedItem(saleInvoice.getEmployee());
             totalAmountField.setText(nf2d.format(saleInvoice.getAmount()));
             totalDiscountField.setText(nf2d.format(saleInvoice.getDiscount()));
-            double paidAmount = saleInvoice.getPaidAmount() != null ? saleInvoice.getPaidAmount() : saleInvoice.getAmount();
+            double paidAmount = saleInvoice.getReceivedAmount() != null ? saleInvoice.getReceivedAmount() : saleInvoice.getAmount();
             paidAmountField.setText(nf2d.format(paidAmount));
             double paidByCC = saleInvoice.getPaidByCreditCard() != null ? saleInvoice.getPaidByCreditCard() : 0.0;
             paidByCCField.setText(nf2d.format(paidByCC));

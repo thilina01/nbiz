@@ -5,7 +5,6 @@
  */
 package com.nanosl.nbiz.gui;
 
-import com.nanosl.lib.db.Manager;
 import com.nanosl.nbiz.util.Export;
 import com.nanosl.nbiz.util.NTopComponent;
 import java.sql.ResultSet;
@@ -13,13 +12,12 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.table.DefaultTableModel;
-import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.util.Exceptions;
-import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
+import org.openide.windows.TopComponent;
 
 /**
  * Top component which displays something.

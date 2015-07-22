@@ -1,5 +1,6 @@
 /*
- * To change this template, choose Tools | Templates
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
 package entity;
@@ -11,6 +12,8 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -28,15 +31,9 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Customer.findAll", query = "SELECT c FROM Customer c"),
     @NamedQuery(name = "Customer.findByCode", query = "SELECT c FROM Customer c WHERE c.code = :code"),
-    @NamedQuery(name = "Customer.findByName", query = "SELECT c FROM Customer c WHERE c.name = :name"),
-    @NamedQuery(name = "Customer.findByAddressNumber", query = "SELECT c FROM Customer c WHERE c.addressNumber = :addressNumber"),
-    @NamedQuery(name = "Customer.findByAddressStreet", query = "SELECT c FROM Customer c WHERE c.addressStreet = :addressStreet"),
-    @NamedQuery(name = "Customer.findByCity", query = "SELECT c FROM Customer c WHERE c.city = :city"),
-    @NamedQuery(name = "Customer.findByMobile", query = "SELECT c FROM Customer c WHERE c.mobile = :mobile"),
     @NamedQuery(name = "Customer.findByFixedLine", query = "SELECT c FROM Customer c WHERE c.fixedLine = :fixedLine"),
     @NamedQuery(name = "Customer.findByFax", query = "SELECT c FROM Customer c WHERE c.fax = :fax"),
     @NamedQuery(name = "Customer.findByNotes", query = "SELECT c FROM Customer c WHERE c.notes = :notes"),
-    @NamedQuery(name = "Customer.findByNic", query = "SELECT c FROM Customer c WHERE c.nic = :nic"),
     @NamedQuery(name = "Customer.findByOperator", query = "SELECT c FROM Customer c WHERE c.operator = :operator")})
 public class Customer implements Serializable, Comparable<Customer> {
 
@@ -45,31 +42,11 @@ public class Customer implements Serializable, Comparable<Customer> {
     @Basic(optional = false)
     @Column(name = "code")
     private String code;
-    @Column(name = "name")
-    private String name;
-    @Column(name = "addressNumber")
-    private String addressNumber;
-    @Column(name = "addressStreet")
-    private String addressStreet;
-    @Column(name = "city")
-    private String city;
-    @Column(name = "mobile")
-    private String mobile;
     @Column(name = "fixedLine")
     private String fixedLine;
     @Column(name = "fax")
     private String fax;
     @Column(name = "notes")
-    private String nic;
-
-    public String getNic() {
-        return nic;
-    }
-
-    public void setNic(String nic) {
-        this.nic = nic;
-    }
-    @Column(name = "person_nic")
     private String notes;
     @Column(name = "operator")
     private String operator;
@@ -77,6 +54,9 @@ public class Customer implements Serializable, Comparable<Customer> {
     private Collection<CanceledInvoice> canceledInvoiceCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "customer")
     private Collection<SaleInvoice> saleInvoiceCollection;
+    @JoinColumn(name = "person_nic", referencedColumnName = "nic")
+    @ManyToOne(optional = false)
+    private Person person;
 
     public Customer() {
     }
@@ -91,46 +71,6 @@ public class Customer implements Serializable, Comparable<Customer> {
 
     public void setCode(String code) {
         this.code = code;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getAddressNumber() {
-        return addressNumber;
-    }
-
-    public void setAddressNumber(String addressNumber) {
-        this.addressNumber = addressNumber;
-    }
-
-    public String getAddressStreet() {
-        return addressStreet;
-    }
-
-    public void setAddressStreet(String addressStreet) {
-        this.addressStreet = addressStreet;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getMobile() {
-        return mobile;
-    }
-
-    public void setMobile(String mobile) {
-        this.mobile = mobile;
     }
 
     public String getFixedLine() {
@@ -183,6 +123,14 @@ public class Customer implements Serializable, Comparable<Customer> {
         this.saleInvoiceCollection = saleInvoiceCollection;
     }
 
+    public Person getPerson() {
+        return person;
+    }
+
+    public void setPerson(Person person) {
+        this.person = person;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -210,6 +158,7 @@ public class Customer implements Serializable, Comparable<Customer> {
 
     @Override
     public int compareTo(Customer o) {
-        return this.code.compareTo(o.code);
+        return code.compareTo(o.getCode());
     }
+
 }

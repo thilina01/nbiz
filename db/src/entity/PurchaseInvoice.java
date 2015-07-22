@@ -1,8 +1,8 @@
 /*
- * To change this template, choose Tools | Templates
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package entity;
 
 import java.io.Serializable;
@@ -13,6 +13,7 @@ import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -20,13 +21,16 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author Thilina Ranathunga
+ * @author Thilina
  */
 @Entity
 @Table(name = "purchase_invoice")
+@XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "PurchaseInvoice.findAll", query = "SELECT p FROM PurchaseInvoice p"),
     @NamedQuery(name = "PurchaseInvoice.findByInvNo", query = "SELECT p FROM PurchaseInvoice p WHERE p.purchaseInvoicePK.invNo = :invNo"),
@@ -43,6 +47,7 @@ public class PurchaseInvoice implements Serializable {
     @Column(name = "inv_date")
     @Temporal(TemporalType.DATE)
     private Date invDate;
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "amount")
     private Double amount;
     @Column(name = "credit")
@@ -51,15 +56,15 @@ public class PurchaseInvoice implements Serializable {
     private Double discount;
     @Column(name = "operator")
     private String operator;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "purchaseInvoice")
-    private Collection<PurchaseInvoiceHasItem> purchaseInvoiceHasItemCollection;
+    @ManyToMany(mappedBy = "purchaseInvoiceCollection")
+    private Collection<IssuedCheque> issuedChequeCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "purchaseInvoice")
     private Collection<IssuedCash> issuedCashCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "purchaseInvoice")
+    private Collection<PurchaseInvoiceHasItem> purchaseInvoiceHasItemCollection;
     @JoinColumn(name = "supplier_code", referencedColumnName = "code", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Supplier supplier;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "purchaseInvoice")
-    private Collection<IssuedCheque> issuedChequeCollection;
 
     public PurchaseInvoice() {
     }
@@ -120,14 +125,16 @@ public class PurchaseInvoice implements Serializable {
         this.operator = operator;
     }
 
-    public Collection<PurchaseInvoiceHasItem> getPurchaseInvoiceHasItemCollection() {
-        return purchaseInvoiceHasItemCollection;
+    @XmlTransient
+    public Collection<IssuedCheque> getIssuedChequeCollection() {
+        return issuedChequeCollection;
     }
 
-    public void setPurchaseInvoiceHasItemCollection(Collection<PurchaseInvoiceHasItem> purchaseInvoiceHasItemCollection) {
-        this.purchaseInvoiceHasItemCollection = purchaseInvoiceHasItemCollection;
+    public void setIssuedChequeCollection(Collection<IssuedCheque> issuedChequeCollection) {
+        this.issuedChequeCollection = issuedChequeCollection;
     }
 
+    @XmlTransient
     public Collection<IssuedCash> getIssuedCashCollection() {
         return issuedCashCollection;
     }
@@ -136,20 +143,21 @@ public class PurchaseInvoice implements Serializable {
         this.issuedCashCollection = issuedCashCollection;
     }
 
+    @XmlTransient
+    public Collection<PurchaseInvoiceHasItem> getPurchaseInvoiceHasItemCollection() {
+        return purchaseInvoiceHasItemCollection;
+    }
+
+    public void setPurchaseInvoiceHasItemCollection(Collection<PurchaseInvoiceHasItem> purchaseInvoiceHasItemCollection) {
+        this.purchaseInvoiceHasItemCollection = purchaseInvoiceHasItemCollection;
+    }
+
     public Supplier getSupplier() {
         return supplier;
     }
 
     public void setSupplier(Supplier supplier) {
         this.supplier = supplier;
-    }
-
-    public Collection<IssuedCheque> getIssuedChequeCollection() {
-        return issuedChequeCollection;
-    }
-
-    public void setIssuedChequeCollection(Collection<IssuedCheque> issuedChequeCollection) {
-        this.issuedChequeCollection = issuedChequeCollection;
     }
 
     @Override
@@ -176,5 +184,5 @@ public class PurchaseInvoice implements Serializable {
     public String toString() {
         return util.ToString.get(this);
     }
-
+    
 }

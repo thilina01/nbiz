@@ -36,7 +36,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "CollectionReceipt.findByReceiptNumber", query = "SELECT c FROM CollectionReceipt c WHERE c.receiptNumber = :receiptNumber"),
     @NamedQuery(name = "CollectionReceipt.findByCollectedTime", query = "SELECT c FROM CollectionReceipt c WHERE c.collectedTime = :collectedTime"),
     @NamedQuery(name = "CollectionReceipt.findByOperator", query = "SELECT c FROM CollectionReceipt c WHERE c.operator = :operator"),
-    @NamedQuery(name = "CollectionReceipt.findByCash", query = "SELECT c FROM CollectionReceipt c WHERE c.cash = :cash")})
+    @NamedQuery(name = "CollectionReceipt.findByAmount", query = "SELECT c FROM CollectionReceipt c WHERE c.amount = :amount")})
 public class CollectionReceipt implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -49,8 +49,8 @@ public class CollectionReceipt implements Serializable {
     @Column(name = "operator")
     private String operator;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
-    @Column(name = "cash")
-    private Double cash; 
+//    @Column(name = "cash")
+//    private Double cash; 
     @Column(name = "amount")
     private Double amount;
     @JoinColumn(name = "sale_invoice_inv_no", referencedColumnName = "inv_no")
@@ -92,13 +92,13 @@ public class CollectionReceipt implements Serializable {
         this.operator = operator;
     }
 
-    public Double getCash() {
-        return cash;
-    }
-
-    public void setCash(Double cash) {
-        this.cash = cash;
-    }
+//    public Double getCash() {
+//        return cash;
+//    }
+//
+//    public void setCash(Double cash) {
+//        this.cash = cash;
+//    }
 
     public SaleInvoice getSaleInvoice() {
         return saleInvoice;

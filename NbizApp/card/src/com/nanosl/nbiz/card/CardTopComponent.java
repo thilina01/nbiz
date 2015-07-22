@@ -9,6 +9,7 @@ import com.nanosl.nbiz.gui.SaleInvoicePaymentTopComponent;
 import com.nanosl.nbiz.util.NTopComponent;
 import entity.CollectionReceipt;
 import entity.Customer;
+import entity.Person;
 import entity.SaleInvoice;
 import entity.SaleInvoiceHasItem;
 import java.awt.Window;
@@ -23,8 +24,8 @@ import org.jdesktop.swingx.JXDatePicker;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
-import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
+import org.openide.windows.TopComponent;
 import org.openide.windows.WindowManager;
 import query.Find;
 
@@ -574,11 +575,12 @@ public final class CardTopComponent extends NTopComponent {
         }
         purchaseDatePicker.setDate(saleInvoice.getInvTime());
         Customer customer = saleInvoice.getCustomer();
-        nicTextField.setText(customer.getNic());
-        nameTextField.setText(customer.getName());
-        addressTextField.setText(customer.getAddressNumber() + ", " + customer.getAddressStreet());
-        cityTextField.setText(customer.getCity());
-        mobileTextField.setText(customer.getMobile());
+        Person person = customer.getPerson();
+        nicTextField.setText(person.getNic());
+        nameTextField.setText(person.getName());
+        addressTextField.setText(person.getAddress());
+        cityTextField.setText(person.getCity());
+        mobileTextField.setText(person.getMobile());
         fixedPhoneTextField.setText(customer.getFixedLine());
 
         invoiceNumberTextField.setText(saleInvoice.getInvNo());
@@ -613,7 +615,6 @@ public final class CardTopComponent extends NTopComponent {
             Object[] row = {collectionReceipt.getReceiptNumber(), yyyy_MM_dd.format(collectionReceipt.getCollectedTime()), nf2d.format(collectionReceipt.getAmount() != null ? collectionReceipt.getAmount() : 0)};
             paymentsTableModel.addRow(row);
         }
-
     }//GEN-LAST:event_cardOrNicNumberTextFieldActionPerformed
 
     private void installmentDatePickerKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_installmentDatePickerKeyPressed

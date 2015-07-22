@@ -53,8 +53,8 @@ public class Item implements Serializable, Comparable<Item> {
     private String code;
     @Column(name = "qkey")
     private Integer qkey;
-    @Column(name = "disable")
-    private Integer disable;
+    @Column(name = "status")
+    private Integer status;
     @Column(name = "description")
     private String description;
     @Column(name = "brand")
@@ -370,16 +370,17 @@ public class Item implements Serializable, Comparable<Item> {
     }
 
     /**
-     * @return the disable
+     * @return the status
      */
-    public Integer getDisable() {
-        return disable;
+    public Integer getStatus() {
+        return status;
     }
 
     /**
-     * @param disable the disable to set
+     * @param status the status to set
      */
-    public void setDisable(Integer disable) {
-        this.disable = disable;
+    public void setStatus(Integer status) {
+        this.status = status;
     }
+
 }

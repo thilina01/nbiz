@@ -97,6 +97,7 @@ public class Data {
      */
     public static void setOperator(Operator aOperator) {
         operator = aOperator;
+        MenuManager.restore();
     }
 
     public static void setVersion(String aVersion) {
@@ -113,7 +114,6 @@ public class Data {
 
     public static Company getCompany() {
         if (company == null) {
-
             company = m.findOne(Company.class);
         }
         return company;
@@ -126,13 +126,12 @@ public class Data {
     public static Map<String, Object> getParams() {
         Map<String, Object> params = new LinkedHashMap<>();
         try {
-            Company company = m.find(Company.class).get(0);
-            params.put("company", company.getName());
-            params.put("address", company.getAddressNumber() + " " + company.getAddressStreet() + " " + company.getAddressCity());
-            params.put("phone", company.getContactOne() + " " + company.getContactTwo());
-            params.put("email", company.getEmail());
-            params.put("fax", company.getFax());
-            params.put("web", company.getWeb());
+            params.put("company", getCompany().getName());
+            params.put("address", getCompany().getAddressNumber() + " " + getCompany().getAddressStreet() + " " + getCompany().getAddressCity());
+            params.put("phone", getCompany().getContactOne() + " " + getCompany().getContactTwo());
+            params.put("email", getCompany().getEmail());
+            params.put("fax", getCompany().getFax());
+            params.put("web", getCompany().getWeb());
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Update Your Company Information");
             TopComponent tc = WindowManager.getDefault().findTopComponent("CompanyTopComponent");
@@ -146,8 +145,8 @@ public class Data {
     public static void updateSales() {
         new Thread(() -> {
             try {
-                String companyCode = com.nanosl.nbiz.util.Data.getCompanyCode();
-                double total = com.nanosl.nbiz.util.FindMySql.totalSalesBetweenDates(new Date(), new Date());
+                String companyCode = getCompanyCode();
+                double total = FindMySql.totalSalesBetweenDates(new Date(), new Date());
                 String path = "http://nanosl.com/nbiz/updater.php?id=" + companyCode + "&amount=" + total;
                 URL url = new URL(path);
                 System.out.println(path);

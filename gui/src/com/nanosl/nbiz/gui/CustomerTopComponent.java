@@ -6,15 +6,15 @@ package com.nanosl.nbiz.gui;
 
 import com.nanosl.nbiz.util.NTopComponent;
 import entity.Customer;
-import java.util.Iterator;
+import entity.Person;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
-import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
+import org.openide.windows.TopComponent;
 
 /**
  * Top component which displays something.
@@ -60,7 +60,6 @@ public final class CustomerTopComponent extends NTopComponent {
         codeLabel = new javax.swing.JLabel();
         nameLabel = new javax.swing.JLabel();
         addressNumberLabel = new javax.swing.JLabel();
-        addressStreetLabel = new javax.swing.JLabel();
         mobileLabel = new javax.swing.JLabel();
         fixedLineLabel = new javax.swing.JLabel();
         faxLabel = new javax.swing.JLabel();
@@ -68,8 +67,7 @@ public final class CustomerTopComponent extends NTopComponent {
         townCodeLabel = new javax.swing.JLabel();
         codeField = new javax.swing.JTextField();
         nameField = new javax.swing.JTextField();
-        addressNumberField = new javax.swing.JTextField();
-        addressStreetField = new javax.swing.JTextField();
+        addressField = new javax.swing.JTextField();
         mobileField = new javax.swing.JTextField();
         fixedLineField = new javax.swing.JTextField();
         faxField = new javax.swing.JTextField();
@@ -126,8 +124,6 @@ public final class CustomerTopComponent extends NTopComponent {
 
         org.openide.awt.Mnemonics.setLocalizedText(addressNumberLabel, org.openide.util.NbBundle.getMessage(CustomerTopComponent.class, "CustomerTopComponent.addressNumberLabel.text")); // NOI18N
 
-        org.openide.awt.Mnemonics.setLocalizedText(addressStreetLabel, org.openide.util.NbBundle.getMessage(CustomerTopComponent.class, "CustomerTopComponent.addressStreetLabel.text")); // NOI18N
-
         org.openide.awt.Mnemonics.setLocalizedText(mobileLabel, org.openide.util.NbBundle.getMessage(CustomerTopComponent.class, "CustomerTopComponent.mobileLabel.text")); // NOI18N
 
         org.openide.awt.Mnemonics.setLocalizedText(fixedLineLabel, org.openide.util.NbBundle.getMessage(CustomerTopComponent.class, "CustomerTopComponent.fixedLineLabel.text")); // NOI18N
@@ -150,15 +146,9 @@ public final class CustomerTopComponent extends NTopComponent {
             }
         });
 
-        addressNumberField.addActionListener(new java.awt.event.ActionListener() {
+        addressField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                addressNumberFieldActionPerformed(evt);
-            }
-        });
-
-        addressStreetField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                addressStreetFieldActionPerformed(evt);
+                addressFieldActionPerformed(evt);
             }
         });
 
@@ -227,48 +217,48 @@ public final class CustomerTopComponent extends NTopComponent {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(masterScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 714, Short.MAX_VALUE)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addComponent(addressNumberLabel)
-                            .addComponent(addressStreetLabel)
-                            .addComponent(townCodeLabel)
-                            .addComponent(mobileLabel)
-                            .addComponent(fixedLineLabel)
-                            .addComponent(faxLabel)
-                            .addComponent(notesLabel)
-                            .addComponent(nameLabel)
-                            .addComponent(codeLabel))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(fixedLineField)
-                            .addComponent(faxField)
-                            .addComponent(addressStreetField)
-                            .addComponent(mobileField)
-                            .addComponent(notesField, javax.swing.GroupLayout.DEFAULT_SIZE, 611, Short.MAX_VALUE)
-                            .addComponent(nicTextField)
-                            .addComponent(codeField)
-                            .addComponent(cityField)
-                            .addComponent(addressNumberField)
-                            .addComponent(nameField)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 215, Short.MAX_VALUE)
+                        .addContainerGap(228, Short.MAX_VALUE)
                         .addComponent(updateButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(deleteButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(clearButton)
-                        .addGap(297, 297, 297)))
+                        .addGap(297, 297, 297))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(masterScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 714, Short.MAX_VALUE)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel1)
+                                    .addComponent(addressNumberLabel)
+                                    .addComponent(townCodeLabel)
+                                    .addComponent(mobileLabel)
+                                    .addComponent(fixedLineLabel)
+                                    .addComponent(faxLabel)
+                                    .addComponent(notesLabel)
+                                    .addComponent(nameLabel)
+                                    .addComponent(codeLabel))
+                                .addGap(28, 28, 28)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(fixedLineField)
+                                    .addComponent(faxField)
+                                    .addComponent(mobileField)
+                                    .addComponent(notesField, javax.swing.GroupLayout.DEFAULT_SIZE, 634, Short.MAX_VALUE)
+                                    .addComponent(nicTextField)
+                                    .addComponent(codeField)
+                                    .addComponent(cityField)
+                                    .addComponent(addressField)
+                                    .addComponent(nameField))))))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(masterScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 311, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(masterScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 337, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(codeLabel)
@@ -284,11 +274,7 @@ public final class CustomerTopComponent extends NTopComponent {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(addressNumberLabel)
-                    .addComponent(addressNumberField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(addressStreetLabel)
-                    .addComponent(addressStreetField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(addressField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(townCodeLabel)
@@ -330,8 +316,8 @@ public final class CustomerTopComponent extends NTopComponent {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -351,21 +337,15 @@ public final class CustomerTopComponent extends NTopComponent {
 
     private void nameFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nameFieldActionPerformed
         if (!nameField.getText().trim().equals("")) {
-            addressNumberField.requestFocus();
+            addressField.requestFocus();
         }
     }//GEN-LAST:event_nameFieldActionPerformed
 
-    private void addressNumberFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addressNumberFieldActionPerformed
-        if (!addressNumberField.getText().trim().equals("")) {
-            addressStreetField.requestFocus();
-        }
-    }//GEN-LAST:event_addressNumberFieldActionPerformed
-
-    private void addressStreetFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addressStreetFieldActionPerformed
-        if (!addressStreetField.getText().trim().equals("")) {
+    private void addressFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addressFieldActionPerformed
+        if (!addressField.getText().trim().equals("")) {
             cityField.requestFocus();
         }
-    }//GEN-LAST:event_addressStreetFieldActionPerformed
+    }//GEN-LAST:event_addressFieldActionPerformed
 
     private void mobileFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mobileFieldActionPerformed
 
@@ -409,10 +389,8 @@ public final class CustomerTopComponent extends NTopComponent {
     }//GEN-LAST:event_nicTextFieldActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTextField addressNumberField;
+    private javax.swing.JTextField addressField;
     private javax.swing.JLabel addressNumberLabel;
-    private javax.swing.JTextField addressStreetField;
-    private javax.swing.JLabel addressStreetLabel;
     private javax.swing.JTextField cityField;
     private javax.swing.JButton clearButton;
     private javax.swing.JTextField codeField;
@@ -455,7 +433,11 @@ public final class CustomerTopComponent extends NTopComponent {
         tableModel.setRowCount(0);
         int i = 0;
         for (Customer customer : customers) {
-            Object[] row = {++i, customer.getCode(), customer.getNic(), customer.getName(), customer.getMobile()};
+            Person person = customer.getPerson();
+            if (person == null) {
+                continue;
+            }
+            Object[] row = {++i, customer.getCode(), person.getNic(), person.getName(), person.getMobile()};
             tableModel.addRow(row);
         }
     }
@@ -465,8 +447,7 @@ public final class CustomerTopComponent extends NTopComponent {
         codeField.setText("");
         nicTextField.setText("");
         nameField.setText("");
-        addressNumberField.setText("");
-        addressStreetField.setText("");
+        addressField.setText("");
         cityField.setText("");
         mobileField.setText("");
         fixedLineField.setText("");
@@ -475,13 +456,13 @@ public final class CustomerTopComponent extends NTopComponent {
     }
 
     private void fillData(Customer customer) {
+        Person person = customer.getPerson();
         codeField.setText(customer.getCode());
-        nicTextField.setText(customer.getNic());
-        nameField.setText(customer.getName());
-        addressNumberField.setText(customer.getAddressNumber());
-        addressStreetField.setText(customer.getAddressStreet());
-        cityField.setText(customer.getCity());
-        mobileField.setText(customer.getMobile());
+        nicTextField.setText(person.getNic());
+        nameField.setText(person.getName());
+        addressField.setText(person.getAddress());
+        cityField.setText(person.getCity());
+        mobileField.setText(person.getMobile());
         fixedLineField.setText(customer.getFixedLine());
         faxField.setText(customer.getFax());
         notesField.setText(customer.getNotes());
@@ -525,8 +506,7 @@ public final class CustomerTopComponent extends NTopComponent {
             return;
         }
 
-        String addressNumber = addressNumberField.getText().trim();
-        String addressStreet = addressStreetField.getText().trim();
+        String address = addressField.getText().trim();
         String mobile = mobileField.getText().trim();
         String fixedLine = fixedLineField.getText().trim();
         String fax = faxField.getText().trim();
@@ -536,15 +516,19 @@ public final class CustomerTopComponent extends NTopComponent {
         if (customer == null) {
             customer = new Customer(code);
         }
-        customer.setNic(nic);
-        customer.setName(name);
-        customer.setAddressNumber(addressNumber);
-        customer.setAddressStreet(addressStreet);
+        Person person = manager.find(Person.class, nic);
+        if (person == null) {
+            person = new Person(nic);
+        }
+        person.setNic(nic);
+        person.setName(name);
+        person.setAddress(address);
+        person.setCity(city);
+        person.setMobile(mobile);
+        customer.setPerson(person);
         customer.setFax(fax);
         customer.setFixedLine(fixedLine);
-        customer.setMobile(mobile);
         customer.setNotes(notes);
-        customer.setCity(city);
         if (manager.update(customer)) {
             clear();
             codeField.requestFocus();

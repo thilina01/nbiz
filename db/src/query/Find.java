@@ -20,6 +20,7 @@ import entity.SrSalesPayments;
 import entity.Stock;
 import entity.StockTransfer;
 import entity.Supplier;
+import entity.Svat;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
@@ -43,7 +44,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "find")
 @NamedQueries({
-    @NamedQuery(name = "Customer.findBy$", query = "SELECT c FROM Customer c WHERE  UPPER(c.code) LIKE UPPER(:text) OR UPPER(c.nic) LIKE UPPER(:text) OR UPPER(c.name) LIKE UPPER(:text) "),
+    @NamedQuery(name = "Customer.findBy$", query = "SELECT c FROM Customer c WHERE  UPPER(c.code) LIKE UPPER(:text) OR UPPER(c.person.nic) LIKE UPPER(:text) OR UPPER(c.person.name) LIKE UPPER(:text) "),
     @NamedQuery(name = "DamageNotes.findByDateTimeAndEmployeeCode", query = "SELECT d FROM DamageNotes d WHERE d.damageNotesPK.dateTime = :dateTime AND d.damageNotesPK.employeeCode = :employeeCode"),
     @NamedQuery(name = "Item.findBy$", query = "SELECT i FROM Item i WHERE  UPPER(i.code) LIKE UPPER(:text) OR UPPER(i.description) LIKE UPPER(:text) OR UPPER(i.brand) LIKE UPPER(:text) "),
     @NamedQuery(name = "PurchaseInvoice.findByInvDates", query = "SELECT p FROM PurchaseInvoice p WHERE p.invDate BETWEEN :startDate AND :endDate"),
@@ -52,7 +53,7 @@ import javax.persistence.Table;
     @NamedQuery(name = "SaleInvoice.findByInvDatesAndEmployee", query = "SELECT s FROM SaleInvoice s WHERE s.employee = :employee AND s.invTime BETWEEN :startDate AND :endDate ORDER BY s.invTime"),
     @NamedQuery(name = "SaleInvoice.findByCard", query = "SELECT s FROM SaleInvoice s WHERE s.cardNumber = :card"),
     @NamedQuery(name = "SaleInvoice.findAllCards", query = "SELECT s FROM SaleInvoice s WHERE s.cardNumber IS NOT NULL"),
-    @NamedQuery(name = "SaleInvoice.findActiveCardsByNic", query = "SELECT s FROM SaleInvoice s WHERE s.customer.nic = :nic AND s.cardNumber IS NOT NULL AND s.amount> s.receivedAmount"),
+    @NamedQuery(name = "SaleInvoice.findActiveCardsByNic", query = "SELECT s FROM SaleInvoice s WHERE s.customer.person.nic = :nic AND s.cardNumber IS NOT NULL AND s.amount> s.receivedAmount"),
     @NamedQuery(name = "SaleInvoiceHasItem.findByItemAndInvDates", query = "SELECT s FROM SaleInvoiceHasItem s WHERE s.item = :item AND s.saleInvoice.invTime BETWEEN :startDate AND :endDate"),
     @NamedQuery(name = "SaleInvoiceHasItem.findByInvDates", query = "SELECT s FROM SaleInvoiceHasItem s WHERE s.saleInvoice.invTime BETWEEN :startDate AND :endDate GROUP BY s.saleInvoiceHasItemPK.itemCode, s.rate ORDER BY s.saleInvoiceHasItemPK.itemCode"),
     @NamedQuery(name = "Supplier.findByName", query = "SELECT s FROM Supplier s WHERE s.name = :name"),
@@ -67,6 +68,7 @@ import javax.persistence.Table;
     @NamedQuery(name = "Expenses.findByDates", query = "SELECT e FROM Expenses e WHERE e.paidTime BETWEEN :startDate AND :endDate"),
     @NamedQuery(name = "CollectionReceipt.findByDates", query = "SELECT c FROM CollectionReceipt c WHERE c.collectedTime BETWEEN :startDate AND :endDate"),
     @NamedQuery(name = "IssuedCheque.findByDates", query = "SELECT i FROM IssuedCheque i WHERE i.issuedDate BETWEEN :startDate AND :endDate"),
+    @NamedQuery(name = "Svat.findByDates", query = "SELECT s FROM Svat s WHERE s.issuedDate BETWEEN :startDate AND :endDate"),
     @NamedQuery(name = "SaleCheque.findByBankingDates", query = "SELECT s FROM SaleCheque s WHERE s.bankingDate BETWEEN :startDate AND :endDate"),
     @NamedQuery(name = "StockTransfer.findByItemAndTransferDates", query = "SELECT s FROM StockTransfer s WHERE s.stockTransferPK.itemCode = :item AND s.stockTransferPK.transferDate BETWEEN :startDate AND :endDate"),
     @NamedQuery(name = "SrSalesPayments.findByStatusAndEmployee", query = "SELECT s FROM SrSalesPayments s WHERE s.status = :status AND s.employee = :employee")
@@ -141,6 +143,13 @@ public class Find implements Serializable {
 
     public static Collection<IssuedCheque> issuedChequeByDates(Date startDate, Date endDate) {
         Query qry = man.getEm().createNamedQuery("IssuedCheque.findByDates");
+        qry.setParameter("startDate", startDate);
+        qry.setParameter("endDate", endDate);
+        return man.exNamedQueryParamResult(qry);
+    }
+
+    public static Collection<Svat> svatByDates(Date startDate, Date endDate) {
+        Query qry = man.getEm().createNamedQuery("Svat.findByDates");
         qry.setParameter("startDate", startDate);
         qry.setParameter("endDate", endDate);
         return man.exNamedQueryParamResult(qry);

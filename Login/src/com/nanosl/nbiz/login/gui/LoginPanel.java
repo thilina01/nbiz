@@ -27,7 +27,7 @@ public class LoginPanel extends javax.swing.JPanel {
      * Creates new form LoginPanel
      */
     public LoginPanel() {
-        initComponents();
+        onLoad();
     }
 
     /**
@@ -102,7 +102,7 @@ public class LoginPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_usernameFieldActionPerformed
 
     private void passwordFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_passwordFieldActionPerformed
-        loginButton.requestFocus();
+        login();
     }//GEN-LAST:event_passwordFieldActionPerformed
 
     private void passwordFieldKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_passwordFieldKeyPressed
@@ -156,6 +156,18 @@ public class LoginPanel extends javax.swing.JPanel {
 //            first();
         }
 //        setLocationRelativeTo(null);
+
+//        initComponents();
+//        closeOpenedTopComponents();
+        loginButton.setText("Login");
+        exitButton.setText("Exit");
+
+        exitButton.addActionListener(exitButtonActionListener);
+        loginButton.addActionListener(loginButtonActionListener);
+
+        notifyDescriptor = new NotifyDescriptor.Confirmation(this, "Login", NotifyDescriptor.DEFAULT_OPTION, NotifyDescriptor.PLAIN_MESSAGE);
+        notifyDescriptor.setOptions(new Object[]{loginButton, exitButton});
+        notifyDescriptor.addPropertyChangeListener(propertyChangeListener);
     }
 
     private void exit() {
@@ -163,37 +175,39 @@ public class LoginPanel extends javax.swing.JPanel {
     }
 
     JButton loginButton = new JButton();
+    JButton exitButton = new JButton();
+    ActionListener exitButtonActionListener = new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent arg0) {
+            exit();
+        }
+    };
+    ActionListener loginButtonActionListener = new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent arg0) {
+            login();
+        }
+    };
 
-    public void createLoginDialog() {
-        loginButton.setText("Login");
-
-        JButton exitButton = new JButton();
-        exitButton.setText("Exit");
-
-        exitButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent arg0) {
+    PropertyChangeListener propertyChangeListener = new PropertyChangeListener() {
+        @Override
+        public void propertyChange(PropertyChangeEvent evt) {
+            if (NotifyDescriptor.CLOSED_OPTION.equals(evt.getNewValue())) {
                 exit();
             }
-        });
+        }
+    };
+    static NotifyDescriptor notifyDescriptor;
+    static LoginPanel loginPanel = new LoginPanel();
 
-        loginButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent arg0) {
-                login();
-            }
-        });
-        NotifyDescriptor nd = new NotifyDescriptor.Confirmation(this, "Login", NotifyDescriptor.DEFAULT_OPTION, NotifyDescriptor.PLAIN_MESSAGE);
-        nd.setOptions(new Object[]{loginButton, exitButton});
-        DialogDisplayer.getDefault().notifyLater(nd);
-
-        nd.addPropertyChangeListener(new PropertyChangeListener() {
-            @Override
-            public void propertyChange(PropertyChangeEvent evt) {
-                if (NotifyDescriptor.CLOSED_OPTION.equals(evt.getNewValue())) {
-                    exit();
-                }
-            }
-        });
+    public static void displayLoginDialog() {
+        DialogDisplayer.getDefault().notifyLater(notifyDescriptor);
     }
+
+//    private void closeOpenedTopComponents() {
+//        Set<TopComponent> topComponent = WindowManager.getDefault().getRegistry().getOpened();
+//        for (Iterator<TopComponent> iterator = topComponent.iterator(); iterator.hasNext();) {
+//            iterator.next().close();
+//        }
+//    }
 }

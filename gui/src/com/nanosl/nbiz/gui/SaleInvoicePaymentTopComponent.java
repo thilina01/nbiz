@@ -9,7 +9,6 @@ import com.nanosl.lib.log.Loggings;
 import com.nanosl.nbiz.util.Data;
 import com.nanosl.nbiz.util.NTopComponent;
 import com.nanosl.nbiz.util.PrintViewTopComponent;
-import com.nanosl.nbiz.util.Printer;
 import entity.Bank;
 import entity.CanceledInvoice;
 import entity.CanceledInvoiceHasItem;
@@ -44,8 +43,8 @@ import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
-import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
+import org.openide.windows.TopComponent;
 import org.openide.windows.WindowManager;
 
 /**
@@ -617,17 +616,17 @@ public final class SaleInvoicePaymentTopComponent extends NTopComponent {
     }
 
     public void fill(SaleInvoice saleInvoice) {
-        System.out.println("filling "+saleInvoice);
+        System.out.println("filling " + saleInvoice);
         clearAll();
         customer = saleInvoice.getCustomer();
         invoiceNumberField.setText(saleInvoice.getInvNo());
         invoiceDateField.setText(yyyy_MM_dd.format(saleInvoice.getInvTime()));
-        customerNameField.setText(saleInvoice.getCustomer().getName());
+        customerNameField.setText(saleInvoice.getCustomer().getPerson().getName());
         amountField.setText(nf2d.format(saleInvoice.getAmount()));
         double amount = saleInvoice.getAmount() == null ? 0 : saleInvoice.getAmount();
         double receivedAmount = saleInvoice.getReceivedAmount() == null ? 0 : saleInvoice.getReceivedAmount();
         remainingAmountField.setText(nf2d.format(amount - receivedAmount));
-        System.out.println("Filled "+saleInvoice);
+        System.out.println("Filled " + saleInvoice);
     }
 
     private void addPay() {
@@ -730,7 +729,6 @@ public final class SaleInvoicePaymentTopComponent extends NTopComponent {
             double collectedAmount = Double.valueOf(paidTextField.getText().trim());
             collectionReceipt.setCollectedTime(collectedTime);
             collectionReceipt.setSaleInvoice(saleInvoice);
-            collectionReceipt.setCash(collectedAmount);
             collectionReceipt.setAmount(collectedAmount);
 
             List<SaleCheque> saleCheques = new ArrayList<SaleCheque>();

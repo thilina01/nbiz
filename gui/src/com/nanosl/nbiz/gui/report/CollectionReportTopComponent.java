@@ -5,7 +5,6 @@
 package com.nanosl.nbiz.gui.report;
 
 import com.nanosl.lib.date.JXDatePicker;
-import query.Find;
 import com.nanosl.nbiz.util.NTopComponent;
 import entity.CollectionReceipt;
 import entity.Customer;
@@ -18,8 +17,9 @@ import javax.swing.table.DefaultTableModel;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
-import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
+import org.openide.windows.TopComponent;
+import query.Find;
 
 /**
  * Top component which displays something.
@@ -291,7 +291,7 @@ public final class CollectionReportTopComponent extends NTopComponent {
                 ++i1,
                 yyyy_MM_dd.format(collectedTime),
                 customer != null ? customer.getCode() : "",
-                customer != null ? customer.getName() : "",
+                customer != null ? customer.getPerson() != null ? customer.getPerson().getName() : "" : "",
                 invoiceNumber,
                 nf2d.format(amount),
                 receiptNumber
@@ -306,7 +306,7 @@ public final class CollectionReportTopComponent extends NTopComponent {
                     yyyy_MM_dd.format(saleCheque.getBankingDate()),
                     nf2d.format(saleCheque.getAmount()),
                     customer != null ? customer.getCode() : "",
-                    customer != null ? customer.getName() : "",
+                    customer != null ? customer.getPerson().getName() : "",
                     saleInvoice.getInvNo()
                 };
                 chequeTableModel.addRow(row1);

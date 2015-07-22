@@ -20,7 +20,7 @@ FROM
 item
 LEFT JOIN price_list ON  item.`code` = price_list.item_code
 LEFT JOIN stock_change ON item.`code` = stock_change.item_code
-WHERE stock_change.stock_change_summery_change_date = $P{d1} AND item.`disable` = 0
+WHERE stock_change.stock_change_summery_change_date = $P{d1} AND item.`status` = 0
 )as x, 
 
 (SELECT

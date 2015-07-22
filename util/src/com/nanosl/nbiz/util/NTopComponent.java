@@ -8,7 +8,6 @@ import com.nanosl.lib.db.Manager;
 import entity.Operator;
 import entity.OptionalComponent;
 import entity.OptionalComponentPK;
-import entity.SaleInvoice;
 import entity.ViewPanel;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -42,6 +41,15 @@ public class NTopComponent extends TopComponent implements Format, Cell {
 
     @Override
     public void setVisible(boolean bln) {
+//        new Thread(new Runnable() {
+//            public void run() {
+//                SwingUtilities.invokeLater(new Runnable() {
+//                    public void run() {
+//                        MenuManager.initialize();
+//                    }
+//                });
+//            }
+//        }).start();
         if (bln) {
             Operator operator = Data.getOperator();
             if (operator == null) {
@@ -98,7 +106,7 @@ public class NTopComponent extends TopComponent implements Format, Cell {
     }
 
     private void removeOptionals() {
-        for (JComponent optionalComponent : optionalComponents) {
+        optionalComponents.stream().forEach((optionalComponent) -> {
             OptionalComponentPK optionalComponentPK = new OptionalComponentPK(optionalComponent.getName(), preferredID());
             OptionalComponent component = manager.find(OptionalComponent.class, optionalComponentPK);
             if (component == null) {
@@ -108,7 +116,7 @@ public class NTopComponent extends TopComponent implements Format, Cell {
                 manager.update(component);
             }
             optionalComponent.setVisible(component.getStatus() == 1);
-        }
+        });
     }
 
     public <X extends Object> List<X> find(Class<X> entityClass) {

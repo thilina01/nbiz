@@ -403,7 +403,7 @@ public class BarPanel extends javax.swing.JPanel {
         CollectionReceipt collectionReceipt = new CollectionReceipt(ReceiptNumber);
         collectionReceipt.setCollectedTime(date);
         collectionReceipt.setSaleInvoice(saleInvoice);
-        collectionReceipt.setCash(amount);
+        collectionReceipt.setAmount(amount);
         SaleCash saleCash = new SaleCash(ReceiptNumber);
         saleCash.setAmount(amount);
         saleCash.setCollectionReceipt(collectionReceipt);

@@ -7,6 +7,7 @@ package com.nanosl.nbiz.card;
 
 import com.nanosl.nbiz.util.NTopComponent;
 import entity.Customer;
+import entity.Person;
 import entity.SaleInvoice;
 import java.util.Collection;
 import javax.persistence.Query;
@@ -14,9 +15,8 @@ import javax.swing.table.DefaultTableModel;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
-import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
-import query.Find;
+import org.openide.windows.TopComponent;
 
 /**
  * Top component which displays something.
@@ -239,8 +239,9 @@ public final class CardListTopComponent extends NTopComponent {
             Customer customer = saleInvoice.getCustomer();
             totalAmount += saleInvoice.getAmount();
             totalRemaining += saleInvoice.getCredit();
+                Person person = customer.getPerson();
             Object[] row = {
-                saleInvoice.getCardNumber(), customer.getNic(), customer.getName(), nf2d.format(saleInvoice.getAmount()), nf2d.format(saleInvoice.getCredit())
+                saleInvoice.getCardNumber(), person.getNic(), person.getName(), nf2d.format(saleInvoice.getAmount()), nf2d.format(saleInvoice.getCredit())
             };
             tableModel.addRow(row);
         }

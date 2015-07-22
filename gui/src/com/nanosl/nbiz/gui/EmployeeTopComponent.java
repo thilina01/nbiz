@@ -7,7 +7,7 @@ package com.nanosl.nbiz.gui;
 import com.nanosl.nbiz.util.NTopComponent;
 import entity.Employee;
 import entity.EmployeePosition;
-import java.util.Iterator;
+import entity.Person;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
@@ -15,8 +15,8 @@ import javax.swing.table.DefaultTableModel;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
-import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
+import org.openide.windows.TopComponent;
 
 /**
  * Top component which displays something.
@@ -61,27 +61,25 @@ public final class EmployeeTopComponent extends NTopComponent {
         addressNumberLabel = new javax.swing.JLabel();
         cityLabel = new javax.swing.JLabel();
         employeePositionCodeLabel = new javax.swing.JLabel();
-        addressNumberField = new javax.swing.JTextField();
+        addressField = new javax.swing.JTextField();
         fixedLineField = new javax.swing.JTextField();
         mobileField = new javax.swing.JTextField();
         firstNameLabel = new javax.swing.JLabel();
         notesField = new javax.swing.JTextField();
-        lastNameLabel = new javax.swing.JLabel();
         codeLabel = new javax.swing.JLabel();
-        addressStreetLabel = new javax.swing.JLabel();
         masterScrollPane = new javax.swing.JScrollPane();
         masterTable = new javax.swing.JTable();
         mobileLabel = new javax.swing.JLabel();
-        lastNameField = new javax.swing.JTextField();
         notesLabel = new javax.swing.JLabel();
-        firstNameField = new javax.swing.JTextField();
-        addressStreetField = new javax.swing.JTextField();
+        nameField = new javax.swing.JTextField();
         codeField = new javax.swing.JTextField();
         fixedLineLabel = new javax.swing.JLabel();
         updateButton = new javax.swing.JButton();
         deleteButton = new javax.swing.JButton();
         clearButton = new javax.swing.JButton();
         positionComboBox = new javax.swing.JComboBox();
+        jLabel1 = new javax.swing.JLabel();
+        nicTextField = new javax.swing.JTextField();
 
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
@@ -97,9 +95,9 @@ public final class EmployeeTopComponent extends NTopComponent {
 
         org.openide.awt.Mnemonics.setLocalizedText(employeePositionCodeLabel, org.openide.util.NbBundle.getMessage(EmployeeTopComponent.class, "EmployeeTopComponent.employeePositionCodeLabel.text")); // NOI18N
 
-        addressNumberField.addActionListener(new java.awt.event.ActionListener() {
+        addressField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                addressNumberFieldActionPerformed(evt);
+                addressFieldActionPerformed(evt);
             }
         });
 
@@ -123,11 +121,7 @@ public final class EmployeeTopComponent extends NTopComponent {
             }
         });
 
-        org.openide.awt.Mnemonics.setLocalizedText(lastNameLabel, org.openide.util.NbBundle.getMessage(EmployeeTopComponent.class, "EmployeeTopComponent.lastNameLabel.text")); // NOI18N
-
         org.openide.awt.Mnemonics.setLocalizedText(codeLabel, org.openide.util.NbBundle.getMessage(EmployeeTopComponent.class, "EmployeeTopComponent.codeLabel.text")); // NOI18N
-
-        org.openide.awt.Mnemonics.setLocalizedText(addressStreetLabel, org.openide.util.NbBundle.getMessage(EmployeeTopComponent.class, "EmployeeTopComponent.addressStreetLabel.text")); // NOI18N
 
         masterTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -156,32 +150,22 @@ public final class EmployeeTopComponent extends NTopComponent {
             }
         });
         masterScrollPane.setViewportView(masterTable);
-        masterTable.getColumnModel().getColumn(0).setPreferredWidth(30);
-        masterTable.getColumnModel().getColumn(0).setHeaderValue(org.openide.util.NbBundle.getMessage(EmployeeTopComponent.class, "EmployeeTopComponent.masterTable.columnModel.title0")); // NOI18N
-        masterTable.getColumnModel().getColumn(1).setHeaderValue(org.openide.util.NbBundle.getMessage(EmployeeTopComponent.class, "EmployeeTopComponent.masterTable.columnModel.title1")); // NOI18N
-        masterTable.getColumnModel().getColumn(2).setPreferredWidth(300);
-        masterTable.getColumnModel().getColumn(2).setHeaderValue(org.openide.util.NbBundle.getMessage(EmployeeTopComponent.class, "EmployeeTopComponent.masterTable.columnModel.title2")); // NOI18N
-        masterTable.getColumnModel().getColumn(3).setHeaderValue(org.openide.util.NbBundle.getMessage(EmployeeTopComponent.class, "EmployeeTopComponent.masterTable.columnModel.title3")); // NOI18N
+        if (masterTable.getColumnModel().getColumnCount() > 0) {
+            masterTable.getColumnModel().getColumn(0).setPreferredWidth(30);
+            masterTable.getColumnModel().getColumn(0).setHeaderValue(org.openide.util.NbBundle.getMessage(EmployeeTopComponent.class, "EmployeeTopComponent.masterTable.columnModel.title0")); // NOI18N
+            masterTable.getColumnModel().getColumn(1).setHeaderValue(org.openide.util.NbBundle.getMessage(EmployeeTopComponent.class, "EmployeeTopComponent.masterTable.columnModel.title1")); // NOI18N
+            masterTable.getColumnModel().getColumn(2).setPreferredWidth(300);
+            masterTable.getColumnModel().getColumn(2).setHeaderValue(org.openide.util.NbBundle.getMessage(EmployeeTopComponent.class, "EmployeeTopComponent.masterTable.columnModel.title2")); // NOI18N
+            masterTable.getColumnModel().getColumn(3).setHeaderValue(org.openide.util.NbBundle.getMessage(EmployeeTopComponent.class, "EmployeeTopComponent.masterTable.columnModel.title3")); // NOI18N
+        }
 
         org.openide.awt.Mnemonics.setLocalizedText(mobileLabel, org.openide.util.NbBundle.getMessage(EmployeeTopComponent.class, "EmployeeTopComponent.mobileLabel.text")); // NOI18N
 
-        lastNameField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                lastNameFieldActionPerformed(evt);
-            }
-        });
-
         org.openide.awt.Mnemonics.setLocalizedText(notesLabel, org.openide.util.NbBundle.getMessage(EmployeeTopComponent.class, "EmployeeTopComponent.notesLabel.text")); // NOI18N
 
-        firstNameField.addActionListener(new java.awt.event.ActionListener() {
+        nameField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                firstNameFieldActionPerformed(evt);
-            }
-        });
-
-        addressStreetField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                addressStreetFieldActionPerformed(evt);
+                nameFieldActionPerformed(evt);
             }
         });
 
@@ -215,9 +199,23 @@ public final class EmployeeTopComponent extends NTopComponent {
         });
 
         positionComboBox.setName("positionComboBox1"); // NOI18N
+        positionComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                positionComboBoxActionPerformed(evt);
+            }
+        });
         positionComboBox.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 positionComboBoxKeyPressed(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(EmployeeTopComponent.class, "EmployeeTopComponent.jLabel1.text")); // NOI18N
+
+        nicTextField.setText(org.openide.util.NbBundle.getMessage(EmployeeTopComponent.class, "EmployeeTopComponent.nicTextField.text")); // NOI18N
+        nicTextField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                nicTextFieldActionPerformed(evt);
             }
         });
 
@@ -226,71 +224,70 @@ public final class EmployeeTopComponent extends NTopComponent {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(updateButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(deleteButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(clearButton))
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(masterScrollPane, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 483, Short.MAX_VALUE)
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(codeLabel)
-                                .addComponent(firstNameLabel)
-                                .addComponent(lastNameLabel)
-                                .addComponent(employeePositionCodeLabel)
-                                .addComponent(addressNumberLabel)
-                                .addComponent(addressStreetLabel)
-                                .addComponent(cityLabel)
-                                .addComponent(mobileLabel)
-                                .addComponent(fixedLineLabel)
-                                .addComponent(notesLabel))
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(positionComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(notesField)
-                                .addComponent(fixedLineField)
-                                .addComponent(mobileField)
-                                .addComponent(cityField)
-                                .addComponent(addressStreetField)
-                                .addComponent(addressNumberField, javax.swing.GroupLayout.DEFAULT_SIZE, 396, Short.MAX_VALUE)
+                        .addContainerGap()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(cityLabel)
+                            .addComponent(mobileLabel)
+                            .addComponent(fixedLineLabel)
+                            .addComponent(notesLabel)
+                            .addComponent(codeLabel)
+                            .addComponent(firstNameLabel)
+                            .addComponent(employeePositionCodeLabel)
+                            .addComponent(addressNumberLabel))
+                        .addGap(16, 16, 16)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(cityField, javax.swing.GroupLayout.PREFERRED_SIZE, 418, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(updateButton)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(deleteButton)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(clearButton))
+                            .addComponent(positionComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(addressField, javax.swing.GroupLayout.PREFERRED_SIZE, 396, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(fixedLineField, javax.swing.GroupLayout.PREFERRED_SIZE, 418, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(mobileField, javax.swing.GroupLayout.PREFERRED_SIZE, 418, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(nameField, javax.swing.GroupLayout.PREFERRED_SIZE, 396, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(notesField, javax.swing.GroupLayout.PREFERRED_SIZE, 418, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(codeField, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(lastNameField)
-                                .addComponent(firstNameField)))))
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabel1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(nicTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addComponent(masterScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 486, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
+        jPanel1Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {addressField, cityField, fixedLineField, mobileField, nameField, notesField, positionComboBox});
+
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(masterScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 167, Short.MAX_VALUE)
+                .addComponent(masterScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 223, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(codeLabel)
-                    .addComponent(codeField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(codeField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1)
+                    .addComponent(nicTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(firstNameLabel)
-                    .addComponent(firstNameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lastNameLabel)
-                    .addComponent(lastNameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(nameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(employeePositionCodeLabel)
                     .addComponent(positionComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(addressNumberLabel)
-                    .addComponent(addressNumberField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(addressStreetLabel)
-                    .addComponent(addressStreetField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(addressField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cityLabel)
@@ -339,11 +336,11 @@ public final class EmployeeTopComponent extends NTopComponent {
         }
     }//GEN-LAST:event_cityFieldActionPerformed
 
-    private void addressNumberFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addressNumberFieldActionPerformed
-        if (!addressNumberField.getText().trim().equals("")) {
-            addressStreetField.requestFocus();
+    private void addressFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addressFieldActionPerformed
+        if (!addressField.getText().trim().equals("")) {
+            cityField.requestFocus();
         }
-    }//GEN-LAST:event_addressNumberFieldActionPerformed
+    }//GEN-LAST:event_addressFieldActionPerformed
 
     private void fixedLineFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fixedLineFieldActionPerformed
         notesField.requestFocus();
@@ -365,37 +362,25 @@ public final class EmployeeTopComponent extends NTopComponent {
         fill();
     }//GEN-LAST:event_masterTableKeyReleased
 
-    private void lastNameFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lastNameFieldActionPerformed
-        if (!lastNameField.getText().trim().equals("")) {
+    private void nameFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nameFieldActionPerformed
+        if (!nameField.getText().trim().equals("")) {
             positionComboBox.requestFocus();
         }
-    }//GEN-LAST:event_lastNameFieldActionPerformed
-
-    private void firstNameFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_firstNameFieldActionPerformed
-        if (!firstNameField.getText().trim().equals("")) {
-            lastNameField.requestFocus();
-        }
-    }//GEN-LAST:event_firstNameFieldActionPerformed
-
-    private void addressStreetFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addressStreetFieldActionPerformed
-        if (!addressStreetField.getText().trim().equals("")) {
-            cityField.requestFocus();
-        }
-    }//GEN-LAST:event_addressStreetFieldActionPerformed
+    }//GEN-LAST:event_nameFieldActionPerformed
 
     private void codeFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_codeFieldActionPerformed
         String code = codeField.getText().trim();
         if (!code.equals("")) {
             fill(code);
-            firstNameField.requestFocus();
+            nicTextField.requestFocus();
         }
     }//GEN-LAST:event_codeFieldActionPerformed
 
     private void updateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateButtonActionPerformed
-        if (!codeField.getText().equals("") && !firstNameField.getText().equals("")) {// && !lastNameField.equals("") && !addressNumberField.getText().equals("") && !addressStreetField.getText().equals("") && !cityField.getText().equals("")
+        if (!codeField.getText().equals("") && !nameField.getText().equals("")&& !nicTextField.getText().equals("")) {// && !lastNameField.equals("") && !addressNumberField.getText().equals("") && !addressStreetField.getText().equals("") && !cityField.getText().equals("")
             update();
         } else {
-            showError("Atleast First Name should be presented along with code");
+            showError("code, Name and NIC should be presented");
         }
     }//GEN-LAST:event_updateButtonActionPerformed
 
@@ -409,14 +394,25 @@ public final class EmployeeTopComponent extends NTopComponent {
 
     private void positionComboBoxKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_positionComboBoxKeyPressed
         if (evt.getKeyCode() == 10) {
-            addressNumberField.requestFocus();
+            addressField.requestFocus();
         }
     }//GEN-LAST:event_positionComboBoxKeyPressed
+
+    private void positionComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_positionComboBoxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_positionComboBoxActionPerformed
+
+    private void nicTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nicTextFieldActionPerformed
+        String nic = nicTextField.getText().trim();
+        if (!nic.equals("")) {
+            fillByNic(nic);
+            nameField.requestFocus();
+        }
+    }//GEN-LAST:event_nicTextFieldActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTextField addressNumberField;
+    private javax.swing.JTextField addressField;
     private javax.swing.JLabel addressNumberLabel;
-    private javax.swing.JTextField addressStreetField;
-    private javax.swing.JLabel addressStreetLabel;
     private javax.swing.JTextField cityField;
     private javax.swing.JLabel cityLabel;
     private javax.swing.JButton clearButton;
@@ -424,17 +420,17 @@ public final class EmployeeTopComponent extends NTopComponent {
     private javax.swing.JLabel codeLabel;
     private javax.swing.JButton deleteButton;
     private javax.swing.JLabel employeePositionCodeLabel;
-    private javax.swing.JTextField firstNameField;
     private javax.swing.JLabel firstNameLabel;
     private javax.swing.JTextField fixedLineField;
     private javax.swing.JLabel fixedLineLabel;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JTextField lastNameField;
-    private javax.swing.JLabel lastNameLabel;
     private javax.swing.JScrollPane masterScrollPane;
     private javax.swing.JTable masterTable;
     private javax.swing.JTextField mobileField;
     private javax.swing.JLabel mobileLabel;
+    private javax.swing.JTextField nameField;
+    private javax.swing.JTextField nicTextField;
     private javax.swing.JTextField notesField;
     private javax.swing.JLabel notesLabel;
     private javax.swing.JComboBox positionComboBox;
@@ -459,9 +455,12 @@ public final class EmployeeTopComponent extends NTopComponent {
         List<Employee> employees = manager.find(Employee.class);
         tableModel.setRowCount(0);
         int i = 0;
-        for (Iterator<Employee> it = employees.iterator(); it.hasNext();) {
-            Employee emp = it.next();
-            Object[] row = {++i, emp.getCode(), emp.getFirstName() + " " + emp.getLastName(), emp.getMobile()};
+        for (Employee employee : employees) {
+            Person person = employee.getPerson();
+            if (person == null) {
+                continue;
+            }
+            Object[] row = {++i, employee.getCode(), person.getName(), person.getMobile()};
             tableModel.addRow(row);
         }
     }
@@ -473,10 +472,9 @@ public final class EmployeeTopComponent extends NTopComponent {
     private void clearFields() {
         codeField.requestFocus();
         codeField.setText("");
-        firstNameField.setText("");
-        lastNameField.setText("");
-        addressNumberField.setText("");
-        addressStreetField.setText("");
+        nicTextField.setText("");
+        nameField.setText("");
+        addressField.setText("");
         cityField.setText("");
         mobileField.setText("");
         fixedLineField.setText("");
@@ -497,8 +495,9 @@ public final class EmployeeTopComponent extends NTopComponent {
             codeField.requestFocus();
             return;
         }
-         if (JOptionPane.YES_OPTION != JOptionPane.showConfirmDialog(deleteButton, "Delete " + code + " ?", "sure?", JOptionPane.YES_NO_OPTION)) {
-            return;}
+        if (JOptionPane.YES_OPTION != JOptionPane.showConfirmDialog(deleteButton, "Delete " + code + " ?", "sure?", JOptionPane.YES_NO_OPTION)) {
+            return;
+        }
         if (manager.delete(Employee.class, code)) {
             clear();
             return;
@@ -508,19 +507,18 @@ public final class EmployeeTopComponent extends NTopComponent {
 
     private void update() {
         String code = codeField.getText().trim();
-        String firstName = firstNameField.getText().trim();
-        String lastName = lastNameField.getText().trim();
+        String nic = nicTextField.getText().trim();
+        String name = nameField.getText().trim();
         if (code.equals("")) {
             codeField.requestFocus();
             return;
         }
-        if (firstName.equals("")) {
-            firstNameField.requestFocus();
+        if (name.equals("")) {
+            nameField.requestFocus();
             return;
         }
 
-        String addressNumber = addressNumberField.getText().trim();
-        String addressStreet = addressStreetField.getText().trim();
+        String address = addressField.getText().trim();
         String mobile = mobileField.getText().trim();
         String fixedLine = fixedLineField.getText().trim();
         String notes = notesField.getText().trim();
@@ -529,15 +527,15 @@ public final class EmployeeTopComponent extends NTopComponent {
         if (employee == null) {
             employee = new Employee(code);
         }
-        employee.setFirstName(firstName);
-        employee.setLastName(lastName);
+        Person person = new Person(nic);
+        person.setName(name);
+        employee.setPerson(person);
         employee.setEmployeePosition((EmployeePosition) positionComboBox.getSelectedItem());
-        employee.setAddressNumber(addressNumber);
-        employee.setAddressStreet(addressStreet);
+        person.setAddress(address);
         employee.setFixedLine(fixedLine);
-        employee.setMobile(mobile);
+        person.setMobile(mobile);
         employee.setNotes(notes);
-        employee.setCity(city);
+        person.setCity(city);
         if (manager.update(employee)) {
             clear();
             codeField.requestFocus();
@@ -553,7 +551,7 @@ public final class EmployeeTopComponent extends NTopComponent {
 
     @Override
     public void componentClosed() {
-      codeField.requestFocus();
+        codeField.requestFocus();
     }
 
     void writeProperties(java.util.Properties p) {
@@ -570,22 +568,31 @@ public final class EmployeeTopComponent extends NTopComponent {
 
     private void fill(Employee employee) {
         if (employee != null) {
+            Person person = employee.getPerson();
+            fill(person);
             codeField.setText(employee.getCode());
-
-            firstNameField.setText(employee.getFirstName());
-            lastNameField.setText(employee.getLastName());
-            addressNumberField.setText(employee.getAddressNumber());
-            addressStreetField.setText(employee.getAddressStreet());
-            cityField.setText(employee.getCity());
-            mobileField.setText(employee.getMobile());
             fixedLineField.setText(employee.getFixedLine());
             notesField.setText(employee.getNotes());
             positionComboBox.setSelectedItem(employee.getEmployeePosition());
         }
     }
 
+    private void fill(Person person) {
+        if (person != null) {
+            nameField.setText(person.getName());
+            addressField.setText(person.getAddress());
+            cityField.setText(person.getCity());
+            mobileField.setText(person.getMobile());
+        }
+    }
+
     private void fill(String code) {
         Employee employee = manager.find(Employee.class, code);
         fill(employee);
+    }
+
+    private void fillByNic(String nic) {
+        Person person = manager.find(Person.class, nic);
+        fill(person);
     }
 }

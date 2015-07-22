@@ -22,7 +22,7 @@ public class Installer extends ModuleInstall {
         };
 
         Timer timer = new Timer();
-        timer.schedule(myTask, 1 * 60 * 1000 /*delay for 2 minutes*/, 1 * 60 * 1000 /* every 2 minutes */);
+        timer.schedule(myTask, 1 * 60 * 1000 /*delay for 1 minutes*/, 1 * 60 * 1000 /* every 1 minutes */);
 
     }
 

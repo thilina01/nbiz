@@ -61,6 +61,7 @@
                 <package>net.sf.jasperreports.data.ds</package>
                 <package>net.sf.jasperreports.data.ejbql</package>
                 <package>net.sf.jasperreports.data.empty</package>
+                <package>net.sf.jasperreports.data.excel</package>
                 <package>net.sf.jasperreports.data.hibernate</package>
                 <package>net.sf.jasperreports.data.hibernate.spring</package>
                 <package>net.sf.jasperreports.data.jdbc</package>
@@ -85,7 +86,6 @@
                 <package>net.sf.jasperreports.engine.export</package>
                 <package>net.sf.jasperreports.engine.export.data</package>
                 <package>net.sf.jasperreports.engine.export.draw</package>
-                <package>net.sf.jasperreports.engine.export.legacy</package>
                 <package>net.sf.jasperreports.engine.export.oasis</package>
                 <package>net.sf.jasperreports.engine.export.ooxml</package>
                 <package>net.sf.jasperreports.engine.export.ooxml.type</package>
@@ -103,6 +103,10 @@
                 <package>net.sf.jasperreports.engine.util.xml</package>
                 <package>net.sf.jasperreports.engine.virtualization</package>
                 <package>net.sf.jasperreports.engine.xml</package>
+                <package>net.sf.jasperreports.export</package>
+                <package>net.sf.jasperreports.export.annotations</package>
+                <package>net.sf.jasperreports.export.parameters</package>
+                <package>net.sf.jasperreports.export.type</package>
                 <package>net.sf.jasperreports.expressions</package>
                 <package>net.sf.jasperreports.extensions</package>
                 <package>net.sf.jasperreports.functions</package>
@@ -112,10 +116,12 @@
                 <package>net.sf.jasperreports.olap</package>
                 <package>net.sf.jasperreports.olap.mapping</package>
                 <package>net.sf.jasperreports.olap.mondrian</package>
+                <package>net.sf.jasperreports.olap.olap4j</package>
                 <package>net.sf.jasperreports.olap.result</package>
                 <package>net.sf.jasperreports.olap.xmla</package>
                 <package>net.sf.jasperreports.renderers</package>
                 <package>net.sf.jasperreports.repo</package>
+                <package>net.sf.jasperreports.search</package>
                 <package>net.sf.jasperreports.swing</package>
                 <package>net.sf.jasperreports.types.date</package>
                 <package>net.sf.jasperreports.util</package>
@@ -180,16 +186,20 @@
                 <package>org.w3c.tools.codec</package>
             </public-packages>
             <class-path-extension>
-                <runtime-relative-path>ext/servlet-api-2.4.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/servlet-api-2.4.jar</binary-origin>
-            </class-path-extension>
-            <class-path-extension>
-                <runtime-relative-path>ext/jasperreports-5.5.1.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/jasperreports-5.5.1.jar</binary-origin>
-            </class-path-extension>
-            <class-path-extension>
                 <runtime-relative-path>ext/poi-3.10-FINAL-20140208.jar</runtime-relative-path>
                 <binary-origin>release/modules/ext/poi-3.10-FINAL-20140208.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/jasperreports-fonts-5.6.0.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/jasperreports-fonts-5.6.0.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/jasperreports-5.6.0.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/jasperreports-5.6.0.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/servlet-api-2.4.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/servlet-api-2.4.jar</binary-origin>
             </class-path-extension>
         </data>
     </configuration>

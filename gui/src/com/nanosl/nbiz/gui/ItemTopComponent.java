@@ -33,8 +33,8 @@ import org.netbeans.api.progress.ProgressHandleFactory;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
-import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
+import org.openide.windows.TopComponent;
 import org.openide.windows.WindowManager;
 import query.Find;
 
@@ -597,12 +597,12 @@ public final class ItemTopComponent extends NTopComponent {
                 lastCode.setCode(code);
                 serializables.add(lastCode);
             }
-            item.setDisable(disableCheckBox.isSelected() ? 1 : 0);
+            item.setStatus(disableCheckBox.isSelected() ? 1 : 0);
             item.setDescription(description);
             item.setBrand(brand);
             item.setSupplier(supplier);
-            ItemType itemType = (ItemType) itemTypeComboBox.getSelectedItem();
-            item.setItemTypeType(itemType);
+            ItemType itemType1 = (ItemType) itemTypeComboBox.getSelectedItem();
+            item.setItemTypeType(itemType1);
             Stock stock = item.getStock();
             if (stock == null) {
                 stock = new Stock(code);
@@ -786,7 +786,7 @@ public final class ItemTopComponent extends NTopComponent {
             return;
         }
         codeField.setText(item.getCode());
-        disableCheckBox.setSelected(item.getDisable() != null ? item.getDisable() == 1 : false);
+        disableCheckBox.setSelected(item.getStatus() != null ? item.getStatus() == 1 : false);
         descriptionField.setText(item.getDescription());
         brandField.setText(item.getBrand());
         supplierComboBox.setSelectedItem(item.getSupplier());

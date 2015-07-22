@@ -62,6 +62,10 @@ public class Company implements Serializable {
     private String email;
     @Column(name = "web")
     private String web;
+    @Column(name = "vat")
+    private String vat;
+    @Column(name = "svat")
+    private String svat;
 
     public Company() {
     }
@@ -189,6 +193,34 @@ public class Company implements Serializable {
     @Override
     public String toString() {
         return util.ToString.get(this);
+    }
+
+    /**
+     * @return the vat
+     */
+    public String getVat() {
+        return vat;
+    }
+
+    /**
+     * @param vat the vat to set
+     */
+    public void setVat(String vat) {
+        this.vat = vat;
+    }
+
+    /**
+     * @return the svat
+     */
+    public String getSvat() {
+        return svat;
+    }
+
+    /**
+     * @param svat the svat to set
+     */
+    public void setSvat(String svat) {
+        this.svat = svat;
     }
 
 }

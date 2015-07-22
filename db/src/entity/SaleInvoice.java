@@ -56,8 +56,10 @@ public class SaleInvoice implements Serializable, Comparable<SaleInvoice> {
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "amount")
     private Double amount;
-    @Column(name = "paid_amount")
-    private Double paidAmount;
+//    @Column(name = "paid_amount")
+//    private Double paidAmount;
+    @Column(name = "paid_by_credit_card")
+    private Double paidByCreditCard;
     @Column(name = "received_amount")
     private Double receivedAmount;
     @Column(name = "discount")
@@ -268,12 +270,26 @@ public class SaleInvoice implements Serializable, Comparable<SaleInvoice> {
         return toString().compareTo(o.toString());
     }
 
-    public Double getPaidAmount() {
-        return paidAmount;
+//    public Double getPaidAmount() {
+//        return paidAmount;
+//    }
+//
+//    public void setPaidAmount(Double paidAmount) {
+//        this.paidAmount = paidAmount;
+//    }
+
+    /**
+     * @return the paidByCreditCard
+     */
+    public Double getPaidByCreditCard() {
+        return paidByCreditCard;
     }
 
-    public void setPaidAmount(Double paidAmount) {
-        this.paidAmount = paidAmount;
+    /**
+     * @param paidByCreditCard the paidByCreditCard to set
+     */
+    public void setPaidByCreditCard(Double paidByCreditCard) {
+        this.paidByCreditCard = paidByCreditCard;
     }
 
 }

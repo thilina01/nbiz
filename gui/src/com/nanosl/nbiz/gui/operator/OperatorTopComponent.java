@@ -9,16 +9,16 @@ import com.nanosl.nbiz.util.Data;
 import com.nanosl.nbiz.util.NTopComponent;
 import entity.Employee;
 import entity.Operator;
+import entity.Person;
 import java.util.Collection;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
-import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
+import org.openide.windows.TopComponent;
 
 /**
  * Top component which displays something.
@@ -277,7 +277,11 @@ public final class OperatorTopComponent extends NTopComponent {
             if (employee == null) {
                 continue;
             }
-            Object[] row = {employee.getFirstName(), operator.getUsername(), yyyy_MM_dd.format(cDat), operator.getCreatedBy()};
+            Person person = employee.getPerson();
+            if (person == null) {
+                continue;
+            }
+            Object[] row = {employee.getPerson().getName(), operator.getUsername(), yyyy_MM_dd.format(cDat), operator.getCreatedBy()};
             tempTableModel.addRow(row);
         }
     }

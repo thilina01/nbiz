@@ -1,5 +1,6 @@
 /*
- * To change this template, choose Tools | Templates
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
 package entity;
@@ -32,12 +33,6 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Employee.findAll", query = "SELECT e FROM Employee e"),
     @NamedQuery(name = "Employee.findByCode", query = "SELECT e FROM Employee e WHERE e.code = :code"),
-    @NamedQuery(name = "Employee.findByFirstName", query = "SELECT e FROM Employee e WHERE e.firstName = :firstName"),
-    @NamedQuery(name = "Employee.findByLastName", query = "SELECT e FROM Employee e WHERE e.lastName = :lastName"),
-    @NamedQuery(name = "Employee.findByAddressNumber", query = "SELECT e FROM Employee e WHERE e.addressNumber = :addressNumber"),
-    @NamedQuery(name = "Employee.findByAddressStreet", query = "SELECT e FROM Employee e WHERE e.addressStreet = :addressStreet"),
-    @NamedQuery(name = "Employee.findByCity", query = "SELECT e FROM Employee e WHERE e.city = :city"),
-    @NamedQuery(name = "Employee.findByMobile", query = "SELECT e FROM Employee e WHERE e.mobile = :mobile"),
     @NamedQuery(name = "Employee.findByFixedLine", query = "SELECT e FROM Employee e WHERE e.fixedLine = :fixedLine"),
     @NamedQuery(name = "Employee.findByNotes", query = "SELECT e FROM Employee e WHERE e.notes = :notes"),
     @NamedQuery(name = "Employee.findBySource", query = "SELECT e FROM Employee e WHERE e.source = :source")})
@@ -48,18 +43,6 @@ public class Employee implements Serializable, Comparable<Employee> {
     @Basic(optional = false)
     @Column(name = "code")
     private String code;
-    @Column(name = "first_Name")
-    private String firstName;
-    @Column(name = "last_Name")
-    private String lastName;
-    @Column(name = "address_Number")
-    private String addressNumber;
-    @Column(name = "address_Street")
-    private String addressStreet;
-    @Column(name = "city")
-    private String city;
-    @Column(name = "Mobile")
-    private String mobile;
     @Column(name = "Fixed_Line")
     private String fixedLine;
     @Column(name = "notes")
@@ -72,28 +55,31 @@ public class Employee implements Serializable, Comparable<Employee> {
     @ManyToMany
     private Collection<RootArea> rootAreaCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "employee")
+    private Collection<RepSale> repSaleCollection;
+    @JoinColumn(name = "employee_position_code", referencedColumnName = "code")
+    @ManyToOne(optional = false)
+    private EmployeePosition employeePosition;
+    @JoinColumn(name = "person_nic", referencedColumnName = "nic")
+    @ManyToOne(optional = false)
+    private Person person;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "employee")
+    private Collection<Operator> operatorCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "employee")
+    private Collection<SrSalesPayments> srSalesPaymentsCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "employee")
     private Collection<RepStockChange> repStockChangeCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "employee")
     private Collection<StockTransfer> stockTransferCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "employee")
-    private Collection<SaleInvoice> saleInvoiceCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "employee")
     private Collection<OperatorDeleted> operatorDeletedCollection;
-    @JoinColumn(name = "employee_position_code", referencedColumnName = "code")
-    @ManyToOne(optional = false)
-    private EmployeePosition employeePosition;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "employee")
-    private Collection<DamageNotes> damageNotesCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "employee")
-    private Collection<RepSale> repSaleCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "employee")
-    private Collection<Operator> operatorCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "employee")
-    private Collection<SrStock> srStockCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "employee")
     private Collection<RepSaleValue> repSaleValueCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "employee")
-    private Collection<SrSalesPayments> srSalesPaymentsCollection;
+    private Collection<SrStock> srStockCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "employee")
+    private Collection<SaleInvoice> saleInvoiceCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "employee")
+    private Collection<DamageNotes> damageNotesCollection;
 
     public Employee() {
     }
@@ -108,54 +94,6 @@ public class Employee implements Serializable, Comparable<Employee> {
 
     public void setCode(String code) {
         this.code = code;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getAddressNumber() {
-        return addressNumber;
-    }
-
-    public void setAddressNumber(String addressNumber) {
-        this.addressNumber = addressNumber;
-    }
-
-    public String getAddressStreet() {
-        return addressStreet;
-    }
-
-    public void setAddressStreet(String addressStreet) {
-        this.addressStreet = addressStreet;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getMobile() {
-        return mobile;
-    }
-
-    public void setMobile(String mobile) {
-        this.mobile = mobile;
     }
 
     public String getFixedLine() {
@@ -192,6 +130,49 @@ public class Employee implements Serializable, Comparable<Employee> {
     }
 
     @XmlTransient
+    public Collection<RepSale> getRepSaleCollection() {
+        return repSaleCollection;
+    }
+
+    public void setRepSaleCollection(Collection<RepSale> repSaleCollection) {
+        this.repSaleCollection = repSaleCollection;
+    }
+
+    public EmployeePosition getEmployeePosition() {
+        return employeePosition;
+    }
+
+    public void setEmployeePosition(EmployeePosition employeePosition) {
+        this.employeePosition = employeePosition;
+    }
+
+    public Person getPerson() {
+        return person;
+    }
+
+    public void setPerson(Person person) {
+        this.person = person;
+    }
+
+    @XmlTransient
+    public Collection<Operator> getOperatorCollection() {
+        return operatorCollection;
+    }
+
+    public void setOperatorCollection(Collection<Operator> operatorCollection) {
+        this.operatorCollection = operatorCollection;
+    }
+
+    @XmlTransient
+    public Collection<SrSalesPayments> getSrSalesPaymentsCollection() {
+        return srSalesPaymentsCollection;
+    }
+
+    public void setSrSalesPaymentsCollection(Collection<SrSalesPayments> srSalesPaymentsCollection) {
+        this.srSalesPaymentsCollection = srSalesPaymentsCollection;
+    }
+
+    @XmlTransient
     public Collection<RepStockChange> getRepStockChangeCollection() {
         return repStockChangeCollection;
     }
@@ -210,65 +191,12 @@ public class Employee implements Serializable, Comparable<Employee> {
     }
 
     @XmlTransient
-    public Collection<SaleInvoice> getSaleInvoiceCollection() {
-        return saleInvoiceCollection;
-    }
-
-    public void setSaleInvoiceCollection(Collection<SaleInvoice> saleInvoiceCollection) {
-        this.saleInvoiceCollection = saleInvoiceCollection;
-    }
-
-    @XmlTransient
     public Collection<OperatorDeleted> getOperatorDeletedCollection() {
         return operatorDeletedCollection;
     }
 
     public void setOperatorDeletedCollection(Collection<OperatorDeleted> operatorDeletedCollection) {
         this.operatorDeletedCollection = operatorDeletedCollection;
-    }
-
-    public EmployeePosition getEmployeePosition() {
-        return employeePosition;
-    }
-
-    public void setEmployeePosition(EmployeePosition employeePosition) {
-        this.employeePosition = employeePosition;
-    }
-
-    @XmlTransient
-    public Collection<DamageNotes> getDamageNotesCollection() {
-        return damageNotesCollection;
-    }
-
-    public void setDamageNotesCollection(Collection<DamageNotes> damageNotesCollection) {
-        this.damageNotesCollection = damageNotesCollection;
-    }
-
-    @XmlTransient
-    public Collection<RepSale> getRepSaleCollection() {
-        return repSaleCollection;
-    }
-
-    public void setRepSaleCollection(Collection<RepSale> repSaleCollection) {
-        this.repSaleCollection = repSaleCollection;
-    }
-
-    @XmlTransient
-    public Collection<Operator> getOperatorCollection() {
-        return operatorCollection;
-    }
-
-    public void setOperatorCollection(Collection<Operator> operatorCollection) {
-        this.operatorCollection = operatorCollection;
-    }
-
-    @XmlTransient
-    public Collection<SrStock> getSrStockCollection() {
-        return srStockCollection;
-    }
-
-    public void setSrStockCollection(Collection<SrStock> srStockCollection) {
-        this.srStockCollection = srStockCollection;
     }
 
     @XmlTransient
@@ -281,12 +209,30 @@ public class Employee implements Serializable, Comparable<Employee> {
     }
 
     @XmlTransient
-    public Collection<SrSalesPayments> getSrSalesPaymentsCollection() {
-        return srSalesPaymentsCollection;
+    public Collection<SrStock> getSrStockCollection() {
+        return srStockCollection;
     }
 
-    public void setSrSalesPaymentsCollection(Collection<SrSalesPayments> srSalesPaymentsCollection) {
-        this.srSalesPaymentsCollection = srSalesPaymentsCollection;
+    public void setSrStockCollection(Collection<SrStock> srStockCollection) {
+        this.srStockCollection = srStockCollection;
+    }
+
+    @XmlTransient
+    public Collection<SaleInvoice> getSaleInvoiceCollection() {
+        return saleInvoiceCollection;
+    }
+
+    public void setSaleInvoiceCollection(Collection<SaleInvoice> saleInvoiceCollection) {
+        this.saleInvoiceCollection = saleInvoiceCollection;
+    }
+
+    @XmlTransient
+    public Collection<DamageNotes> getDamageNotesCollection() {
+        return damageNotesCollection;
+    }
+
+    public void setDamageNotesCollection(Collection<DamageNotes> damageNotesCollection) {
+        this.damageNotesCollection = damageNotesCollection;
     }
 
     @Override
@@ -316,6 +262,9 @@ public class Employee implements Serializable, Comparable<Employee> {
 
     @Override
     public int compareTo(Employee o) {
-        return firstName.compareTo(o.firstName);
+        if (person == null) {
+            return code.compareTo(o.code);
+        }
+        return person.getName().compareTo(o.getPerson().getName());
     }
 }

@@ -5,8 +5,8 @@
 package com.nanosl.nbiz.quicklaunch;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import javax.swing.JButton;
-import javax.swing.JToolBar;
 import org.openide.util.Exceptions;
 
 /**
@@ -29,6 +29,7 @@ public class SideBarPanel extends javax.swing.JPanel {
      */
     public SideBarPanel() {
         initComponents();
+        loadButtons();
     }
 
     /**
@@ -42,20 +43,20 @@ public class SideBarPanel extends javax.swing.JPanel {
 
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jToolBar1 = new javax.swing.JToolBar();
-        jButton2 = new javax.swing.JButton();
+        toolBar = new javax.swing.JToolBar();
+        logoButton = new javax.swing.JButton();
 
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        jToolBar1.setOrientation(javax.swing.SwingConstants.VERTICAL);
-        jToolBar1.setRollover(true);
-        jScrollPane1.setViewportView(jToolBar1);
+        toolBar.setOrientation(javax.swing.SwingConstants.VERTICAL);
+        toolBar.setRollover(true);
+        jScrollPane1.setViewportView(toolBar);
 
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/nanosl/nbiz/quicklaunch/resources/nano150.png"))); // NOI18N
-        org.openide.awt.Mnemonics.setLocalizedText(jButton2, org.openide.util.NbBundle.getMessage(SideBarPanel.class, "SideBarPanel.jButton2.text")); // NOI18N
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        logoButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/nanosl/nbiz/quicklaunch/resources/nano150.png"))); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(logoButton, org.openide.util.NbBundle.getMessage(SideBarPanel.class, "SideBarPanel.logoButton.text")); // NOI18N
+        logoButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                logoButtonActionPerformed(evt);
             }
         });
 
@@ -68,7 +69,7 @@ public class SideBarPanel extends javax.swing.JPanel {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jButton2)
+                        .addComponent(logoButton)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -76,7 +77,7 @@ public class SideBarPanel extends javax.swing.JPanel {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jButton2)
+                .addComponent(logoButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 413, Short.MAX_VALUE)
                 .addContainerGap())
@@ -100,28 +101,24 @@ public class SideBarPanel extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void logoButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logoButtonActionPerformed
         try {
-            Runtime.getRuntime().exec("explorer http://www.facebook.com/thilina01");
+            Runtime.getRuntime().exec("explorer http://www.nanosl.com/");
         } catch (IOException ex) {
             Exceptions.printStackTrace(ex);
         }
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_logoButtonActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private static javax.swing.JToolBar jToolBar1;
+    private javax.swing.JButton logoButton;
+    private static javax.swing.JToolBar toolBar;
     // End of variables declaration//GEN-END:variables
 
-    public static void addButton(JButton jButton) {
-        if (instance == null) {
-            instance = new SideBarPanel();
-        }
-        jToolBar1.add(jButton);
-    }
-
-    public static JToolBar getjToolBar1() {
-        return jToolBar1;
+    private void loadButtons() {
+        ArrayList<JButton> jButtons = ToolBarManager.getToolBarButtons();
+        jButtons.stream().forEach((jButton) -> {
+            toolBar.add(jButton);
+        });
     }
 }

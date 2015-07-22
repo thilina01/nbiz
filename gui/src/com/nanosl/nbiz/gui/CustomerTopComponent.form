@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<Form version="1.5" maxVersion="1.8" type="org.netbeans.modules.form.forminfo.JPanelFormInfo">
+<Form version="1.5" maxVersion="1.8">
   <AuxValues>
     <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="1"/>
     <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="false"/>
@@ -27,8 +27,8 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
-              <EmptySpace max="32767" attributes="0"/>
+              <Component id="jPanel1" max="32767" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -47,44 +47,46 @@
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" attributes="0">
-                  <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="masterScrollPane" pref="714" max="32767" attributes="0"/>
-                      <Group type="102" attributes="0">
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="jLabel1" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="addressNumberLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="addressStreetLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="townCodeLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="mobileLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="fixedLineLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="faxLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="notesLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="nameLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="codeLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="fixedLineField" alignment="0" max="32767" attributes="0"/>
-                              <Component id="faxField" alignment="0" max="32767" attributes="0"/>
-                              <Component id="addressStreetField" alignment="0" max="32767" attributes="0"/>
-                              <Component id="mobileField" alignment="0" max="32767" attributes="0"/>
-                              <Component id="notesField" alignment="0" pref="611" max="32767" attributes="0"/>
-                              <Component id="nicTextField" alignment="0" max="32767" attributes="0"/>
-                              <Component id="codeField" alignment="0" max="32767" attributes="0"/>
-                              <Component id="cityField" alignment="0" max="32767" attributes="0"/>
-                              <Component id="addressNumberField" alignment="0" max="32767" attributes="0"/>
-                              <Component id="nameField" alignment="0" max="32767" attributes="0"/>
-                          </Group>
-                      </Group>
                       <Group type="102" alignment="1" attributes="0">
-                          <EmptySpace pref="215" max="32767" attributes="0"/>
+                          <EmptySpace pref="228" max="32767" attributes="0"/>
                           <Component id="updateButton" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="deleteButton" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="clearButton" min="-2" max="-2" attributes="0"/>
                           <EmptySpace min="297" pref="297" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="102" attributes="0">
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="masterScrollPane" pref="714" max="32767" attributes="0"/>
+                              <Group type="102" attributes="0">
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="jLabel1" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      <Component id="addressNumberLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      <Component id="townCodeLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      <Component id="mobileLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      <Component id="fixedLineLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      <Component id="faxLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      <Component id="notesLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      <Component id="nameLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      <Component id="codeLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="fixedLineField" alignment="0" max="32767" attributes="0"/>
+                                      <Component id="faxField" alignment="0" max="32767" attributes="0"/>
+                                      <Component id="mobileField" alignment="0" max="32767" attributes="0"/>
+                                      <Component id="notesField" alignment="0" pref="634" max="32767" attributes="0"/>
+                                      <Component id="nicTextField" alignment="0" max="32767" attributes="0"/>
+                                      <Component id="codeField" alignment="0" max="32767" attributes="0"/>
+                                      <Component id="cityField" alignment="0" max="32767" attributes="0"/>
+                                      <Component id="addressField" alignment="0" max="32767" attributes="0"/>
+                                      <Component id="nameField" alignment="0" max="32767" attributes="0"/>
+                                  </Group>
+                              </Group>
+                          </Group>
                       </Group>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
@@ -95,7 +97,7 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="1" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="masterScrollPane" min="-2" pref="311" max="-2" attributes="0"/>
+                  <Component id="masterScrollPane" min="-2" pref="337" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="codeLabel" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -114,12 +116,7 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="addressNumberLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="addressNumberField" alignment="3" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <EmptySpace min="-2" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="addressStreetLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="addressStreetField" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="addressField" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
@@ -251,13 +248,6 @@
             </Property>
           </Properties>
         </Component>
-        <Component class="javax.swing.JLabel" name="addressStreetLabel">
-          <Properties>
-            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="com/nanosl/nbiz/gui/Bundle.properties" key="CustomerTopComponent.addressStreetLabel.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
-            </Property>
-          </Properties>
-        </Component>
         <Component class="javax.swing.JLabel" name="mobileLabel">
           <Properties>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
@@ -303,14 +293,9 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="nameFieldActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JTextField" name="addressNumberField">
+        <Component class="javax.swing.JTextField" name="addressField">
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="addressNumberFieldActionPerformed"/>
-          </Events>
-        </Component>
-        <Component class="javax.swing.JTextField" name="addressStreetField">
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="addressStreetFieldActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="addressFieldActionPerformed"/>
           </Events>
         </Component>
         <Component class="javax.swing.JTextField" name="mobileField">

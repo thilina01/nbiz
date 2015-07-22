@@ -1,5 +1,6 @@
 /*
- * To change this template, choose Tools | Templates
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
 package entity;
@@ -17,13 +18,16 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author Thilina Ranathunga
+ * @author Thilina
  */
 @Entity
 @Table(name = "supplier")
+@XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Supplier.findAll", query = "SELECT s FROM Supplier s"),
     @NamedQuery(name = "Supplier.findByCode", query = "SELECT s FROM Supplier s WHERE s.code = :code"),
@@ -34,7 +38,9 @@ import javax.persistence.Table;
     @NamedQuery(name = "Supplier.findByMobile", query = "SELECT s FROM Supplier s WHERE s.mobile = :mobile"),
     @NamedQuery(name = "Supplier.findByFixedLine", query = "SELECT s FROM Supplier s WHERE s.fixedLine = :fixedLine"),
     @NamedQuery(name = "Supplier.findByFax", query = "SELECT s FROM Supplier s WHERE s.fax = :fax"),
-    @NamedQuery(name = "Supplier.findByNotes", query = "SELECT s FROM Supplier s WHERE s.notes = :notes")})
+    @NamedQuery(name = "Supplier.findByNotes", query = "SELECT s FROM Supplier s WHERE s.notes = :notes"),
+    @NamedQuery(name = "Supplier.findByVat", query = "SELECT s FROM Supplier s WHERE s.vat = :vat"),
+    @NamedQuery(name = "Supplier.findBySvat", query = "SELECT s FROM Supplier s WHERE s.svat = :svat")})
 public class Supplier implements Serializable, Comparable<Supplier> {
 
     private static final long serialVersionUID = 1L;
@@ -58,15 +64,21 @@ public class Supplier implements Serializable, Comparable<Supplier> {
     private String fax;
     @Column(name = "notes")
     private String notes;
+    @Column(name = "vat")
+    private String vat;
+    @Column(name = "svat")
+    private String svat;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "supplier")
+    private Collection<SupplierHasBank> supplierHasBankCollection;
     @JoinColumn(name = "town_code", referencedColumnName = "code")
     @ManyToOne(optional = false)
     private Town town;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "supplier")
-    private Collection<SupplierHasBank> supplierHasBankCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "supplier")
     private Collection<Item> itemCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "supplier")
     private Collection<PurchaseInvoice> purchaseInvoiceCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "supplier")
+    private Collection<Svat> svatCollection;
 
     public Supplier() {
     }
@@ -147,14 +159,23 @@ public class Supplier implements Serializable, Comparable<Supplier> {
         this.notes = notes;
     }
 
-    public Town getTown() {
-        return town;
+    public String getVat() {
+        return vat;
     }
 
-    public void setTown(Town town) {
-        this.town = town;
+    public void setVat(String vat) {
+        this.vat = vat;
     }
 
+    public String getSvat() {
+        return svat;
+    }
+
+    public void setSvat(String svat) {
+        this.svat = svat;
+    }
+
+    @XmlTransient
     public Collection<SupplierHasBank> getSupplierHasBankCollection() {
         return supplierHasBankCollection;
     }
@@ -163,6 +184,15 @@ public class Supplier implements Serializable, Comparable<Supplier> {
         this.supplierHasBankCollection = supplierHasBankCollection;
     }
 
+    public Town getTown() {
+        return town;
+    }
+
+    public void setTown(Town town) {
+        this.town = town;
+    }
+
+    @XmlTransient
     public Collection<Item> getItemCollection() {
         return itemCollection;
     }
@@ -171,12 +201,22 @@ public class Supplier implements Serializable, Comparable<Supplier> {
         this.itemCollection = itemCollection;
     }
 
+    @XmlTransient
     public Collection<PurchaseInvoice> getPurchaseInvoiceCollection() {
         return purchaseInvoiceCollection;
     }
 
     public void setPurchaseInvoiceCollection(Collection<PurchaseInvoice> purchaseInvoiceCollection) {
         this.purchaseInvoiceCollection = purchaseInvoiceCollection;
+    }
+
+    @XmlTransient
+    public Collection<Svat> getSvatCollection() {
+        return svatCollection;
+    }
+
+    public void setSvatCollection(Collection<Svat> svatCollection) {
+        this.svatCollection = svatCollection;
     }
 
     @Override
@@ -193,9 +233,11 @@ public class Supplier implements Serializable, Comparable<Supplier> {
             return false;
         }
         Supplier other = (Supplier) object;
-        return (this.code != null || other.code == null) && (this.code == null || this.code.equals(other.code));
+        if ((this.code == null && other.code != null) || (this.code != null && !this.code.equals(other.code))) {
+            return false;
+        }
+        return true;
     }
-    static boolean ex = false;
 
     @Override
     public String toString() {

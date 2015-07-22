@@ -9,8 +9,8 @@ import entity.Company;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
-import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
+import org.openide.windows.TopComponent;
 
 /**
  * Top component which displays something.
@@ -36,7 +36,7 @@ import org.openide.util.NbBundle.Messages;
 public final class CompanyTopComponent extends NTopComponent {
 
     public CompanyTopComponent() {
-        
+
         initComponents();
         setName(Bundle.CTL_CompanyTopComponent());
         setToolTipText(Bundle.HINT_CompanyTopComponent());
@@ -78,6 +78,10 @@ public final class CompanyTopComponent extends NTopComponent {
         emailLabel = new javax.swing.JLabel();
         updateButton = new javax.swing.JButton();
         clearButton = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        vatTextField = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        svatTextField = new javax.swing.JTextField();
 
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
@@ -191,6 +195,24 @@ public final class CompanyTopComponent extends NTopComponent {
             }
         });
 
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(CompanyTopComponent.class, "CompanyTopComponent.jLabel1.text")); // NOI18N
+
+        vatTextField.setText(org.openide.util.NbBundle.getMessage(CompanyTopComponent.class, "CompanyTopComponent.vatTextField.text")); // NOI18N
+        vatTextField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                vatTextFieldActionPerformed(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel2, org.openide.util.NbBundle.getMessage(CompanyTopComponent.class, "CompanyTopComponent.jLabel2.text")); // NOI18N
+
+        svatTextField.setText(org.openide.util.NbBundle.getMessage(CompanyTopComponent.class, "CompanyTopComponent.svatTextField.text")); // NOI18N
+        svatTextField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                svatTextFieldActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -198,37 +220,57 @@ public final class CompanyTopComponent extends NTopComponent {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(codeLabel)
-                    .addComponent(nameLabel)
-                    .addComponent(sloganOneLabel)
-                    .addComponent(sloganTwoLabel)
-                    .addComponent(addressNumberLabel)
-                    .addComponent(addressStreetLabel)
-                    .addComponent(addressCityLabel)
-                    .addComponent(contactOneLabel)
-                    .addComponent(contactTwoLabel)
-                    .addComponent(faxLabel)
-                    .addComponent(emailLabel)
-                    .addComponent(webLabel))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(codeField, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(addressNumberField, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(faxField)
-                    .addComponent(contactTwoField)
-                    .addComponent(contactOneField, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(updateButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 176, Short.MAX_VALUE)
-                        .addComponent(clearButton))
-                    .addComponent(emailField)
-                    .addComponent(webField, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
-                    .addComponent(sloganOneField)
-                    .addComponent(sloganTwoField)
-                    .addComponent(addressStreetField)
-                    .addComponent(addressCityField, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
-                    .addComponent(nameField))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(codeLabel)
+                            .addComponent(nameLabel)
+                            .addComponent(sloganOneLabel)
+                            .addComponent(sloganTwoLabel)
+                            .addComponent(addressNumberLabel)
+                            .addComponent(addressStreetLabel)
+                            .addComponent(addressCityLabel)
+                            .addComponent(contactOneLabel)
+                            .addComponent(contactTwoLabel)
+                            .addComponent(faxLabel)
+                            .addComponent(jLabel1))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(codeField, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(addressNumberField, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(faxField)
+                                    .addComponent(contactTwoField)
+                                    .addComponent(contactOneField, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
+                                    .addComponent(sloganOneField)
+                                    .addComponent(sloganTwoField)
+                                    .addComponent(addressStreetField)
+                                    .addComponent(addressCityField, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
+                                    .addComponent(nameField))
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(vatTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jLabel2)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(svatTextField))))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(emailLabel)
+                            .addComponent(webLabel))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(updateButton)
+                                .addGap(176, 176, 176)
+                                .addComponent(clearButton)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(55, 55, 55)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(webField, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(emailField))))))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -275,6 +317,12 @@ public final class CompanyTopComponent extends NTopComponent {
                     .addComponent(faxField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(vatTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2)
+                    .addComponent(svatTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(emailLabel)
                     .addComponent(emailField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -285,7 +333,7 @@ public final class CompanyTopComponent extends NTopComponent {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(updateButton)
                     .addComponent(clearButton))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(50, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -319,7 +367,7 @@ public final class CompanyTopComponent extends NTopComponent {
     }//GEN-LAST:event_emailFieldActionPerformed
 
     private void faxFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_faxFieldActionPerformed
-        emailField.requestFocus();
+        vatTextField.requestFocus();
     }//GEN-LAST:event_faxFieldActionPerformed
 
     private void contactOneFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_contactOneFieldActionPerformed
@@ -368,6 +416,14 @@ public final class CompanyTopComponent extends NTopComponent {
         clearFields();
     }//GEN-LAST:event_clearButtonActionPerformed
 
+    private void vatTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_vatTextFieldActionPerformed
+        svatTextField.requestFocus();
+    }//GEN-LAST:event_vatTextFieldActionPerformed
+
+    private void svatTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_svatTextFieldActionPerformed
+        emailField.requestFocus();
+    }//GEN-LAST:event_svatTextFieldActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField addressCityField;
     private javax.swing.JLabel addressCityLabel;
@@ -386,6 +442,8 @@ public final class CompanyTopComponent extends NTopComponent {
     private javax.swing.JLabel emailLabel;
     private javax.swing.JTextField faxField;
     private javax.swing.JLabel faxLabel;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JTextField nameField;
     private javax.swing.JLabel nameLabel;
@@ -393,13 +451,15 @@ public final class CompanyTopComponent extends NTopComponent {
     private javax.swing.JLabel sloganOneLabel;
     private javax.swing.JTextField sloganTwoField;
     private javax.swing.JLabel sloganTwoLabel;
+    private javax.swing.JTextField svatTextField;
     private javax.swing.JButton updateButton;
+    private javax.swing.JTextField vatTextField;
     private javax.swing.JTextField webField;
     private javax.swing.JLabel webLabel;
     // End of variables declaration//GEN-END:variables
     @Override
     public void componentOpened() {
-    codeField.requestFocus();
+        codeField.requestFocus();
     }
 
     @Override
@@ -418,8 +478,7 @@ public final class CompanyTopComponent extends NTopComponent {
         String version = p.getProperty("version");
         // TODO read your settings according to their version
     }
-    
-    
+
     private void fill(String code) {
         Company company;
         company = manager.find(Company.class, code);
@@ -437,6 +496,8 @@ public final class CompanyTopComponent extends NTopComponent {
         contactOneField.setText(company.getContactOne());
         contactTwoField.setText(company.getContactTwo());
         faxField.setText(company.getFax());
+        vatTextField.setText(company.getVat());
+        svatTextField.setText(company.getSvat());
         emailField.setText(company.getEmail());
         webField.setText(company.getWeb());
     }
@@ -461,9 +522,11 @@ public final class CompanyTopComponent extends NTopComponent {
         String contactOne = contactOneField.getText().trim();
         String contactTwo = contactTwoField.getText().trim();
         String fax = faxField.getText().trim();
+        String vat = vatTextField.getText().trim();
+        String svat = svatTextField.getText().trim();
         String email = emailField.getText().trim();
         String web = webField.getText().trim();
-        
+
         Company company = manager.find(Company.class, code);
         if (company == null) {
             company = new Company(code);
@@ -477,6 +540,8 @@ public final class CompanyTopComponent extends NTopComponent {
         company.setContactOne(contactOne);
         company.setContactTwo(contactTwo);
         company.setFax(fax);
+        company.setVat(vat);
+        company.setSvat(svat);
         company.setEmail(email);
         company.setWeb(web);
         if (manager.update(company)) {
@@ -486,8 +551,6 @@ public final class CompanyTopComponent extends NTopComponent {
         }
         showError("Unable to update " + code);
     }
-    
-    
 
     private void clearFields() {
         codeField.requestFocus();
@@ -501,6 +564,8 @@ public final class CompanyTopComponent extends NTopComponent {
         contactOneField.setText("");
         contactTwoField.setText("");
         faxField.setText("");
+        vatTextField.setText("");
+        svatTextField.setText("");
         emailField.setText("");
         webField.setText("");
     }

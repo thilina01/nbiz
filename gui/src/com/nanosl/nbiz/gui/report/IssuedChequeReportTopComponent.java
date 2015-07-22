@@ -8,9 +8,9 @@ import com.nanosl.lib.date.JXDatePicker;
 import query.Find;
 import com.nanosl.nbiz.util.NTopComponent;
 import entity.IssuedCheque;
+import entity.PurchaseInvoice;
 import java.util.Collection;
 import java.util.Date;
-import java.util.Iterator;
 import javax.swing.table.DefaultTableModel;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
@@ -97,17 +97,19 @@ public final class IssuedChequeReportTopComponent extends NTopComponent {
             }
         });
         masterScrollPane.setViewportView(masterTable);
-        masterTable.getColumnModel().getColumn(0).setPreferredWidth(30);
-        masterTable.getColumnModel().getColumn(0).setHeaderValue(org.openide.util.NbBundle.getMessage(IssuedChequeReportTopComponent.class, "IssuedChequeReportTopComponent.masterTable.columnModel.title0")); // NOI18N
-        masterTable.getColumnModel().getColumn(1).setHeaderValue(org.openide.util.NbBundle.getMessage(IssuedChequeReportTopComponent.class, "IssuedChequeReportTopComponent.masterTable.columnModel.title1")); // NOI18N
-        masterTable.getColumnModel().getColumn(2).setHeaderValue(org.openide.util.NbBundle.getMessage(IssuedChequeReportTopComponent.class, "IssuedChequeReportTopComponent.masterTable.columnModel.title2")); // NOI18N
-        masterTable.getColumnModel().getColumn(2).setCellRenderer(rightAlignCell);
-        masterTable.getColumnModel().getColumn(3).setHeaderValue(org.openide.util.NbBundle.getMessage(IssuedChequeReportTopComponent.class, "IssuedChequeReportTopComponent.masterTable.columnModel.title3")); // NOI18N
-        masterTable.getColumnModel().getColumn(4).setHeaderValue(org.openide.util.NbBundle.getMessage(IssuedChequeReportTopComponent.class, "IssuedChequeReportTopComponent.masterTable.columnModel.title4")); // NOI18N
-        masterTable.getColumnModel().getColumn(5).setHeaderValue(org.openide.util.NbBundle.getMessage(IssuedChequeReportTopComponent.class, "IssuedChequeReportTopComponent.masterTable.columnModel.title5")); // NOI18N
-        masterTable.getColumnModel().getColumn(6).setHeaderValue(org.openide.util.NbBundle.getMessage(IssuedChequeReportTopComponent.class, "IssuedChequeReportTopComponent.masterTable.columnModel.title6")); // NOI18N
-        masterTable.getColumnModel().getColumn(7).setPreferredWidth(300);
-        masterTable.getColumnModel().getColumn(7).setHeaderValue(org.openide.util.NbBundle.getMessage(IssuedChequeReportTopComponent.class, "IssuedChequeReportTopComponent.masterTable.columnModel.title7")); // NOI18N
+        if (masterTable.getColumnModel().getColumnCount() > 0) {
+            masterTable.getColumnModel().getColumn(0).setPreferredWidth(30);
+            masterTable.getColumnModel().getColumn(0).setHeaderValue(org.openide.util.NbBundle.getMessage(IssuedChequeReportTopComponent.class, "IssuedChequeReportTopComponent.masterTable.columnModel.title0")); // NOI18N
+            masterTable.getColumnModel().getColumn(1).setHeaderValue(org.openide.util.NbBundle.getMessage(IssuedChequeReportTopComponent.class, "IssuedChequeReportTopComponent.masterTable.columnModel.title1")); // NOI18N
+            masterTable.getColumnModel().getColumn(2).setHeaderValue(org.openide.util.NbBundle.getMessage(IssuedChequeReportTopComponent.class, "IssuedChequeReportTopComponent.masterTable.columnModel.title2")); // NOI18N
+            masterTable.getColumnModel().getColumn(2).setCellRenderer(rightAlignCell);
+            masterTable.getColumnModel().getColumn(3).setHeaderValue(org.openide.util.NbBundle.getMessage(IssuedChequeReportTopComponent.class, "IssuedChequeReportTopComponent.masterTable.columnModel.title3")); // NOI18N
+            masterTable.getColumnModel().getColumn(4).setHeaderValue(org.openide.util.NbBundle.getMessage(IssuedChequeReportTopComponent.class, "IssuedChequeReportTopComponent.masterTable.columnModel.title4")); // NOI18N
+            masterTable.getColumnModel().getColumn(5).setHeaderValue(org.openide.util.NbBundle.getMessage(IssuedChequeReportTopComponent.class, "IssuedChequeReportTopComponent.masterTable.columnModel.title5")); // NOI18N
+            masterTable.getColumnModel().getColumn(6).setHeaderValue(org.openide.util.NbBundle.getMessage(IssuedChequeReportTopComponent.class, "IssuedChequeReportTopComponent.masterTable.columnModel.title6")); // NOI18N
+            masterTable.getColumnModel().getColumn(7).setPreferredWidth(300);
+            masterTable.getColumnModel().getColumn(7).setHeaderValue(org.openide.util.NbBundle.getMessage(IssuedChequeReportTopComponent.class, "IssuedChequeReportTopComponent.masterTable.columnModel.title7")); // NOI18N
+        }
 
         startDatePicker.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -219,9 +221,18 @@ public final class IssuedChequeReportTopComponent extends NTopComponent {
             return;
         }
         int i = 0;
-        for (Iterator<IssuedCheque> it = issuedCheques.iterator(); it.hasNext();) {
-            IssuedCheque issuedCheque = it.next();
-            Object[] row = {++i, issuedCheque.getChequeNumber(), nf2d.format(issuedCheque.getAmount()), yyyy_MM_dd.format(issuedCheque.getIssuedDate()), yyyy_MM_dd.format(issuedCheque.getBankingDate()), issuedCheque.getBank().getName(), issuedCheque.getPurchaseInvoice().getPurchaseInvoicePK().getInvNo(), issuedCheque.getPurchaseInvoice().getPurchaseInvoicePK().getSupplierCode()};
+        for (IssuedCheque issuedCheque : issuedCheques) {
+            Collection<PurchaseInvoice> purchaseInvoices = issuedCheque.getPurchaseInvoiceCollection();
+            String invoiceNumbers = "";
+            String supplierCode = "";
+            for (PurchaseInvoice purchaseInvoice : purchaseInvoices) {
+                if (invoiceNumbers.length() > 0) {
+                    invoiceNumbers += ", ";
+                    supplierCode = purchaseInvoice.getSupplier().getCode();
+                }                
+                    invoiceNumbers += purchaseInvoice.getPurchaseInvoicePK().getInvNo();
+            }
+            Object[] row = {++i, issuedCheque.getChequeNumber(), nf2d.format(issuedCheque.getAmount()), yyyy_MM_dd.format(issuedCheque.getIssuedDate()), yyyy_MM_dd.format(issuedCheque.getBankingDate()), issuedCheque.getBank().getName(), invoiceNumbers, supplierCode};
             tableModel.addRow(row);
         }
         calcTotal();

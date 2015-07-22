@@ -39,9 +39,9 @@ import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.util.AsyncGUIJob;
 import org.openide.util.Exceptions;
-import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
 import org.openide.util.Utilities;
+import org.openide.windows.TopComponent;
 import org.openide.windows.WindowManager;
 
 /**
@@ -693,7 +693,7 @@ public final class SaleInvoiceTopComponent extends NTopComponent {
             CollectionReceipt collectionReceipt = new CollectionReceipt(ReceiptNumber);
             collectionReceipt.setCollectedTime(date);
             collectionReceipt.setSaleInvoice(saleInvoice);
-            collectionReceipt.setCash(paidAmount);
+            collectionReceipt.setAmount(paidAmount);
             SaleCash saleCash = new SaleCash(ReceiptNumber);
             saleCash.setAmount(paidAmount);
             saleCash.setCollectionReceipt(collectionReceipt);

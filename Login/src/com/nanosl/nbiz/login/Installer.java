@@ -6,13 +6,19 @@ package com.nanosl.nbiz.login;
 
 import com.nanosl.nbiz.login.gui.LoginPanel;
 import org.openide.modules.ModuleInstall;
+import org.openide.windows.WindowManager;
 
 public class Installer extends ModuleInstall {
 
-    private final LoginPanel loginPanel = new LoginPanel();
-
+//    private final LoginPanel loginPanel = new LoginPanel();
     @Override
     public void restored() {
-        loginPanel.createLoginDialog();
+        WindowManager.getDefault().invokeWhenUIReady(new Runnable() {
+            @Override
+            public void run() {
+//                WindowManager.getDefault().getMainWindow().setExtendedState(Frame.ICONIFIED);
+                LoginPanel.displayLoginDialog();
+            }
+        });
     }
 }

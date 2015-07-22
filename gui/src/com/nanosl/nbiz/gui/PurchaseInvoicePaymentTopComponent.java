@@ -484,13 +484,13 @@ public final class PurchaseInvoicePaymentTopComponent extends NTopComponent {
         invoiceDtm.setRowCount(0);
         paymentDtm.setRowCount(0);
         purchaseInvoices = manager.find(PurchaseInvoice.class);
-        for (PurchaseInvoice pi : purchaseInvoices) {
+        purchaseInvoices.stream().forEach((pi) -> {
             double credit = pi.getCredit() == null ? 0 : pi.getCredit();
             if (credit > 0) {
                 Object[] rowData = {pi,pi.getSupplier()};
                 invoiceDtm.addRow(rowData);
             }
-        }
+        });
     }
 
     private void fill() {
@@ -601,7 +601,9 @@ public final class PurchaseInvoicePaymentTopComponent extends NTopComponent {
                     issuedCheque.setBank(bank);
                     issuedCheque.setBankingDate(date);
                     issuedCheque.setIssuedDate(new Date());
-                    issuedCheque.setPurchaseInvoice(purchaseInvoice);
+                    ArrayList<PurchaseInvoice> purchaseInvoicesOfCheque = new ArrayList<>();
+                    purchaseInvoicesOfCheque.add(purchaseInvoice);
+                    issuedCheque.setPurchaseInvoiceCollection(purchaseInvoicesOfCheque);
                     issuedCheque.setStatus(0);
                     serializables.add(issuedCheque);
                     purchaseInvoice.getIssuedChequeCollection().add(issuedCheque);
