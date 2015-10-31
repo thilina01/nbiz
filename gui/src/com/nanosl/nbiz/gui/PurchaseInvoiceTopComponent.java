@@ -5,6 +5,9 @@
 package com.nanosl.nbiz.gui;
 
 import com.nanosl.lib.date.JXDatePicker;
+import com.nanosl.nbiz.util.Combo;
+import com.nanosl.nbiz.util.FindMySql;
+import static com.nanosl.nbiz.util.Format.nf2d;
 import com.nanosl.nbiz.util.NTopComponent;
 import entity.Item;
 import entity.LastCode;
@@ -29,12 +32,9 @@ import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
-import org.openide.windows.TopComponent;
-import org.openide.util.NbBundle.Messages;
-import com.nanosl.nbiz.util.Combo;
-import com.nanosl.nbiz.util.FindMySql;
-import static com.nanosl.nbiz.util.Format.nf2d;
 import org.openide.awt.StatusDisplayer;
+import org.openide.util.NbBundle.Messages;
+import org.openide.windows.TopComponent;
 
 /**
  * Top component which displays something.
@@ -109,7 +109,7 @@ public final class PurchaseInvoiceTopComponent extends NTopComponent {
 
         invoiceNumberField.setText(invoiceNumber);
         totalAmountLabel.setText(nf2d.format(purchaseInvoice.getAmount()));
-        totalDiscountLabel.setText(nf2d.format(purchaseInvoice.getDiscount()));
+        totalDiscountTextField.setText(nf2d.format(purchaseInvoice.getDiscount()));
 //        supplierComboBox.setSelectedItem(supplier);
 
     }
@@ -154,7 +154,6 @@ public final class PurchaseInvoiceTopComponent extends NTopComponent {
         jLabel7 = new javax.swing.JLabel();
         discountField = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
-        totalDiscountLabel = new javax.swing.JLabel();
         stockLabel = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         sellingTextField = new javax.swing.JTextField();
@@ -162,6 +161,7 @@ public final class PurchaseInvoiceTopComponent extends NTopComponent {
         addToExistingRadioButton = new javax.swing.JRadioButton();
         setNewValueRadioButton = new javax.swing.JRadioButton();
         jRadioButton1 = new javax.swing.JRadioButton();
+        totalDiscountTextField = new javax.swing.JTextField();
 
         datePicker.setName("datePicker"); // NOI18N
         datePicker.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -358,9 +358,6 @@ public final class PurchaseInvoiceTopComponent extends NTopComponent {
         jLabel9.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(jLabel9, org.openide.util.NbBundle.getMessage(PurchaseInvoiceTopComponent.class, "PurchaseInvoiceTopComponent.jLabel9.text")); // NOI18N
 
-        totalDiscountLabel.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        totalDiscountLabel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-
         stockLabel.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(stockLabel, org.openide.util.NbBundle.getMessage(PurchaseInvoiceTopComponent.class, "PurchaseInvoiceTopComponent.stockLabel.text")); // NOI18N
 
@@ -390,6 +387,10 @@ public final class PurchaseInvoiceTopComponent extends NTopComponent {
         jRadioButton1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(jRadioButton1, org.openide.util.NbBundle.getMessage(PurchaseInvoiceTopComponent.class, "PurchaseInvoiceTopComponent.jRadioButton1.text")); // NOI18N
         jRadioButton1.setEnabled(false);
+
+        totalDiscountTextField.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        totalDiscountTextField.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
+        totalDiscountTextField.setText(org.openide.util.NbBundle.getMessage(PurchaseInvoiceTopComponent.class, "PurchaseInvoiceTopComponent.totalDiscountTextField.text")); // NOI18N
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -428,7 +429,7 @@ public final class PurchaseInvoiceTopComponent extends NTopComponent {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel9)
                         .addGap(18, 18, 18)
-                        .addComponent(totalDiscountLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(totalDiscountTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jLabel8)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -506,11 +507,11 @@ public final class PurchaseInvoiceTopComponent extends NTopComponent {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(totalAmountLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel8)
-                    .addComponent(totalDiscountLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel9)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(processButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(clearButton)))
+                        .addComponent(clearButton))
+                    .addComponent(totalDiscountTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(20, 20, 20))
         );
 
@@ -700,7 +701,7 @@ public final class PurchaseInvoiceTopComponent extends NTopComponent {
     private javax.swing.JComboBox supplierComboBox;
     private javax.swing.JTable table;
     private javax.swing.JLabel totalAmountLabel;
-    private javax.swing.JLabel totalDiscountLabel;
+    private javax.swing.JTextField totalDiscountTextField;
     // End of variables declaration//GEN-END:variables
     DefaultTableModel dtm;
     DefaultComboBoxModel<Supplier> supplierComboBoxModel;
@@ -785,7 +786,7 @@ public final class PurchaseInvoiceTopComponent extends NTopComponent {
             totalDiscount += Double.valueOf(table.getValueAt(i, 6).toString());
             totalAmount += Double.valueOf(table.getValueAt(i, 8).toString());
         }
-        totalDiscountLabel.setText(nf2d.format(totalDiscount));
+        totalDiscountTextField.setText(nf2d.format(totalDiscount));
         totalAmountLabel.setText(nf2d.format(totalAmount));
     }
 
@@ -811,7 +812,7 @@ public final class PurchaseInvoiceTopComponent extends NTopComponent {
             return;
         }
         double invoiveAmount = Double.valueOf(totalAmountLabel.getText());
-        double invoiceDiscount = Double.valueOf(totalDiscountLabel.getText());
+        double invoiceDiscount = Double.valueOf(totalDiscountTextField.getText());
         purchaseInvoice = new PurchaseInvoice(invoiceNumber, supplier.getCode());
         purchaseInvoice.setSupplier(supplier);
         purchaseInvoice.setAmount(invoiveAmount);
@@ -870,7 +871,7 @@ public final class PurchaseInvoiceTopComponent extends NTopComponent {
         quantityField.setText("");
         costField.setText("");
         totalAmountLabel.setText("");
-        totalDiscountLabel.setText("");
+        totalDiscountTextField.setText("");
         stockLabel.setText("stock");
         datePicker.setDate(new Date());
     }
@@ -1096,7 +1097,7 @@ public final class PurchaseInvoiceTopComponent extends NTopComponent {
 //        if (existingPurchaseInvoice != null) {
 //            datePicker.setDate(existingPurchaseInvoice.getInvDate());
 //            totalAmountLabel.setText(nf2d.format(existingPurchaseInvoice.getAmount()));
-//            totalDiscountLabel.setText(nf2d.format(existingPurchaseInvoice.getDiscount()));
+//            totalDiscountTextField.setText(nf2d.format(existingPurchaseInvoice.getDiscount()));
 //            Collection<PurchaseInvoiceHasItem> purchaseInvoiceHasItems = existingPurchaseInvoice.getPurchaseInvoiceHasItemCollection();
 //            dtm.setRowCount(0);
 //            int r = 0;

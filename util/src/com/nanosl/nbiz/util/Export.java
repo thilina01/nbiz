@@ -1,6 +1,8 @@
 package com.nanosl.nbiz.util;
 
 import com.nanosl.lib.db.Manager;
+import java.awt.Desktop;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -61,13 +63,25 @@ public class Export {
                 i0++;
                 i1++;
             }
-            String yemi = "C:/Users/Thilina/Desktop/" + tableName + (System.currentTimeMillis() / 1000) + ".xls";
+            //"C:/" + 
+            String userHomeFolder = System.getProperty("user.home");
+            String exportFolder = userHomeFolder + File.separator + "Export";
+            new File(exportFolder).mkdir();
+            String yemi = exportFolder + File.separator + tableName + (System.currentTimeMillis() / 1000) + ".xls";
             try (FileOutputStream fileOut = new FileOutputStream(yemi)) {
                 workbook.write(fileOut);
+                System.out.println("Written to: " + yemi);
+                if (Desktop.isDesktopSupported()) {
+                    Desktop.getDesktop().open(new File(exportFolder));
+                }
+//                Runtime.getRuntime().exec(exportFolder);
             }
         } catch (SQLException e1) {
+            e1.printStackTrace();
         } catch (FileNotFoundException e1) {
+            e1.printStackTrace();
         } catch (IOException e1) {
+            e1.printStackTrace();
         }
     }
 }

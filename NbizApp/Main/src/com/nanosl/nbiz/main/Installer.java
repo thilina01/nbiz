@@ -4,22 +4,17 @@
  */
 package com.nanosl.nbiz.main;
 
-import com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException;
 import com.nanosl.lib.db.Manager;
-import entity.Employee;
-import entity.EmployeePosition;
+import com.nanosl.nbiz.util.Data;
 import entity.Fix;
 import entity.Operator;
-import entity.Person;
-import entity.ViewPanel;
 import java.io.File;
-import java.io.Serializable;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,6 +42,9 @@ public class Installer extends ModuleInstall {
                 System.out.println(manager.getDatabase());
                 try {
                     Operator operator = manager.find(Operator.class, "admin");
+                    if (operator == null) {
+                        Data.initFirstUser();
+                    }
                     com.nanosl.nbiz.util.Data.setOperator(operator);
                 } catch (NullPointerException e) {
 //   if (round < 3) {
@@ -63,31 +61,9 @@ public class Installer extends ModuleInstall {
                     manager.initiateDatabase();
                     manager = Manager.getInstance();
                     Operator operator = manager.find(Operator.class, "admin");
-                    if (operator != null) {
-                        return;
+                    if (operator == null) {
+                        Data.initFirstUser();
                     }
-                    operator = new Operator("admin");
-                    operator.setPassword("n");
-                    Employee employee = new Employee("000");
-                    Person person = new Person("000000000V");
-                    employee.setPerson(person);
-                    EmployeePosition employeePosition = new EmployeePosition("ADMIN");
-                    employee.setEmployeePosition(employeePosition);
-                    operator.setEmployee(employee);
-                    ViewPanel viewPanel = new ViewPanel("PermissionTopComponent");
-                    Collection<Operator> operators = new ArrayList<>();
-                    operators.add(operator);
-                    viewPanel.setOperatorCollection(operators);
-                    Collection<ViewPanel> viewPanels = new ArrayList<>();
-                    viewPanels.add(viewPanel);
-                    operator.setViewPanelCollection(viewPanels);
-                    List<Serializable> serializables = new ArrayList<>();
-                    serializables.add(person);
-                    serializables.add(employeePosition);
-                    serializables.add(employee);
-                    serializables.add(viewPanel);
-                    serializables.add(operator);
-                    manager.update(serializables);
                 } catch (URISyntaxException ex) {
                     Exceptions.printStackTrace(ex);
                 }
@@ -156,13 +132,24 @@ public class Installer extends ModuleInstall {
             + " ON DELETE NO ACTION"
             + " ON UPDATE NO ACTION)"
             + " ENGINE = InnoDB";
+    String CREATE_TABLE_PERSON = "CREATE TABLE IF NOT EXISTS `person` ("
+            + "  `nic` VARCHAR(10) NOT NULL,"
+            + "  `name` VARCHAR(250) NULL,"
+            + "  `address` VARCHAR(150) NULL,"
+            + "  `city` VARCHAR(60) NULL,"
+            + "  `mobile` VARCHAR(10) NULL,"
+            + "  `personcol` VARCHAR(45) NULL,"
+            + "  `operator` VARCHAR(15) NULL,"
+            + "  PRIMARY KEY (`nic`))"
+            + "  ENGINE = InnoDB";
 
     private void applyFix() {
         Map<String, String> queryMap = new HashMap();
         apply("x20150712", CREATE_TABLE_FIX);
         queryMap.put("x20150712", CREATE_TABLE_FIX);
         queryMap.put("x20150709a", x20150709a);
-        queryMap.put("ADD_paid_by_credit_card_TO_sale_invoice", ADD_paid_by_credit_card_TO_sale_invoice);
+        queryMap.put("CREATE_TABLE_PERSON", CREATE_TABLE_PERSON);
+//        queryMap.put("ADD_paid_by_credit_card_TO_sale_invoice", ADD_paid_by_credit_card_TO_sale_invoice);
         queryMap.put("x20150709b", x20150709b);
         queryMap.put("createTableToolBarButton", createTableToolBarButton);
         queryMap.put("x20150711", x20150711);
@@ -220,14 +207,22 @@ public class Installer extends ModuleInstall {
     }
 
     private void apply(String key, String value) {
-        try (PreparedStatement ps = manager.getConnection().prepareStatement(value)) {
+        try {
+            Connection connection = manager.getConnection();
+            if (connection == null) {
+                new NullPointerException("Null connection, ").printStackTrace();
+                System.exit(0);
+            }
+            PreparedStatement ps = connection.prepareStatement(value);
             ps.executeUpdate();
             System.out.println("Applied: " + key);
             manager.update(new Fix(key));
-        } catch (MySQLSyntaxErrorException ex) {
-            manager.update(new Fix(key));
         } catch (SQLException ex) {
             Exceptions.printStackTrace(ex);
+        } catch (Exception ex) {
+            Exceptions.printStackTrace(ex);
         }
+
     }
+
 }

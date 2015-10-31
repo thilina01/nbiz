@@ -115,10 +115,12 @@ public class SideBarPanel extends javax.swing.JPanel {
     private static javax.swing.JToolBar toolBar;
     // End of variables declaration//GEN-END:variables
 
-    private void loadButtons() {
+    public void loadButtons() {
         ArrayList<JButton> jButtons = ToolBarManager.getToolBarButtons();
+        toolBar.removeAll();
         jButtons.stream().forEach((jButton) -> {
             toolBar.add(jButton);
         });
+        toolBar.repaint();
     }
 }

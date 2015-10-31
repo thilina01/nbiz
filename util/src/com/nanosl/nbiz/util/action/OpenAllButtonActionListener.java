@@ -29,7 +29,7 @@ public final class OpenAllButtonActionListener implements ActionListener {
         WindowManager windowManager = WindowManager.getDefault();
         windowManager.getModes().stream().map((next) -> next.getTopComponents()).forEach((topComponents) -> {
             for (TopComponent topComponent : topComponents) {
-                System.out.println("Topcomponent: " + topComponent);
+//                System.out.println("Topcomponent: " + topComponent);
                 if (topComponent instanceof NTopComponent) {
                     topComponent.open();
                 }

@@ -90,6 +90,8 @@ CREATE TABLE IF NOT EXISTS `supplier` (
   `mobile` VARCHAR(10) NULL DEFAULT NULL,
   `fixed_Line` VARCHAR(10) NULL DEFAULT NULL,
   `fax` VARCHAR(10) NULL DEFAULT NULL,
+  `svat` VARCHAR(60) NULL DEFAULT NULL,
+  `vat` VARCHAR(60) NULL DEFAULT NULL,
   `notes` VARCHAR(255) NULL DEFAULT NULL,
   `town_code` VARCHAR(30) NOT NULL,
   PRIMARY KEY (`code`),
@@ -102,6 +104,25 @@ CREATE TABLE IF NOT EXISTS `supplier` (
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = latin1;
 
+-- -----------------------------------------------------
+-- Table `svat`
+-- -----------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS `svat` (
+  `serial_number` INT NOT NULL,
+  `svat_amount` DOUBLE NULL,
+  `purchasing_amount` DOUBLE NULL,
+  `issued_date` DATETIME NULL,
+  `ending_month` DATE NULL,
+  `supplier_code` VARCHAR(10) NOT NULL,
+  PRIMARY KEY (`serial_number`),
+  INDEX `fk_svat_supplier1_idx` (`supplier_code` ASC),
+  CONSTRAINT `fk_svat_supplier1`
+    FOREIGN KEY (`supplier_code`)
+    REFERENCES `eis`.`supplier` (`code`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
 
 -- -----------------------------------------------------
 -- Table `item_type`

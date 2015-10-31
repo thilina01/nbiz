@@ -8,17 +8,13 @@ import com.nanosl.nbiz.gui.PurchaseInvoiceTopComponent;
 import com.nanosl.nbiz.util.Combo;
 import com.nanosl.nbiz.util.NTopComponent;
 import entity.PurchaseInvoice;
-import entity.PurchaseInvoiceHasItem;
-import entity.PurchaseInvoicePK;
 import entity.Supplier;
 import java.awt.Component;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.Collection;
 import java.util.Date;
-import java.util.Iterator;
 import javax.swing.JComponent;
-import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.netbeans.api.settings.ConvertAsProperties;
@@ -298,8 +294,7 @@ public final class PurchaseReportTopComponent extends NTopComponent {
             return;
         }
         int i = 0;
-        for (Iterator<PurchaseInvoice> it = purchaseInvoices.iterator(); it.hasNext();) {
-            PurchaseInvoice purchaseInvoice = it.next();
+        for (PurchaseInvoice purchaseInvoice : purchaseInvoices) {
             Object[] row = {++i, yyyy_MM_dd.format(purchaseInvoice.getInvDate()), purchaseInvoice.getSupplier().getCode(), purchaseInvoice.getSupplier().getName(), purchaseInvoice.getPurchaseInvoicePK().getInvNo(), nf2d.format(purchaseInvoice.getAmount())};
             tableModel.addRow(row);
         }

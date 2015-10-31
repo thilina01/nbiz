@@ -5,13 +5,13 @@
  */
 package com.nanos.nbiz.pos;
 
-import com.nanosl.nbiz.quicklaunch.ToolBarManager;
+import com.nanosl.nbiz.util.Shared;
 import org.openide.modules.ModuleInstall;
 
 public class Installer extends ModuleInstall {
 
     @Override
     public void restored() {
-        ToolBarManager.registerToolBarButton("POS", "POSTopComponent", "com/nanos/nbiz/pos/resources/specials-offers-save-sale.png");
+        Shared.registerToolBarButton("POS", "POSTopComponent", "com/nanos/nbiz/pos/resources/specials-offers-save-sale.png");
     }
 }

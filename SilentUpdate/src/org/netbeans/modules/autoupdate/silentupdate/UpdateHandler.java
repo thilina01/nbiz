@@ -286,7 +286,7 @@ public final class UpdateHandler {
 
     static Validator doDownload(InstallSupport support) throws OperationException {
         ProgressHandle downloadHandle = ProgressHandleFactory.createHandle("dummy-download-handle"); // NOI18N
-        return support.doDownload(downloadHandle, true);
+        return support.doDownload(downloadHandle, true, true);//(downloadHandle, true);
     }
 
     static Installer doVerify(InstallSupport support, Validator validator) throws OperationException {

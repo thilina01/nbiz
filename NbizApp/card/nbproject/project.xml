@@ -23,14 +23,6 @@
                     </run-dependency>
                 </dependency>
                 <dependency>
-                    <code-name-base>com.nanosl.nbiz.gui</code-name-base>
-                    <build-prerequisite/>
-                    <compile-dependency/>
-                    <run-dependency>
-                        <specification-version>2.0.2</specification-version>
-                    </run-dependency>
-                </dependency>
-                <dependency>
                     <code-name-base>com.nanosl.nbiz.nanolibWrapper</code-name-base>
                     <build-prerequisite/>
                     <compile-dependency/>

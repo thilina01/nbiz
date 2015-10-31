@@ -2,19 +2,26 @@ package com.nanosl.nbiz.util;
 
 import com.nanosl.lib.db.Manager;
 import entity.Company;
+import entity.Employee;
+import entity.EmployeePosition;
 import entity.General;
 import entity.Operator;
+import entity.Person;
+import entity.ViewPanel;
 import java.io.IOException;
+import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import javax.swing.JOptionPane;
 import org.openide.windows.TopComponent;
 import org.openide.windows.WindowManager;
-//import ui.CompanyView;
 
 /**
  *
@@ -24,40 +31,45 @@ public class Data {
 
     private static Operator operator;
     private static String version = "0.a.0";
-    static Manager m = Manager.getInstance();
+    static Manager manager = Manager.getInstance();
 
     public static Operator getOperator() {
-        m.clearCache();
-        if (operator == null) {
-            operator = new Operator("admin");
-            operator.setPassword("n");
-            m.update(operator);
+        manager.clearCache();
+
+        if (manager.count(Operator.class) == 0) {
+            Data.initFirstUser();
+//            first();
         }
-        return m.find(Operator.class, operator.getUsername());
+//        if (operator == null) {
+//            operator = new Operator("admin");
+//            operator.setPassword("n");
+//            manager.update(operator);
+//        }
+        return manager.find(Operator.class, operator != null ? operator.getUsername() : "");
     }
 
     public static String getInvoiceNo() {
-        m.clearCache();
-        General general = m.find(General.class, 1);
+        manager.clearCache();
+        General general = manager.find(General.class, 1);
         if (general == null) {
             general = new General();
             general.setInvoiceNo("0");
             general.setReceiptNo("0");
-            m.update(general);
-            general = m.find(General.class, 1);
+            manager.update(general);
+            general = manager.find(General.class, 1);
         }
         return general.getInvoiceNo();
     }
 
     public static String getReceiptNo() {
-        m.clearCache();
-        General general = m.find(General.class, 1);
+        manager.clearCache();
+        General general = manager.find(General.class, 1);
         if (general == null) {
             general = new General();
             general.setInvoiceNo("0");
             general.setReceiptNo("0");
-            m.update(general);
-            general = m.find(General.class, 1);
+            manager.update(general);
+            general = manager.find(General.class, 1);
         }
         return general == null ? "000" : general.getReceiptNo();
     }
@@ -65,31 +77,31 @@ public class Data {
     public static void setReceiptNo(String lastReceiptNo) {
         try {
             int reciptNo = Integer.parseInt(lastReceiptNo);
-            General general = m.find(General.class, 1);
+            General general = manager.find(General.class, 1);
             if (general == null) {
                 general = new General();
                 general.setInvoiceNo("0");
             }
             general.setReceiptNo(++reciptNo + "");
-            m.update(general);
+            manager.update(general);
         } catch (Exception e) {
         }
-        m.clearCache();
+        manager.clearCache();
     }
 
     public static void setInvoiceNo(String lastInvoiceNo) {
         try {
             int invoiceNo = Integer.parseInt(lastInvoiceNo);
-            General general = m.find(General.class, 1);
+            General general = manager.find(General.class, 1);
             if (general == null) {
                 general = new General();
                 general.setReceiptNo("0");
             }
             general.setInvoiceNo(++invoiceNo + "");
-            m.update(general);
+            manager.update(general);
         } catch (Exception e) {
         }
-        m.clearCache();
+        manager.clearCache();
     }
 
     /**
@@ -98,6 +110,12 @@ public class Data {
     public static void setOperator(Operator aOperator) {
         operator = aOperator;
         MenuManager.restore();
+//
+//        Set<TopComponent> openTopComponents = WindowManager.getDefault().getRegistry().getOpened();
+//        openTopComponents.stream().forEach((tc) -> {
+//            tc.setVisible(tc.isShowing());
+//
+//        });
     }
 
     public static void setVersion(String aVersion) {
@@ -114,7 +132,7 @@ public class Data {
 
     public static Company getCompany() {
         if (company == null) {
-            company = m.findOne(Company.class);
+            company = manager.findOne(Company.class);
         }
         return company;
     }
@@ -142,6 +160,32 @@ public class Data {
         return params;
     }
 
+    public static void initFirstUser() {
+
+        operator = new Operator("admin");
+        operator.setPassword("n");
+        Employee employee = new Employee("000");
+        Person person = new Person("000000000V");
+        employee.setPerson(person);
+        EmployeePosition employeePosition = new EmployeePosition("ADMIN");
+        employee.setEmployeePosition(employeePosition);
+        operator.setEmployee(employee);
+        ViewPanel viewPanel = new ViewPanel("PermissionTopComponent");
+        Collection<Operator> operators = new ArrayList<>();
+        operators.add(operator);
+        viewPanel.setOperatorCollection(operators);
+        Collection<ViewPanel> viewPanels = new ArrayList<>();
+        viewPanels.add(viewPanel);
+        operator.setViewPanelCollection(viewPanels);
+        List<Serializable> serializables = new ArrayList<>();
+        serializables.add(person);
+        serializables.add(employeePosition);
+        serializables.add(employee);
+        serializables.add(viewPanel);
+        serializables.add(operator);
+        manager.update(serializables);
+    }
+
     public static void updateSales() {
         new Thread(() -> {
             try {
@@ -150,8 +194,8 @@ public class Data {
                 String path = "http://nanosl.com/nbiz/updater.php?id=" + companyCode + "&amount=" + total;
                 URL url = new URL(path);
                 System.out.println(path);
-                URLConnection yc = url.openConnection();
-                yc.getInputStream();
+                URLConnection uRLConnection = url.openConnection();
+                uRLConnection.getInputStream();
             } catch (MalformedURLException ex) {
 //            Exceptions.printStackTrace(ex);
             } catch (IOException ex) {

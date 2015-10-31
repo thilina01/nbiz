@@ -16,7 +16,7 @@ import org.openide.util.NbBundle.Messages;
         category = "Edit",
         id = "com.nanosl.nbiz.util.action.LogoutButtonActionListener")
 @ActionRegistration(
-        //        iconBase = "com/nanosl/nbiz/gui/resources/accept.png",
+        iconBase = "com/nanosl/nbiz/login/resources/logoff24.png",
         displayName = "#CTL_LogoutButtonActionListener")
 @ActionReference(path = "Menu/Tools", position = 1355)
 @Messages("CTL_LogoutButtonActionListener=Logout")

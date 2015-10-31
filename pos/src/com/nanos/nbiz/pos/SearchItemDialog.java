@@ -20,7 +20,7 @@ import query.Find;
  *
  * @author Thilina
  */
-public class SearchItemDialog extends javax.swing.JDialog{
+public class SearchItemDialog extends javax.swing.JDialog {
 
     Item item;
 
@@ -176,7 +176,7 @@ public class SearchItemDialog extends javax.swing.JDialog{
     }// </editor-fold>//GEN-END:initComponents
 
     private void searchTextFieldKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchTextFieldKeyPressed
-        System.out.println();
+
     }//GEN-LAST:event_searchTextFieldKeyPressed
 
     private void itemTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_itemTableMouseClicked
@@ -211,9 +211,9 @@ public class SearchItemDialog extends javax.swing.JDialog{
             for (Item item1 : items) {
                 Object[] row = {
                     item1.getCode(),
-                    item1.getDescription(), 
-                    Format.nf2d.format(item1.getPriceList().getCostPack()), 
-                    Format.nf2d.format(item1.getPriceList().getSellingPack()), 
+                    item1.getDescription(),
+                    Format.nf2d.format(item1.getPriceList().getCostPack()),
+                    Format.nf2d.format(item1.getPriceList().getSellingPack()),
                     Format.nf2d.format(item1.getStock().getQuantity())
                 };
                 itemTableModel.addRow(row);

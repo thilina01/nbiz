@@ -8,18 +8,11 @@ import com.nanosl.nbiz.util.MenuManager;
 import com.nanosl.nbiz.util.NTopComponent;
 import entity.Menu;
 import entity.MenuItem;
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.Frame;
-import javax.swing.JMenuItem;
-import javax.swing.JPopupMenu;
-import javax.swing.MenuElement;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.util.NbBundle.Messages;
 import org.openide.windows.TopComponent;
-import org.openide.windows.WindowManager;
 import query.Find;
 
 /**
@@ -71,7 +64,6 @@ public final class MenuManageTopComponent extends NTopComponent {
         menuRemoveButton = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         activeMenuList = new javax.swing.JList();
-        jButton1 = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         menuItemRemoveButton = new javax.swing.JButton();
@@ -119,13 +111,6 @@ public final class MenuManageTopComponent extends NTopComponent {
         });
         jScrollPane1.setViewportView(activeMenuList);
 
-        org.openide.awt.Mnemonics.setLocalizedText(jButton1, org.openide.util.NbBundle.getMessage(MenuManageTopComponent.class, "MenuManageTopComponent.jButton1.text")); // NOI18N
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -138,8 +123,7 @@ public final class MenuManageTopComponent extends NTopComponent {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(menuRemoveButton)
-                    .addComponent(menuAssignButton)
-                    .addComponent(jButton1))
+                    .addComponent(menuAssignButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
@@ -158,10 +142,8 @@ public final class MenuManageTopComponent extends NTopComponent {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(1, 1, 1)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel3)
-                            .addComponent(jButton1))
+                        .addGap(5, 5, 5)
+                        .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane3))
                     .addGroup(jPanel2Layout.createSequentialGroup()
@@ -301,19 +283,11 @@ public final class MenuManageTopComponent extends NTopComponent {
         menuItemOperation(1);
     }//GEN-LAST:event_menuItemassignButtonActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-
-        WindowManager windowManager = WindowManager.getDefault();
-        Frame frame = windowManager.getMainWindow();
-        fl(frame);
-    }//GEN-LAST:event_jButton1ActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JList activeMenuItemList;
     private javax.swing.JList activeMenuList;
     private javax.swing.JList inactiveMenuItemList;
     private javax.swing.JList inactiveMenuList;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -407,48 +381,5 @@ public final class MenuManageTopComponent extends NTopComponent {
     void readProperties(java.util.Properties p) {
         String version = p.getProperty("version");
         // TODO read your settings according to their version
-    }
-
-    int i = 0;
-//    boolean b = false;
-
-    private void fl(Container container) {
-//        System.out.println(++i + " Component: " + container.getName() + " - " + container.getClass());
-        if (container.getClass().toString().equalsIgnoreCase("class org.openide.awt.MenuBar")) {
-            Container menuBar = container;
-//            menuBar.setVisible(b);
-//            b = !b;
-        }
-        if (container instanceof JMenuItem) {
-            JMenuItem menu = (JMenuItem) container;
-            MenuElement[] menuComponents = menu.getSubElements();
-            if (container instanceof JMenuItem) {
-                JMenuItem jMenuItem = (JMenuItem) container;
-                System.out.println(++i + " " + jMenuItem.getText());
-
-                for (MenuElement menuElement : menuComponents) {
-                    JPopupMenu popupMenu = (JPopupMenu) menuElement;
-//                fl(container1);
-
-                    Component[] components = popupMenu.getComponents();
-                    for (Component component : components) {
-                        if (component instanceof JMenuItem) {
-                            JMenuItem container1 = (JMenuItem) component;
-                            System.out.println(" : " + container1.getText() + " - " + container1.getClass());
-                        }
-//                    fl(container1);
-//            container1.getComponents();
-                    }
-//                container1.getComponents();
-                }
-//            System.out.println(menu.getMenuComponents());
-            }
-        }
-        Component[] components = container.getComponents();
-        for (Component component : components) {
-            Container container1 = (Container) component;
-            fl(container1);
-//            container1.getComponents();
-        }
     }
 }

@@ -1130,8 +1130,7 @@ public final class POSTopComponent extends NTopComponent {
 
         if (!invoiceNumber.equalsIgnoreCase("AUTO")) {
             saleInvoice = manager.find(SaleInvoice.class, invoiceNumber);
-            if (saleInvoice
-                    != null) {
+            if (saleInvoice != null) {
                 int option = JOptionPane.showConfirmDialog(null, "Sure to edit Invoice: " + invoiceNumber + " ?", "Edit " + invoiceNumber, JOptionPane.OK_CANCEL_OPTION);
                 if (option == JOptionPane.OK_OPTION) {
                     edit = true;
@@ -1301,7 +1300,7 @@ public final class POSTopComponent extends NTopComponent {
             serializables.add(stock);
         }
         serializables.add(saleInvoice);
-        if (receivedAmount > 0) {
+        if (totalReceivedAmount > 0) {
             if (ReceiptNumber.equals("")) {
                 showError("Recipt Number Required!");
                 return;
@@ -1309,12 +1308,12 @@ public final class POSTopComponent extends NTopComponent {
             CollectionReceipt collectionReceipt = new CollectionReceipt(ReceiptNumber);
             collectionReceipt.setCollectedTime(date);
             collectionReceipt.setSaleInvoice(saleInvoice);
-            collectionReceipt.setAmount(receivedAmount);
+            collectionReceipt.setAmount(totalReceivedAmount);
             SaleCash saleCash = new SaleCash(ReceiptNumber);
-            saleCash.setAmount(receivedAmount);
+            saleCash.setAmount(totalReceivedAmount);
             saleCash.setCollectionReceipt(collectionReceipt);
             collectionReceipt.setSaleCash(saleCash);
-            saleInvoice.setReceivedAmount(receivedAmount);
+            saleInvoice.setReceivedAmount(totalReceivedAmount);
             serializables.add(saleCash);
             serializables.add(collectionReceipt);
         }
@@ -1439,7 +1438,7 @@ public final class POSTopComponent extends NTopComponent {
             paidAmountField.setText(nf2d.format(paidAmount));
             double paidByCC = saleInvoice.getPaidByCreditCard() != null ? saleInvoice.getPaidByCreditCard() : 0.0;
             paidByCCField.setText(nf2d.format(paidByCC));
-            remainingAmountField.setText(nf2d.format(saleInvoice.getAmount() - paidAmount));
+            remainingAmountField.setText(nf2d.format(saleInvoice.getAmount() - (paidAmount+paidByCC)));
             Collection<SaleInvoiceHasItem> saleInvoiceHasItems = saleInvoice.getSaleInvoiceHasItemCollection();
             tableModel.setRowCount(0);
             int r = 0;

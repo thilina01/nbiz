@@ -79,7 +79,10 @@
                     </run-dependency>
                 </dependency>
             </module-dependencies>
-            <public-packages/>
+            <public-packages>
+                <package>com.nanosl.nbiz.login</package>
+                <package>com.nanosl.nbiz.login.gui</package>
+            </public-packages>
         </data>
     </configuration>
 </project>

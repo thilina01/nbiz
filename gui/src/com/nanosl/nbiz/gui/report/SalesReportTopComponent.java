@@ -5,17 +5,27 @@
 package com.nanosl.nbiz.gui.report;
 
 import com.nanosl.lib.date.JXDatePicker;
+import com.nanosl.nbiz.util.Combo;
 import com.nanosl.nbiz.util.FindMySql;
 import com.nanosl.nbiz.util.NTopComponent;
+import entity.ItemType;
+import entity.Supplier;
+import java.awt.Component;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
+import java.util.List;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JComponent;
 import javax.swing.table.DefaultTableModel;
+import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
-import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
+import org.openide.windows.TopComponent;
 
 /**
  * Top component which displays something.
@@ -56,6 +66,7 @@ public final class SalesReportTopComponent extends NTopComponent {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
+        itemTypeComboBox = new javax.swing.JComboBox();
         jLabel2 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         table = new javax.swing.JTable();
@@ -63,8 +74,18 @@ public final class SalesReportTopComponent extends NTopComponent {
         startDatePicker = new JXDatePicker();
         endDatePicker = new JXDatePicker();
         fillButton = new javax.swing.JButton();
+        supplierCheckBox = new javax.swing.JCheckBox();
+        supplierComboBox = new javax.swing.JComboBox();
+        typeCheckBox = new javax.swing.JCheckBox();
 
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        itemTypeComboBox.setName("itemTypeComboBox"); // NOI18N
+        itemTypeComboBox.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                itemTypeComboBoxKeyPressed(evt);
+            }
+        });
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel2, org.openide.util.NbBundle.getMessage(SalesReportTopComponent.class, "SalesReportTopComponent.jLabel2.text")); // NOI18N
 
@@ -108,6 +129,7 @@ public final class SalesReportTopComponent extends NTopComponent {
             table.getColumnModel().getColumn(6).setCellRenderer(rightAlignCell);
         }
 
+        totalLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(totalLabel, org.openide.util.NbBundle.getMessage(SalesReportTopComponent.class, "SalesReportTopComponent.totalLabel.text")); // NOI18N
 
         startDatePicker.addActionListener(new java.awt.event.ActionListener() {
@@ -129,6 +151,17 @@ public final class SalesReportTopComponent extends NTopComponent {
             }
         });
 
+        org.openide.awt.Mnemonics.setLocalizedText(supplierCheckBox, org.openide.util.NbBundle.getMessage(SalesReportTopComponent.class, "SalesReportTopComponent.supplierCheckBox.text")); // NOI18N
+
+        supplierComboBox.setName("supplierComboBox"); // NOI18N
+        supplierComboBox.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                supplierComboBoxKeyPressed(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(typeCheckBox, org.openide.util.NbBundle.getMessage(SalesReportTopComponent.class, "SalesReportTopComponent.typeCheckBox.text")); // NOI18N
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -148,6 +181,14 @@ public final class SalesReportTopComponent extends NTopComponent {
                         .addComponent(endDatePicker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(fillButton)
+                        .addGap(18, 18, 18)
+                        .addComponent(supplierCheckBox)
+                        .addGap(18, 18, 18)
+                        .addComponent(supplierComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(typeCheckBox)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(itemTypeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -155,11 +196,17 @@ public final class SalesReportTopComponent extends NTopComponent {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(startDatePicker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(endDatePicker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(fillButton))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(supplierCheckBox)
+                        .addComponent(supplierComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(typeCheckBox)
+                        .addComponent(itemTypeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel2)
+                        .addComponent(startDatePicker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(endDatePicker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(fillButton)))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 437, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -194,20 +241,37 @@ public final class SalesReportTopComponent extends NTopComponent {
     private void fillButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fillButtonActionPerformed
         fill();
     }//GEN-LAST:event_fillButtonActionPerformed
+
+    private void supplierComboBoxKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_supplierComboBoxKeyPressed
+        if (evt.getKeyCode() == 10) {
+            fill();
+        }
+    }//GEN-LAST:event_supplierComboBoxKeyPressed
+
+    private void itemTypeComboBoxKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_itemTypeComboBoxKeyPressed
+        if (evt.getKeyCode() == 10) {
+            fill();
+        }
+    }//GEN-LAST:event_itemTypeComboBoxKeyPressed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.jdesktop.swingx.JXDatePicker endDatePicker;
     private javax.swing.JButton fillButton;
+    private javax.swing.JComboBox itemTypeComboBox;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private org.jdesktop.swingx.JXDatePicker startDatePicker;
+    private javax.swing.JCheckBox supplierCheckBox;
+    private javax.swing.JComboBox supplierComboBox;
     private javax.swing.JTable table;
     private javax.swing.JLabel totalLabel;
+    private javax.swing.JCheckBox typeCheckBox;
     // End of variables declaration//GEN-END:variables
     DefaultTableModel tableModel;
 
     private void fillTable() {
-       try {
+        try {
             tableModel.setRowCount(0);
             totalLabel.setText(nf2d.format(0));
             Date startDate = startDatePicker.getDate();
@@ -215,7 +279,15 @@ public final class SalesReportTopComponent extends NTopComponent {
             double totalProfit = 0;
             ///////////////////////
 
-            ResultSet res = FindMySql.saleItemProfitBetweenDates(startDate, endDate);
+            Supplier supplier = (Supplier) supplierComboBox.getSelectedItem();
+            ItemType itemType = (ItemType) itemTypeComboBox.getSelectedItem();
+            ResultSet res = supplierCheckBox.isSelected()
+                    ? typeCheckBox.isSelected()
+                            ? FindMySql.saleItemProfitBySupplierAndItemTypeBetweenDates(startDate, endDate, supplier.getCode(), itemType.getType())
+                            : FindMySql.saleItemProfitBySupplierBetweenDates(startDate, endDate, supplier.getCode())
+                    : typeCheckBox.isSelected()
+                            ? FindMySql.saleItemProfitByItemTypeBetweenDates(startDate, endDate, itemType)
+                            : FindMySql.saleItemProfitBetweenDates(startDate, endDate);
             while (res.next()) {
                 String code = res.getString("Code");
                 String item = res.getString("Item");
@@ -265,7 +337,7 @@ public final class SalesReportTopComponent extends NTopComponent {
 //                totalProfitLabel.setText(nf2d.format(totalProfit));
 //            }
         } catch (SQLException ex) {
-           // Logger.getLogger(SalesReport.class.getName()).log(Level.SEVERE, null, ex);
+            // Logger.getLogger(SalesReport.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -273,14 +345,59 @@ public final class SalesReportTopComponent extends NTopComponent {
         initComponents();
         tableModel = (DefaultTableModel) table.getModel();
         table.setDefaultRenderer(Object.class, coloredCellRenderer);
+        AutoCompleteDecorator.decorate(supplierComboBox);
+        AutoCompleteDecorator.decorate(itemTypeComboBox);
+        setComboBoxKeyAdapters(supplierComboBox);
+        setComboBoxKeyAdapters(itemTypeComboBox);
+
     }
+
+    private void setComboBoxKeyAdapters(JComponent comp) {
+        String compName = comp.getName();
+        if (compName == null) {
+            return;
+        }
+        Component component[] = comp.getComponents();
+        for (Component component1 : component) {
+            switch (compName) {
+                case "supplierComboBox":
+                    component1.addKeyListener(supplierComboBoxKeyAdapter);
+                    break;
+                case "itemTypeComboBox":
+                    component1.addKeyListener(itemTypeComboBoxKeyAdapter);
+                    break;
+            }
+        }
+    }
+    KeyAdapter supplierComboBoxKeyAdapter = new java.awt.event.KeyAdapter() {
+        @Override
+        public void keyPressed(KeyEvent evt) {
+            supplierComboBoxKeyPressed(evt);
+        }
+    };
+    KeyAdapter itemTypeComboBoxKeyAdapter = new java.awt.event.KeyAdapter() {
+        @Override
+        public void keyPressed(KeyEvent evt) {
+            itemTypeComboBoxKeyPressed(evt);
+        }
+    };
 
     @Override
     public void setVisible(boolean b) {
         super.setVisible(b);
+        Combo.fillSuppliers(supplierComboBox, null);
+        fillItemTypes();
         fill();
     }
-
+private void fillItemTypes() {
+        List<ItemType> itemTypes = manager.find(ItemType.class);
+        if (itemTypes.isEmpty()) {
+            manager.update(new ItemType("ITEM"));
+            manager.update(new ItemType("METERIAL"));
+        }
+        itemTypes = manager.find(ItemType.class);
+        itemTypeComboBox.setModel(new DefaultComboBoxModel(itemTypes.toArray()));
+    }
     private void fill() {
         fillTable();
         calcTotal();
@@ -293,7 +410,7 @@ public final class SalesReportTopComponent extends NTopComponent {
             totalProfit += Double.valueOf(tableModel.getValueAt(i, 6).toString());
             totalIncome += Double.valueOf(tableModel.getValueAt(i, 3).toString());
         }
-        totalLabel.setText("Total: Income "+nf2d.format(totalIncome) +" & Profit " +nf2d.format(totalProfit) );
+        totalLabel.setText("Total: Income " + nf2d.format(totalIncome) + " & Profit " + nf2d.format(totalProfit));
     }
 
     @Override

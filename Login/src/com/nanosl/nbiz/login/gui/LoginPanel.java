@@ -102,13 +102,15 @@ public class LoginPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_usernameFieldActionPerformed
 
     private void passwordFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_passwordFieldActionPerformed
-        login();
+//        login();        
+        loginButton.doClick();
     }//GEN-LAST:event_passwordFieldActionPerformed
 
     private void passwordFieldKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_passwordFieldKeyPressed
-        if (evt.getKeyCode() == 10) {
-            loginButton.requestFocus();
-        }
+//        if (evt.getKeyCode() == 10) {
+//            login();
+////            loginButton.requestFocus();
+//        }
     }//GEN-LAST:event_passwordFieldKeyPressed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -139,20 +141,23 @@ public class LoginPanel extends javax.swing.JPanel {
     private void login(boolean b) {
         if (b) {
             Data.setOperator(operator);
+
         } else {
             JOptionPane.showMessageDialog(this, "Incorrect Login Attempt!!");
 //            usernameField.setText("");
 //            passwordField.setText("");
 //            usernameField.requestFocus();
-//            if (retry > 2) {
-            exit();
-//            }
+            if (retry > 2) {
+                exit();
+            }
+            displayLoginDialog();
         }
     }
 
     private void onLoad() {
         initComponents();
         if (manager.count(Operator.class) == 0) {
+            Data.initFirstUser();
 //            first();
         }
 //        setLocationRelativeTo(null);

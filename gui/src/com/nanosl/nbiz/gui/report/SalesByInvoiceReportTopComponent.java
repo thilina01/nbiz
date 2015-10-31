@@ -12,14 +12,16 @@ import static com.nanosl.nbiz.util.Format.nf2d;
 import com.nanosl.nbiz.util.NTopComponent;
 import entity.Employee;
 import entity.SaleInvoice;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.Date;
 import javax.swing.table.DefaultTableModel;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
-import org.openide.windows.TopComponent;
+import org.openide.util.Exceptions;
 import org.openide.util.NbBundle.Messages;
+import org.openide.windows.TopComponent;
 import org.openide.windows.WindowManager;
 import query.Find;
 
@@ -257,11 +259,21 @@ public final class SalesByInvoiceReportTopComponent extends NTopComponent {
         if (evt.getClickCount() > 1) {
             TopComponent tc = WindowManager.getDefault().findTopComponent("POSTopComponent");
             if (tc != null) {
-                if (tc instanceof com.nanos.nbiz.pos.POSTopComponent) {
-                    com.nanos.nbiz.pos.POSTopComponent ptc = (com.nanos.nbiz.pos.POSTopComponent) tc;
-                    ptc.fillInvoice(table.getValueAt(table.getSelectedRow(), 2).toString());
-                    ptc.open();
-                    ptc.requestActive();
+                try {
+                    //String parameter
+                    Class[] paramString = new Class[1];
+                    paramString[0] = String.class;
+                    tc.getClass().getMethod("fillInvoice", paramString).invoke(tc, table.getValueAt(table.getSelectedRow(), 2).toString());
+                    tc.open();
+                    tc.requestActive();
+//                if (tc instanceof com.nanos.nbiz.pos.POSTopComponent) {
+//                    com.nanos.nbiz.pos.POSTopComponent ptc = (com.nanos.nbiz.pos.POSTopComponent) tc;
+//                    ptc.fillInvoice(table.getValueAt(table.getSelectedRow(), 2).toString());
+//                    ptc.open();
+//                    ptc.requestActive();
+//                }
+                } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+                    Exceptions.printStackTrace(ex);
                 }
             }
         }
@@ -332,13 +344,13 @@ public final class SalesByInvoiceReportTopComponent extends NTopComponent {
 
     private void calcTotal() {
 //        double totalProfit = 0;
-        double totalIncome = 0, totalCreditCardPayment = 0;
+        double totalIncome = 0, totalCreditCardPayment = 0,totalDiscount = 0;
         for (int i = 0; i < tableModel.getRowCount(); i++) {
-//            totalProfit += Double.valueOf(tableModel.getValueAt(i, 6).toString());
+            totalDiscount += Double.valueOf(tableModel.getValueAt(i, 4).toString());
             totalIncome += Double.valueOf(tableModel.getValueAt(i, 3).toString());
             totalCreditCardPayment += Double.valueOf(tableModel.getValueAt(i, 5).toString());
         }
-        totalLabel.setText("Total: Income " + nf2d.format(totalIncome) + " Credit Card: " + nf2d.format(totalCreditCardPayment));//+ " & Profit " + nf2d.format(totalProfit));
+        totalLabel.setText("Total: Income " + nf2d.format(totalIncome) + " Credit Card: " + nf2d.format(totalCreditCardPayment)+ " Discount: " + nf2d.format(totalDiscount));//+ " & Profit " + nf2d.format(totalProfit));
     }
 
     @Override

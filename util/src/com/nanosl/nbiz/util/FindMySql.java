@@ -6,6 +6,7 @@ package com.nanosl.nbiz.util;
 
 import com.nanosl.lib.db.Manager;
 import com.nanosl.lib.er.Errors;
+import entity.ItemType;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -57,7 +58,69 @@ public class FindMySql {
             + "INNER JOIN sale_invoice ON sale_invoice.inv_no = sale_invoice_has_item.sale_invoice_inv_no "
             + "WHERE "
             + "sale_invoice.inv_time BETWEEN ? AND ? "
+            + "AND sale_invoice.amount != 0 "
             + "GROUP BY sale_invoice_has_item.item_code,sale_invoice_has_item.rate ";
+    private static final String saleItemProfitBySupplierBetweenDates
+            = "SELECT "
+            + "item.`code` as 'Code', "
+            + "item.description as 'Item', "
+            + "Sum(sale_invoice_has_item.quantity) AS Quantity, "
+            + "sale_invoice_has_item.rate AS Rate,"
+            + "( Rate *  SUM(sale_invoice_has_item.quantity) ) AS Income, "
+            + "sale_invoice_has_item.cost AS `Item Cost`, "
+            + "( Cost *  SUM(sale_invoice_has_item.quantity) ) AS `Total Cost`, "
+            + "( Rate *  SUM(sale_invoice_has_item.quantity) ) - ( Cost *  SUM(sale_invoice_has_item.quantity) ) AS Profit "
+            + "FROM "
+            + "sale_invoice_has_item "
+            + "INNER JOIN item ON item.`code` = sale_invoice_has_item.item_code "
+            + "INNER JOIN sale_invoice ON sale_invoice.inv_no = sale_invoice_has_item.sale_invoice_inv_no "
+            + "WHERE "
+            + "sale_invoice.inv_time BETWEEN ? AND ? "
+            + "AND item.supplier_code = ? "
+            + "AND sale_invoice.amount != 0 "
+            + "GROUP BY sale_invoice_has_item.item_code,sale_invoice_has_item.rate ";
+    
+    private static final String saleItemProfitByItemTypeBetweenDates
+            = "SELECT "
+            + "item.`code` as 'Code', "
+            + "item.description as 'Item', "
+            + "Sum(sale_invoice_has_item.quantity) AS Quantity, "
+            + "sale_invoice_has_item.rate AS Rate,"
+            + "( Rate *  SUM(sale_invoice_has_item.quantity) ) AS Income, "
+            + "sale_invoice_has_item.cost AS `Item Cost`, "
+            + "( Cost *  SUM(sale_invoice_has_item.quantity) ) AS `Total Cost`, "
+            + "( Rate *  SUM(sale_invoice_has_item.quantity) ) - ( Cost *  SUM(sale_invoice_has_item.quantity) ) AS Profit "
+            + "FROM "
+            + "sale_invoice_has_item "
+            + "INNER JOIN item ON item.`code` = sale_invoice_has_item.item_code "
+            + "INNER JOIN sale_invoice ON sale_invoice.inv_no = sale_invoice_has_item.sale_invoice_inv_no "
+            + "WHERE "
+            + "sale_invoice.inv_time BETWEEN ? AND ? "
+            + "AND item.item_type_type = ? "
+            + "AND sale_invoice.amount != 0 "
+            + "GROUP BY sale_invoice_has_item.item_code,sale_invoice_has_item.rate ";    
+    
+    private static final String saleItemProfitBySupplierAndItemTypeBetweenDates
+            = "SELECT "
+            + "item.`code` as 'Code', "
+            + "item.description as 'Item', "
+            + "Sum(sale_invoice_has_item.quantity) AS Quantity, "
+            + "sale_invoice_has_item.rate AS Rate,"
+            + "( Rate *  SUM(sale_invoice_has_item.quantity) ) AS Income, "
+            + "sale_invoice_has_item.cost AS `Item Cost`, "
+            + "( Cost *  SUM(sale_invoice_has_item.quantity) ) AS `Total Cost`, "
+            + "( Rate *  SUM(sale_invoice_has_item.quantity) ) - ( Cost *  SUM(sale_invoice_has_item.quantity) ) AS Profit "
+            + "FROM "
+            + "sale_invoice_has_item "
+            + "INNER JOIN item ON item.`code` = sale_invoice_has_item.item_code "
+            + "INNER JOIN sale_invoice ON sale_invoice.inv_no = sale_invoice_has_item.sale_invoice_inv_no "
+            + "WHERE "
+            + "sale_invoice.inv_time BETWEEN ? AND ? "
+            + "AND item.supplier_code = ? "
+            + "AND item.item_type_type = ? "
+            + "AND sale_invoice.amount != 0 "
+            + "GROUP BY sale_invoice_has_item.item_code,sale_invoice_has_item.rate ";    
+    
     private static final String itemTotalSaleBetweenDates = "SELECT "
             + "sale_invoice_has_item.item_code as 'code', "
             + "item.description as 'description', "
@@ -162,6 +225,46 @@ public class FindMySql {
             preparedStatement = con.prepareStatement(saleItemProfitBetweenDates);
             preparedStatement.setString(1, yyyy_MM_dd.format(startDate) + " 00:00:00");
             preparedStatement.setString(2, yyyy_MM_dd.format(endDate) + " 23:59:59");
+            res = preparedStatement.executeQuery();
+        } catch (SQLException ex) {
+            Errors.reportError(ex);
+        }
+        return res;
+    }
+public static ResultSet saleItemProfitBySupplierBetweenDates(Date startDate, Date endDate, String supplierCode) {
+        connect();
+        try {
+            preparedStatement = con.prepareStatement(saleItemProfitBySupplierBetweenDates);
+            preparedStatement.setString(1, yyyy_MM_dd.format(startDate) + " 00:00:00");
+            preparedStatement.setString(2, yyyy_MM_dd.format(endDate) + " 23:59:59");
+            preparedStatement.setString(3, supplierCode);
+            res = preparedStatement.executeQuery();
+        } catch (SQLException ex) {
+            Errors.reportError(ex);
+        }
+        return res;
+    }
+public static ResultSet saleItemProfitByItemTypeBetweenDates(Date startDate, Date endDate, ItemType itemType) {
+        connect();
+        try {
+            preparedStatement = con.prepareStatement(saleItemProfitByItemTypeBetweenDates);
+            preparedStatement.setString(1, yyyy_MM_dd.format(startDate) + " 00:00:00");
+            preparedStatement.setString(2, yyyy_MM_dd.format(endDate) + " 23:59:59");
+            preparedStatement.setString(3, itemType.getType());
+            res = preparedStatement.executeQuery();
+        } catch (SQLException ex) {
+            Errors.reportError(ex);
+        }
+        return res;
+    }
+public static ResultSet saleItemProfitBySupplierAndItemTypeBetweenDates(Date startDate, Date endDate, String supplierCode,String itemType) {
+        connect();
+        try {
+            preparedStatement = con.prepareStatement(saleItemProfitBySupplierAndItemTypeBetweenDates);
+            preparedStatement.setString(1, yyyy_MM_dd.format(startDate) + " 00:00:00");
+            preparedStatement.setString(2, yyyy_MM_dd.format(endDate) + " 23:59:59");
+            preparedStatement.setString(3, supplierCode);
+            preparedStatement.setString(4, itemType);
             res = preparedStatement.executeQuery();
         } catch (SQLException ex) {
             Errors.reportError(ex);

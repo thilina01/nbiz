@@ -8,6 +8,8 @@ import com.nanosl.nbiz.util.NTopComponent;
 import entity.Employee;
 import entity.EmployeePosition;
 import entity.Person;
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
@@ -377,7 +379,7 @@ public final class EmployeeTopComponent extends NTopComponent {
     }//GEN-LAST:event_codeFieldActionPerformed
 
     private void updateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateButtonActionPerformed
-        if (!codeField.getText().equals("") && !nameField.getText().equals("")&& !nicTextField.getText().equals("")) {// && !lastNameField.equals("") && !addressNumberField.getText().equals("") && !addressStreetField.getText().equals("") && !cityField.getText().equals("")
+        if (!codeField.getText().equals("") && !nameField.getText().equals("") && !nicTextField.getText().equals("")) {// && !lastNameField.equals("") && !addressNumberField.getText().equals("") && !addressStreetField.getText().equals("") && !cityField.getText().equals("")
             update();
         } else {
             showError("code, Name and NIC should be presented");
@@ -527,7 +529,8 @@ public final class EmployeeTopComponent extends NTopComponent {
         if (employee == null) {
             employee = new Employee(code);
         }
-        Person person = new Person(nic);
+        Person person = manager.find(Person.class, nic);
+        person = person == null ? new Person(nic) : person;
         person.setName(name);
         employee.setPerson(person);
         employee.setEmployeePosition((EmployeePosition) positionComboBox.getSelectedItem());
@@ -536,7 +539,10 @@ public final class EmployeeTopComponent extends NTopComponent {
         person.setMobile(mobile);
         employee.setNotes(notes);
         person.setCity(city);
-        if (manager.update(employee)) {
+        List<Serializable> serializables = new  ArrayList<>();
+        serializables.add(person);
+        serializables.add(employee);
+        if (manager.update(serializables)) {
             clear();
             codeField.requestFocus();
             return;
@@ -580,6 +586,7 @@ public final class EmployeeTopComponent extends NTopComponent {
     private void fill(Person person) {
         if (person != null) {
             nameField.setText(person.getName());
+            nicTextField.setText(person.getNic());
             addressField.setText(person.getAddress());
             cityField.setText(person.getCity());
             mobileField.setText(person.getMobile());

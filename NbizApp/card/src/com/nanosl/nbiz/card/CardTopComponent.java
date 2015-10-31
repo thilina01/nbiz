@@ -5,7 +5,7 @@
  */
 package com.nanosl.nbiz.card;
 
-import com.nanosl.nbiz.gui.SaleInvoicePaymentTopComponent;
+//import com.nanosl.nbiz.gui.SaleInvoicePaymentTopComponent;
 import com.nanosl.nbiz.util.NTopComponent;
 import entity.CollectionReceipt;
 import entity.Customer;
@@ -13,6 +13,7 @@ import entity.Person;
 import entity.SaleInvoice;
 import entity.SaleInvoiceHasItem;
 import java.awt.Window;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.Date;
 import javax.persistence.Query;
@@ -24,6 +25,7 @@ import org.jdesktop.swingx.JXDatePicker;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
+import org.openide.util.Exceptions;
 import org.openide.util.NbBundle.Messages;
 import org.openide.windows.TopComponent;
 import org.openide.windows.WindowManager;
@@ -627,17 +629,30 @@ public final class CardTopComponent extends NTopComponent {
 
     private void payButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_payButtonActionPerformed
         TopComponent tc = WindowManager.getDefault().findTopComponent("SaleInvoicePaymentTopComponent");
-        SaleInvoicePaymentTopComponent saleInvoicePaymentTopComponent;
         if (tc != null) {
-            saleInvoicePaymentTopComponent = (SaleInvoicePaymentTopComponent) tc;
-            saleInvoicePaymentTopComponent.fill(manager.find(SaleInvoice.class, invoiceNumberTextField.getText().trim()));
-            saleInvoicePaymentTopComponent.open();
-            saleInvoicePaymentTopComponent.requestActive();
-        } else {
-            System.out.println("tc is null");
-            throw new NullPointerException();
+            try {
+                //String parameter
+                Class[] paramSaleInvoice = new Class[1];
+                paramSaleInvoice[0] = SaleInvoice.class;
+                tc.getClass().getMethod("fill", paramSaleInvoice).invoke(manager.find(SaleInvoice.class, invoiceNumberTextField.getText().trim()));
+                tc.open();
+                tc.requestActive();
+            } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+                Exceptions.printStackTrace(ex);
+            }
         }
-        
+//        
+//        SaleInvoicePaymentTopComponent saleInvoicePaymentTopComponent;
+//        if (tc != null) {
+//            saleInvoicePaymentTopComponent = (SaleInvoicePaymentTopComponent) tc;
+//            saleInvoicePaymentTopComponent.fill(manager.find(SaleInvoice.class, invoiceNumberTextField.getText().trim()));
+//            saleInvoicePaymentTopComponent.open();
+//            saleInvoicePaymentTopComponent.requestActive();
+//        } else {
+//            System.out.println("tc is null");
+//            throw new NullPointerException();
+//        }
+//        
     }//GEN-LAST:event_payButtonActionPerformed
 
     private void cardTypeComboBoxKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cardTypeComboBoxKeyPressed
