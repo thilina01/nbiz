@@ -1,11 +1,14 @@
 package query;
 
 import com.nanosl.lib.db.Manager;
+import entity.CashBox;
+import entity.CashLog;
 import entity.CollectionReceipt;
 import entity.Customer;
 import entity.DamageNotes;
 import entity.Employee;
 import entity.Expenses;
+import entity.ExpensesType;
 import entity.IssuedCash;
 import entity.IssuedCheque;
 import entity.Item;
@@ -13,6 +16,7 @@ import entity.ItemType;
 import entity.Menu;
 import entity.PurchaseInvoice;
 import entity.PurchaseInvoiceHasItem;
+import entity.Quotation;
 import entity.SaleCheque;
 import entity.SaleInvoice;
 import entity.SaleInvoiceHasItem;
@@ -46,11 +50,15 @@ import javax.persistence.Table;
 @NamedQueries({
     @NamedQuery(name = "Customer.findBy$", query = "SELECT c FROM Customer c WHERE  UPPER(c.code) LIKE UPPER(:text) OR UPPER(c.person.nic) LIKE UPPER(:text) OR UPPER(c.person.name) LIKE UPPER(:text) "),
     @NamedQuery(name = "DamageNotes.findByDateTimeAndEmployeeCode", query = "SELECT d FROM DamageNotes d WHERE d.damageNotesPK.dateTime = :dateTime AND d.damageNotesPK.employeeCode = :employeeCode"),
-    @NamedQuery(name = "Item.findBy$", query = "SELECT i FROM Item i WHERE  UPPER(i.code) LIKE UPPER(:text) OR UPPER(i.description) LIKE UPPER(:text) OR UPPER(i.brand) LIKE UPPER(:text) "),
-    @NamedQuery(name = "PurchaseInvoice.findByInvDates", query = "SELECT p FROM PurchaseInvoice p WHERE p.invDate BETWEEN :startDate AND :endDate"),
-    @NamedQuery(name = "PurchaseInvoice.findByInvDatesAndSupplier", query = "SELECT p FROM PurchaseInvoice p WHERE p.supplier = :supplier AND p.invDate BETWEEN :startDate AND :endDate"),
+    @NamedQuery(name = "Item.findBy$", query = "SELECT i FROM Item i WHERE  UPPER(i.code) LIKE UPPER(:text) OR UPPER(i.description) LIKE UPPER(:text) OR UPPER(i.brand) LIKE UPPER(:text) OR UPPER(i.itemTypeType.type) LIKE UPPER(:text) "),
+    @NamedQuery(name = "CashLog.findByDates", query = "SELECT p FROM CashLog p WHERE p.cashLogPK.logTime BETWEEN :startDate AND :endDate ORDER BY p.cashLogPK.logTime"),
+    @NamedQuery(name = "CashLog.findByDatesAndCashBox", query = "SELECT p FROM CashLog p WHERE p.cashBox = :cashBox AND p.cashLogPK.logTime BETWEEN :startDate AND :endDate ORDER BY p.cashLogPK.logTime"),
+    @NamedQuery(name = "PurchaseInvoice.findByInvDates", query = "SELECT p FROM PurchaseInvoice p WHERE p.invDate BETWEEN :startDate AND :endDate ORDER BY p.invDate"),
+    @NamedQuery(name = "PurchaseInvoice.findByInvDatesAndSupplier", query = "SELECT p FROM PurchaseInvoice p WHERE p.supplier = :supplier AND p.invDate BETWEEN :startDate AND :endDate ORDER BY p.invDate"),
     @NamedQuery(name = "SaleInvoice.findByInvDates", query = "SELECT s FROM SaleInvoice s WHERE s.invTime BETWEEN :startDate AND :endDate ORDER BY s.invTime"),
+    @NamedQuery(name = "Quotation.findByQuotationTimes", query = "SELECT s FROM Quotation s WHERE s.quotationTime BETWEEN :startDate AND :endDate ORDER BY s.quotationTime"),
     @NamedQuery(name = "SaleInvoice.findByInvDatesAndEmployee", query = "SELECT s FROM SaleInvoice s WHERE s.employee = :employee AND s.invTime BETWEEN :startDate AND :endDate ORDER BY s.invTime"),
+    @NamedQuery(name = "Quotation.findByQuotationTimesAndEmployee", query = "SELECT s FROM Quotation s WHERE s.employeeCode = :employee AND s.quotationTime BETWEEN :startDate AND :endDate ORDER BY s.quotationTime"),
     @NamedQuery(name = "SaleInvoice.findByCard", query = "SELECT s FROM SaleInvoice s WHERE s.cardNumber = :card"),
     @NamedQuery(name = "SaleInvoice.findAllCards", query = "SELECT s FROM SaleInvoice s WHERE s.cardNumber IS NOT NULL"),
     @NamedQuery(name = "SaleInvoice.findActiveCardsByNic", query = "SELECT s FROM SaleInvoice s WHERE s.customer.person.nic = :nic AND s.cardNumber IS NOT NULL AND s.amount> s.receivedAmount"),
@@ -61,11 +69,13 @@ import javax.persistence.Table;
     @NamedQuery(name = "PurchaseInvoiceHasItem.findByItemndInvDates", query = "SELECT p FROM PurchaseInvoiceHasItem p WHERE p.item = :item AND p.purchaseInvoice.invDate BETWEEN :startDate AND :endDate"),
     @NamedQuery(name = "MenuItem.findByMenuAndStatus", query = "SELECT m FROM MenuItem m WHERE m.menu = :menu AND m.status = :status"),
     @NamedQuery(name = "Stock.findLessMinLimit", query = "SELECT s FROM Stock s WHERE s.minLimit > s.quantity"),
+    @NamedQuery(name = "Stock.findLessThan", query = "SELECT s FROM Stock s WHERE s.quantity < :quantity"),
     @NamedQuery(name = "Stock.findBySupplier", query = "SELECT s FROM Stock s WHERE s.item.supplier = :supplier"),
     @NamedQuery(name = "Stock.findByItemType", query = "SELECT s FROM Stock s WHERE s.item.itemTypeType = :itemType"),
     @NamedQuery(name = "Stock.findBySupplierAndItemType", query = "SELECT s FROM Stock s WHERE s.item.supplier = :supplier AND s.item.itemTypeType = :itemType"),
     @NamedQuery(name = "IssuedCash.findByDates", query = "SELECT i FROM IssuedCash i WHERE i.issuedTime BETWEEN :startDate AND :endDate"),
     @NamedQuery(name = "Expenses.findByDates", query = "SELECT e FROM Expenses e WHERE e.paidTime BETWEEN :startDate AND :endDate"),
+    @NamedQuery(name = "Expenses.findByDatesAndExpensesType", query = "SELECT e FROM Expenses e WHERE e.expensesType = :expensesType AND e.paidTime BETWEEN :startDate AND :endDate"),
     @NamedQuery(name = "CollectionReceipt.findByDates", query = "SELECT c FROM CollectionReceipt c WHERE c.collectedTime BETWEEN :startDate AND :endDate"),
     @NamedQuery(name = "IssuedCheque.findByDates", query = "SELECT i FROM IssuedCheque i WHERE i.issuedDate BETWEEN :startDate AND :endDate"),
     @NamedQuery(name = "Svat.findByDates", query = "SELECT s FROM Svat s WHERE s.issuedDate BETWEEN :startDate AND :endDate"),
@@ -87,7 +97,23 @@ public class Find implements Serializable {
         qry.setParameter("endDate", endDate);
         return man.exNamedQueryParamResult(qry);
     }
-    public static Collection<PurchaseInvoice> purchaseInvoicesByDatesAndSupplier(Date startDate, Date endDate,Supplier supplier) {
+
+    public static Collection<CashLog> cashLogByDates(Date startDate, Date endDate) {
+        Query qry = man.getEm().createNamedQuery("CashLog.findByDates");
+        qry.setParameter("startDate", startDate);
+        qry.setParameter("endDate", endDate);
+        return man.exNamedQueryParamResult(qry);
+    }
+
+    public static Collection<CashLog> cashLogByDatesAndCashBox(Date startDate, Date endDate, CashBox cashBox) {
+        Query qry = man.getEm().createNamedQuery("CashLog.findByDatesAndCashBox");
+        qry.setParameter("startDate", startDate);
+        qry.setParameter("endDate", endDate);
+        qry.setParameter("cashBox", cashBox);
+        return man.exNamedQueryParamResult(qry);
+    }
+
+    public static Collection<PurchaseInvoice> purchaseInvoicesByDatesAndSupplier(Date startDate, Date endDate, Supplier supplier) {
         Query qry = man.getEm().createNamedQuery("PurchaseInvoice.findByInvDatesAndSupplier");
         qry.setParameter("startDate", startDate);
         qry.setParameter("endDate", endDate);
@@ -102,8 +128,23 @@ public class Find implements Serializable {
         return man.exNamedQueryParamResult(qry);
     }
 
+    public static Collection<Quotation> QuotationsByDates(Date startDate, Date endDate) {
+        Query qry = man.getEm().createNamedQuery("Quotation.findByQuotationTimes");
+        qry.setParameter("startDate", startDate);
+        qry.setParameter("endDate", endDate);
+        return man.exNamedQueryParamResult(qry);
+    }
+
     public static Collection<SaleInvoice> saleInvoicesByDatesAndEmployee(Date startDate, Date endDate, Employee employee) {
         Query qry = man.getEm().createNamedQuery("SaleInvoice.findByInvDatesAndEmployee");
+        qry.setParameter("startDate", startDate);
+        qry.setParameter("endDate", endDate);
+        qry.setParameter("employee", employee);
+        return man.exNamedQueryParamResult(qry);
+    }
+
+    public static Collection<Quotation> QuotationsByDatesAndEmployee(Date startDate, Date endDate, Employee employee) {
+        Query qry = man.getEm().createNamedQuery("Quotation.findByQuotationTimesAndEmployee");
         qry.setParameter("startDate", startDate);
         qry.setParameter("endDate", endDate);
         qry.setParameter("employee", employee);
@@ -162,6 +203,14 @@ public class Find implements Serializable {
         return man.exNamedQueryParamResult(qry);
     }
 
+    public static Collection<Expenses> expensesByDatesAndExpensesType(Date startDate, Date endDate, ExpensesType expensesType) {
+        Query qry = man.getEm().createNamedQuery("Expenses.findByDatesAndExpensesType");
+        qry.setParameter("startDate", startDate);
+        qry.setParameter("endDate", endDate);
+        qry.setParameter("expensesType", expensesType);
+        return man.exNamedQueryParamResult(qry);
+    }
+
     public static Collection<SrSalesPayments> pendingPaymentsByRef(Employee rep) {
         Query qry = man.getEm().createNamedQuery("SrSalesPayments.findByStatusAndEmployee");
         qry.setParameter("status", 0);
@@ -204,6 +253,12 @@ public class Find implements Serializable {
 
     public static List<Stock> stockLessMinLimit() {
         Query qry = man.getEm().createNamedQuery("Stock.findLessMinLimit");
+        return man.exNamedQueryParamResult(qry);
+    }
+
+    public static List<Stock> stockLessThan(double quantity) {
+        Query qry = man.getEm().createNamedQuery("Stock.findLessThan");
+        qry.setParameter("quantity", quantity);
         return man.exNamedQueryParamResult(qry);
     }
 
@@ -278,7 +333,14 @@ public class Find implements Serializable {
 
     public static List<Item> itemBy$(String text) {
         Query qry = man.getEm().createNamedQuery("Item.findBy$");
-        qry.setParameter("text", "%" + text + "%");
+        qry.setParameter("text", text);//"%" + +"%"
+        return man.exNamedQueryParamResult(qry);
+    }
+
+    public static List<Item> itemBy$(String text, int limit) {
+        Query qry = man.getEm().createNamedQuery("Item.findBy$");
+        qry.setParameter("text", text);//"%" + +"%"
+        qry.setMaxResults(limit);
         return man.exNamedQueryParamResult(qry);
     }
 

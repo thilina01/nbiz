@@ -232,7 +232,7 @@
                   <Table columnCount="9" rowCount="0">
                     <Column editable="false" title="#" type="java.lang.Object"/>
                     <Column editable="false" title="Cheque Number" type="java.lang.Object"/>
-                    <Column editable="false" title="Bank" type="java.lang.Object"/>
+                    <Column editable="false" title="Account" type="java.lang.Object"/>
                     <Column editable="false" title="Issued Date" type="java.lang.Object"/>
                     <Column editable="false" title="Banking Date" type="java.lang.Object"/>
                     <Column editable="false" title="amount" type="java.lang.Object"/>

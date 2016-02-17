@@ -5,9 +5,14 @@
 package com.nanosl.nbiz.gui.report;
 
 import com.nanosl.lib.date.JXDatePicker;
+import com.nanosl.nbiz.util.Combo;
+import com.nanosl.nbiz.util.Export;
+import static com.nanosl.nbiz.util.Format.yyyy_MM_dd;
 import query.Find;
 import com.nanosl.nbiz.util.NTopComponent;
+import com.sun.javafx.css.Combinator;
 import entity.Expenses;
+import entity.ExpensesType;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
@@ -63,6 +68,10 @@ public final class ExpensesReportTopComponent extends NTopComponent {
         jLabel3 = new javax.swing.JLabel();
         totalLabel = new javax.swing.JLabel();
         endDatePicker = new JXDatePicker();
+        fillButton = new javax.swing.JButton();
+        expensesTypeComboBox = new javax.swing.JComboBox();
+        typeCheckBox = new javax.swing.JCheckBox();
+        exportButton = new javax.swing.JButton();
 
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
@@ -97,14 +106,16 @@ public final class ExpensesReportTopComponent extends NTopComponent {
             }
         });
         masterScrollPane.setViewportView(masterTable);
-        masterTable.getColumnModel().getColumn(0).setPreferredWidth(30);
-        masterTable.getColumnModel().getColumn(0).setHeaderValue(org.openide.util.NbBundle.getMessage(ExpensesReportTopComponent.class, "ExpensesReportTopComponent.masterTable.columnModel.title0")); // NOI18N
-        masterTable.getColumnModel().getColumn(1).setHeaderValue(org.openide.util.NbBundle.getMessage(ExpensesReportTopComponent.class, "ExpensesReportTopComponent.masterTable.columnModel.title1")); // NOI18N
-        masterTable.getColumnModel().getColumn(2).setHeaderValue(org.openide.util.NbBundle.getMessage(ExpensesReportTopComponent.class, "ExpensesReportTopComponent.masterTable.columnModel.title2")); // NOI18N
-        masterTable.getColumnModel().getColumn(3).setPreferredWidth(300);
-        masterTable.getColumnModel().getColumn(3).setHeaderValue(org.openide.util.NbBundle.getMessage(ExpensesReportTopComponent.class, "ExpensesReportTopComponent.masterTable.columnModel.title3")); // NOI18N
-        masterTable.getColumnModel().getColumn(4).setHeaderValue(org.openide.util.NbBundle.getMessage(ExpensesReportTopComponent.class, "ExpensesReportTopComponent.masterTable.columnModel.title4")); // NOI18N
-        masterTable.getColumnModel().getColumn(4).setCellRenderer(rightAlignCell);
+        if (masterTable.getColumnModel().getColumnCount() > 0) {
+            masterTable.getColumnModel().getColumn(0).setPreferredWidth(30);
+            masterTable.getColumnModel().getColumn(0).setHeaderValue(org.openide.util.NbBundle.getMessage(ExpensesReportTopComponent.class, "ExpensesReportTopComponent.masterTable.columnModel.title0")); // NOI18N
+            masterTable.getColumnModel().getColumn(1).setHeaderValue(org.openide.util.NbBundle.getMessage(ExpensesReportTopComponent.class, "ExpensesReportTopComponent.masterTable.columnModel.title1")); // NOI18N
+            masterTable.getColumnModel().getColumn(2).setHeaderValue(org.openide.util.NbBundle.getMessage(ExpensesReportTopComponent.class, "ExpensesReportTopComponent.masterTable.columnModel.title2")); // NOI18N
+            masterTable.getColumnModel().getColumn(3).setPreferredWidth(300);
+            masterTable.getColumnModel().getColumn(3).setHeaderValue(org.openide.util.NbBundle.getMessage(ExpensesReportTopComponent.class, "ExpensesReportTopComponent.masterTable.columnModel.title3")); // NOI18N
+            masterTable.getColumnModel().getColumn(4).setHeaderValue(org.openide.util.NbBundle.getMessage(ExpensesReportTopComponent.class, "ExpensesReportTopComponent.masterTable.columnModel.title4")); // NOI18N
+            masterTable.getColumnModel().getColumn(4).setCellRenderer(rightAlignCell);
+        }
 
         startDatePicker.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -124,6 +135,34 @@ public final class ExpensesReportTopComponent extends NTopComponent {
             }
         });
 
+        org.openide.awt.Mnemonics.setLocalizedText(fillButton, org.openide.util.NbBundle.getMessage(ExpensesReportTopComponent.class, "ExpensesReportTopComponent.fillButton.text")); // NOI18N
+        fillButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                fillButtonActionPerformed(evt);
+            }
+        });
+
+        expensesTypeComboBox.setName("bankCombo"); // NOI18N
+        expensesTypeComboBox.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                expensesTypeComboBoxKeyPressed(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(typeCheckBox, org.openide.util.NbBundle.getMessage(ExpensesReportTopComponent.class, "ExpensesReportTopComponent.typeCheckBox.text")); // NOI18N
+        typeCheckBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                typeCheckBoxActionPerformed(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(exportButton, org.openide.util.NbBundle.getMessage(ExpensesReportTopComponent.class, "ExpensesReportTopComponent.exportButton.text")); // NOI18N
+        exportButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                exportButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -132,16 +171,25 @@ public final class ExpensesReportTopComponent extends NTopComponent {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(startDatePicker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(endDatePicker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(masterScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 659, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(totalLabel)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel3)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(startDatePicker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(endDatePicker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(fillButton)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(typeCheckBox)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(expensesTypeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(masterScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 659, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(exportButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(totalLabel)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -151,11 +199,16 @@ public final class ExpensesReportTopComponent extends NTopComponent {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(startDatePicker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3)
-                    .addComponent(endDatePicker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(endDatePicker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(fillButton)
+                    .addComponent(expensesTypeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(typeCheckBox))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(masterScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 301, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(totalLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(exportButton)
+                    .addComponent(totalLabel))
                 .addContainerGap())
         );
 
@@ -197,27 +250,51 @@ public final class ExpensesReportTopComponent extends NTopComponent {
         fill();
     }//GEN-LAST:event_endDatePickerActionPerformed
 
+    private void fillButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fillButtonActionPerformed
+        fill();
+    }//GEN-LAST:event_fillButtonActionPerformed
+
+    private void expensesTypeComboBoxKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_expensesTypeComboBoxKeyPressed
+        if (evt.getKeyCode() == 10) {
+            fill();
+        }
+    }//GEN-LAST:event_expensesTypeComboBoxKeyPressed
+
+    private void typeCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_typeCheckBoxActionPerformed
+        fill();
+    }//GEN-LAST:event_typeCheckBoxActionPerformed
+
+    private void exportButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportButtonActionPerformed
+        export();
+    }//GEN-LAST:event_exportButtonActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.jdesktop.swingx.JXDatePicker endDatePicker;
+    private javax.swing.JComboBox expensesTypeComboBox;
+    private javax.swing.JButton exportButton;
+    private javax.swing.JButton fillButton;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane masterScrollPane;
     private javax.swing.JTable masterTable;
     private org.jdesktop.swingx.JXDatePicker startDatePicker;
     private javax.swing.JLabel totalLabel;
+    private javax.swing.JCheckBox typeCheckBox;
     // End of variables declaration//GEN-END:variables
-    
+
     // End of variables declaration                   
     DefaultTableModel tableModel;
-    
+
     private void fillTable() {
         tableModel.setRowCount(0);
         totalLabel.setText("0.00");
         Date startDate = startDatePicker.getDate();
         Date endDate = endDatePicker.getDate();
         //ALTER TABLE `sgm`.`purchase_invoice` CHANGE COLUMN `inv_time` `inv_date` DATE NULL DEFAULT NULL  ;
-
-        Collection<Expenses> expenseses = Find.expensesByDates(startDate, endDate);
+        ExpensesType expensesType = (ExpensesType) expensesTypeComboBox.getSelectedItem();
+        Collection<Expenses> expenseses = typeCheckBox.isSelected()
+                ? Find.expensesByDatesAndExpensesType(makeStartDate(startDate), makeEndDate(endDate), expensesType)
+                : Find.expensesByDates(makeStartDate(startDate), makeEndDate(endDate));
         if (expenseses == null) {
             showSuccess("No Record Found!");
             return;
@@ -231,29 +308,33 @@ public final class ExpensesReportTopComponent extends NTopComponent {
             tableModel.addRow(row);
             total += amount;
         }
-        
+
         totalLabel.setText(nf2d.format(total));
     }
-    
+
     protected void onLoad() {
         initComponents();
         tableModel = (DefaultTableModel) masterTable.getModel();
         masterTable.setDefaultRenderer(Object.class, coloredCellRenderer);
     }
-    
+
     @Override
     public void setVisible(boolean b) {
         super.setVisible(b);
+        Combo.fillExpensesTypes(expensesTypeComboBox);
         fill();
     }
-    
+
     private void fill() {
         fillTable();
     }
 
+    private void export() {
+        Export.toExcel(masterTable, yyyy_MM_dd.format(makeStartDate(startDatePicker.getDate())) + " to " + yyyy_MM_dd.format(makeEndDate(endDatePicker.getDate())), "Expenses");
+    }
+
     @Override
     public void componentOpened() {
-        // TODO add custom code on component opening
     }
 
     @Override

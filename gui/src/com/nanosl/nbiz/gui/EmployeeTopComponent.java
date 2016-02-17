@@ -19,6 +19,7 @@ import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.util.NbBundle.Messages;
 import org.openide.windows.TopComponent;
+import org.openide.windows.WindowManager;
 
 /**
  * Top component which displays something.
@@ -82,6 +83,7 @@ public final class EmployeeTopComponent extends NTopComponent {
         positionComboBox = new javax.swing.JComboBox();
         jLabel1 = new javax.swing.JLabel();
         nicTextField = new javax.swing.JTextField();
+        newPossitionButton = new javax.swing.JButton();
 
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
@@ -221,6 +223,13 @@ public final class EmployeeTopComponent extends NTopComponent {
             }
         });
 
+        org.openide.awt.Mnemonics.setLocalizedText(newPossitionButton, org.openide.util.NbBundle.getMessage(EmployeeTopComponent.class, "EmployeeTopComponent.newPossitionButton.text")); // NOI18N
+        newPossitionButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                newPossitionButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -239,7 +248,7 @@ public final class EmployeeTopComponent extends NTopComponent {
                             .addComponent(employeePositionCodeLabel)
                             .addComponent(addressNumberLabel))
                         .addGap(16, 16, 16)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(cityField, javax.swing.GroupLayout.PREFERRED_SIZE, 418, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(updateButton)
@@ -247,7 +256,6 @@ public final class EmployeeTopComponent extends NTopComponent {
                                 .addComponent(deleteButton)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(clearButton))
-                            .addComponent(positionComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(addressField, javax.swing.GroupLayout.PREFERRED_SIZE, 396, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(fixedLineField, javax.swing.GroupLayout.PREFERRED_SIZE, 418, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(mobileField, javax.swing.GroupLayout.PREFERRED_SIZE, 418, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -258,14 +266,18 @@ public final class EmployeeTopComponent extends NTopComponent {
                                 .addGap(18, 18, 18)
                                 .addComponent(jLabel1)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(nicTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addComponent(nicTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(positionComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(newPossitionButton))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(10, 10, 10)
                         .addComponent(masterScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 486, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel1Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {addressField, cityField, fixedLineField, mobileField, nameField, notesField, positionComboBox});
+        jPanel1Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {addressField, cityField, fixedLineField, mobileField, nameField, notesField});
 
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -285,7 +297,8 @@ public final class EmployeeTopComponent extends NTopComponent {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(employeePositionCodeLabel)
-                    .addComponent(positionComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(positionComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(newPossitionButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(addressNumberLabel)
@@ -412,6 +425,15 @@ public final class EmployeeTopComponent extends NTopComponent {
         }
     }//GEN-LAST:event_nicTextFieldActionPerformed
 
+    private void newPossitionButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newPossitionButtonActionPerformed
+
+        TopComponent tc = WindowManager.getDefault().findTopComponent("EmployeePositionTopComponent");
+        if (tc != null) {
+            tc.open();
+            tc.requestActive();
+        }
+    }//GEN-LAST:event_newPossitionButtonActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField addressField;
     private javax.swing.JLabel addressNumberLabel;
@@ -432,6 +454,7 @@ public final class EmployeeTopComponent extends NTopComponent {
     private javax.swing.JTextField mobileField;
     private javax.swing.JLabel mobileLabel;
     private javax.swing.JTextField nameField;
+    private javax.swing.JButton newPossitionButton;
     private javax.swing.JTextField nicTextField;
     private javax.swing.JTextField notesField;
     private javax.swing.JLabel notesLabel;
@@ -539,7 +562,7 @@ public final class EmployeeTopComponent extends NTopComponent {
         person.setMobile(mobile);
         employee.setNotes(notes);
         person.setCity(city);
-        List<Serializable> serializables = new  ArrayList<>();
+        List<Serializable> serializables = new ArrayList<>();
         serializables.add(person);
         serializables.add(employee);
         if (manager.update(serializables)) {

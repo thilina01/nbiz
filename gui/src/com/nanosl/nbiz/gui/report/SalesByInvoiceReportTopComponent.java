@@ -8,7 +8,9 @@ package com.nanosl.nbiz.gui.report;
 import com.nanosl.lib.date.JXDatePicker;
 import static com.nanosl.nbiz.util.Cell.coloredCellRenderer;
 import com.nanosl.nbiz.util.Combo;
+import com.nanosl.nbiz.util.Export;
 import static com.nanosl.nbiz.util.Format.nf2d;
+import static com.nanosl.nbiz.util.Format.yyyy_MM_dd;
 import com.nanosl.nbiz.util.NTopComponent;
 import entity.Employee;
 import entity.SaleInvoice;
@@ -77,6 +79,7 @@ public final class SalesByInvoiceReportTopComponent extends NTopComponent {
         employeeCheckBox = new javax.swing.JCheckBox();
         employeeComboBox = new javax.swing.JComboBox();
         freeCheckBox = new javax.swing.JCheckBox();
+        updateButton = new javax.swing.JButton();
 
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
@@ -167,6 +170,13 @@ public final class SalesByInvoiceReportTopComponent extends NTopComponent {
             }
         });
 
+        org.openide.awt.Mnemonics.setLocalizedText(updateButton, org.openide.util.NbBundle.getMessage(SalesByInvoiceReportTopComponent.class, "SalesByInvoiceReportTopComponent.updateButton.text")); // NOI18N
+        updateButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                updateButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -175,7 +185,8 @@ public final class SalesByInvoiceReportTopComponent extends NTopComponent {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(updateButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(totalLabel))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 822, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -207,9 +218,11 @@ public final class SalesByInvoiceReportTopComponent extends NTopComponent {
                     .addComponent(employeeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(freeCheckBox))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 419, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(totalLabel)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(totalLabel)
+                    .addComponent(updateButton))
                 .addContainerGap())
         );
 
@@ -283,6 +296,11 @@ public final class SalesByInvoiceReportTopComponent extends NTopComponent {
         fill();
     }//GEN-LAST:event_freeCheckBoxActionPerformed
 
+    private void updateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateButtonActionPerformed
+        Export.toExcel(table, yyyy_MM_dd.format(makeStartDate(startDatePicker.getDate())) + " to " + yyyy_MM_dd.format(makeEndDate(endDatePicker.getDate())), getName().replace(" Window", ""));
+           // TODO add your handling code here:
+    }//GEN-LAST:event_updateButtonActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox employeeCheckBox;
     private javax.swing.JComboBox employeeComboBox;
@@ -295,6 +313,7 @@ public final class SalesByInvoiceReportTopComponent extends NTopComponent {
     private org.jdesktop.swingx.JXDatePicker startDatePicker;
     private javax.swing.JTable table;
     private javax.swing.JLabel totalLabel;
+    private javax.swing.JButton updateButton;
     // End of variables declaration//GEN-END:variables
      DefaultTableModel tableModel;
 

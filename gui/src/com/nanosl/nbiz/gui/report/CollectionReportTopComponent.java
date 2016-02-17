@@ -280,10 +280,10 @@ public final class CollectionReportTopComponent extends NTopComponent {
         }
         int i1 = 0, i2 = 0;
         for (CollectionReceipt collectionReceipt : collectionReceipts) {
-            SaleInvoice saleInvoice = collectionReceipt.getSaleInvoice();
-            Customer customer = saleInvoice.getCustomer();
+            SaleInvoice saleInvoice = collectionReceipt.getSaleInvoice();            
+            Customer customer = saleInvoice!=null?saleInvoice.getCustomer():collectionReceipt.getCustomer();
             Date collectedTime = collectionReceipt.getCollectedTime();
-            String invoiceNumber = saleInvoice.getInvNo();
+            String invoiceNumber = saleInvoice!=null?saleInvoice.getInvNo():"";
             SaleCash saleCash = collectionReceipt.getSaleCash();
             double amount = saleCash != null ? saleCash.getAmount() : 0.0;
             String receiptNumber = collectionReceipt.getReceiptNumber();
@@ -307,7 +307,7 @@ public final class CollectionReportTopComponent extends NTopComponent {
                     nf2d.format(saleCheque.getAmount()),
                     customer != null ? customer.getCode() : "",
                     customer != null ? customer.getPerson().getName() : "",
-                    saleInvoice.getInvNo()
+                    invoiceNumber
                 };
                 chequeTableModel.addRow(row1);
             }

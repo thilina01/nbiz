@@ -5,12 +5,18 @@
 package com.nanosl.nbiz.gui.report;
 
 import com.nanosl.lib.date.JXDatePicker;
+import com.nanosl.nbiz.util.Export;
+import static com.nanosl.nbiz.util.Format.yyyy_MM_dd;
 import query.Find;
 import com.nanosl.nbiz.util.NTopComponent;
+import entity.Account;
 import entity.IssuedCheque;
 import entity.PurchaseInvoice;
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import javax.swing.table.DefaultTableModel;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
@@ -63,6 +69,15 @@ public final class IssuedChequeReportTopComponent extends NTopComponent {
         jLabel3 = new javax.swing.JLabel();
         totalLabel = new javax.swing.JLabel();
         endDatePicker = new JXDatePicker();
+        jLabel4 = new javax.swing.JLabel();
+        fillStatusComboBox = new javax.swing.JComboBox();
+        jPanel3 = new javax.swing.JPanel();
+        jLabel5 = new javax.swing.JLabel();
+        chequeNumberTextField = new javax.swing.JTextField();
+        setStatusComboBox = new javax.swing.JComboBox();
+        jLabel6 = new javax.swing.JLabel();
+        updateButton1 = new javax.swing.JButton();
+        exportButton = new javax.swing.JButton();
 
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
@@ -72,7 +87,7 @@ public final class IssuedChequeReportTopComponent extends NTopComponent {
 
             },
             new String [] {
-                "#", "Number", "Amount", "Issued Date", "Banking Date", "Bank", "Invoice", "Supplier"
+                "#", "Number", "Amount", "Issued Date", "Banking Date", "Account", "Invoice", "Supplier"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -84,11 +99,11 @@ public final class IssuedChequeReportTopComponent extends NTopComponent {
             }
         });
         masterTable.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseReleased(java.awt.event.MouseEvent evt) {
-                masterTableMouseReleased(evt);
-            }
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 masterTableMouseClicked(evt);
+            }
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                masterTableMouseReleased(evt);
             }
         });
         masterTable.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -129,6 +144,67 @@ public final class IssuedChequeReportTopComponent extends NTopComponent {
             }
         });
 
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel4, org.openide.util.NbBundle.getMessage(IssuedChequeReportTopComponent.class, "IssuedChequeReportTopComponent.jLabel4.text")); // NOI18N
+
+        fillStatusComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Pending", "Cleared", "Returned", "All" }));
+        fillStatusComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                fillStatusComboBoxActionPerformed(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel5, org.openide.util.NbBundle.getMessage(IssuedChequeReportTopComponent.class, "IssuedChequeReportTopComponent.jLabel5.text")); // NOI18N
+
+        chequeNumberTextField.setEditable(false);
+
+        setStatusComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Pending", "Cleared", "Returned" }));
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel6, org.openide.util.NbBundle.getMessage(IssuedChequeReportTopComponent.class, "IssuedChequeReportTopComponent.jLabel6.text")); // NOI18N
+
+        org.openide.awt.Mnemonics.setLocalizedText(updateButton1, org.openide.util.NbBundle.getMessage(IssuedChequeReportTopComponent.class, "IssuedChequeReportTopComponent.updateButton1.text")); // NOI18N
+        updateButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                updateButton1ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel6)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(chequeNumberTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel5)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(setStatusComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(updateButton1)
+                .addContainerGap())
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6)
+                    .addComponent(chequeNumberTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5)
+                    .addComponent(setStatusComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(updateButton1))
+                .addContainerGap())
+        );
+
+        org.openide.awt.Mnemonics.setLocalizedText(exportButton, org.openide.util.NbBundle.getMessage(IssuedChequeReportTopComponent.class, "IssuedChequeReportTopComponent.exportButton.text")); // NOI18N
+        exportButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                exportButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -136,16 +212,23 @@ public final class IssuedChequeReportTopComponent extends NTopComponent {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(masterScrollPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 907, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(startDatePicker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(endDatePicker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(fillStatusComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(masterScrollPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 907, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(exportButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(totalLabel)))
                 .addContainerGap())
         );
@@ -156,11 +239,17 @@ public final class IssuedChequeReportTopComponent extends NTopComponent {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(startDatePicker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3)
-                    .addComponent(endDatePicker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(endDatePicker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4)
+                    .addComponent(fillStatusComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(masterScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 389, Short.MAX_VALUE)
+                .addComponent(masterScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 384, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(totalLabel)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(totalLabel)
+                        .addComponent(exportButton)))
                 .addContainerGap())
         );
 
@@ -183,6 +272,7 @@ public final class IssuedChequeReportTopComponent extends NTopComponent {
     }// </editor-fold>//GEN-END:initComponents
 
     private void masterTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_masterTableMouseClicked
+        loadCheque();
     }//GEN-LAST:event_masterTableMouseClicked
 
     private void masterTableMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_masterTableMouseReleased
@@ -198,14 +288,36 @@ public final class IssuedChequeReportTopComponent extends NTopComponent {
     private void endDatePickerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_endDatePickerActionPerformed
         fill();
     }//GEN-LAST:event_endDatePickerActionPerformed
+
+    private void fillStatusComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fillStatusComboBoxActionPerformed
+        fill();
+    }//GEN-LAST:event_fillStatusComboBoxActionPerformed
+
+    private void updateButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateButton1ActionPerformed
+        updat();
+    }//GEN-LAST:event_updateButton1ActionPerformed
+
+    private void exportButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportButtonActionPerformed
+        export();
+    }//GEN-LAST:event_exportButtonActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField chequeNumberTextField;
     private org.jdesktop.swingx.JXDatePicker endDatePicker;
+    private javax.swing.JButton exportButton;
+    private javax.swing.JComboBox fillStatusComboBox;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane masterScrollPane;
     private javax.swing.JTable masterTable;
+    private javax.swing.JComboBox setStatusComboBox;
     private org.jdesktop.swingx.JXDatePicker startDatePicker;
     private javax.swing.JLabel totalLabel;
+    private javax.swing.JButton updateButton1;
     // End of variables declaration//GEN-END:variables
     DefaultTableModel tableModel;
 
@@ -215,25 +327,39 @@ public final class IssuedChequeReportTopComponent extends NTopComponent {
         Date endDate = endDatePicker.getDate();
         //ALTER TABLE `sgm`.`purchase_invoice` CHANGE COLUMN `inv_time` `inv_date` DATE NULL DEFAULT NULL  ;
 
-        Collection<IssuedCheque> issuedCheques = Find.issuedChequeByDates(startDate, endDate);
+        Collection<IssuedCheque> issuedCheques = Find.issuedChequeByDates(makeStartDate(startDate), makeEndDate(endDate));
         if (issuedCheques == null) {
             showSuccess("No Record Found!");
             return;
         }
         int i = 0;
+        int fillStatus = fillStatusComboBox.getSelectedIndex();
         for (IssuedCheque issuedCheque : issuedCheques) {
-            Collection<PurchaseInvoice> purchaseInvoices = issuedCheque.getPurchaseInvoiceCollection();
-            String invoiceNumbers = "";
-            String supplierCode = "";
-            for (PurchaseInvoice purchaseInvoice : purchaseInvoices) {
-                if (invoiceNumbers.length() > 0) {
-                    invoiceNumbers += ", ";
-                    supplierCode = purchaseInvoice.getSupplier().getCode();
-                }                
+
+            int chequeStatus = issuedCheque.getStatus();
+            if (fillStatus == 3 | chequeStatus == fillStatus) {
+                Collection<PurchaseInvoice> purchaseInvoices = issuedCheque.getPurchaseInvoiceCollection();
+                String invoiceNumbers = "";
+                String supplierCode = "";
+                for (PurchaseInvoice purchaseInvoice : purchaseInvoices) {
+                    if (invoiceNumbers.length() > 0) {
+                        invoiceNumbers += ", ";
+                        supplierCode = purchaseInvoice.getSupplier().getCode();
+                    }
                     invoiceNumbers += purchaseInvoice.getPurchaseInvoicePK().getInvNo();
+                }
+                Object[] row = {
+                    ++i,
+                    issuedCheque.getChequeNumber(),
+                    nf2d.format(issuedCheque.getAmount()),
+                    yyyy_MM_dd.format(issuedCheque.getIssuedDate()),
+                    yyyy_MM_dd.format(issuedCheque.getBankingDate()),
+                    issuedCheque.getAccount(),
+                    invoiceNumbers,
+                    supplierCode
+                };
+                tableModel.addRow(row);
             }
-            Object[] row = {++i, issuedCheque.getChequeNumber(), nf2d.format(issuedCheque.getAmount()), yyyy_MM_dd.format(issuedCheque.getIssuedDate()), yyyy_MM_dd.format(issuedCheque.getBankingDate()), issuedCheque.getBank().getName(), invoiceNumbers, supplierCode};
-            tableModel.addRow(row);
         }
         calcTotal();
     }
@@ -253,6 +379,7 @@ public final class IssuedChequeReportTopComponent extends NTopComponent {
     private void fill() {
         fillTable();
         calcTotal();
+        chequeNumberTextField.setText("");
     }
 
     private void calcTotal() {
@@ -261,6 +388,56 @@ public final class IssuedChequeReportTopComponent extends NTopComponent {
             total += Double.valueOf(tableModel.getValueAt(i, 2).toString());
         }
         totalLabel.setText(nf2d.format(total));
+    }
+
+    private void loadCheque() {
+        chequeNumberTextField.setText("");
+        if (tableModel.getRowCount() > 0) {
+            int row = masterTable.getSelectedRow();
+            String chequeNumber = tableModel.getValueAt(row, 1).toString();
+//            Account account = (Account) tableModel.getValueAt(row, 5);
+//            String ReceiptNumber = tableModel.getValueAt(row, 8).toString();
+//            saleCheque = manager.find(SaleCheque.class, new SaleChequePK(chequeNumber, account, ReceiptNumber));
+            chequeNumberTextField.setText(chequeNumber);
+        }
+    }
+
+    private void updat() {
+        IssuedCheque issuedCheque = manager.find(IssuedCheque.class, chequeNumberTextField.getText());
+        if (issuedCheque == null) {
+            showError("Check Not Found.");
+            return;
+        }
+        int existingStatus = issuedCheque.getStatus();
+        int newStatus = setStatusComboBox.getSelectedIndex();
+        if (existingStatus == newStatus) {
+            showMessage("Cheque " + issuedCheque.getChequeNumber() + " Nothing to update.");
+        } else if (existingStatus == 0 && newStatus == 1) {
+            issuedCheque.setStatus(newStatus);
+            Account account = issuedCheque.getAccount();
+            account.setBalance(account.getBalance() - issuedCheque.getAmount());
+            List<Serializable> serializables = new ArrayList<>();
+            serializables.add(issuedCheque);
+            serializables.add(account);
+            if (manager.update(serializables)) {
+                showSuccess("Cheque " + issuedCheque.getChequeNumber() + " Cleared.");
+                chequeNumberTextField.setText("");
+                fill();
+            }
+        } else if (existingStatus == 0 && newStatus == 2) {
+            issuedCheque.setStatus(newStatus);
+            if (manager.update(issuedCheque)) {
+                showSuccess("Cheque " + issuedCheque.getChequeNumber() + " Returned.");
+                chequeNumberTextField.setText("");
+                fill();
+            }
+        } else {
+            showMessage("Operation not supported");
+        }
+    }
+
+    private void export() {
+        Export.toExcel(masterTable, yyyy_MM_dd.format(makeStartDate(startDatePicker.getDate())) + " to " + yyyy_MM_dd.format(makeEndDate(endDatePicker.getDate())), "Issued Cheques");
     }
 
     @Override

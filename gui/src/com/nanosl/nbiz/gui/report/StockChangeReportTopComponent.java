@@ -4,6 +4,8 @@
  */
 package com.nanosl.nbiz.gui.report;
 
+import com.nanosl.nbiz.util.Export;
+import static com.nanosl.nbiz.util.Format.yyyy_MM_dd;
 import com.nanosl.nbiz.util.NTopComponent;
 import entity.Item;
 import entity.StockChange;
@@ -57,15 +59,16 @@ public final class StockChangeReportTopComponent extends NTopComponent {
 
         jPanel1 = new javax.swing.JPanel();
         masterScrollPane = new javax.swing.JScrollPane();
-        masterTable = new javax.swing.JTable();
+        table = new javax.swing.JTable();
         jXDatePicker1 = new org.jdesktop.swingx.JXDatePicker();
         jLabel3 = new javax.swing.JLabel();
         totalLabel = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
 
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        masterTable.setAutoCreateRowSorter(true);
-        masterTable.setModel(new javax.swing.table.DefaultTableModel(
+        table.setAutoCreateRowSorter(true);
+        table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -88,35 +91,37 @@ public final class StockChangeReportTopComponent extends NTopComponent {
                 return canEdit [columnIndex];
             }
         });
-        masterTable.addMouseListener(new java.awt.event.MouseAdapter() {
+        table.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
-                masterTableMouseReleased(evt);
+                tableMouseReleased(evt);
             }
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                masterTableMouseClicked(evt);
+                tableMouseClicked(evt);
             }
         });
-        masterTable.addKeyListener(new java.awt.event.KeyAdapter() {
+        table.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                masterTableKeyReleased(evt);
+                tableKeyReleased(evt);
             }
         });
-        masterScrollPane.setViewportView(masterTable);
-        masterTable.getColumnModel().getColumn(0).setPreferredWidth(30);
-        masterTable.getColumnModel().getColumn(0).setHeaderValue(org.openide.util.NbBundle.getMessage(StockChangeReportTopComponent.class, "StockChangeReportTopComponent.masterTable.columnModel.title0")); // NOI18N
-        masterTable.getColumnModel().getColumn(1).setHeaderValue(org.openide.util.NbBundle.getMessage(StockChangeReportTopComponent.class, "StockChangeReportTopComponent.masterTable.columnModel.title1")); // NOI18N
-        masterTable.getColumnModel().getColumn(2).setPreferredWidth(150);
-        masterTable.getColumnModel().getColumn(2).setHeaderValue(org.openide.util.NbBundle.getMessage(StockChangeReportTopComponent.class, "StockChangeReportTopComponent.masterTable.columnModel.title2")); // NOI18N
-        masterTable.getColumnModel().getColumn(3).setHeaderValue(org.openide.util.NbBundle.getMessage(StockChangeReportTopComponent.class, "StockChangeReportTopComponent.masterTable.columnModel.title3")); // NOI18N
-        masterTable.getColumnModel().getColumn(3).setCellRenderer(rightAlignCell);
-        masterTable.getColumnModel().getColumn(4).setHeaderValue(org.openide.util.NbBundle.getMessage(StockChangeReportTopComponent.class, "StockChangeReportTopComponent.masterTable.columnModel.title4")); // NOI18N
-        masterTable.getColumnModel().getColumn(4).setCellRenderer(rightAlignCell);
-        masterTable.getColumnModel().getColumn(5).setHeaderValue(org.openide.util.NbBundle.getMessage(StockChangeReportTopComponent.class, "StockChangeReportTopComponent.masterTable.columnModel.title5")); // NOI18N
-        masterTable.getColumnModel().getColumn(5).setCellRenderer(rightAlignCell);
-        masterTable.getColumnModel().getColumn(6).setHeaderValue(org.openide.util.NbBundle.getMessage(StockChangeReportTopComponent.class, "StockChangeReportTopComponent.masterTable.columnModel.title6")); // NOI18N
-        masterTable.getColumnModel().getColumn(6).setCellRenderer(rightAlignCell);
-        masterTable.getColumnModel().getColumn(7).setHeaderValue(org.openide.util.NbBundle.getMessage(StockChangeReportTopComponent.class, "StockChangeReportTopComponent.masterTable.columnModel.title7")); // NOI18N
-        masterTable.getColumnModel().getColumn(7).setCellRenderer(rightAlignCell);
+        masterScrollPane.setViewportView(table);
+        if (table.getColumnModel().getColumnCount() > 0) {
+            table.getColumnModel().getColumn(0).setPreferredWidth(30);
+            table.getColumnModel().getColumn(0).setHeaderValue(org.openide.util.NbBundle.getMessage(StockChangeReportTopComponent.class, "StockChangeReportTopComponent.table.columnModel.title0")); // NOI18N
+            table.getColumnModel().getColumn(1).setHeaderValue(org.openide.util.NbBundle.getMessage(StockChangeReportTopComponent.class, "StockChangeReportTopComponent.table.columnModel.title1")); // NOI18N
+            table.getColumnModel().getColumn(2).setPreferredWidth(150);
+            table.getColumnModel().getColumn(2).setHeaderValue(org.openide.util.NbBundle.getMessage(StockChangeReportTopComponent.class, "StockChangeReportTopComponent.table.columnModel.title2")); // NOI18N
+            table.getColumnModel().getColumn(3).setHeaderValue(org.openide.util.NbBundle.getMessage(StockChangeReportTopComponent.class, "StockChangeReportTopComponent.table.columnModel.title3")); // NOI18N
+            table.getColumnModel().getColumn(3).setCellRenderer(rightAlignCell);
+            table.getColumnModel().getColumn(4).setHeaderValue(org.openide.util.NbBundle.getMessage(StockChangeReportTopComponent.class, "StockChangeReportTopComponent.table.columnModel.title4")); // NOI18N
+            table.getColumnModel().getColumn(4).setCellRenderer(rightAlignCell);
+            table.getColumnModel().getColumn(5).setHeaderValue(org.openide.util.NbBundle.getMessage(StockChangeReportTopComponent.class, "StockChangeReportTopComponent.table.columnModel.title5")); // NOI18N
+            table.getColumnModel().getColumn(5).setCellRenderer(rightAlignCell);
+            table.getColumnModel().getColumn(6).setHeaderValue(org.openide.util.NbBundle.getMessage(StockChangeReportTopComponent.class, "StockChangeReportTopComponent.table.columnModel.title6")); // NOI18N
+            table.getColumnModel().getColumn(6).setCellRenderer(rightAlignCell);
+            table.getColumnModel().getColumn(7).setHeaderValue(org.openide.util.NbBundle.getMessage(StockChangeReportTopComponent.class, "StockChangeReportTopComponent.table.columnModel.title7")); // NOI18N
+            table.getColumnModel().getColumn(7).setCellRenderer(rightAlignCell);
+        }
 
         jXDatePicker1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -130,6 +135,13 @@ public final class StockChangeReportTopComponent extends NTopComponent {
         totalLabel.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         org.openide.awt.Mnemonics.setLocalizedText(totalLabel, org.openide.util.NbBundle.getMessage(StockChangeReportTopComponent.class, "StockChangeReportTopComponent.totalLabel.text")); // NOI18N
 
+        org.openide.awt.Mnemonics.setLocalizedText(jButton1, org.openide.util.NbBundle.getMessage(StockChangeReportTopComponent.class, "StockChangeReportTopComponent.jButton1.text")); // NOI18N
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -138,7 +150,8 @@ public final class StockChangeReportTopComponent extends NTopComponent {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jButton1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(totalLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(masterScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 849, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -156,9 +169,11 @@ public final class StockChangeReportTopComponent extends NTopComponent {
                     .addComponent(jXDatePicker1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(masterScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 358, Short.MAX_VALUE)
+                .addComponent(masterScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 350, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(totalLabel)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(totalLabel)
+                    .addComponent(jButton1))
                 .addContainerGap())
         );
 
@@ -180,31 +195,36 @@ public final class StockChangeReportTopComponent extends NTopComponent {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void masterTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_masterTableMouseClicked
+    private void tableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableMouseClicked
 
-    }//GEN-LAST:event_masterTableMouseClicked
+    }//GEN-LAST:event_tableMouseClicked
 
-    private void masterTableMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_masterTableMouseReleased
+    private void tableMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableMouseReleased
 
-    }//GEN-LAST:event_masterTableMouseReleased
+    }//GEN-LAST:event_tableMouseReleased
 
-    private void masterTableKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_masterTableKeyReleased
+    private void tableKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tableKeyReleased
 
-    }//GEN-LAST:event_masterTableKeyReleased
+    }//GEN-LAST:event_tableKeyReleased
 
     private void jXDatePicker1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jXDatePicker1ActionPerformed
         fill();
     }//GEN-LAST:event_jXDatePicker1ActionPerformed
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        Export.toExcel(table, yyyy_MM_dd.format(jXDatePicker1.getDate()), getName().replace(" Window", ""));
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private org.jdesktop.swingx.JXDatePicker jXDatePicker1;
     private javax.swing.JScrollPane masterScrollPane;
-    private javax.swing.JTable masterTable;
+    private javax.swing.JTable table;
     private javax.swing.JLabel totalLabel;
     // End of variables declaration//GEN-END:variables
-  
+
     DefaultTableModel tableModel;
 
     private void fillTable() {
@@ -231,9 +251,9 @@ public final class StockChangeReportTopComponent extends NTopComponent {
 
     protected void onLoad() {
         initComponents();
-        tableModel = (DefaultTableModel) masterTable.getModel();
-        masterTable.setDefaultRenderer(Object.class, coloredCellRenderer);
-       
+        tableModel = (DefaultTableModel) table.getModel();
+        table.setDefaultRenderer(Object.class, coloredCellRenderer);
+
     }
 
     @Override
@@ -253,6 +273,7 @@ public final class StockChangeReportTopComponent extends NTopComponent {
         }
         totalLabel.setText(total + "");
     }
+
     @Override
     public void componentOpened() {
         // TODO add custom code on component opening

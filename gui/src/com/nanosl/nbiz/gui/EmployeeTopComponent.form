@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<Form version="1.5" maxVersion="1.8" type="org.netbeans.modules.form.forminfo.JPanelFormInfo">
+<Form version="1.5" maxVersion="1.8">
   <AuxValues>
     <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="1"/>
     <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="false"/>
@@ -61,7 +61,7 @@
                               <Component id="addressNumberLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace min="-2" pref="16" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
                               <Component id="cityField" linkSize="1" alignment="0" min="-2" pref="418" max="-2" attributes="1"/>
                               <Group type="102" alignment="0" attributes="0">
                                   <Component id="updateButton" min="-2" max="-2" attributes="0"/>
@@ -70,7 +70,6 @@
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Component id="clearButton" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <Component id="positionComboBox" linkSize="1" alignment="0" min="-2" pref="350" max="-2" attributes="0"/>
                               <Component id="addressField" linkSize="1" alignment="0" min="-2" pref="396" max="-2" attributes="1"/>
                               <Component id="fixedLineField" linkSize="1" alignment="0" min="-2" pref="418" max="-2" attributes="1"/>
                               <Component id="mobileField" linkSize="1" alignment="0" min="-2" pref="418" max="-2" attributes="1"/>
@@ -82,6 +81,11 @@
                                   <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                   <Component id="nicTextField" min="-2" pref="135" max="-2" attributes="0"/>
+                              </Group>
+                              <Group type="102" alignment="1" attributes="0">
+                                  <Component id="positionComboBox" max="32767" attributes="0"/>
+                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                  <Component id="newPossitionButton" min="-2" max="-2" attributes="0"/>
                               </Group>
                           </Group>
                       </Group>
@@ -115,6 +119,7 @@
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="employeePositionCodeLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="positionComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="newPossitionButton" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
@@ -377,6 +382,16 @@
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="nicTextFieldActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JButton" name="newPossitionButton">
+          <Properties>
+            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+              <ResourceString bundle="com/nanosl/nbiz/gui/Bundle.properties" key="EmployeeTopComponent.newPossitionButton.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+            </Property>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="newPossitionButtonActionPerformed"/>
           </Events>
         </Component>
       </SubComponents>

@@ -42,6 +42,22 @@ public class FindMySql {
             + "INNER JOIN person ON person.nic = customer.`person_nic` "
             + "WHERE collection_receipt.collected_time BETWEEN ? AND ? "
             + "AND collection_receipt.amount < sale_invoice.amount";
+
+    private static final String quotationItemBetweenDates
+            = "SELECT "
+            + "item.`code` as 'Code', "
+            + "item.description as 'Item', "
+            + "Sum(quotation_has_item.quantity) AS Quantity, "
+            + "quotation_has_item.rate AS Rate "
+            + "FROM "
+            + "quotation_has_item "
+            + "INNER JOIN item ON item.`code` = quotation_has_item.item_code "
+            + "INNER JOIN quotation ON quotation.quotation_no = quotation_has_item.quotation_quotation_no "
+            + "WHERE "
+            + "quotation.quotation_time BETWEEN ? AND ? "
+            + "AND quotation.amount != 0 "
+            + "GROUP BY quotation_has_item.item_code,quotation_has_item.rate ";
+
     private static final String saleItemProfitBetweenDates
             = "SELECT "
             + "item.`code` as 'Code', "
@@ -60,6 +76,23 @@ public class FindMySql {
             + "sale_invoice.inv_time BETWEEN ? AND ? "
             + "AND sale_invoice.amount != 0 "
             + "GROUP BY sale_invoice_has_item.item_code,sale_invoice_has_item.rate ";
+
+    private static final String quotationItemBySupplierBetweenDates
+            = "SELECT "
+            + "item.`code` as 'Code', "
+            + "item.description as 'Item', "
+            + "Sum(quotation_has_item.quantity) AS Quantity, "
+            + "quotation_has_item.rate AS Rate "
+            + "FROM "
+            + "quotation_has_item "
+            + "INNER JOIN item ON item.`code` = quotation_has_item.item_code "
+            + "INNER JOIN quotation ON quotation.quotation_no = quotation_has_item.quotation_quotation_no "
+            + "WHERE "
+            + "quotation.quotation_time BETWEEN ? AND ? "
+            + "AND item.supplier_code = ? "
+            + "AND quotation.amount != 0 "
+            + "GROUP BY quotation_has_item.item_code,quotation_has_item.rate ";
+
     private static final String saleItemProfitBySupplierBetweenDates
             = "SELECT "
             + "item.`code` as 'Code', "
@@ -79,7 +112,24 @@ public class FindMySql {
             + "AND item.supplier_code = ? "
             + "AND sale_invoice.amount != 0 "
             + "GROUP BY sale_invoice_has_item.item_code,sale_invoice_has_item.rate ";
-    
+//
+
+    private static final String quotationItemByItemTypeBetweenDates
+            = "SELECT "
+            + "item.`code` as 'Code', "
+            + "item.description as 'Item', "
+            + "Sum(quotation_has_item.quantity) AS Quantity, "
+            + "quotation_has_item.rate AS Rate "
+            + "FROM "
+            + "quotation_has_item "
+            + "INNER JOIN item ON item.`code` = quotation_has_item.item_code "
+            + "INNER JOIN quotation ON quotation.quotation_no = quotation_has_item.quotation_quotation_no "
+            + "WHERE "
+            + "quotation.quotation_time BETWEEN ? AND ? "
+            + "AND item.item_type_type = ? "
+            + "AND quotation.amount != 0 "
+            + "GROUP BY quotation_has_item.item_code,quotation_has_item.rate ";
+
     private static final String saleItemProfitByItemTypeBetweenDates
             = "SELECT "
             + "item.`code` as 'Code', "
@@ -98,8 +148,26 @@ public class FindMySql {
             + "sale_invoice.inv_time BETWEEN ? AND ? "
             + "AND item.item_type_type = ? "
             + "AND sale_invoice.amount != 0 "
-            + "GROUP BY sale_invoice_has_item.item_code,sale_invoice_has_item.rate ";    
-    
+            + "GROUP BY sale_invoice_has_item.item_code,sale_invoice_has_item.rate ";
+
+    //
+    private static final String quotationItemBySupplierAndItemTypeBetweenDates
+            = "SELECT "
+            + "item.`code` as 'Code', "
+            + "item.description as 'Item', "
+            + "Sum(quotation_has_item.quantity) AS Quantity, "
+            + "quotation_has_item.rate AS Rate "
+            + "FROM "
+            + "quotation_has_item "
+            + "INNER JOIN item ON item.`code` = quotation_has_item.item_code "
+            + "INNER JOIN quotation ON quotation.quotation_no = quotation_has_item.quotation_quotation_no "
+            + "WHERE "
+            + "quotation.quotation_time BETWEEN ? AND ? "
+            + "AND item.supplier_code = ? "
+            + "AND item.item_type_type = ? "
+            + "AND quotation.amount != 0 "
+            + "GROUP BY quotation_has_item.item_code,quotation_has_item.rate ";
+
     private static final String saleItemProfitBySupplierAndItemTypeBetweenDates
             = "SELECT "
             + "item.`code` as 'Code', "
@@ -119,8 +187,8 @@ public class FindMySql {
             + "AND item.supplier_code = ? "
             + "AND item.item_type_type = ? "
             + "AND sale_invoice.amount != 0 "
-            + "GROUP BY sale_invoice_has_item.item_code,sale_invoice_has_item.rate ";    
-    
+            + "GROUP BY sale_invoice_has_item.item_code,sale_invoice_has_item.rate ";
+
     private static final String itemTotalSaleBetweenDates = "SELECT "
             + "sale_invoice_has_item.item_code as 'code', "
             + "item.description as 'description', "
@@ -181,6 +249,7 @@ public class FindMySql {
             + "sale_invoice "
             + "WHERE "
             + "sale_invoice.inv_time BETWEEN ? AND ? ";
+    private static final String item = "SELECT * from item";
     private static Manager man;
     private static Connection con;
     private static Statement st;
@@ -218,6 +287,20 @@ public class FindMySql {
 //            Logger.getLogger(FindMySql.class.getName()).log(Level.SEVERE, null, ex);
 //        }
     }
+//
+
+    public static ResultSet quotationItemBetweenDates(Date startDate, Date endDate) {
+        connect();
+        try {
+            preparedStatement = con.prepareStatement(quotationItemBetweenDates);
+            preparedStatement.setString(1, yyyy_MM_dd.format(startDate) + " 00:00:00");
+            preparedStatement.setString(2, yyyy_MM_dd.format(endDate) + " 23:59:59");
+            res = preparedStatement.executeQuery();
+        } catch (SQLException ex) {
+            Errors.reportError(ex);
+        }
+        return res;
+    }
 
     public static ResultSet saleItemProfitBetweenDates(Date startDate, Date endDate) {
         connect();
@@ -231,7 +314,22 @@ public class FindMySql {
         }
         return res;
     }
-public static ResultSet saleItemProfitBySupplierBetweenDates(Date startDate, Date endDate, String supplierCode) {
+
+    public static ResultSet quotationItemBySupplierBetweenDates(Date startDate, Date endDate, String supplierCode) {
+        connect();
+        try {
+            preparedStatement = con.prepareStatement(quotationItemBySupplierBetweenDates);
+            preparedStatement.setString(1, yyyy_MM_dd.format(startDate) + " 00:00:00");
+            preparedStatement.setString(2, yyyy_MM_dd.format(endDate) + " 23:59:59");
+            preparedStatement.setString(3, supplierCode);
+            res = preparedStatement.executeQuery();
+        } catch (SQLException ex) {
+            Errors.reportError(ex);
+        }
+        return res;
+    }
+
+    public static ResultSet saleItemProfitBySupplierBetweenDates(Date startDate, Date endDate, String supplierCode) {
         connect();
         try {
             preparedStatement = con.prepareStatement(saleItemProfitBySupplierBetweenDates);
@@ -244,7 +342,8 @@ public static ResultSet saleItemProfitBySupplierBetweenDates(Date startDate, Dat
         }
         return res;
     }
-public static ResultSet saleItemProfitByItemTypeBetweenDates(Date startDate, Date endDate, ItemType itemType) {
+
+    public static ResultSet saleItemProfitByItemTypeBetweenDates(Date startDate, Date endDate, ItemType itemType) {
         connect();
         try {
             preparedStatement = con.prepareStatement(saleItemProfitByItemTypeBetweenDates);
@@ -257,7 +356,38 @@ public static ResultSet saleItemProfitByItemTypeBetweenDates(Date startDate, Dat
         }
         return res;
     }
-public static ResultSet saleItemProfitBySupplierAndItemTypeBetweenDates(Date startDate, Date endDate, String supplierCode,String itemType) {
+
+    public static ResultSet quotationItemByItemTypeBetweenDates(Date startDate, Date endDate, ItemType itemType) {
+        connect();
+        try {
+            preparedStatement = con.prepareStatement(quotationItemByItemTypeBetweenDates);
+            preparedStatement.setString(1, yyyy_MM_dd.format(startDate) + " 00:00:00");
+            preparedStatement.setString(2, yyyy_MM_dd.format(endDate) + " 23:59:59");
+            preparedStatement.setString(3, itemType.getType());
+            res = preparedStatement.executeQuery();
+        } catch (SQLException ex) {
+            Errors.reportError(ex);
+        }
+        return res;
+    }
+
+//
+    public static ResultSet quotationItemBySupplierAndItemTypeBetweenDates(Date startDate, Date endDate, String supplierCode, String itemType) {
+        connect();
+        try {
+            preparedStatement = con.prepareStatement(quotationItemBySupplierAndItemTypeBetweenDates);
+            preparedStatement.setString(1, yyyy_MM_dd.format(startDate) + " 00:00:00");
+            preparedStatement.setString(2, yyyy_MM_dd.format(endDate) + " 23:59:59");
+            preparedStatement.setString(3, supplierCode);
+            preparedStatement.setString(4, itemType);
+            res = preparedStatement.executeQuery();
+        } catch (SQLException ex) {
+            Errors.reportError(ex);
+        }
+        return res;
+    }
+
+    public static ResultSet saleItemProfitBySupplierAndItemTypeBetweenDates(Date startDate, Date endDate, String supplierCode, String itemType) {
         connect();
         try {
             preparedStatement = con.prepareStatement(saleItemProfitBySupplierAndItemTypeBetweenDates);
@@ -445,5 +575,16 @@ public static ResultSet saleItemProfitBySupplierAndItemTypeBetweenDates(Date sta
             Errors.reportError(ex);
         }
         return quantity;
+    }
+
+    static ResultSet item() {
+        connect();
+        try {
+            preparedStatement = con.prepareStatement(item);
+            res = preparedStatement.executeQuery();
+        } catch (SQLException ex) {
+            Errors.reportError(ex);
+        }
+        return res;
     }
 }

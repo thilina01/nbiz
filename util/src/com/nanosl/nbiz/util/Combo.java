@@ -5,14 +5,20 @@
 package com.nanosl.nbiz.util;
 
 import com.nanosl.lib.db.Manager;
+import entity.Account;
 import entity.Bank;
+import entity.CashBox;
 import entity.Customer;
 import entity.Employee;
+import entity.ExpensesType;
 import entity.Item;
 import entity.ItemType;
+import entity.SaleInvoice;
 import entity.Supplier;
 import entity.Town;
 import java.util.Arrays;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import javax.swing.DefaultComboBoxModel;
@@ -93,7 +99,7 @@ public class Combo {
         comboBoxWorker.execute();
     }
 
-    public static void fillItemTypes(final JComboBox<ItemType> comboBox,final ItemType toSelect) {
+    public static void fillItemTypes(final JComboBox<ItemType> comboBox, final ItemType toSelect) {
         SwingWorker<DefaultComboBoxModel<ItemType>, ItemType> comboBoxWorker = new SwingWorker<DefaultComboBoxModel<ItemType>, ItemType>() {
             @Override
             protected DefaultComboBoxModel<ItemType> doInBackground() throws Exception {
@@ -132,6 +138,15 @@ public class Combo {
         }
     }
 
+    public static void fillCashBoxes(JComboBox<CashBox> jcb) {
+        List<CashBox> cashBoxes = manager.find(CashBox.class);
+        if (cashBoxes != null) {
+            CashBox[] bs = cashBoxes.toArray(new CashBox[0]);
+            Arrays.sort(bs);
+            jcb.setModel(new DefaultComboBoxModel<>(bs));
+        }
+    }
+
     public static DefaultComboBoxModel<Supplier> getSupplierComboBoxModel() {
         List<Supplier> suppliers = manager.find(Supplier.class);
         if (suppliers != null) {
@@ -153,10 +168,20 @@ public class Combo {
     }
 
     public static DefaultComboBoxModel<Item> getItemComboBoxModel() {
+        long startTime = System.currentTimeMillis();
         List<Item> items = manager.find(Item.class);
+        long loadedTime = System.currentTimeMillis();
+//        ResultSet resultSet = FindMySql.item();
+
         if (items != null) {
             Item[] ses = items.toArray(new Item[0]);
             Arrays.sort(ses);
+            long sortedTime = System.currentTimeMillis();
+
+            System.out.println("Thilina: loading = " + (loadedTime - startTime));
+            System.out.println("Thilina: sorting = " + (sortedTime - loadedTime));
+            System.out.println("Thilina: total = " + (sortedTime - startTime));
+
             return new DefaultComboBoxModel<>(ses);
         }
         return new DefaultComboBoxModel<>();
@@ -171,6 +196,58 @@ public class Combo {
             return new DefaultComboBoxModel<>(ses);
         }
         return new DefaultComboBoxModel<>();
-
     }
+
+    public static void fillSaleInvoice(final JComboBox<SaleInvoice> comboBox, final SaleInvoice toSelect) {
+
+        SwingWorker<DefaultComboBoxModel<SaleInvoice>, SaleInvoice> comboBoxWorker = new SwingWorker<DefaultComboBoxModel<SaleInvoice>, SaleInvoice>() {
+            @Override
+            protected DefaultComboBoxModel<SaleInvoice> doInBackground() throws Exception {
+                List<SaleInvoice> saleInvoices = manager.findLimitOrderByDec(SaleInvoice.class, 50, "invTime");
+                SaleInvoice[] saleInvoicesArray = new SaleInvoice[saleInvoices.size()];
+                saleInvoices.toArray(saleInvoicesArray);
+                Comparator<SaleInvoice> comparator = new Comparator<SaleInvoice>() {
+
+                    @Override
+                    public int compare(SaleInvoice o1, SaleInvoice o2) {
+                        Date o2Date = o2.getInvTime() == null ? new Date() : o2.getInvTime();
+                        return o2Date.compareTo(o1.getInvTime() == null ? new Date() : o1.getInvTime());
+                    }
+                };
+                Arrays.sort(saleInvoicesArray, comparator);
+                return new DefaultComboBoxModel(saleInvoicesArray);
+            }
+
+            @Override
+            protected void done() {
+                try {
+                    comboBox.setModel(get());
+                    if (toSelect != null) {
+                        comboBox.setSelectedItem(toSelect);
+                    }
+                } catch (InterruptedException | ExecutionException ignore) {
+                }
+            }
+        };
+        comboBoxWorker.execute();
+    }
+
+    public static void fillAccounts(JComboBox jcb) {
+        List<Account> entities = manager.find(Account.class);
+        if (entities != null) {
+            Account[] bs = entities.toArray(new Account[0]);
+            Arrays.sort(bs);
+            jcb.setModel(new DefaultComboBoxModel<>(bs));
+        }
+    }
+
+    public static void fillExpensesTypes(JComboBox jcb) {
+        List<ExpensesType> entities = manager.find(ExpensesType.class);
+        if (entities != null) {
+            ExpensesType[] bs = entities.toArray(new ExpensesType[0]);
+            Arrays.sort(bs);
+            jcb.setModel(new DefaultComboBoxModel<>(bs));
+        }
+    }
+
 }

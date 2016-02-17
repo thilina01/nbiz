@@ -36,6 +36,8 @@ public class PurchaseInvoiceHasItem implements Serializable {
     protected PurchaseInvoiceHasItemPK purchaseInvoiceHasItemPK;
     @Column(name = "quantity")
     private Double quantity;
+    @Column(name = "free_quantity")
+    private Double freeQuantity;
     @Column(name = "cost")
     private Double cost;
     @Column(name = "discount")
@@ -131,6 +133,14 @@ public class PurchaseInvoiceHasItem implements Serializable {
     @Override
     public String toString() {
         return util.ToString.get(this);
+    }
+
+    public Double getFreeQuantity() {
+        return freeQuantity;
+    }
+
+    public void setFreeQuantity(Double freeQuantity) {
+        this.freeQuantity = freeQuantity;
     }
 
 }

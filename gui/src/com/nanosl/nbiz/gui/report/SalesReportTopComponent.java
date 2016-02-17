@@ -6,7 +6,9 @@ package com.nanosl.nbiz.gui.report;
 
 import com.nanosl.lib.date.JXDatePicker;
 import com.nanosl.nbiz.util.Combo;
+import com.nanosl.nbiz.util.Export;
 import com.nanosl.nbiz.util.FindMySql;
+import static com.nanosl.nbiz.util.Format.yyyy_MM_dd;
 import com.nanosl.nbiz.util.NTopComponent;
 import entity.ItemType;
 import entity.Supplier;
@@ -77,6 +79,7 @@ public final class SalesReportTopComponent extends NTopComponent {
         supplierCheckBox = new javax.swing.JCheckBox();
         supplierComboBox = new javax.swing.JComboBox();
         typeCheckBox = new javax.swing.JCheckBox();
+        exportButton = new javax.swing.JButton();
 
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
@@ -162,6 +165,13 @@ public final class SalesReportTopComponent extends NTopComponent {
 
         org.openide.awt.Mnemonics.setLocalizedText(typeCheckBox, org.openide.util.NbBundle.getMessage(SalesReportTopComponent.class, "SalesReportTopComponent.typeCheckBox.text")); // NOI18N
 
+        org.openide.awt.Mnemonics.setLocalizedText(exportButton, org.openide.util.NbBundle.getMessage(SalesReportTopComponent.class, "SalesReportTopComponent.exportButton.text")); // NOI18N
+        exportButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                exportButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -170,7 +180,8 @@ public final class SalesReportTopComponent extends NTopComponent {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(exportButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(totalLabel))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 922, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -208,9 +219,11 @@ public final class SalesReportTopComponent extends NTopComponent {
                         .addComponent(endDatePicker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(fillButton)))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 437, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 428, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(totalLabel)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(totalLabel)
+                    .addComponent(exportButton))
                 .addContainerGap())
         );
 
@@ -254,8 +267,19 @@ public final class SalesReportTopComponent extends NTopComponent {
         }
     }//GEN-LAST:event_itemTypeComboBoxKeyPressed
 
+    private void exportButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportButtonActionPerformed
+        System.out.println("1 " + getName());
+        System.out.println("2 " + getDisplayName());
+        System.out.println("3 " + getHtmlDisplayName());
+        System.out.println("3 " + getShortName());
+        System.out.println("3 " + getUIClassID());
+
+        Export.toExcel(table, yyyy_MM_dd.format(makeStartDate(startDatePicker.getDate())) + " to " + yyyy_MM_dd.format(makeEndDate(endDatePicker.getDate())), getName().replace(" Window", ""));
+    }//GEN-LAST:event_exportButtonActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.jdesktop.swingx.JXDatePicker endDatePicker;
+    private javax.swing.JButton exportButton;
     private javax.swing.JButton fillButton;
     private javax.swing.JComboBox itemTypeComboBox;
     private javax.swing.JLabel jLabel2;
@@ -389,7 +413,8 @@ public final class SalesReportTopComponent extends NTopComponent {
         fillItemTypes();
         fill();
     }
-private void fillItemTypes() {
+
+    private void fillItemTypes() {
         List<ItemType> itemTypes = manager.find(ItemType.class);
         if (itemTypes.isEmpty()) {
             manager.update(new ItemType("ITEM"));
@@ -398,6 +423,7 @@ private void fillItemTypes() {
         itemTypes = manager.find(ItemType.class);
         itemTypeComboBox.setModel(new DefaultComboBoxModel(itemTypes.toArray()));
     }
+
     private void fill() {
         fillTable();
         calcTotal();

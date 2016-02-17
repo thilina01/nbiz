@@ -4,22 +4,32 @@
  */
 package com.nanos.nbiz.pos;
 
+import com.nanosl.nbiz.util.search.SearchItemDialog;
+import com.nanosl.nbiz.util.search.SearchInvoiceDialog;
+import com.nanosl.nbiz.util.search.SearchCustomerDialog;
 import com.nanosl.nbiz.util.Combo;
+import com.nanosl.nbiz.util.Convert;
 import com.nanosl.nbiz.util.Data;
 import com.nanosl.nbiz.util.FindMySql;
 import static com.nanosl.nbiz.util.Format.yyyy_MM_dd;
 import com.nanosl.nbiz.util.NTopComponent;
 import com.nanosl.nbiz.util.Printer;
+import entity.CashBox;
+import entity.CashLog;
 import entity.CollectionReceipt;
 import entity.Customer;
 import entity.Employee;
 import entity.Item;
+import entity.Person;
 import entity.PriceList;
+import entity.Quotation;
+import entity.QuotationHasItem;
 import entity.SaleCash;
 import entity.SaleInvoice;
 import entity.SaleInvoiceHasItem;
 import entity.SaleInvoiceHasItemPK;
 import entity.Stock;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -27,13 +37,10 @@ import java.awt.event.MouseEvent;
 import java.io.Serializable;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
@@ -91,7 +98,6 @@ public final class POSTopComponent extends NTopComponent {
         jPanel1 = new javax.swing.JPanel();
         datePicker = new com.nanosl.lib.date.JXDatePicker();
         jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
         invoiceNumberField = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         customerComboBox = new javax.swing.JComboBox<>();
@@ -112,22 +118,28 @@ public final class POSTopComponent extends NTopComponent {
         jLabel7 = new javax.swing.JLabel();
         discountField = new javax.swing.JTextField();
         quantityLabel = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
+        paidAmountLabel = new javax.swing.JLabel();
         paidAmountField = new javax.swing.JTextField();
-        jLabel11 = new javax.swing.JLabel();
+        remainingAmountLabel = new javax.swing.JLabel();
         remainingAmountField = new javax.swing.JTextField();
         searchCustomerButton = new javax.swing.JButton();
         printCheckBox = new javax.swing.JCheckBox();
         anotherButton = new javax.swing.JButton();
-        lastInvoiceNumberField = new javax.swing.JTextField();
         searchItemButton = new javax.swing.JButton();
         employeeComboBox = new javax.swing.JComboBox<Employee>();
-        historyComboBox = new javax.swing.JComboBox();
         receiptPanel = new javax.swing.JPanel();
         jLabel12 = new javax.swing.JLabel();
         receiptNumberField = new javax.swing.JTextField();
-        paidByCCField = new javax.swing.JTextField();
+        lastInvoiceNumberField = new javax.swing.JTextField();
+        saleInvoiceComboBox = new javax.swing.JComboBox();
         jLabel13 = new javax.swing.JLabel();
+        cashBoxComboBox = new javax.swing.JComboBox();
+        paidByCCField = new javax.swing.JTextField();
+        paidByCCLabel = new javax.swing.JLabel();
+        quotationCheckBox = new javax.swing.JCheckBox();
+        jLabel10 = new javax.swing.JLabel();
+        discountPercentageField = new javax.swing.JTextField();
+        invoiceCheckBox = new javax.swing.JCheckBox();
 
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
@@ -141,9 +153,6 @@ public final class POSTopComponent extends NTopComponent {
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(POSTopComponent.class, "POSTopComponent.jLabel1.text")); // NOI18N
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel2, org.openide.util.NbBundle.getMessage(POSTopComponent.class, "POSTopComponent.jLabel2.text")); // NOI18N
-
         invoiceNumberField.setEditable(false);
         invoiceNumberField.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         invoiceNumberField.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
@@ -155,6 +164,11 @@ public final class POSTopComponent extends NTopComponent {
         invoiceNumberField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 invoiceNumberFieldActionPerformed(evt);
+            }
+        });
+        invoiceNumberField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                invoiceNumberFieldKeyPressed(evt);
             }
         });
 
@@ -299,14 +313,14 @@ public final class POSTopComponent extends NTopComponent {
 
         totalDiscountField.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         totalDiscountField.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
-        totalDiscountField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                totalDiscountFieldActionPerformed(evt);
-            }
-        });
         totalDiscountField.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
                 totalDiscountFieldFocusLost(evt);
+            }
+        });
+        totalDiscountField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                totalDiscountFieldActionPerformed(evt);
             }
         });
         totalDiscountField.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -334,8 +348,8 @@ public final class POSTopComponent extends NTopComponent {
         quantityLabel.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(quantityLabel, org.openide.util.NbBundle.getMessage(POSTopComponent.class, "POSTopComponent.quantityLabel.text")); // NOI18N
 
-        jLabel10.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel10, org.openide.util.NbBundle.getMessage(POSTopComponent.class, "POSTopComponent.jLabel10.text")); // NOI18N
+        paidAmountLabel.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(paidAmountLabel, org.openide.util.NbBundle.getMessage(POSTopComponent.class, "POSTopComponent.paidAmountLabel.text")); // NOI18N
 
         paidAmountField.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         paidAmountField.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
@@ -355,8 +369,8 @@ public final class POSTopComponent extends NTopComponent {
             }
         });
 
-        jLabel11.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel11, org.openide.util.NbBundle.getMessage(POSTopComponent.class, "POSTopComponent.jLabel11.text")); // NOI18N
+        remainingAmountLabel.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(remainingAmountLabel, org.openide.util.NbBundle.getMessage(POSTopComponent.class, "POSTopComponent.remainingAmountLabel.text")); // NOI18N
 
         remainingAmountField.setEditable(false);
         remainingAmountField.setBackground(new java.awt.Color(255, 255, 255));
@@ -380,15 +394,6 @@ public final class POSTopComponent extends NTopComponent {
         anotherButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 anotherButtonActionPerformed(evt);
-            }
-        });
-
-        lastInvoiceNumberField.setEditable(false);
-        lastInvoiceNumberField.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
-        lastInvoiceNumberField.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
-        lastInvoiceNumberField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                lastInvoiceNumberFieldActionPerformed(evt);
             }
         });
 
@@ -418,14 +423,6 @@ public final class POSTopComponent extends NTopComponent {
             }
         });
 
-        historyComboBox.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
-        historyComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "a", "b", "c", "d" }));
-        historyComboBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                historyComboBoxActionPerformed(evt);
-            }
-        });
-
         receiptPanel.setName("receiptPanel"); // NOI18N
 
         jLabel12.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
@@ -443,25 +440,70 @@ public final class POSTopComponent extends NTopComponent {
             }
         });
 
+        lastInvoiceNumberField.setEditable(false);
+        lastInvoiceNumberField.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
+        lastInvoiceNumberField.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
+        lastInvoiceNumberField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                lastInvoiceNumberFieldActionPerformed(evt);
+            }
+        });
+
+        saleInvoiceComboBox.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
+        saleInvoiceComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "a", "b", "c", "d" }));
+        saleInvoiceComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saleInvoiceComboBoxActionPerformed(evt);
+            }
+        });
+
+        jLabel13.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel13, org.openide.util.NbBundle.getMessage(POSTopComponent.class, "POSTopComponent.jLabel13.text")); // NOI18N
+
+        cashBoxComboBox.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
+        cashBoxComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "a", "b", "c", "d" }));
+        cashBoxComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cashBoxComboBoxActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout receiptPanelLayout = new javax.swing.GroupLayout(receiptPanel);
         receiptPanel.setLayout(receiptPanelLayout);
         receiptPanelLayout.setHorizontalGroup(
             receiptPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(receiptPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel12)
-                .addGap(18, 18, 18)
-                .addComponent(receiptNumberField, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addGroup(receiptPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lastInvoiceNumberField, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel12)
+                    .addComponent(jLabel13))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(receiptPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(saleInvoiceComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cashBoxComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(receiptNumberField, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
+        receiptPanelLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {cashBoxComboBox, receiptNumberField, saleInvoiceComboBox});
+
         receiptPanelLayout.setVerticalGroup(
             receiptPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(receiptPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(receiptPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(receiptNumberField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel12))
-                .addContainerGap())
+                    .addComponent(jLabel12)
+                    .addComponent(receiptNumberField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(receiptPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lastInvoiceNumberField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(saleInvoiceComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(receiptPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cashBoxComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel13))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         paidByCCField.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
@@ -482,17 +524,69 @@ public final class POSTopComponent extends NTopComponent {
             }
         });
 
-        jLabel13.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel13, org.openide.util.NbBundle.getMessage(POSTopComponent.class, "POSTopComponent.jLabel13.text")); // NOI18N
+        paidByCCLabel.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(paidByCCLabel, org.openide.util.NbBundle.getMessage(POSTopComponent.class, "POSTopComponent.paidByCCLabel.text")); // NOI18N
+
+        quotationCheckBox.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(quotationCheckBox, org.openide.util.NbBundle.getMessage(POSTopComponent.class, "POSTopComponent.quotationCheckBox.text")); // NOI18N
+        quotationCheckBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                quotationCheckBoxActionPerformed(evt);
+            }
+        });
+
+        jLabel10.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel10, org.openide.util.NbBundle.getMessage(POSTopComponent.class, "POSTopComponent.jLabel10.text")); // NOI18N
+
+        discountPercentageField.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
+        discountPercentageField.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
+        discountPercentageField.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                discountPercentageFieldFocusLost(evt);
+            }
+        });
+        discountPercentageField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                discountPercentageFieldActionPerformed(evt);
+            }
+        });
+        discountPercentageField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                discountPercentageFieldKeyPressed(evt);
+            }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                discountPercentageFieldKeyReleased(evt);
+            }
+        });
+
+        invoiceCheckBox.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(invoiceCheckBox, org.openide.util.NbBundle.getMessage(POSTopComponent.class, "POSTopComponent.invoiceCheckBox.text")); // NOI18N
+        invoiceCheckBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                invoiceCheckBoxActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(itemComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
+                        .addComponent(quantityLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(searchItemButton))
                     .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(quotationCheckBox))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(processButton)
@@ -502,47 +596,35 @@ public final class POSTopComponent extends NTopComponent {
                                 .addComponent(anotherButton)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(printCheckBox))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(lastInvoiceNumberField, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(historyComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(receiptPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 6, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel9, javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 63, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel13)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(paidByCCField, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel10))
-                            .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(employeeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel10)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jLabel11)))
+                                .addComponent(discountPercentageField, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jLabel9))
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                    .addComponent(paidByCCLabel)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(paidByCCField, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(paidAmountLabel))
+                                .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                    .addComponent(employeeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(remainingAmountLabel))))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(totalDiscountField)
                             .addComponent(remainingAmountField)
                             .addComponent(paidAmountField)
                             .addComponent(totalAmountField, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jScrollPane1)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(invoiceNumberField, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel1)
-                        .addGap(18, 18, 18)
-                        .addComponent(datePicker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(customerComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 349, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(searchCustomerButton))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(quantityField, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -554,14 +636,20 @@ public final class POSTopComponent extends NTopComponent {
                         .addComponent(jLabel7)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(discountField, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel4)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(invoiceCheckBox)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(invoiceNumberField, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel1)
+                        .addGap(18, 18, 18)
+                        .addComponent(datePicker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(itemComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 649, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(customerComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 349, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(quantityLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(searchItemButton)))
+                        .addComponent(searchCustomerButton)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -570,12 +658,12 @@ public final class POSTopComponent extends NTopComponent {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel2)
                         .addComponent(invoiceNumberField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel1)
                         .addComponent(jLabel3)
                         .addComponent(customerComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(searchCustomerButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(searchCustomerButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(invoiceCheckBox))
                     .addComponent(datePicker, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -590,9 +678,10 @@ public final class POSTopComponent extends NTopComponent {
                     .addComponent(jLabel6)
                     .addComponent(priceField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel7)
-                    .addComponent(discountField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(discountField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(quotationCheckBox))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 298, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 287, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -602,15 +691,15 @@ public final class POSTopComponent extends NTopComponent {
                             .addComponent(anotherButton)
                             .addComponent(printCheckBox))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(receiptPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(14, 14, 14)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lastInvoiceNumberField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(historyComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(receiptPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(totalDiscountField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel9))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(discountPercentageField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel10))
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(totalDiscountField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel9)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(totalAmountField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -618,15 +707,15 @@ public final class POSTopComponent extends NTopComponent {
                         .addGap(4, 4, 4)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(paidAmountField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel10)
+                            .addComponent(paidAmountLabel)
                             .addComponent(paidByCCField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel13))
+                            .addComponent(paidByCCLabel))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(remainingAmountField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel11)
+                            .addComponent(remainingAmountLabel)
                             .addComponent(employeeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap())
+                .addGap(19, 19, 19))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -683,20 +772,28 @@ public final class POSTopComponent extends NTopComponent {
     }//GEN-LAST:event_itemComboBoxActionPerformed
 
     private void itemComboBoxKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_itemComboBoxKeyPressed
-        if (evt.getKeyCode() == 10) {
-            Item item = (Item) itemComboBox.getSelectedItem();
-            if (item == null) {
-                return;
-            }
-            quantityField.requestFocus();
-        } else if (evt.getKeyCode() == KeyEvent.VK_F2) {
-            searchItem();
-        } else if (evt.getKeyCode() == 192 || evt.getKeyCode() == KeyEvent.VK_ADD || evt.getKeyCode() == KeyEvent.VK_RIGHT) {
-            if (employeeComboBox.isVisible()) {
-                employeeComboBox.requestFocus();
-            } else {
-                totalDiscountField.requestFocus();
-            }
+        switch (evt.getKeyCode()) {
+            case 10:
+                Item item = (Item) itemComboBox.getSelectedItem();
+                if (item == null) {
+                    return;
+                }
+                quantityField.requestFocus();
+                break;
+            case 192:
+            case KeyEvent.VK_ADD:
+            case KeyEvent.VK_RIGHT:
+                if (employeeComboBox.isVisible()) {
+                    employeeComboBox.requestFocus();
+                } else {
+                    totalDiscountField.requestFocus();
+                }
+                break;
+            case KeyEvent.VK_F2:
+//                break;
+            default:
+                searchItem(evt.getKeyChar() + "");
+                break;
         }
     }//GEN-LAST:event_itemComboBoxKeyPressed
 
@@ -731,8 +828,12 @@ public final class POSTopComponent extends NTopComponent {
     }//GEN-LAST:event_clearButtonActionPerformed
 
     private void totalDiscountFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_totalDiscountFieldActionPerformed
+        calcDiscount();
         paidAmountField.requestFocus();
         paidAmountField.selectAll();
+        if (quotationCheckBox.isSelected()) {
+            processButton.requestFocus();
+        }
     }//GEN-LAST:event_totalDiscountFieldActionPerformed
 
     private void totalDiscountFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_totalDiscountFieldKeyReleased
@@ -740,7 +841,7 @@ public final class POSTopComponent extends NTopComponent {
             totalDiscountField.setText("0");
             totalDiscountField.selectAll();
         }
-        substractDiscount();
+//        substractDiscount();
     }//GEN-LAST:event_totalDiscountFieldKeyReleased
 
     private void discountFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_discountFieldActionPerformed
@@ -801,13 +902,14 @@ public final class POSTopComponent extends NTopComponent {
     }//GEN-LAST:event_totalDiscountFieldKeyPressed
 
     private void searchItemButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchItemButtonActionPerformed
-        searchItem();
+        searchItem("");
     }//GEN-LAST:event_searchItemButtonActionPerformed
 
     private void totalDiscountFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_totalDiscountFieldFocusLost
-        if (totalDiscountField.getText().equalsIgnoreCase("+")) {
-            totalDiscountField.setText("0.0");
-        }
+////        calcDiscount();
+//        if (totalDiscountField.getText().equalsIgnoreCase("+")) {
+//            totalDiscountField.setText("0.0");
+//        }
     }//GEN-LAST:event_totalDiscountFieldFocusLost
 
     private void paidAmountFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_paidAmountFieldFocusGained
@@ -817,7 +919,7 @@ public final class POSTopComponent extends NTopComponent {
     }//GEN-LAST:event_paidAmountFieldFocusGained
 
     private void invoiceNumberFieldMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_invoiceNumberFieldMouseClicked
-        searchInvoice();
+
     }//GEN-LAST:event_invoiceNumberFieldMouseClicked
 
     private void employeeComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_employeeComboBoxActionPerformed
@@ -837,8 +939,8 @@ public final class POSTopComponent extends NTopComponent {
                     return;
                 }
             }
-            totalDiscountField.requestFocus();
-            totalDiscountField.selectAll();
+            discountPercentageField.requestFocus();
+            discountPercentageField.selectAll();
             enterCount = 0;
         }
     }//GEN-LAST:event_employeeComboBoxKeyPressed
@@ -862,9 +964,9 @@ public final class POSTopComponent extends NTopComponent {
 
     }//GEN-LAST:event_employeeComboBoxMouseClicked
 
-    private void historyComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_historyComboBoxActionPerformed
-        fillInvoice(historyComboBox.getSelectedItem().toString());
-    }//GEN-LAST:event_historyComboBoxActionPerformed
+    private void saleInvoiceComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saleInvoiceComboBoxActionPerformed
+        fillInvoice(saleInvoiceComboBox.getSelectedItem().toString());
+    }//GEN-LAST:event_saleInvoiceComboBoxActionPerformed
 
     private void paidByCCFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_paidByCCFieldActionPerformed
         paidAmountField.requestFocus();
@@ -878,22 +980,61 @@ public final class POSTopComponent extends NTopComponent {
         calcRemaining();
     }//GEN-LAST:event_paidByCCFieldKeyReleased
 
+    private void quotationCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_quotationCheckBoxActionPerformed
+        quotationUI(quotationCheckBox.isSelected());
+        if (quotationCheckBox.isSelected()) {
+
+        }
+    }//GEN-LAST:event_quotationCheckBoxActionPerformed
+
+    private void discountPercentageFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_discountPercentageFieldFocusLost
+        // TODO add your handling code here:
+    }//GEN-LAST:event_discountPercentageFieldFocusLost
+
+    private void discountPercentageFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_discountPercentageFieldActionPerformed
+        calcDiscount();
+    }//GEN-LAST:event_discountPercentageFieldActionPerformed
+
+    private void discountPercentageFieldKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_discountPercentageFieldKeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_discountPercentageFieldKeyPressed
+
+    private void discountPercentageFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_discountPercentageFieldKeyReleased
+        // TODO add your handling code here:
+    }//GEN-LAST:event_discountPercentageFieldKeyReleased
+
+    private void cashBoxComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cashBoxComboBoxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cashBoxComboBoxActionPerformed
+
+    private void invoiceCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_invoiceCheckBoxActionPerformed
+        boolean isManualInvoice = invoiceCheckBox.isSelected();
+        invoiceNumberField.setEditable(isManualInvoice);
+        invoiceNumberField.setText(isManualInvoice ? "" : "AUTO");
+    }//GEN-LAST:event_invoiceCheckBoxActionPerformed
+
+    private void invoiceNumberFieldKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_invoiceNumberFieldKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_F2) {
+            searchInvoice();
+        }
+    }//GEN-LAST:event_invoiceNumberFieldKeyPressed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton anotherButton;
+    private javax.swing.JComboBox cashBoxComboBox;
     private javax.swing.JButton clearButton;
     private javax.swing.JComboBox<Customer> customerComboBox;
     private org.jdesktop.swingx.JXDatePicker datePicker;
     private javax.swing.JTextField discountField;
+    private javax.swing.JTextField discountPercentageField;
     private javax.swing.JComboBox employeeComboBox;
-    private javax.swing.JComboBox historyComboBox;
+    private javax.swing.JCheckBox invoiceCheckBox;
     private javax.swing.JTextField invoiceNumberField;
     private javax.swing.JComboBox<Item> itemComboBox;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -905,15 +1046,20 @@ public final class POSTopComponent extends NTopComponent {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField lastInvoiceNumberField;
     private javax.swing.JTextField paidAmountField;
+    private javax.swing.JLabel paidAmountLabel;
     private javax.swing.JTextField paidByCCField;
+    private javax.swing.JLabel paidByCCLabel;
     private javax.swing.JTextField priceField;
     private javax.swing.JCheckBox printCheckBox;
     private javax.swing.JButton processButton;
     private javax.swing.JTextField quantityField;
     private javax.swing.JLabel quantityLabel;
+    private javax.swing.JCheckBox quotationCheckBox;
     private javax.swing.JTextField receiptNumberField;
     private javax.swing.JPanel receiptPanel;
     private javax.swing.JTextField remainingAmountField;
+    private javax.swing.JLabel remainingAmountLabel;
+    private javax.swing.JComboBox saleInvoiceComboBox;
     private javax.swing.JButton searchCustomerButton;
     private javax.swing.JButton searchItemButton;
     private javax.swing.JTable table;
@@ -934,7 +1080,6 @@ public final class POSTopComponent extends NTopComponent {
 //        KeyAdapter();
         tableModel = (DefaultTableModel) table.getModel();
         table.setDefaultRenderer(Object.class, coloredCellRenderer);
-        fillHistory();
     }
 
     private void setComboBoxKeyAdapters(JComboBox<? extends Object> comboBox) {
@@ -956,13 +1101,13 @@ public final class POSTopComponent extends NTopComponent {
     private void clear() {
         tableModel.setRowCount(0);
         fillCombo();
-        fillHistory();
 //        itemComboBoxWorker.execute();
         clearFields();
+        datePicker.setDate(new Date());
     }
 
     private void clearFields() {
-        invoiceNumberField.setText("AUTO");//Data.getInvoiceNo()
+        invoiceNumberField.setText(invoiceCheckBox.isSelected() ? "" : "AUTO");//Data.getInvoiceNo()
         quantityField.setText("");
         priceField.setText("");
         quantityLabel.setText("");
@@ -972,6 +1117,7 @@ public final class POSTopComponent extends NTopComponent {
         paidAmountField.setText("");
         paidByCCField.setText("");
         remainingAmountField.setText("");
+        discountPercentageField.setText("");
         itemComboBox.requestFocus();
 //        receiptNumberField.setText(Data.getReceiptNo());
     }
@@ -1124,10 +1270,341 @@ public final class POSTopComponent extends NTopComponent {
             return;
         }
 
+        if (quotationCheckBox.isSelected()) {
+            processQuotation();
+        } else {
+            processInvoice();
+
+        }
+    }
+
+    private void substractDiscount() {
+        String totalDiscountText = totalDiscountField.getText().trim();
+        double totalDiscount;
+        try {
+            totalDiscount = Double.parseDouble(totalDiscountText);
+        } catch (NumberFormatException numberFormatException) {
+            totalDiscount = 0;
+        }
+        totalAmountField.setText(nf2d.format(totalAmount - totalDiscount));
+    }
+
+    @Override
+    public void componentOpened() {
+        customerComboBox.requestFocus();
+    }
+
+    @Override
+    public void componentClosed() {
+        // TODO add custom code on component closing
+    }
+
+    void writeProperties(java.util.Properties p) {
+        // better to version settings since initial version as advocated at
+        // http://wiki.apidesign.org/wiki/PropertyFiles
+        p.setProperty("version", "1.0");
+        // TODO store your settings
+    }
+
+    void readProperties(java.util.Properties p) {
+        String version = p.getProperty("version");
+        // TODO read your settings according to their version
+    }
+
+    private void searchCustomer() {
+        SearchCustomerDialog searchCustomerDialog = new SearchCustomerDialog(null, true);
+        Customer customer = searchCustomerDialog.getCustomer();
+        if (customer != null) {
+            customerComboBox.setSelectedItem(customer);
+            itemComboBox.requestFocus();
+        } else {
+            customerComboBox.requestFocus();
+        }
+    }
+
+    private void searchItem(String c) {
+        SearchItemDialog searchItemDialog = new SearchItemDialog(null, true, c + "");
+        Item item = searchItemDialog.getItem();
+        if (item != null) {
+            itemComboBox.setSelectedItem(item);
+            quantityField.requestFocus();
+        } else {
+            itemComboBox.requestFocus();
+        }
+    }
+
+    private void searchInvoice() {
+        SearchInvoiceDialog searchInvoiceDialog = new SearchInvoiceDialog(null, true);
+        SaleInvoice saleInvoice = searchInvoiceDialog.getSaleInvoice();
+        if (saleInvoice != null) {
+            fillInvoice(saleInvoice);
+        } else {
+            clear();
+        }
+    }
+
+    private void rowNumbers() {
+        for (int i = 0; i < table.getRowCount(); i++) {
+            table.setValueAt(i + 1, i, 0);
+        }
+    }
+
+    public void fillInvoice(String invoiceNumber) {
+        SaleInvoice saleInvoice = manager.find(SaleInvoice.class, invoiceNumber);
+        fillInvoice(saleInvoice);
+    }
+
+    public void fillInvoice(SaleInvoice saleInvoice) {
+        if (saleInvoice != null) {
+            invoiceNumberField.setText(saleInvoice.getInvNo());
+            datePicker.setDate(saleInvoice.getInvTime());
+            customerComboBox.setSelectedItem(saleInvoice.getCustomer());
+            employeeComboBox.setSelectedItem(saleInvoice.getEmployee());
+            totalAmountField.setText(nf2d.format(saleInvoice.getAmount()));
+            totalDiscountField.setText(nf2d.format(saleInvoice.getDiscount()));
+            double paidAmount = saleInvoice.getReceivedAmount() != null ? saleInvoice.getReceivedAmount() : saleInvoice.getAmount();
+            paidAmountField.setText(nf2d.format(paidAmount));
+            double paidByCC = saleInvoice.getPaidByCreditCard() != null ? saleInvoice.getPaidByCreditCard() : 0.0;
+            paidByCCField.setText(nf2d.format(paidByCC));
+            remainingAmountField.setText(nf2d.format(saleInvoice.getAmount() - (paidAmount + paidByCC)));
+            Collection<SaleInvoiceHasItem> saleInvoiceHasItems = saleInvoice.getSaleInvoiceHasItemCollection();
+            tableModel.setRowCount(0);
+            int r = 0;
+            for (SaleInvoiceHasItem saleInvoiceHasItem : saleInvoiceHasItems) {
+                double rate = saleInvoiceHasItem.getRate();
+                double quantity = saleInvoiceHasItem.getQuantity();
+                double net = rate * quantity;
+                double discount = saleInvoiceHasItem.getDiscount();
+                double amount = net - discount;
+
+                Object[] row = {
+                    nf3p.format(++r),
+                    saleInvoiceHasItem.getItem().getCode(),
+                    saleInvoiceHasItem.getItem().getDescription(),
+                    nf2d.format(rate),
+                    nf2d.format(quantity),
+                    nf2d.format(net),
+                    nf2d.format(discount),
+                    nf2d.format(discount / amount * 100),
+                    nf2d.format(amount)
+
+                };
+                tableModel.addRow(row);
+            }
+        }
+    }
+
+    public void fillQuotation(Quotation quotation) {
+        if (quotation != null) {
+            invoiceNumberField.setText("AUTO");
+            datePicker.setDate(new Date());
+            customerComboBox.setSelectedItem(quotation.getCustomer());
+            employeeComboBox.setSelectedItem(quotation.getEmployeeCode());
+            totalAmountField.setText(nf2d.format(quotation.getAmount()));
+            totalDiscountField.setText(nf2d.format(quotation.getDiscount()));
+//            double paidAmount = quotation.getReceivedAmount() != null ? quotation.getReceivedAmount() : quotation.getAmount();
+            paidAmountField.setText(nf2d.format(0));
+//            double paidByCC = quotation.getPaidByCreditCard() != null ? quotation.getPaidByCreditCard() : 0.0;
+            paidByCCField.setText(nf2d.format(0));
+            remainingAmountField.setText(nf2d.format(quotation.getAmount()));
+            Collection<QuotationHasItem> quotationHasItems = quotation.getQuotationHasItemCollection();
+            tableModel.setRowCount(0);
+            int r = 0;
+            for (QuotationHasItem saleInvoiceHasItem : quotationHasItems) {
+                double rate = saleInvoiceHasItem.getRate();
+                double quantity = saleInvoiceHasItem.getQuantity();
+                double net = rate * quantity;
+                double discount = saleInvoiceHasItem.getDiscount();
+                double amount = net - discount;
+
+                Object[] row = {
+                    nf3p.format(++r),
+                    saleInvoiceHasItem.getItem().getCode(),
+                    saleInvoiceHasItem.getItem().getDescription(),
+                    nf2d.format(rate),
+                    nf2d.format(quantity),
+                    nf2d.format(net),
+                    nf2d.format(discount),
+                    nf2d.format(discount / amount * 100),
+                    nf2d.format(amount)
+
+                };
+                tableModel.addRow(row);
+            }
+        }
+    }
+
+    private void removeOldItems(List<SaleInvoiceHasItem> saleInvoiceHasItemCollection) {
+        List<Serializable> toEdit = new ArrayList<>();
+        for (SaleInvoiceHasItem saleInvoiceHasItem : saleInvoiceHasItemCollection) {
+            Stock stock = saleInvoiceHasItem.getItem().getStock();
+            stock.setQuantity(stock.getQuantity() + saleInvoiceHasItem.getQuantity());
+            toEdit.add(stock);
+        }
+        manager.update(toEdit);
+        manager.delete(saleInvoiceHasItemCollection);
+    }
+
+    /**
+     * @return the optionalComponents
+     */
+    public ArrayList<JComponent> getOptionalComponents() {
+        return optionalComponents;
+    }
+
+    private void fillCombo() {
+        Combo.fillCustomers(customerComboBox);
+        Combo.fillSaleInvoice(saleInvoiceComboBox, null);
+        Combo.fillCashBoxes(cashBoxComboBox);
+//        Combo.fillItems(itemComboBox);
+//
+//        List<SaleInvoice> saleInvoices = manager.findLimit(SaleInvoice.class, 10);
+//        System.out.println("Thilina - Size : " + saleInvoices.size());
+//        SaleInvoice[] saleInvoicesArray = new SaleInvoice[saleInvoices.size()];
+//        saleInvoices.toArray(saleInvoicesArray);
+//        Comparator<SaleInvoice> comparator = new Comparator<SaleInvoice>() {
+//
+//            @Override
+//            public int compare(SaleInvoice o1, SaleInvoice o2) {
+//                Date o2Date = o2.getInvTime() == null ? new Date() : o2.getInvTime();
+//                return o2Date.compareTo(o1.getInvTime() == null ? new Date() : o1.getInvTime());
+//            }
+//        };
+//        Arrays.sort(saleInvoicesArray, comparator);
+//        saleInvoiceComboBox.setModel(new DefaultComboBoxModel(saleInvoicesArray));
+    }
+
+    private void quotationUI(boolean selected) {
+        quotationCheckBox.setBackground(Color.YELLOW);
+        quotationCheckBox.setForeground(Color.red);
+        invoiceNumberField.setVisible(!selected);
+        invoiceCheckBox.setVisible(!selected);
+        paidAmountField.setVisible(!selected);
+        paidAmountLabel.setVisible(!selected);
+        paidByCCField.setVisible(!selected);
+        paidByCCLabel.setVisible(!selected);
+        remainingAmountField.setVisible(!selected);
+        remainingAmountLabel.setVisible(!selected);
+
+    }
+
+    private void processQuotation() {
+
+        Date date = datePicker.getDate();
+        String today = yyyy_MM_dd.format(new Date());
+        String quotationDay = yyyy_MM_dd.format(date);
+        if (date == null) {
+            datePicker.requestFocus();
+            return;
+        } else if (quotationDay.equals(today)) {
+            date = new Date();
+        }
+
+        String totalAmountText = totalAmountField.getText().trim();
+        String totalDiscountText = totalDiscountField.getText().trim();
+        totalDiscountText = totalDiscountText.equals("") ? "0" : totalDiscountText;
+        double discount;
+        try {
+            discount = Double.parseDouble(totalDiscountText);
+        } catch (NumberFormatException e) {
+            showError("Invalid Amount");
+            return;
+        }
+
+        double amount = Double.valueOf(totalAmountText);
+
+        Customer customer = (Customer) customerComboBox.getSelectedItem();
+        System.currentTimeMillis();
+
+        Quotation quotation = new Quotation(System.currentTimeMillis() + "");
+
+        quotation.setCustomer(customer);
+        quotation.setCustomerName(customer.getName());
+        quotation.setAmount(amount);
+        quotation.setDiscount(discount);
+        quotation.setQuotationTime(date);
+        Object o = employeeComboBox.getSelectedItem();
+        Employee employee = o instanceof Employee ? (Employee) o : Data.getOperator().getEmployee();
+        quotation.setOperator(Data.getOperator().getUsername());
+        quotation.setEmployeeCode(employee == null ? "000" : employee.getCode());
+
+        List<Serializable> serializables = new ArrayList<>();
+        int temp = 0;
+
+        for (int i = 0; i < table.getRowCount(); i++) {
+            String code = table.getValueAt(i, 1).toString();
+            double quantity = Double.valueOf(table.getValueAt(i, 4).toString());
+            double rate = Double.valueOf(table.getValueAt(i, 3).toString());
+            double itemDiscount = Double.valueOf(table.getValueAt(i, 6).toString());
+            Item item;
+            if (code.equalsIgnoreCase("00")) {
+                String tempCode = "TEMP" + ++temp;
+                item = new Item(tempCode);
+                item.setDescription("OTHER");
+                Stock stock = new Stock(tempCode);
+                stock.setQuantity(quantity);
+                item.setStock(stock);
+//                serializables.add(stock);
+                PriceList priceList = new PriceList(tempCode);
+                priceList.setSellingPack(rate);
+                priceList.setCostPack(0.0);
+                item.setPriceList(priceList);
+//                serializables.add(priceList);
+
+            } else {
+                item = manager.find(Item.class, code);
+            }
+//            QuotationHasItemPK quotationHasItemPK = new QuotationHasItemPK(quotation.getQuotationNo(), item.getCode());
+            QuotationHasItem quotationHasItem = new QuotationHasItem(quotation.getQuotationNo(), item.getCode());
+            quotationHasItem.setQuotation(quotation);
+            quotationHasItem.setQuantity(quantity);
+            quotationHasItem.setDiscount(itemDiscount);
+            if (item.getStock() == null) {
+                return;
+            }
+            quotationHasItem.setItem(item);
+            PriceList priceList = item.getPriceList();
+            quotationHasItem.setCost(priceList.getCostPack());
+            quotationHasItem.setRate(rate);
+            priceList.setSellingPack(rate);
+            serializables.add(priceList);
+            serializables.add(quotationHasItem);
+        }
+        serializables.add(quotation);
+
+        if (manager.update(serializables)) {
+//            SaleInvoicePaymentView.getInstance().fill(saleInvoice);
+//            SaleInvoicePaymentView.display();
+//            if (printCheckBox.isSelected()) {
+//                try {
+//                    URL url = getClass().getResource("/com/nanos/nbiz/pos/jrxml/PosInvoice.jasper");
+//                    Object object = JRLoader.loadObject(url);//"src/com/nanosl/nbiz/gui/jrxml/report1.jasper"
+//                    if (object == null) {
+//                        showError("Unable to print");
+//                        return;
+//                    }
+//                    JasperReport report = (JasperReport) object;
+//                    Map<String, Object> params = Data.getParams();
+//                    params.put("invoice", invoiceNumber);
+//                    Printer.printPosInvoice(report, params);
+//                } catch (JRException ex) {
+//                    Exceptions.printStackTrace(ex);
+//                }
+//            }
+            showSuccess("Quotation Updated");
+
+            clear();
+        } else {
+            showError("Update failed");
+        }
+
+    }
+
+    private void processInvoice() {
         String invoiceNumber = invoiceNumberField.getText();
         boolean edit = false;
         SaleInvoice saleInvoice = null;
-
+        boolean isManualInvoice = invoiceCheckBox.isSelected();
         if (!invoiceNumber.equalsIgnoreCase("AUTO")) {
             saleInvoice = manager.find(SaleInvoice.class, invoiceNumber);
             if (saleInvoice != null) {
@@ -1140,7 +1617,7 @@ public final class POSTopComponent extends NTopComponent {
                 }
             }
         }
-        invoiceNumber = edit ? invoiceNumber : Data.getInvoiceNo();
+        invoiceNumber = edit ? invoiceNumber : isManualInvoice ? invoiceNumber : Data.getInvoiceNo();
         String ReceiptNumber = Data.getReceiptNo();
         if (invoiceNumber.equals("")) {
             invoiceNumberField.requestFocus();
@@ -1202,7 +1679,9 @@ public final class POSTopComponent extends NTopComponent {
             }
             customerName = JOptionPane.showInputDialog("Customer Name");
         } else {
-            customerName = customer.getPerson().getName();
+            Person person = customer.getPerson();
+
+            customerName = person != null ? person.getName() : "";
         }
         double receivedAmount, paidByCC;
         try {
@@ -1224,6 +1703,8 @@ public final class POSTopComponent extends NTopComponent {
 //        double discount = Double.valueOf(totalDiscountText);
         saleInvoice = saleInvoice == null ? new SaleInvoice(invoiceNumber) : saleInvoice;
 
+        customer.setCredit(customer.getCredit() + credit);
+
         saleInvoice.setCustomer(customer);
         saleInvoice.setCustomerName(customerName);
         saleInvoice.setAmount(amount);
@@ -1241,7 +1722,7 @@ public final class POSTopComponent extends NTopComponent {
         List<Serializable> serializables = new ArrayList<>();
         int temp = 0;
 
-        for (int i = 0; i < rowCount; i++) {
+        for (int i = 0; i < table.getRowCount(); i++) {
             String code = table.getValueAt(i, 1).toString();
             double quantity = Double.valueOf(table.getValueAt(i, 4).toString());
             double rate = Double.valueOf(table.getValueAt(i, 3).toString());
@@ -1300,6 +1781,29 @@ public final class POSTopComponent extends NTopComponent {
             serializables.add(stock);
         }
         serializables.add(saleInvoice);
+        serializables.add(customer);
+
+        CashBox cashBox = (CashBox) cashBoxComboBox.getSelectedItem();
+        if (cashBox == null) {
+            cashBox = new CashBox("001");
+            cashBox.setBalance(0.0);
+            cashBox.setDescription("Cash Box 001");
+            serializables.add(cashBox);
+        } else {
+            cashBox = manager.find(CashBox.class, cashBox.getId());
+        }
+        double actualReceivedAmount = receivedAmount > amount ? amount : receivedAmount;
+        double oldBalance = cashBox.getBalance();
+        cashBox.setBalance(oldBalance + actualReceivedAmount);
+        CashLog cashLog = new CashLog(new Date(), cashBox.getId());
+        cashLog.setAmount(actualReceivedAmount);
+        cashLog.setCashBox(cashBox);
+        cashLog.setBoxBalance(oldBalance);
+        cashLog.setEntity(SaleInvoice.class.getName());
+        cashLog.setEntityId(Convert.toBytes(saleInvoice.getInvNo()));
+        serializables.add(cashBox);
+        serializables.add(cashLog);
+
         if (totalReceivedAmount > 0) {
             if (ReceiptNumber.equals("")) {
                 showError("Recipt Number Required!");
@@ -1309,6 +1813,7 @@ public final class POSTopComponent extends NTopComponent {
             collectionReceipt.setCollectedTime(date);
             collectionReceipt.setSaleInvoice(saleInvoice);
             collectionReceipt.setAmount(totalReceivedAmount);
+            collectionReceipt.setCustomer(customer);
             SaleCash saleCash = new SaleCash(ReceiptNumber);
             saleCash.setAmount(totalReceivedAmount);
             saleCash.setCollectionReceipt(collectionReceipt);
@@ -1350,158 +1855,30 @@ public final class POSTopComponent extends NTopComponent {
         }
     }
 
-    private void substractDiscount() {
+    private void calcDiscount() {
+//        calcTotal();
+        String discountPercentageText = discountPercentageField.getText().trim();
         String totalDiscountText = totalDiscountField.getText().trim();
-        double totalDiscount;
-        try {
-            totalDiscount = Double.parseDouble(totalDiscountText);
-        } catch (NumberFormatException numberFormatException) {
-            totalDiscount = 0;
+        double discountPercentage, totalDiscount;
+        if (!discountPercentageText.isEmpty()) {
+            try {
+                discountPercentage = Double.parseDouble(discountPercentageText);
+                totalDiscount = totalAmount / 100 * discountPercentage;
+                totalDiscountField.setText(totalDiscount + "");
+            } catch (NumberFormatException numberFormatException) {
+                totalDiscount = 0;
+            }
+        } else {
+            try {
+                totalDiscount = Double.parseDouble(totalDiscountText);
+            } catch (NumberFormatException numberFormatException) {
+                totalDiscount = 0;
+            }
+
         }
         totalAmountField.setText(nf2d.format(totalAmount - totalDiscount));
-    }
-
-    @Override
-    public void componentOpened() {
-        customerComboBox.requestFocus();
-    }
-
-    @Override
-    public void componentClosed() {
-        // TODO add custom code on component closing
-    }
-
-    void writeProperties(java.util.Properties p) {
-        // better to version settings since initial version as advocated at
-        // http://wiki.apidesign.org/wiki/PropertyFiles
-        p.setProperty("version", "1.0");
-        // TODO store your settings
-    }
-
-    void readProperties(java.util.Properties p) {
-        String version = p.getProperty("version");
-        // TODO read your settings according to their version
-    }
-
-    private void searchCustomer() {
-        SearchCustomerDialog searchCustomerDialog = new SearchCustomerDialog(null, true);
-        Customer customer = searchCustomerDialog.customer;
-        if (customer != null) {
-            customerComboBox.setSelectedItem(customer);
-            itemComboBox.requestFocus();
-        } else {
-            customerComboBox.requestFocus();
-        }
-    }
-
-    private void searchItem() {
-        SearchItemDialog searchItemDialog = new SearchItemDialog(null, true);
-        Item item = searchItemDialog.item;
-        if (item != null) {
-            itemComboBox.setSelectedItem(item);
-            quantityField.requestFocus();
-        } else {
-            itemComboBox.requestFocus();
-        }
-    }
-
-    private void searchInvoice() {
-        SearchInvoiceDialog searchInvoiceDialog = new SearchInvoiceDialog(null, true);
-        SaleInvoice saleInvoice = searchInvoiceDialog.saleInvoice;
-        if (saleInvoice != null) {
-            fillInvoice(saleInvoice);
-        } else {
-            clear();
-        }
-    }
-
-    private void rowNumbers() {
-        for (int i = 0; i < table.getRowCount(); i++) {
-            table.setValueAt(i + 1, i, 0);
-        }
-    }
-
-    public void fillInvoice(String invoiceNumber) {
-        SaleInvoice saleInvoice = manager.find(SaleInvoice.class, invoiceNumber);
-        fillInvoice(saleInvoice);
-    }
-
-    public void fillInvoice(SaleInvoice saleInvoice) {
-        if (saleInvoice != null) {
-            invoiceNumberField.setText(saleInvoice.getInvNo());
-            datePicker.setDate(saleInvoice.getInvTime());
-            customerComboBox.setSelectedItem(saleInvoice.getCustomer());
-            employeeComboBox.setSelectedItem(saleInvoice.getEmployee());
-            totalAmountField.setText(nf2d.format(saleInvoice.getAmount()));
-            totalDiscountField.setText(nf2d.format(saleInvoice.getDiscount()));
-            double paidAmount = saleInvoice.getReceivedAmount() != null ? saleInvoice.getReceivedAmount() : saleInvoice.getAmount();
-            paidAmountField.setText(nf2d.format(paidAmount));
-            double paidByCC = saleInvoice.getPaidByCreditCard() != null ? saleInvoice.getPaidByCreditCard() : 0.0;
-            paidByCCField.setText(nf2d.format(paidByCC));
-            remainingAmountField.setText(nf2d.format(saleInvoice.getAmount() - (paidAmount+paidByCC)));
-            Collection<SaleInvoiceHasItem> saleInvoiceHasItems = saleInvoice.getSaleInvoiceHasItemCollection();
-            tableModel.setRowCount(0);
-            int r = 0;
-            for (SaleInvoiceHasItem saleInvoiceHasItem : saleInvoiceHasItems) {
-                double rate = saleInvoiceHasItem.getRate();
-                double quantity = saleInvoiceHasItem.getQuantity();
-                double net = rate * quantity;
-                double discount = saleInvoiceHasItem.getDiscount();
-                double amount = net - discount;
-
-                Object[] row = {
-                    nf3p.format(++r),
-                    saleInvoiceHasItem.getItem().getCode(),
-                    saleInvoiceHasItem.getItem().getDescription(),
-                    nf2d.format(rate),
-                    nf2d.format(quantity),
-                    nf2d.format(net),
-                    nf2d.format(discount),
-                    nf2d.format(discount / amount * 100),
-                    nf2d.format(amount)
-
-                };
-                tableModel.addRow(row);
-            }
-        }
-    }
-
-    private void removeOldItems(List<SaleInvoiceHasItem> saleInvoiceHasItemCollection) {
-        List<Serializable> toEdit = new ArrayList<>();
-        for (SaleInvoiceHasItem saleInvoiceHasItem : saleInvoiceHasItemCollection) {
-            Stock stock = saleInvoiceHasItem.getItem().getStock();
-            stock.setQuantity(stock.getQuantity() + saleInvoiceHasItem.getQuantity());
-            toEdit.add(stock);
-        }
-        manager.update(toEdit);
-        manager.delete(saleInvoiceHasItemCollection);
-    }
-
-    /**
-     * @return the optionalComponents
-     */
-    public ArrayList<JComponent> getOptionalComponents() {
-        return optionalComponents;
-    }
-
-    private void fillHistory() {
-        List<SaleInvoice> saleInvoices = find(SaleInvoice.class);
-        SaleInvoice[] saleInvoicesArray = new SaleInvoice[saleInvoices.size()];
-        saleInvoices.toArray(saleInvoicesArray);
-        Comparator<SaleInvoice> comparator = new Comparator<SaleInvoice>() {
-
-            @Override
-            public int compare(SaleInvoice o1, SaleInvoice o2) {
-                Date o2Date = o2.getInvTime() == null ? new Date() : o2.getInvTime();
-                return o2Date.compareTo(o1.getInvTime() == null ? new Date() : o1.getInvTime());
-            }
-        };
-        Arrays.sort(saleInvoicesArray, comparator);
-        historyComboBox.setModel(new DefaultComboBoxModel(saleInvoicesArray));
-    }
-
-    private void fillCombo() {
-        Combo.fillCustomers(customerComboBox);
-        Combo.fillItems(itemComboBox);
+        calcRemaining();
+        totalDiscountField.requestFocus();
+        totalDiscountField.selectAll();
     }
 }

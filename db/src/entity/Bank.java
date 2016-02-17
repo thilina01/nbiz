@@ -41,8 +41,10 @@ public class Bank implements Serializable, Comparable<Bank> {
     private Collection<SupplierHasBank> supplierHasBankCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "bank")
     private Collection<IssuedCash> issuedCashCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "bankCode")
+    private Collection<Loan> loanCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "bank")
-    private Collection<IssuedCheque> issuedChequeCollection;
+    private Collection<Account> accountCollection;
 
     public Bank() {
     }
@@ -91,12 +93,20 @@ public class Bank implements Serializable, Comparable<Bank> {
         this.issuedCashCollection = issuedCashCollection;
     }
 
-    public Collection<IssuedCheque> getIssuedChequeCollection() {
-        return issuedChequeCollection;
+    public Collection<Loan> getLoanCollection() {
+        return loanCollection;
     }
 
-    public void setIssuedChequeCollection(Collection<IssuedCheque> issuedChequeCollection) {
-        this.issuedChequeCollection = issuedChequeCollection;
+    public void setLoanCollection(Collection<Loan> loanCollection) {
+        this.loanCollection = loanCollection;
+    }
+    
+    public Collection<Account> getAccountCollection() {
+        return accountCollection;
+    }
+
+    public void setAccountCollection(Collection<Account> accountCollection) {
+        this.accountCollection = accountCollection;
     }
 
     @Override

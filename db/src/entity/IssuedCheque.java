@@ -13,6 +13,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
@@ -40,6 +41,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "IssuedCheque.findByStatus", query = "SELECT i FROM IssuedCheque i WHERE i.status = :status"),
     @NamedQuery(name = "IssuedCheque.findByOperator", query = "SELECT i FROM IssuedCheque i WHERE i.operator = :operator")})
 public class IssuedCheque implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -56,6 +58,11 @@ public class IssuedCheque implements Serializable {
     private Double amount;
     @Column(name = "status")
     private Integer status;
+    @JoinColumns({
+        @JoinColumn(name = "account_account_no", referencedColumnName = "account_no"),
+        @JoinColumn(name = "account_bank_code", referencedColumnName = "bank_code")})
+    @ManyToOne(optional = false)
+    private Account account;
     @Column(name = "operator")
     private String operator;
     @JoinTable(name = "issued_cheque_has_purchase_invoice", joinColumns = {
@@ -64,9 +71,9 @@ public class IssuedCheque implements Serializable {
         @JoinColumn(name = "purchase_invoice_supplier_code", referencedColumnName = "supplier_code")})
     @ManyToMany
     private Collection<PurchaseInvoice> purchaseInvoiceCollection;
-    @JoinColumn(name = "bank_code", referencedColumnName = "code")
-    @ManyToOne(optional = false)
-    private Bank bank;
+//    @JoinColumn(name = "bank_code", referencedColumnName = "code")
+//    @ManyToOne(optional = false)
+//    private Bank bank;
 
     public IssuedCheque() {
     }
@@ -132,14 +139,13 @@ public class IssuedCheque implements Serializable {
         this.purchaseInvoiceCollection = purchaseInvoiceCollection;
     }
 
-    public Bank getBank() {
-        return bank;
-    }
-
-    public void setBank(Bank bank) {
-        this.bank = bank;
-    }
-
+//    public Bank getBank() {
+//        return bank;
+//    }
+//
+//    public void setBank(Bank bank) {
+//        this.bank = bank;
+//    }
     @Override
     public int hashCode() {
         int hash = 0;
@@ -164,5 +170,19 @@ public class IssuedCheque implements Serializable {
     public String toString() {
         return "entity.IssuedCheque[ chequeNumber=" + chequeNumber + " ]";
     }
-    
+
+    /**
+     * @return the account
+     */
+    public Account getAccount() {
+        return account;
+    }
+
+    /**
+     * @param account the account to set
+     */
+    public void setAccount(Account account) {
+        this.account = account;
+    }
+
 }

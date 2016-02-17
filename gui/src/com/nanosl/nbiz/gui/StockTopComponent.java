@@ -6,7 +6,9 @@ package com.nanosl.nbiz.gui;
 
 import com.nanosl.nbiz.util.Combo;
 import com.nanosl.nbiz.util.Data;
+import com.nanosl.nbiz.util.Export;
 import static com.nanosl.nbiz.util.Format.nf2d;
+import static com.nanosl.nbiz.util.Format.yyyy_MM_dd;
 import query.Find;
 import com.nanosl.nbiz.util.NTopComponent;
 import entity.Item;
@@ -19,6 +21,7 @@ import java.awt.event.KeyEvent;
 import java.net.URL;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -93,6 +96,8 @@ public final class StockTopComponent extends NTopComponent {
         selectedRadioButton = new javax.swing.JRadioButton();
         countTextField = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
+        minusRadioButton = new javax.swing.JRadioButton();
+        exportButton = new javax.swing.JButton();
 
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
@@ -233,6 +238,21 @@ public final class StockTopComponent extends NTopComponent {
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(StockTopComponent.class, "StockTopComponent.jLabel1.text")); // NOI18N
 
+        buttonGroup1.add(minusRadioButton);
+        org.openide.awt.Mnemonics.setLocalizedText(minusRadioButton, org.openide.util.NbBundle.getMessage(StockTopComponent.class, "StockTopComponent.minusRadioButton.text")); // NOI18N
+        minusRadioButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                minusRadioButtonActionPerformed(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(exportButton, org.openide.util.NbBundle.getMessage(StockTopComponent.class, "StockTopComponent.exportButton.text")); // NOI18N
+        exportButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                exportButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -246,6 +266,8 @@ public final class StockTopComponent extends NTopComponent {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(minimumRadioButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(minusRadioButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(selectedRadioButton)
                         .addGap(6, 6, 6)
                         .addComponent(supplierCheckBox)
@@ -255,7 +277,7 @@ public final class StockTopComponent extends NTopComponent {
                         .addComponent(typeCheckBox)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(itemTypeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 47, Short.MAX_VALUE)
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(countTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -263,7 +285,9 @@ public final class StockTopComponent extends NTopComponent {
                         .addComponent(reloadButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(printButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 656, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(exportButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(totalLabel)))
                 .addContainerGap())
         );
@@ -280,14 +304,16 @@ public final class StockTopComponent extends NTopComponent {
                     .addComponent(supplierComboBox)
                     .addComponent(selectedRadioButton)
                     .addComponent(countTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1))
+                    .addComponent(jLabel1)
+                    .addComponent(minusRadioButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(masterScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 466, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(reloadButton)
                     .addComponent(totalLabel)
-                    .addComponent(printButton))
+                    .addComponent(printButton)
+                    .addComponent(exportButton))
                 .addContainerGap())
         );
 
@@ -365,6 +391,14 @@ public final class StockTopComponent extends NTopComponent {
         selectedRadioButton.setSelected(true);
         fillTable();
     }//GEN-LAST:event_supplierCheckBoxActionPerformed
+
+    private void minusRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_minusRadioButtonActionPerformed
+        fillTable();
+    }//GEN-LAST:event_minusRadioButtonActionPerformed
+
+    private void exportButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportButtonActionPerformed
+        Export.toExcel(table, "on " + yyyy_MM_dd_hh_mm_ss_a_Space.format(new Date()), getName().replace(" Window", ""));
+    }//GEN-LAST:event_exportButtonActionPerformed
 //    private void searchSupplier() {
 //        SearchSupplierDialog searchSupplierDialog = new SearchSupplierDialog(null, true);
 //        supplier = searchSupplierDialog.suppllier;
@@ -377,11 +411,13 @@ public final class StockTopComponent extends NTopComponent {
     private javax.swing.JRadioButton allRadioButton;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JTextField countTextField;
+    private javax.swing.JButton exportButton;
     private javax.swing.JComboBox itemTypeComboBox;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane masterScrollPane;
     private javax.swing.JRadioButton minimumRadioButton;
+    private javax.swing.JRadioButton minusRadioButton;
     private javax.swing.JButton printButton;
     private javax.swing.JButton reloadButton;
     private javax.swing.JRadioButton selectedRadioButton;
@@ -438,6 +474,8 @@ public final class StockTopComponent extends NTopComponent {
                             stocks = manager.find(Stock.class);
                         } else if (minimumRadioButton.isSelected()) {
                             stocks = Find.stockLessMinLimit();
+                        } else if (minusRadioButton.isSelected()) {
+                            stocks = Find.stockLessThan(0);
                         } else if (supplierCheckBox.isSelected()) {
                             Object o = supplierComboBox.getSelectedItem();
                             Supplier supplier;
@@ -500,7 +538,7 @@ public final class StockTopComponent extends NTopComponent {
                             double selling = item.getPriceList() != null ? item.getPriceList().getSellingPack() != null ? item.getPriceList().getSellingPack() : 0.0 : 0.0;
                             totalSelling += (quantity * selling);
                             Object[] row = {
-                                ++i,
+                                nf4p.format(++i),
                                 item.getCode(),
                                 item.getDescription(),
                                 item.getItemTypeType() == null ? "" : item.getItemTypeType().getType(),

@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package entity;
 
 import java.io.Serializable;
@@ -11,9 +10,8 @@ import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -24,6 +22,7 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @Table(name = "sale_cheque")
+/*
 @NamedQueries({
     @NamedQuery(name = "SaleCheque.findAll", query = "SELECT s FROM SaleCheque s"),
     @NamedQuery(name = "SaleCheque.findByChequeNumber", query = "SELECT s FROM SaleCheque s WHERE s.saleChequePK.chequeNumber = :chequeNumber"),
@@ -32,7 +31,9 @@ import javax.persistence.TemporalType;
     @NamedQuery(name = "SaleCheque.findByBankingDate", query = "SELECT s FROM SaleCheque s WHERE s.bankingDate = :bankingDate"),
     @NamedQuery(name = "SaleCheque.findByStatus", query = "SELECT s FROM SaleCheque s WHERE s.status = :status"),
     @NamedQuery(name = "SaleCheque.findByCollectionReceiptReceiptNumber", query = "SELECT s FROM SaleCheque s WHERE s.saleChequePK.collectionReceiptReceiptNumber = :collectionReceiptReceiptNumber")})
-public class SaleCheque implements Serializable {
+ */
+public class SaleCheque implements Serializable, Comparable<SaleCheque> {
+
     private static final long serialVersionUID = 1L;
     @EmbeddedId
     protected SaleChequePK saleChequePK;
@@ -43,6 +44,11 @@ public class SaleCheque implements Serializable {
     private Date bankingDate;
     @Column(name = "status")
     private Integer status;
+    @JoinColumns({
+        @JoinColumn(name = "account_account_no", referencedColumnName = "account_no"),
+        @JoinColumn(name = "account_bank_code", referencedColumnName = "bank_code")})
+    @ManyToOne(optional = false)
+    private Account account;
     @JoinColumn(name = "collection_receipt_receipt_number", referencedColumnName = "receipt_number", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private CollectionReceipt collectionReceipt;
@@ -93,12 +99,12 @@ public class SaleCheque implements Serializable {
         this.status = status;
     }
 
-    public CollectionReceipt getCollectionReceipt() {
-        return collectionReceipt;
+    public Account getAccount() {
+        return account;
     }
 
-    public void setCollectionReceipt(CollectionReceipt collectionReceipt) {
-        this.collectionReceipt = collectionReceipt;
+    public void setAccount(Account account) {
+        this.account = account;
     }
 
     public Bank getBank() {
@@ -107,6 +113,14 @@ public class SaleCheque implements Serializable {
 
     public void setBank(Bank bank) {
         this.bank = bank;
+    }
+
+    public CollectionReceipt getCollectionReceipt() {
+        return collectionReceipt;
+    }
+
+    public void setCollectionReceipt(CollectionReceipt collectionReceipt) {
+        this.collectionReceipt = collectionReceipt;
     }
 
     @Override
@@ -132,6 +146,11 @@ public class SaleCheque implements Serializable {
     @Override
     public String toString() {
         return util.ToString.get(this);
+    }
+
+    @Override
+    public int compareTo(SaleCheque o) {
+        return this.compareTo(o);
     }
 
 }

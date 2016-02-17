@@ -59,6 +59,13 @@
     <class>entity.Person</class>
     <class>entity.Fix</class>
     <class>entity.Svat</class>
+    <class>entity.Quotation</class>
+    <class>entity.QuotationHasItem</class>
+    <class>entity.Loan</class>
+    <class>entity.Term</class>
+    <class>entity.Account</class>
+    <class>entity.CashBox</class>
+    <class>entity.CashLog</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/cbis?zeroDateTimeBehavior=convertToNull"/>
       <property name="javax.persistence.jdbc.password" value="123"/>

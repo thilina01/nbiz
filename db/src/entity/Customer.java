@@ -42,6 +42,10 @@ public class Customer implements Serializable, Comparable<Customer> {
     @Basic(optional = false)
     @Column(name = "code")
     private String code;
+    @Column(name = "name")
+    private String name;
+    @Column(name = "credit")
+    private double credit;
     @Column(name = "fixedLine")
     private String fixedLine;
     @Column(name = "fax")
@@ -54,6 +58,10 @@ public class Customer implements Serializable, Comparable<Customer> {
     private Collection<CanceledInvoice> canceledInvoiceCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "customer")
     private Collection<SaleInvoice> saleInvoiceCollection;
+    @OneToMany(mappedBy = "customer")
+    private Collection<Quotation> quotationCollection;
+    @OneToMany(mappedBy = "customer")
+    private Collection<CollectionReceipt> collectionReceiptCollection;
     @JoinColumn(name = "person_nic", referencedColumnName = "nic")
     @ManyToOne(optional = false)
     private Person person;
@@ -122,7 +130,16 @@ public class Customer implements Serializable, Comparable<Customer> {
     public void setSaleInvoiceCollection(Collection<SaleInvoice> saleInvoiceCollection) {
         this.saleInvoiceCollection = saleInvoiceCollection;
     }
+    
+    @XmlTransient
+    public Collection<Quotation> getQuotationCollection() {
+        return quotationCollection;
+    }
 
+    public void setQuotationCollection(Collection<Quotation> quotationCollection) {
+        this.quotationCollection = quotationCollection;
+    }
+    
     public Person getPerson() {
         return person;
     }
@@ -159,6 +176,42 @@ public class Customer implements Serializable, Comparable<Customer> {
     @Override
     public int compareTo(Customer o) {
         return code.compareTo(o.getCode());
+    }
+
+    /**
+     * @return the name
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * @param name the name to set
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    /**
+     * @return the credit
+     */
+    public double getCredit() {
+        return credit;
+    }
+
+    /**
+     * @param credit the credit to set
+     */
+    public void setCredit(double credit) {
+        this.credit = credit;
+    }
+
+    public Collection<CollectionReceipt> getCollectionReceiptCollection() {
+        return collectionReceiptCollection;
+    }
+
+    public void setCollectionReceiptCollection(Collection<CollectionReceipt> collectionReceiptCollection) {
+        this.collectionReceiptCollection = collectionReceiptCollection;
     }
 
 }

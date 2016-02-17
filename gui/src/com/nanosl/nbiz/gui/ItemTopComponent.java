@@ -103,6 +103,8 @@ public final class ItemTopComponent extends NTopComponent {
         sellingPriceTextField = new javax.swing.JTextField();
         quantityTextField = new javax.swing.JTextField();
         newTypeButton = new javax.swing.JButton();
+        jLabel7 = new javax.swing.JLabel();
+        profitPercentageTextField = new javax.swing.JTextField();
         searchTextField = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
 
@@ -264,6 +266,15 @@ public final class ItemTopComponent extends NTopComponent {
             }
         });
 
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel7, org.openide.util.NbBundle.getMessage(ItemTopComponent.class, "ItemTopComponent.jLabel7.text")); // NOI18N
+
+        profitPercentageTextField.setText(org.openide.util.NbBundle.getMessage(ItemTopComponent.class, "ItemTopComponent.profitPercentageTextField.text")); // NOI18N
+        profitPercentageTextField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                profitPercentageTextFieldActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -291,7 +302,11 @@ public final class ItemTopComponent extends NTopComponent {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addGap(28, 28, 28)
-                        .addComponent(minimumLimitTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(minimumLimitTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel7)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(profitPercentageTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
@@ -351,7 +366,9 @@ public final class ItemTopComponent extends NTopComponent {
                     .addComponent(minimumLimitTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(clearButton)
                     .addComponent(deleteButton)
-                    .addComponent(updateButton))
+                    .addComponent(updateButton)
+                    .addComponent(jLabel7)
+                    .addComponent(profitPercentageTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
@@ -461,8 +478,7 @@ public final class ItemTopComponent extends NTopComponent {
     }//GEN-LAST:event_clearButtonActionPerformed
 
     private void minimumLimitTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_minimumLimitTextFieldActionPerformed
-        sellingPriceTextField.requestFocus();
-        sellingPriceTextField.selectAll();
+        profitPercentageTextField.requestFocus();
     }//GEN-LAST:event_minimumLimitTextFieldActionPerformed
 
     private void itemTypeComboBoxKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_itemTypeComboBoxKeyPressed
@@ -472,11 +488,43 @@ public final class ItemTopComponent extends NTopComponent {
     }//GEN-LAST:event_itemTypeComboBoxKeyPressed
 
     private void costTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_costTextFieldActionPerformed
+        String profitPercentageText = profitPercentageTextField.getText().trim();
+        profitPercentageText = profitPercentageText.isEmpty() ? "0.0" : profitPercentageText;
+        double profitPercentage = Double.parseDouble(profitPercentageText);
+
+        String costText = costTextField.getText().trim();
+        costText = costText.isEmpty() ? "0.0" : costText;
+        double cost = Double.parseDouble(costText);
+
+        String sellingPriceText = sellingPriceTextField.getText().trim();
+        sellingPriceText = sellingPriceText.isEmpty() ? "0.0" : sellingPriceText;
+        double sellingPrice = Double.parseDouble(sellingPriceText);
+
+        if (cost > 0 && profitPercentage > 0) {
+            sellingPrice = cost + (cost / 100 * profitPercentage);
+            sellingPriceTextField.setText(nf2d.format(sellingPrice));
+        } else if (cost > 0 && profitPercentage == 0 && sellingPrice > 0) {
+            profitPercentage = (sellingPrice - cost) / cost;
+            profitPercentageTextField.setText(nf2d.format(profitPercentage * 100));
+        }
         quantityTextField.requestFocus();
         quantityTextField.selectAll();
     }//GEN-LAST:event_costTextFieldActionPerformed
 
     private void sellingPriceTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sellingPriceTextFieldActionPerformed
+        String profitPercentageText = profitPercentageTextField.getText().trim();
+        profitPercentageText = profitPercentageText.isEmpty() ? "0.0" : profitPercentageText;
+        double profitPercentage = Double.parseDouble(profitPercentageText);
+
+        String sellingPriceText = sellingPriceTextField.getText().trim();
+        sellingPriceText = sellingPriceText.isEmpty() ? "0.0" : sellingPriceText;
+        double sellingPrice = Double.parseDouble(sellingPriceText);
+
+        if (sellingPrice > 0 && profitPercentage > 0) {
+            double cost = sellingPrice / (1 + profitPercentage / 100);
+            costTextField.setText(nf2d.format(cost));
+            costTextField.setSelectionStart(0);
+        }
         costTextField.requestFocus();
         costTextField.selectAll();
     }//GEN-LAST:event_sellingPriceTextFieldActionPerformed
@@ -497,7 +545,7 @@ public final class ItemTopComponent extends NTopComponent {
         String text = searchTextField.getText().trim();
         tableModel.setRowCount(0);
         if (text.length() > 2) {
-            List<Item> items = Find.itemBy$(text);
+            List<Item> items = Find.itemBy$("%" + text + "%");
             int i = 0;
             for (Item item1 : items) {
                 Object[] row = {
@@ -514,6 +562,11 @@ public final class ItemTopComponent extends NTopComponent {
             fillTable();
         }
     }//GEN-LAST:event_searchTextFieldKeyReleased
+
+    private void profitPercentageTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_profitPercentageTextFieldActionPerformed
+        sellingPriceTextField.requestFocus();
+        sellingPriceTextField.selectAll();
+    }//GEN-LAST:event_profitPercentageTextFieldActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField brandField;
@@ -533,12 +586,14 @@ public final class ItemTopComponent extends NTopComponent {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane masterScrollPane;
     private javax.swing.JTable masterTable;
     private javax.swing.JTextField minimumLimitTextField;
     private javax.swing.JButton newTypeButton;
+    private javax.swing.JTextField profitPercentageTextField;
     private javax.swing.JTextField quantityTextField;
     private javax.swing.JTextField searchTextField;
     private javax.swing.JTextField sellingPriceTextField;
@@ -569,11 +624,14 @@ public final class ItemTopComponent extends NTopComponent {
             return;
         }
         String brand = brandField.getText().trim();
-
         try {
             String minLimText = minimumLimitTextField.getText().trim();
             minLimText = minLimText.isEmpty() ? "0.0" : minLimText;
             double minimumLimit = Double.parseDouble(minLimText);
+
+            String profitPercentageText = profitPercentageTextField.getText().trim();
+            profitPercentageText = profitPercentageText.isEmpty() ? "0.0" : profitPercentageText;
+            double profitPercentage = Double.parseDouble(profitPercentageText);
 
             String costString = costTextField.getText().trim();
             costString = costString.isEmpty() ? "0.0" : costString;
@@ -600,6 +658,7 @@ public final class ItemTopComponent extends NTopComponent {
             item.setStatus(disableCheckBox.isSelected() ? 1 : 0);
             item.setDescription(description);
             item.setBrand(brand);
+            item.setProfitPersantage(profitPercentage);
             item.setSupplier(supplier);
             ItemType itemType1 = (ItemType) itemTypeComboBox.getSelectedItem();
             item.setItemTypeType(itemType1);
@@ -664,6 +723,7 @@ public final class ItemTopComponent extends NTopComponent {
 
     private void clearFields() {
         codeField.setText("");
+        profitPercentageTextField.setText("");
         descriptionField.setText("");
         brandField.setText("");
         minimumLimitTextField.setText("");
@@ -744,7 +804,7 @@ public final class ItemTopComponent extends NTopComponent {
         KeyAdapter();
         tableModel = (DefaultTableModel) masterTable.getModel();
         masterTable.setDefaultRenderer(Object.class, coloredCellRenderer);
-        clear();
+//        clear();
     }
 
     private void KeyAdapter() {

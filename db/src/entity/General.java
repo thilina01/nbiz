@@ -45,6 +45,8 @@ public class General implements Serializable {
     private String invoiceNo;
     @Column(name = "receipt_no")
     private String receiptNo;
+    @Column(name = "quotation_no")
+    private String quotationNo;
 
     public General() {
     }
@@ -136,5 +138,19 @@ public class General implements Serializable {
      */
     public void setReceiptNo(String receiptNo) {
         this.receiptNo = receiptNo;
+    }
+
+    /**
+     * @return the quotationNo
+     */
+    public String getQuotationNo() {
+        return quotationNo;
+    }
+
+    /**
+     * @param quotationNo the quotationNo to set
+     */
+    public void setQuotationNo(String quotationNo) {
+        this.quotationNo = quotationNo;
     }
 }

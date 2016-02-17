@@ -4,9 +4,12 @@
  */
 package com.nanosl.nbiz.gui;
 
+import com.nanosl.nbiz.util.Export;
+import static com.nanosl.nbiz.util.Format.yyyy_MM_dd;
 import com.nanosl.nbiz.util.NTopComponent;
 import entity.Customer;
 import entity.Person;
+import java.util.Date;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -56,7 +59,7 @@ public final class CustomerTopComponent extends NTopComponent {
 
         jPanel1 = new javax.swing.JPanel();
         masterScrollPane = new javax.swing.JScrollPane();
-        masterTable = new javax.swing.JTable();
+        table = new javax.swing.JTable();
         codeLabel = new javax.swing.JLabel();
         nameLabel = new javax.swing.JLabel();
         addressNumberLabel = new javax.swing.JLabel();
@@ -78,44 +81,49 @@ public final class CustomerTopComponent extends NTopComponent {
         cityField = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         nicTextField = new javax.swing.JTextField();
+        notesLabel1 = new javax.swing.JLabel();
+        creditField = new javax.swing.JTextField();
+        exportButton = new javax.swing.JButton();
 
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        masterTable.setModel(new javax.swing.table.DefaultTableModel(
+        table.setAutoCreateRowSorter(true);
+        table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "#", "Code", "NIC", "Name", "Mobile"
+                "#", "Code", "NIC", "Name", "Mobile", "Credit"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
+                false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
-        masterTable.addMouseListener(new java.awt.event.MouseAdapter() {
+        table.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
-                masterTableMouseReleased(evt);
+                tableMouseReleased(evt);
             }
         });
-        masterTable.addKeyListener(new java.awt.event.KeyAdapter() {
+        table.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                masterTableKeyReleased(evt);
+                tableKeyReleased(evt);
             }
         });
-        masterScrollPane.setViewportView(masterTable);
-        if (masterTable.getColumnModel().getColumnCount() > 0) {
-            masterTable.getColumnModel().getColumn(0).setPreferredWidth(30);
-            masterTable.getColumnModel().getColumn(0).setHeaderValue(org.openide.util.NbBundle.getMessage(CustomerTopComponent.class, "CustomerTopComponent.masterTable.columnModel.title0")); // NOI18N
-            masterTable.getColumnModel().getColumn(1).setHeaderValue(org.openide.util.NbBundle.getMessage(CustomerTopComponent.class, "CustomerTopComponent.masterTable.columnModel.title1")); // NOI18N
-            masterTable.getColumnModel().getColumn(2).setHeaderValue(org.openide.util.NbBundle.getMessage(CustomerTopComponent.class, "CustomerTopComponent.masterTable.columnModel.title4")); // NOI18N
-            masterTable.getColumnModel().getColumn(3).setPreferredWidth(300);
-            masterTable.getColumnModel().getColumn(3).setHeaderValue(org.openide.util.NbBundle.getMessage(CustomerTopComponent.class, "CustomerTopComponent.masterTable.columnModel.title2")); // NOI18N
-            masterTable.getColumnModel().getColumn(4).setHeaderValue(org.openide.util.NbBundle.getMessage(CustomerTopComponent.class, "CustomerTopComponent.masterTable.columnModel.title3")); // NOI18N
+        masterScrollPane.setViewportView(table);
+        if (table.getColumnModel().getColumnCount() > 0) {
+            table.getColumnModel().getColumn(0).setPreferredWidth(30);
+            table.getColumnModel().getColumn(0).setHeaderValue(org.openide.util.NbBundle.getMessage(CustomerTopComponent.class, "CustomerTopComponent.table.columnModel.title0")); // NOI18N
+            table.getColumnModel().getColumn(1).setHeaderValue(org.openide.util.NbBundle.getMessage(CustomerTopComponent.class, "CustomerTopComponent.table.columnModel.title1")); // NOI18N
+            table.getColumnModel().getColumn(2).setHeaderValue(org.openide.util.NbBundle.getMessage(CustomerTopComponent.class, "CustomerTopComponent.masterTable.columnModel.title4")); // NOI18N
+            table.getColumnModel().getColumn(3).setPreferredWidth(300);
+            table.getColumnModel().getColumn(3).setHeaderValue(org.openide.util.NbBundle.getMessage(CustomerTopComponent.class, "CustomerTopComponent.masterTable.columnModel.title2")); // NOI18N
+            table.getColumnModel().getColumn(4).setHeaderValue(org.openide.util.NbBundle.getMessage(CustomerTopComponent.class, "CustomerTopComponent.masterTable.columnModel.title3")); // NOI18N
+            table.getColumnModel().getColumn(5).setHeaderValue(org.openide.util.NbBundle.getMessage(CustomerTopComponent.class, "CustomerTopComponent.table.columnModel.title5")); // NOI18N
         }
 
         org.openide.awt.Mnemonics.setLocalizedText(codeLabel, org.openide.util.NbBundle.getMessage(CustomerTopComponent.class, "CustomerTopComponent.codeLabel.text")); // NOI18N
@@ -212,54 +220,71 @@ public final class CustomerTopComponent extends NTopComponent {
             }
         });
 
+        org.openide.awt.Mnemonics.setLocalizedText(notesLabel1, org.openide.util.NbBundle.getMessage(CustomerTopComponent.class, "CustomerTopComponent.notesLabel1.text")); // NOI18N
+
+        creditField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                creditFieldActionPerformed(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(exportButton, org.openide.util.NbBundle.getMessage(CustomerTopComponent.class, "CustomerTopComponent.exportButton.text")); // NOI18N
+        exportButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                exportButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(masterScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 714, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addContainerGap(228, Short.MAX_VALUE)
+                        .addComponent(exportButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(updateButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(deleteButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(clearButton)
-                        .addGap(297, 297, 297))
+                        .addComponent(clearButton))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(masterScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 714, Short.MAX_VALUE)
+                            .addComponent(jLabel1)
+                            .addComponent(addressNumberLabel)
+                            .addComponent(townCodeLabel)
+                            .addComponent(mobileLabel)
+                            .addComponent(fixedLineLabel)
+                            .addComponent(faxLabel)
+                            .addComponent(notesLabel)
+                            .addComponent(nameLabel)
+                            .addComponent(codeLabel)
+                            .addComponent(notesLabel1))
+                        .addGap(28, 28, 28)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel1)
-                                    .addComponent(addressNumberLabel)
-                                    .addComponent(townCodeLabel)
-                                    .addComponent(mobileLabel)
-                                    .addComponent(fixedLineLabel)
-                                    .addComponent(faxLabel)
-                                    .addComponent(notesLabel)
-                                    .addComponent(nameLabel)
-                                    .addComponent(codeLabel))
-                                .addGap(28, 28, 28)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(fixedLineField)
-                                    .addComponent(faxField)
-                                    .addComponent(mobileField)
-                                    .addComponent(notesField, javax.swing.GroupLayout.DEFAULT_SIZE, 634, Short.MAX_VALUE)
-                                    .addComponent(nicTextField)
-                                    .addComponent(codeField)
-                                    .addComponent(cityField)
-                                    .addComponent(addressField)
-                                    .addComponent(nameField))))))
+                                .addComponent(creditField, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(fixedLineField)
+                            .addComponent(faxField)
+                            .addComponent(mobileField)
+                            .addComponent(notesField, javax.swing.GroupLayout.DEFAULT_SIZE, 634, Short.MAX_VALUE)
+                            .addComponent(nicTextField)
+                            .addComponent(codeField)
+                            .addComponent(cityField)
+                            .addComponent(addressField)
+                            .addComponent(nameField))))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(masterScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 337, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(masterScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 277, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(codeLabel)
                     .addComponent(codeField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -295,11 +320,16 @@ public final class CustomerTopComponent extends NTopComponent {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(notesLabel)
                     .addComponent(notesField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(notesLabel1)
+                    .addComponent(creditField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(clearButton)
                     .addComponent(deleteButton)
-                    .addComponent(updateButton))
+                    .addComponent(updateButton)
+                    .addComponent(exportButton))
                 .addContainerGap())
         );
 
@@ -321,13 +351,13 @@ public final class CustomerTopComponent extends NTopComponent {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void masterTableMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_masterTableMouseReleased
+    private void tableMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableMouseReleased
         fill();
-    }//GEN-LAST:event_masterTableMouseReleased
+    }//GEN-LAST:event_tableMouseReleased
 
-    private void masterTableKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_masterTableKeyReleased
+    private void tableKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tableKeyReleased
         fill();
-    }//GEN-LAST:event_masterTableKeyReleased
+    }//GEN-LAST:event_tableKeyReleased
 
     private void codeFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_codeFieldActionPerformed
         if (!codeField.getText().trim().equals("")) {
@@ -361,7 +391,7 @@ public final class CustomerTopComponent extends NTopComponent {
     }//GEN-LAST:event_faxFieldActionPerformed
 
     private void notesFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_notesFieldActionPerformed
-        updateButton.requestFocus();
+        creditField.requestFocus();
     }//GEN-LAST:event_notesFieldActionPerformed
 
     private void updateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateButtonActionPerformed
@@ -383,10 +413,19 @@ public final class CustomerTopComponent extends NTopComponent {
     }//GEN-LAST:event_cityFieldActionPerformed
 
     private void nicTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nicTextFieldActionPerformed
-        if (!nicTextField.getText().trim().equals("")) {
-            nameField.requestFocus();
+        if (nicTextField.getText().trim().equals("")) {
+            nicTextField.setText(codeField.getText());
         }
+        nameField.requestFocus();
     }//GEN-LAST:event_nicTextFieldActionPerformed
+
+    private void creditFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_creditFieldActionPerformed
+        updateButton.requestFocus();
+    }//GEN-LAST:event_creditFieldActionPerformed
+
+    private void exportButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportButtonActionPerformed
+        Export.toExcel(table, "on " + yyyy_MM_dd.format(new Date()), getName().replace(" Window", ""));
+    }//GEN-LAST:event_exportButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField addressField;
@@ -395,7 +434,9 @@ public final class CustomerTopComponent extends NTopComponent {
     private javax.swing.JButton clearButton;
     private javax.swing.JTextField codeField;
     private javax.swing.JLabel codeLabel;
+    private javax.swing.JTextField creditField;
     private javax.swing.JButton deleteButton;
+    private javax.swing.JButton exportButton;
     private javax.swing.JTextField faxField;
     private javax.swing.JLabel faxLabel;
     private javax.swing.JTextField fixedLineField;
@@ -403,7 +444,6 @@ public final class CustomerTopComponent extends NTopComponent {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane masterScrollPane;
-    private javax.swing.JTable masterTable;
     private javax.swing.JTextField mobileField;
     private javax.swing.JLabel mobileLabel;
     private javax.swing.JTextField nameField;
@@ -411,6 +451,8 @@ public final class CustomerTopComponent extends NTopComponent {
     private javax.swing.JTextField nicTextField;
     private javax.swing.JTextField notesField;
     private javax.swing.JLabel notesLabel;
+    private javax.swing.JLabel notesLabel1;
+    private javax.swing.JTable table;
     private javax.swing.JLabel townCodeLabel;
     private javax.swing.JButton updateButton;
     // End of variables declaration//GEN-END:variables
@@ -418,8 +460,8 @@ public final class CustomerTopComponent extends NTopComponent {
 
     protected void onLoad() {
         initComponents();
-        tableModel = (DefaultTableModel) masterTable.getModel();
-        masterTable.setDefaultRenderer(Object.class, coloredCellRenderer);
+        tableModel = (DefaultTableModel) table.getModel();
+        table.setDefaultRenderer(Object.class, coloredCellRenderer);
         clear();
     }
 
@@ -437,7 +479,7 @@ public final class CustomerTopComponent extends NTopComponent {
             if (person == null) {
                 continue;
             }
-            Object[] row = {++i, customer.getCode(), person.getNic(), person.getName(), person.getMobile()};
+            Object[] row = {++i, customer.getCode(), person.getNic(), person.getName(), person.getMobile(), nf2d.format(customer.getCredit())};
             tableModel.addRow(row);
         }
     }
@@ -453,6 +495,7 @@ public final class CustomerTopComponent extends NTopComponent {
         fixedLineField.setText("");
         faxField.setText("");
         notesField.setText("");
+        creditField.setText("");
     }
 
     private void fillData(Customer customer) {
@@ -466,13 +509,14 @@ public final class CustomerTopComponent extends NTopComponent {
         fixedLineField.setText(customer.getFixedLine());
         faxField.setText(customer.getFax());
         notesField.setText(customer.getNotes());
+        creditField.setText(nf2d.format(customer.getCredit()));
     }
 
     private void fill() {
         //clearFields();
-        int row = masterTable.getSelectedRow();
+        int row = table.getSelectedRow();
         if (row > -1) {
-            Customer customer = manager.find(Customer.class, masterTable.getValueAt(row, 1));
+            Customer customer = manager.find(Customer.class, table.getValueAt(row, 1));
             fillData(customer);
         }
     }
@@ -497,6 +541,9 @@ public final class CustomerTopComponent extends NTopComponent {
         String code = codeField.getText().trim();
         String name = nameField.getText().trim();
         String nic = nicTextField.getText().trim();
+        nic = nic.equals("") ? code : nic;
+        String creditText = creditField.getText().trim();
+        double credit = 0;
         if (code.equals("")) {
             codeField.requestFocus();
             return;
@@ -504,6 +551,15 @@ public final class CustomerTopComponent extends NTopComponent {
         if (name.equals("")) {
             nameField.requestFocus();
             return;
+        }
+
+        if (!creditText.equals("")) {
+            try {
+                credit = Double.parseDouble(creditText);
+            } catch (Exception e) {
+                creditField.requestFocus();
+                return;
+            }
         }
 
         String address = addressField.getText().trim();
@@ -529,6 +585,8 @@ public final class CustomerTopComponent extends NTopComponent {
         customer.setFax(fax);
         customer.setFixedLine(fixedLine);
         customer.setNotes(notes);
+        customer.setName(name);
+        customer.setCredit(credit);
         if (manager.update(customer)) {
             clear();
             codeField.requestFocus();

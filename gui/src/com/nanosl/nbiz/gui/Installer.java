@@ -20,6 +20,7 @@ public class Installer extends ModuleInstall {
         Shared.registerToolBarButton("Stock", "StockTopComponent", "com/nanosl/nbiz/gui/resources/box.png");
         Shared.registerToolBarButton("Supplier", "SupplierTopComponent", "com/nanosl/nbiz/gui/resources/company.png");
         Shared.registerToolBarButton("Item", "ItemTopComponent", "com/nanosl/nbiz/gui/resources/tv.png");
+        Shared.registerToolBarButton("Customer", "CustomerTopComponent", "com/nanosl/nbiz/gui/resources/customer36.png");
     }
 
 }

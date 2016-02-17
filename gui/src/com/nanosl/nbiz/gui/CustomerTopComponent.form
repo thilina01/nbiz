@@ -47,45 +47,46 @@
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" attributes="0">
+                  <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="masterScrollPane" pref="714" max="32767" attributes="0"/>
                       <Group type="102" alignment="1" attributes="0">
-                          <EmptySpace pref="228" max="32767" attributes="0"/>
+                          <Component id="exportButton" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="32767" attributes="0"/>
                           <Component id="updateButton" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="deleteButton" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="clearButton" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="297" pref="297" max="-2" attributes="0"/>
                       </Group>
-                      <Group type="102" attributes="0">
-                          <EmptySpace max="-2" attributes="0"/>
+                      <Group type="102" alignment="0" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="masterScrollPane" pref="714" max="32767" attributes="0"/>
+                              <Component id="jLabel1" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="addressNumberLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="townCodeLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="mobileLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="fixedLineLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="faxLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="notesLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="nameLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="codeLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="notesLabel1" alignment="0" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" attributes="0">
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="jLabel1" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      <Component id="addressNumberLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      <Component id="townCodeLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      <Component id="mobileLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      <Component id="fixedLineLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      <Component id="faxLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      <Component id="notesLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      <Component id="nameLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      <Component id="codeLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  </Group>
-                                  <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="fixedLineField" alignment="0" max="32767" attributes="0"/>
-                                      <Component id="faxField" alignment="0" max="32767" attributes="0"/>
-                                      <Component id="mobileField" alignment="0" max="32767" attributes="0"/>
-                                      <Component id="notesField" alignment="0" pref="634" max="32767" attributes="0"/>
-                                      <Component id="nicTextField" alignment="0" max="32767" attributes="0"/>
-                                      <Component id="codeField" alignment="0" max="32767" attributes="0"/>
-                                      <Component id="cityField" alignment="0" max="32767" attributes="0"/>
-                                      <Component id="addressField" alignment="0" max="32767" attributes="0"/>
-                                      <Component id="nameField" alignment="0" max="32767" attributes="0"/>
-                                  </Group>
+                                  <Component id="creditField" min="-2" pref="177" max="-2" attributes="0"/>
+                                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                               </Group>
+                              <Component id="fixedLineField" alignment="0" max="32767" attributes="0"/>
+                              <Component id="faxField" alignment="0" max="32767" attributes="0"/>
+                              <Component id="mobileField" alignment="0" max="32767" attributes="0"/>
+                              <Component id="notesField" alignment="0" pref="634" max="32767" attributes="0"/>
+                              <Component id="nicTextField" alignment="0" max="32767" attributes="0"/>
+                              <Component id="codeField" alignment="0" max="32767" attributes="0"/>
+                              <Component id="cityField" alignment="0" max="32767" attributes="0"/>
+                              <Component id="addressField" alignment="0" max="32767" attributes="0"/>
+                              <Component id="nameField" alignment="0" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
@@ -97,8 +98,8 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="1" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="masterScrollPane" min="-2" pref="337" max="-2" attributes="0"/>
-                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="masterScrollPane" min="-2" pref="277" max="-2" attributes="0"/>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="codeLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="codeField" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -143,11 +144,17 @@
                       <Component id="notesLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="notesField" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="11" max="32767" attributes="0"/>
+                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="notesLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="creditField" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="32767" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="clearButton" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="deleteButton" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="updateButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="exportButton" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -162,29 +169,31 @@
 
           <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
           <SubComponents>
-            <Component class="javax.swing.JTable" name="masterTable">
+            <Component class="javax.swing.JTable" name="table">
               <Properties>
+                <Property name="autoCreateRowSorter" type="boolean" value="true"/>
                 <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                  <Table columnCount="5" rowCount="0">
+                  <Table columnCount="6" rowCount="0">
                     <Column editable="false" title="#" type="java.lang.Object"/>
                     <Column editable="false" title="Code" type="java.lang.Object"/>
                     <Column editable="false" title="NIC" type="java.lang.Object"/>
                     <Column editable="false" title="Name" type="java.lang.Object"/>
                     <Column editable="false" title="Mobile" type="java.lang.Object"/>
+                    <Column editable="false" title="Credit" type="java.lang.Object"/>
                   </Table>
                 </Property>
                 <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
                   <TableColumnModel selectionModel="0">
                     <Column maxWidth="-1" minWidth="-1" prefWidth="30" resizable="true">
                       <Title editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                        <ResourceString bundle="com/nanosl/nbiz/gui/Bundle.properties" key="CustomerTopComponent.masterTable.columnModel.title0" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                        <ResourceString bundle="com/nanosl/nbiz/gui/Bundle.properties" key="CustomerTopComponent.table.columnModel.title0" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                       </Title>
                       <Editor/>
                       <Renderer/>
                     </Column>
                     <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
                       <Title editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                        <ResourceString bundle="com/nanosl/nbiz/gui/Bundle.properties" key="CustomerTopComponent.masterTable.columnModel.title1" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                        <ResourceString bundle="com/nanosl/nbiz/gui/Bundle.properties" key="CustomerTopComponent.table.columnModel.title1" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                       </Title>
                       <Editor/>
                       <Renderer/>
@@ -210,6 +219,13 @@
                       <Editor/>
                       <Renderer/>
                     </Column>
+                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                      <Title editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                        <ResourceString bundle="com/nanosl/nbiz/gui/Bundle.properties" key="CustomerTopComponent.table.columnModel.title5" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                      </Title>
+                      <Editor/>
+                      <Renderer/>
+                    </Column>
                   </TableColumnModel>
                 </Property>
                 <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">
@@ -217,8 +233,8 @@
                 </Property>
               </Properties>
               <Events>
-                <EventHandler event="mouseReleased" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="masterTableMouseReleased"/>
-                <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="masterTableKeyReleased"/>
+                <EventHandler event="mouseReleased" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tableMouseReleased"/>
+                <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="tableKeyReleased"/>
               </Events>
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>
@@ -380,6 +396,28 @@
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="nicTextFieldActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JLabel" name="notesLabel1">
+          <Properties>
+            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+              <ResourceString bundle="com/nanosl/nbiz/gui/Bundle.properties" key="CustomerTopComponent.notesLabel1.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+            </Property>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JTextField" name="creditField">
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="creditFieldActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JButton" name="exportButton">
+          <Properties>
+            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+              <ResourceString bundle="com/nanosl/nbiz/gui/Bundle.properties" key="CustomerTopComponent.exportButton.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+            </Property>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="exportButtonActionPerformed"/>
           </Events>
         </Component>
       </SubComponents>

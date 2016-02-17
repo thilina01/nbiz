@@ -13,7 +13,7 @@ import static com.nanosl.nbiz.util.Format.nf2d;
 import static com.nanosl.nbiz.util.Format.yyyy_MM_dd;
 import com.nanosl.nbiz.util.NTopComponent;
 import com.nanosl.nbiz.util.Printer;
-import entity.Bank;
+import entity.Account;
 import entity.IssuedCheque;
 import entity.PurchaseInvoice;
 import entity.Supplier;
@@ -90,7 +90,7 @@ public final class ChequeTopComponent extends NTopComponent {
 //        }
 //        System.out.println("at setvisible " + supplier);
         Combo.fillSuppliers(supplierComboBox, null);
-        Combo.fillBanks(bankComboBox);
+        Combo.fillBanks(accountComboBox);
         fill();
     }
 
@@ -112,7 +112,7 @@ public final class ChequeTopComponent extends NTopComponent {
         jLabel6 = new javax.swing.JLabel();
         chequeNumbertField = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
-        bankComboBox = new javax.swing.JComboBox();
+        accountComboBox = new javax.swing.JComboBox();
         supplierComboBox = new javax.swing.JComboBox();
         jPanel3 = new javax.swing.JPanel();
         masterScrollPane = new javax.swing.JScrollPane();
@@ -164,10 +164,10 @@ public final class ChequeTopComponent extends NTopComponent {
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel9, org.openide.util.NbBundle.getMessage(ChequeTopComponent.class, "ChequeTopComponent.jLabel9.text")); // NOI18N
 
-        bankComboBox.setName("bankComboBox"); // NOI18N
-        bankComboBox.addKeyListener(new java.awt.event.KeyAdapter() {
+        accountComboBox.setName("accountComboBox"); // NOI18N
+        accountComboBox.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
-                bankComboBoxKeyPressed(evt);
+                accountComboBoxKeyPressed(evt);
             }
         });
 
@@ -212,18 +212,18 @@ public final class ChequeTopComponent extends NTopComponent {
                             .addComponent(chequeNumbertField, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(amountTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(supplierComboBox, 0, 200, Short.MAX_VALUE)
-                            .addComponent(bankComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addComponent(accountComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel1Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {amountTextField, bankComboBox, chequeNumbertField, datePicker, supplierComboBox});
+        jPanel1Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {accountComboBox, amountTextField, chequeNumbertField, datePicker, supplierComboBox});
 
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(bankComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(accountComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel9))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -254,11 +254,11 @@ public final class ChequeTopComponent extends NTopComponent {
 
             },
             new String [] {
-                "#", "Number", "Amount", "Issued Date", "Banking Date", "Bank", "Invoice", "Supplier"
+                "#", "Number", "Amount", "Issued Date", "Banking Date", "Account", "Invoice", "Supplier", "Status"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false
+                false, false, false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -291,8 +291,9 @@ public final class ChequeTopComponent extends NTopComponent {
             masterTable.getColumnModel().getColumn(5).setPreferredWidth(150);
             masterTable.getColumnModel().getColumn(5).setHeaderValue(org.openide.util.NbBundle.getMessage(ChequeTopComponent.class, "ChequeTopComponent.masterTable.columnModel.title5")); // NOI18N
             masterTable.getColumnModel().getColumn(6).setHeaderValue(org.openide.util.NbBundle.getMessage(ChequeTopComponent.class, "ChequeTopComponent.masterTable.columnModel.title6")); // NOI18N
-            masterTable.getColumnModel().getColumn(7).setPreferredWidth(200);
+            masterTable.getColumnModel().getColumn(7).setPreferredWidth(150);
             masterTable.getColumnModel().getColumn(7).setHeaderValue(org.openide.util.NbBundle.getMessage(ChequeTopComponent.class, "ChequeTopComponent.masterTable.columnModel.title7")); // NOI18N
+            masterTable.getColumnModel().getColumn(8).setHeaderValue(org.openide.util.NbBundle.getMessage(ChequeTopComponent.class, "ChequeTopComponent.masterTable.columnModel.title8")); // NOI18N
         }
 
         startDatePicker.addActionListener(new java.awt.event.ActionListener() {
@@ -405,11 +406,11 @@ public final class ChequeTopComponent extends NTopComponent {
         }
     }//GEN-LAST:event_chequeNumbertFieldActionPerformed
 
-    private void bankComboBoxKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_bankComboBoxKeyPressed
+    private void accountComboBoxKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_accountComboBoxKeyPressed
         if (evt.getKeyCode() == 10) {
             chequeNumbertField.requestFocus();
         }
-    }//GEN-LAST:event_bankComboBoxKeyPressed
+    }//GEN-LAST:event_accountComboBoxKeyPressed
 
     private void supplierComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_supplierComboBoxActionPerformed
 //        fillItems();
@@ -491,9 +492,9 @@ public final class ChequeTopComponent extends NTopComponent {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox acPayOnlyCheckBox;
+    private javax.swing.JComboBox accountComboBox;
     private javax.swing.JCheckBox allSimpleCheckBox;
     private javax.swing.JTextField amountTextField;
-    private javax.swing.JComboBox bankComboBox;
     private javax.swing.JTextField chequeNumbertField;
     private org.jdesktop.swingx.JXDatePicker datePicker;
     private org.jdesktop.swingx.JXDatePicker endDatePicker;
@@ -545,7 +546,7 @@ public final class ChequeTopComponent extends NTopComponent {
         String chequeNumber = chequeNumbertField.getText().trim();
         IssuedCheque issuedCheque = new IssuedCheque(chequeNumber);
         issuedCheque.setAmount(amount);
-        issuedCheque.setBank((Bank) bankComboBox.getSelectedItem());
+        issuedCheque.setAccount((Account) accountComboBox.getSelectedItem());
         issuedCheque.setBankingDate(date);
         issuedCheque.setIssuedDate(new Date());
 //            issuedCheque.set
@@ -561,9 +562,9 @@ public final class ChequeTopComponent extends NTopComponent {
     }
 
     private void KeyAdapter() {
-        AutoCompleteDecorator.decorate(bankComboBox);
+        AutoCompleteDecorator.decorate(accountComboBox);
         AutoCompleteDecorator.decorate(supplierComboBox);
-        setComboBoxKeyAdapters(bankComboBox);
+        setComboBoxKeyAdapters(accountComboBox);
         setComboBoxKeyAdapters(datePicker);
         setComboBoxKeyAdapters(supplierComboBox);
     }
@@ -588,7 +589,7 @@ public final class ChequeTopComponent extends NTopComponent {
     KeyAdapter bankComboBoxKeyAdapter = new java.awt.event.KeyAdapter() {
         @Override
         public void keyPressed(KeyEvent evt) {
-            bankComboBoxKeyPressed(evt);
+            accountComboBoxKeyPressed(evt);
         }
     };
     KeyAdapter bankingDatePickerKeyAdapter = new java.awt.event.KeyAdapter() {
@@ -640,7 +641,7 @@ public final class ChequeTopComponent extends NTopComponent {
                 nf2dComma.format(issuedCheque.getAmount()),
                 yyyy_MM_dd_hh_mm_ss_a.format(issuedCheque.getIssuedDate()),
                 yyyy_MM_dd.format(issuedCheque.getBankingDate()),
-                issuedCheque.getBank().getName(),
+                issuedCheque.getAccount(),
                 invoiceNumbers,
                 supplierName
             };

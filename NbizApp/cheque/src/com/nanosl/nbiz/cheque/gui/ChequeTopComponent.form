@@ -69,7 +69,7 @@
                               <Component id="chequeNumbertField" linkSize="1" alignment="0" min="-2" pref="103" max="-2" attributes="1"/>
                               <Component id="amountTextField" linkSize="1" alignment="0" min="-2" pref="92" max="-2" attributes="0"/>
                               <Component id="supplierComboBox" linkSize="1" alignment="0" pref="200" max="32767" attributes="0"/>
-                              <Component id="bankComboBox" linkSize="1" alignment="0" max="32767" attributes="1"/>
+                              <Component id="accountComboBox" linkSize="1" alignment="0" max="32767" attributes="1"/>
                           </Group>
                       </Group>
                   </Group>
@@ -82,7 +82,7 @@
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="bankComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="accountComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabel9" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
@@ -184,15 +184,15 @@
             </Property>
           </Properties>
         </Component>
-        <Component class="javax.swing.JComboBox" name="bankComboBox">
+        <Component class="javax.swing.JComboBox" name="accountComboBox">
           <Properties>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
               <StringArray count="0"/>
             </Property>
-            <Property name="name" type="java.lang.String" value="bankComboBox" noResource="true"/>
+            <Property name="name" type="java.lang.String" value="accountComboBox" noResource="true"/>
           </Properties>
           <Events>
-            <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="bankComboBoxKeyPressed"/>
+            <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="accountComboBoxKeyPressed"/>
           </Events>
         </Component>
         <Component class="javax.swing.JComboBox" name="supplierComboBox">
@@ -283,15 +283,16 @@
               <Properties>
                 <Property name="autoCreateRowSorter" type="boolean" value="true"/>
                 <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                  <Table columnCount="8" rowCount="0">
+                  <Table columnCount="9" rowCount="0">
                     <Column editable="false" title="#" type="java.lang.Object"/>
                     <Column editable="false" title="Number" type="java.lang.Object"/>
                     <Column editable="false" title="Amount" type="java.lang.Object"/>
                     <Column editable="false" title="Issued Date" type="java.lang.Object"/>
                     <Column editable="false" title="Banking Date" type="java.lang.Object"/>
-                    <Column editable="false" title="Bank" type="java.lang.Object"/>
+                    <Column editable="false" title="Account" type="java.lang.Object"/>
                     <Column editable="false" title="Invoice" type="java.lang.Object"/>
                     <Column editable="false" title="Supplier" type="java.lang.Object"/>
+                    <Column editable="false" title="Status" type="java.lang.Object"/>
                   </Table>
                 </Property>
                 <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
@@ -347,9 +348,16 @@
                       <Editor/>
                       <Renderer/>
                     </Column>
-                    <Column maxWidth="-1" minWidth="-1" prefWidth="200" resizable="true">
+                    <Column maxWidth="-1" minWidth="-1" prefWidth="150" resizable="true">
                       <Title editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                         <ResourceString bundle="com/nanosl/nbiz/cheque/gui/Bundle.properties" key="ChequeTopComponent.masterTable.columnModel.title7" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                      </Title>
+                      <Editor/>
+                      <Renderer/>
+                    </Column>
+                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                      <Title editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                        <ResourceString bundle="com/nanosl/nbiz/cheque/gui/Bundle.properties" key="ChequeTopComponent.masterTable.columnModel.title8" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                       </Title>
                       <Editor/>
                       <Renderer/>

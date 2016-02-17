@@ -50,26 +50,29 @@ public class Data {
 
     public static String getInvoiceNo() {
         manager.clearCache();
-        General general = manager.find(General.class, 1);
+        General general = manager.findOne(General.class);
+        
+        System.out.println(general+" ***************** General******");
         if (general == null) {
             general = new General();
             general.setInvoiceNo("0");
             general.setReceiptNo("0");
             manager.update(general);
-            general = manager.find(General.class, 1);
+            general = manager.findOne(General.class);
         }
+        System.out.println(general);
         return general.getInvoiceNo();
     }
 
     public static String getReceiptNo() {
         manager.clearCache();
-        General general = manager.find(General.class, 1);
+        General general = manager.findOne(General.class);
         if (general == null) {
             general = new General();
             general.setInvoiceNo("0");
             general.setReceiptNo("0");
             manager.update(general);
-            general = manager.find(General.class, 1);
+            general = manager.findOne(General.class);
         }
         return general == null ? "000" : general.getReceiptNo();
     }
@@ -77,7 +80,7 @@ public class Data {
     public static void setReceiptNo(String lastReceiptNo) {
         try {
             int reciptNo = Integer.parseInt(lastReceiptNo);
-            General general = manager.find(General.class, 1);
+            General general = manager.findOne(General.class);
             if (general == null) {
                 general = new General();
                 general.setInvoiceNo("0");
@@ -92,7 +95,7 @@ public class Data {
     public static void setInvoiceNo(String lastInvoiceNo) {
         try {
             int invoiceNo = Integer.parseInt(lastInvoiceNo);
-            General general = manager.find(General.class, 1);
+            General general = manager.findOne(General.class);
             if (general == null) {
                 general = new General();
                 general.setReceiptNo("0");
@@ -166,6 +169,7 @@ public class Data {
         operator.setPassword("n");
         Employee employee = new Employee("000");
         Person person = new Person("000000000V");
+        person.setName("ADMINISTRATOR");
         employee.setPerson(person);
         EmployeePosition employeePosition = new EmployeePosition("ADMIN");
         employee.setEmployeePosition(employeePosition);

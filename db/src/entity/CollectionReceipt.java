@@ -21,8 +21,6 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -30,14 +28,13 @@ import javax.xml.bind.annotation.XmlTransient;
  */
 @Entity
 @Table(name = "collection_receipt")
-@XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "CollectionReceipt.findAll", query = "SELECT c FROM CollectionReceipt c"),
     @NamedQuery(name = "CollectionReceipt.findByReceiptNumber", query = "SELECT c FROM CollectionReceipt c WHERE c.receiptNumber = :receiptNumber"),
     @NamedQuery(name = "CollectionReceipt.findByCollectedTime", query = "SELECT c FROM CollectionReceipt c WHERE c.collectedTime = :collectedTime"),
     @NamedQuery(name = "CollectionReceipt.findByOperator", query = "SELECT c FROM CollectionReceipt c WHERE c.operator = :operator"),
     @NamedQuery(name = "CollectionReceipt.findByAmount", query = "SELECT c FROM CollectionReceipt c WHERE c.amount = :amount")})
-public class CollectionReceipt implements Serializable {
+public class CollectionReceipt implements Serializable, Comparable<CollectionReceipt>  {
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -53,6 +50,8 @@ public class CollectionReceipt implements Serializable {
 //    private Double cash; 
     @Column(name = "amount")
     private Double amount;
+    @Column(name = "amount_in_cash")
+    private Double amountInCash;
     @JoinColumn(name = "sale_invoice_inv_no", referencedColumnName = "inv_no")
     @ManyToOne(optional = false)
     private SaleInvoice saleInvoice;
@@ -60,6 +59,9 @@ public class CollectionReceipt implements Serializable {
     private Collection<SaleCheque> saleChequeCollection;
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "collectionReceipt")
     private SaleCash saleCash;
+    @JoinColumn(name = "customer_code", referencedColumnName = "code")
+    @ManyToOne
+    private Customer customer;
 
     public CollectionReceipt() {
     }
@@ -107,8 +109,7 @@ public class CollectionReceipt implements Serializable {
     public void setSaleInvoice(SaleInvoice saleInvoice) {
         this.saleInvoice = saleInvoice;
     }
-
-    @XmlTransient
+    
     public Collection<SaleCheque> getSaleChequeCollection() {
         return saleChequeCollection;
     }
@@ -156,6 +157,34 @@ public class CollectionReceipt implements Serializable {
 
     public void setAmount(Double amount) {
         this.amount = amount;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
+    /**
+     * @return the amountInCash
+     */
+    public Double getAmountInCash() {
+        return amountInCash;
+    }
+
+    /**
+     * @param amountInCash the amountInCash to set
+     */
+    public void setAmountInCash(Double amountInCash) {
+        this.amountInCash = amountInCash;
+    }
+
+    
+    @Override
+    public int compareTo(CollectionReceipt o) {
+        return receiptNumber.compareTo(o.getReceiptNumber());
     }
     
 }

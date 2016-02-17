@@ -29,6 +29,7 @@ import org.openide.awt.ActionReference;
 import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
 import com.nanosl.nbiz.util.Combo;
+import entity.Account;
 
 /**
  * Top component which displays something.
@@ -487,7 +488,7 @@ public final class PurchaseInvoicePaymentTopComponent extends NTopComponent {
         purchaseInvoices.stream().forEach((pi) -> {
             double credit = pi.getCredit() == null ? 0 : pi.getCredit();
             if (credit > 0) {
-                Object[] rowData = {pi,pi.getSupplier()};
+                Object[] rowData = {pi, pi.getSupplier()};
                 invoiceDtm.addRow(rowData);
             }
         });
@@ -526,7 +527,7 @@ public final class PurchaseInvoicePaymentTopComponent extends NTopComponent {
                 clearPaymentFields();
                 calcRemaining();
             }
-        } catch (NumberFormatException  e) {
+        } catch (NumberFormatException e) {
             Loggings.logError(getName(), e);
         }
     }
@@ -581,7 +582,7 @@ public final class PurchaseInvoicePaymentTopComponent extends NTopComponent {
             for (int i = 0; i < rowCount; i++) {
                 Object o = paymentTable.getValueAt(i, 1);
                 String chequeNumber = o == null ? "" : o.toString().trim();
-                Bank bank = manager.find(Bank.class, paymentTable.getValueAt(i, 3).toString());
+                Account account = (Account) paymentTable.getValueAt(i, 3);
                 double amount = Double.valueOf(paymentTable.getValueAt(i, 0).toString());
                 Date date = yyyy_MM_dd.parse(paymentTable.getValueAt(i, 2).toString());
                 if (chequeNumber.equals("")) {
@@ -592,13 +593,13 @@ public final class PurchaseInvoicePaymentTopComponent extends NTopComponent {
                     IssuedCash issuedCash = new IssuedCash(calendar.getTime());
                     issuedCash.setAmount(amount);
                     issuedCash.setPurchaseInvoice(purchaseInvoice);
-                    issuedCash.setBank(bank);
+//                    issuedCash.setBank(account);
                     serializables.add(issuedCash);
                     purchaseInvoice.getIssuedCashCollection().add(issuedCash);
                 } else {
                     IssuedCheque issuedCheque = new IssuedCheque(chequeNumber);
                     issuedCheque.setAmount(amount);
-                    issuedCheque.setBank(bank);
+                    issuedCheque.setAccount(account);
                     issuedCheque.setBankingDate(date);
                     issuedCheque.setIssuedDate(new Date());
                     ArrayList<PurchaseInvoice> purchaseInvoicesOfCheque = new ArrayList<>();
