@@ -43,6 +43,7 @@ public class Installer extends ModuleInstall {
             } catch (InterruptedException ex) {
                 Exceptions.printStackTrace(ex);
             }
+            config = DatabaseConfigurationPanel.read();
             restored();
         }
         server = config.getServer() == null | config.getServer().equals("") ? server : config.getServer();

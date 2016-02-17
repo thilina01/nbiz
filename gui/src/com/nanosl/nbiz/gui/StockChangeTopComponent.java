@@ -9,7 +9,6 @@ import entity.Item;
 import entity.Stock;
 import entity.StockChange;
 import entity.StockChangeSummery;
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -436,7 +435,7 @@ public final class StockChangeTopComponent extends NTopComponent {
             Item item = stock.getItem();
             double quantity = stock.getQuantity() == null ? 0 : stock.getQuantity();
             double cost = item.getPriceList() == null ? 0 : item.getPriceList().getCostPack();
-            Object[] row = {++i, item.getCode(), item.getDescription(), quantity, quantity, 0, cost, 0};
+            Object[] row = {++i, item.getCode(), item.getDescription(), quantity, 0, 0, cost, 0};
             tableModel.addRow(row);
         }
     }
