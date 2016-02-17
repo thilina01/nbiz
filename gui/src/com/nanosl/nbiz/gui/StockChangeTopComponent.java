@@ -340,7 +340,7 @@ public final class StockChangeTopComponent extends NTopComponent {
             if (masterTable.getValueAt(i, 1).equals(item.getCode())) {
                 double oldQuantity = Double.valueOf(masterTable.getValueAt(i, 3).toString());
                 masterTable.setValueAt(actualQuantity, i, 4);
-                double deferent = oldQuantity - actualQuantity;
+                double deferent = actualQuantity - oldQuantity;
                 masterTable.setValueAt(deferent, i, 5);
                 double rate = Double.valueOf(masterTable.getValueAt(i, 6).toString());
                 masterTable.setValueAt(deferent * rate, i, 7);
@@ -357,7 +357,7 @@ public final class StockChangeTopComponent extends NTopComponent {
         for (int i = 0; i < tableModel.getRowCount(); i++) {
             total += Double.valueOf(tableModel.getValueAt(i, 7).toString());
         }
-        totalLabel.setText(total + "");
+        totalLabel.setText(nf2d.format(total));
     }
 
     private void process() {
@@ -435,7 +435,15 @@ public final class StockChangeTopComponent extends NTopComponent {
             Item item = stock.getItem();
             double quantity = stock.getQuantity() == null ? 0 : stock.getQuantity();
             double cost = item.getPriceList() == null ? 0 : item.getPriceList().getCostPack();
-            Object[] row = {++i, item.getCode(), item.getDescription(), quantity, 0, 0, cost, 0};
+            Object[] row = {
+                ++i,
+                item.getCode(),
+                item.getDescription(),
+                quantity,
+                0,
+                0 - quantity,
+                nf2d.format(cost),
+                nf2d.format((0 - quantity) * cost)};
             tableModel.addRow(row);
         }
     }
