@@ -69,7 +69,7 @@ public class Installer extends ModuleInstall {
 //   }
                 System.exit(0);
             }
-            Fixer.applyFix();
+//            Fixer.applyFix(); // You may enable this ***** Importent ****
         } else {
             try {
                 URI uri = Installer.class.getResource("db.sql").toURI();

@@ -9,6 +9,8 @@ import com.nanosl.lib.db.Manager;
 import static com.nanosl.nbiz.util.Cell.coloredCellRenderer;
 import com.nanosl.nbiz.util.Format;
 import entity.Item;
+import entity.PriceList;
+import entity.Stock;
 import java.awt.event.KeyEvent;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
@@ -26,6 +28,10 @@ public class SearchItemDialog extends javax.swing.JDialog {
 
     /**
      * Creates new form SearchCustomerDialog
+     *
+     * @param parent
+     * @param modal
+     * @param c
      */
     public SearchItemDialog(java.awt.Frame parent, boolean modal, String c) {
         super(parent, modal);
@@ -59,6 +65,7 @@ public class SearchItemDialog extends javax.swing.JDialog {
         containsRadioButton = new javax.swing.JRadioButton();
         jLabel2 = new javax.swing.JLabel();
         limitTextField = new javax.swing.JTextField();
+        closeButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -141,6 +148,13 @@ public class SearchItemDialog extends javax.swing.JDialog {
 
         limitTextField.setText(org.openide.util.NbBundle.getMessage(SearchItemDialog.class, "SearchItemDialog.limitTextField.text")); // NOI18N
 
+        org.openide.awt.Mnemonics.setLocalizedText(closeButton, org.openide.util.NbBundle.getMessage(SearchItemDialog.class, "SearchItemDialog.closeButton.text")); // NOI18N
+        closeButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                closeButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -164,8 +178,10 @@ public class SearchItemDialog extends javax.swing.JDialog {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(limitTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(addButton)))
-                .addContainerGap())
+                        .addComponent(addButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(closeButton)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -178,7 +194,8 @@ public class SearchItemDialog extends javax.swing.JDialog {
                     .addComponent(startingRadioButton)
                     .addComponent(containsRadioButton)
                     .addComponent(jLabel2)
-                    .addComponent(limitTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(limitTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(closeButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -217,7 +234,8 @@ public class SearchItemDialog extends javax.swing.JDialog {
 
     private void searchTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchTextFieldActionPerformed
         if (itemTable.getRowCount() > 0) {
-            setItem(Manager.getInstance().find(Item.class, itemTable.getValueAt(0, 0).toString()));
+            int selectedRow = itemTable.getSelectedRow();
+            setItem(Manager.getInstance().find(Item.class, itemTable.getValueAt(selectedRow < 0 ? 0 : selectedRow, 0).toString()));
             dispose();
         } else {
             setItem(Manager.getInstance().find(Item.class, searchTextField.getText().trim()));
@@ -239,7 +257,12 @@ public class SearchItemDialog extends javax.swing.JDialog {
         String text = searchTextField.getText().trim();
         itemTableModel.setRowCount(0);
         int length = text.length();
-        if (length > 2) {
+
+        if (length == 2) {
+            List<Item> items = Find.itemBy$(text);
+            fillTable(items);
+            selectRow();
+        } else if (length > 2) {
             int limit = 10;
             try {
                 limit = Integer.parseInt(limitTextField.getText().trim());
@@ -247,7 +270,10 @@ public class SearchItemDialog extends javax.swing.JDialog {
             }
             List<Item> items = Find.itemBy$(startingRadioButton.isSelected() ? text + "%" : "%" + text + "%", limit);
             fillTable(items);
+            selectRow();
         }
+
+
     }//GEN-LAST:event_searchTextFieldKeyReleased
 
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
@@ -271,6 +297,10 @@ public class SearchItemDialog extends javax.swing.JDialog {
             dispose();
         }
     }//GEN-LAST:event_itemTableKeyPressed
+
+    private void closeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeButtonActionPerformed
+        dispose();        // TODO add your handling code here:
+    }//GEN-LAST:event_closeButtonActionPerformed
     /**
      * @param args the command line arguments
      */
@@ -317,6 +347,7 @@ public class SearchItemDialog extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addButton;
     private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JButton closeButton;
     private javax.swing.JRadioButton containsRadioButton;
     private javax.swing.JTable itemTable;
     private javax.swing.JLabel jLabel1;
@@ -331,17 +362,9 @@ public class SearchItemDialog extends javax.swing.JDialog {
     DefaultTableModel itemTableModel;
 
     private void fillTable(List<Item> items) {
-
-        for (Item item1 : items) {
-            Object[] row = {
-                item1.getCode(),
-                item1.getDescription(),
-                Format.nf2d.format(item1.getPriceList().getCostPack()),
-                Format.nf2d.format(item1.getPriceList().getSellingPack()),
-                Format.nf2d.format(item1.getStock().getQuantity())
-            };
-            itemTableModel.addRow(row);
-        }
+        items.stream().forEach((item1) -> {
+            addRow(item1);
+        });
     }
 
     /**
@@ -356,5 +379,28 @@ public class SearchItemDialog extends javax.swing.JDialog {
      */
     public void setItem(Item item) {
         this.item = item;
+    }
+
+    private void selectRow() {
+        int rowCount = itemTable.getRowCount();
+        String searchText = searchTextField.getText().trim();
+        for (int i = 0; i < rowCount; i++) {
+            if (searchText.equalsIgnoreCase(itemTable.getValueAt(i, 0).toString())) {
+                itemTable.setRowSelectionInterval(i, i);
+            }
+        }
+    }
+
+    private void addRow(Item item1) {
+        PriceList priceList = item1.getPriceList();
+        Stock stock = item1.getStock();
+        Object[] row = {
+            item1.getCode(),
+            item1.getDescription(),
+            Format.nf2d.format(priceList == null ? 0 : priceList.getCostPack()),
+            Format.nf2d.format(priceList == null ? 0 : priceList.getSellingPack()),
+            Format.nf2d.format(stock == null ? 0 : stock.getQuantity())
+        };
+        itemTableModel.addRow(row);
     }
 }

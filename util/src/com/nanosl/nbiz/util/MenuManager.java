@@ -49,7 +49,8 @@ public class MenuManager {
                 menu.setStatus(0);
                 manager.update(menu);
             }
-            jMenuItem.setVisible(menu.getStatus() > 0 || Data.getOperator().getUsername().equalsIgnoreCase("admin"));
+
+            jMenuItem.setVisible(menu.getStatus() > 0 || Data.getOperator() != null && Data.getOperator().getUsername().equalsIgnoreCase("admin"));
             for (MenuElement menuElement : menuComponents) {
                 JPopupMenu popupMenu = (JPopupMenu) menuElement;
                 Component[] components = popupMenu.getComponents();

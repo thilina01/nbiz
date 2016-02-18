@@ -749,7 +749,7 @@ public final class ItemTopComponent extends NTopComponent {
                         p.start();
 
                         int i = 0;
-                        List<Serializable> serializables = new ArrayList<>();
+//                        List<Serializable> serializables = new ArrayList<>();
                         List<Item> items = manager.find(Item.class);
                         Collections.sort(items);
                         for (Item item : items) {
@@ -760,7 +760,7 @@ public final class ItemTopComponent extends NTopComponent {
                                 stock.setItem(item);
                                 stock.setQuantity(0.0);
                                 item.setStock(stock);
-                                serializables.add(stock);
+//                                serializables.add(stock);
                             }
                             PriceList priceList = item.getPriceList();
 
@@ -772,9 +772,9 @@ public final class ItemTopComponent extends NTopComponent {
                                 priceList.setSellingUnit(0.0);
                                 priceList.setItem(item);
                                 item.setPriceList(priceList);
-                                serializables.add(priceList);
+//                                serializables.add(priceList);
                             }
-                            manager.update(serializables);
+//                            manager.update(serializables);
                             double selling = priceList.getSellingPack() != null ? priceList.getSellingPack() : 0;
                             double cost = priceList.getCostPack() != null ? priceList.getCostPack() : 0;
                             Object[] row = {++i, item.getCode(), item.getDescription(), nf2d.format(cost), nf2d.format(selling), nf2d.format(item.getStock().getQuantity())};
@@ -894,6 +894,7 @@ public final class ItemTopComponent extends NTopComponent {
         }
         Combo.fillSuppliers(supplierComboBox, supplier);
         Combo.fillItemTypes(itemTypeComboBox, itemType);
+        fillItemTypes();
 //        if (supplier != null) {
 //            supplier = manager.find(Supplier.class, supplier.getCode());
 //            supplierComboBox.setSelectedItem(supplier);

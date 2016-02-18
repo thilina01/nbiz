@@ -772,7 +772,8 @@ public final class POSTopComponent extends NTopComponent {
     }//GEN-LAST:event_itemComboBoxActionPerformed
 
     private void itemComboBoxKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_itemComboBoxKeyPressed
-        switch (evt.getKeyCode()) {
+        int keyCode = evt.getKeyCode();
+        switch (keyCode) {
             case 10:
                 Item item = (Item) itemComboBox.getSelectedItem();
                 if (item == null) {
@@ -792,7 +793,9 @@ public final class POSTopComponent extends NTopComponent {
             case KeyEvent.VK_F2:
 //                break;
             default:
-                searchItem(evt.getKeyChar() + "");
+                if ((keyCode > 47 && keyCode < 58) || (keyCode > 64 && keyCode < 91)|| (keyCode > 95 && keyCode < 106)) {
+                    searchItem(evt.getKeyChar() + "");
+                }
                 break;
         }
     }//GEN-LAST:event_itemComboBoxKeyPressed
@@ -1702,9 +1705,11 @@ public final class POSTopComponent extends NTopComponent {
         double initialPayment = totalReceivedAmount > amount ? amount : totalReceivedAmount;
 //        double discount = Double.valueOf(totalDiscountText);
         saleInvoice = saleInvoice == null ? new SaleInvoice(invoiceNumber) : saleInvoice;
-
-        customer.setCredit(customer.getCredit() + credit);
-
+        if (customer != null) {
+            customer.setCredit(customer.getCredit() + credit);
+        } else {
+            customer = new Customer("000");
+        }
         saleInvoice.setCustomer(customer);
         saleInvoice.setCustomerName(customerName);
         saleInvoice.setAmount(amount);
