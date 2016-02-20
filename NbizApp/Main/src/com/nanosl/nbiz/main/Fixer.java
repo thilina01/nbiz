@@ -170,20 +170,20 @@ public class Fixer {
 //        queryMap.put("x20150716c", x20150716c);
 //        queryMap.put("x20150716d", x20150716d);
 //        queryMap.put("x20150717a", x20150717a);
-        queryMap.put("CREATE_TABLE_QUOTATION", CREATE_TABLE_QUOTATION);
-        queryMap.put("addCreditToCustomer", addCreditToCustomer);
-        queryMap.put("CREATE_TABLE_quotation_has_item", CREATE_TABLE_quotation_has_item);
-        queryMap.put("addFreeQuantityToPurchaseInvoiceHasItem", addFreeQuantityToPurchaseInvoiceHasItem);
-        queryMap.put("addQuotation_noToGeneral", addQuotation_noToGeneral);
-        queryMap.put("addcustomerCodeToCollectionReceipt", addcustomerCodeToCollectionReceipt);
-        queryMap.put("addAccountAccountNoToSaleCheque", addAccountAccountNoToSaleCheque);
-        queryMap.put("addAccountBankCodeToSaleCheque", addAccountBankCodeToSaleCheque);
-        queryMap.put("CREATE_TABLE_account", CREATE_TABLE_account);
-        queryMap.put("addAmountInCashToCollectionReceipt", addAmountInCashToCollectionReceipt);
-        queryMap.put("CREATE_TABLE_cash_box", CREATE_TABLE_cash_box);
-        queryMap.put("CREATE_TABLE_cash_log", CREATE_TABLE_cash_log);
-        queryMap.put("addAccountAccountNoToIssuedCheque", addAccountAccountNoToIssuedCheque);
-        queryMap.put("addAccountBankCodeToIssuedCheque", addAccountBankCodeToIssuedCheque);
+//        queryMap.put("CREATE_TABLE_QUOTATION", CREATE_TABLE_QUOTATION);
+//        queryMap.put("addCreditToCustomer", addCreditToCustomer);
+//        queryMap.put("CREATE_TABLE_quotation_has_item", CREATE_TABLE_quotation_has_item);
+//        queryMap.put("addFreeQuantityToPurchaseInvoiceHasItem", addFreeQuantityToPurchaseInvoiceHasItem);
+//        queryMap.put("addQuotation_noToGeneral", addQuotation_noToGeneral);
+//        queryMap.put("addcustomerCodeToCollectionReceipt", addcustomerCodeToCollectionReceipt);
+//        queryMap.put("addAccountAccountNoToSaleCheque", addAccountAccountNoToSaleCheque);
+//        queryMap.put("addAccountBankCodeToSaleCheque", addAccountBankCodeToSaleCheque);
+//        queryMap.put("CREATE_TABLE_account", CREATE_TABLE_account);
+//        queryMap.put("addAmountInCashToCollectionReceipt", addAmountInCashToCollectionReceipt);
+//        queryMap.put("CREATE_TABLE_cash_box", CREATE_TABLE_cash_box);
+//        queryMap.put("CREATE_TABLE_cash_log", CREATE_TABLE_cash_log);
+//        queryMap.put("addAccountAccountNoToIssuedCheque", addAccountAccountNoToIssuedCheque);
+//        queryMap.put("addAccountBankCodeToIssuedCheque", addAccountBankCodeToIssuedCheque);
 
         List<Fix> fixs = Manager.getInstance().find(Fix.class);
         for (Fix next : fixs) {

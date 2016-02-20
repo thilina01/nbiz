@@ -10,6 +10,7 @@ import entity.Operator;
 import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
+import javax.swing.JOptionPane;
 import org.openide.modules.ModuleInstall;
 import org.openide.util.Exceptions;
 
@@ -71,18 +72,20 @@ public class Installer extends ModuleInstall {
             }
 //            Fixer.applyFix(); // You may enable this ***** Importent ****
         } else {
-            try {
-                URI uri = Installer.class.getResource("db.sql").toURI();
-                manager.createDatabase(uri);
-                manager.initiateDatabase();
-                manager = Manager.getInstance();
-                Operator operator = manager.find(Operator.class, "admin");
-                if (operator == null) {
-                    Data.initFirstUser();
-                }
-            } catch (URISyntaxException ex) {
-                Exceptions.printStackTrace(ex);
-            }
+            JOptionPane.showMessageDialog(this, "Unable to connect to database,", "Error", JOptionPane.ERROR_MESSAGE);
+            System.exit(0);
+//            try {
+//                URI uri = Installer.class.getResource("db.sql").toURI();
+//                manager.createDatabase(uri);
+//                manager.initiateDatabase();
+//                manager = Manager.getInstance();
+//                Operator operator = manager.find(Operator.class, "admin");
+//                if (operator == null) {
+//                    Data.initFirstUser();
+//                }
+//            } catch (URISyntaxException ex) {
+//                Exceptions.printStackTrace(ex);
+//            }
         }
     }
 

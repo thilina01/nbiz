@@ -197,7 +197,7 @@ public class SearchItemDialog extends javax.swing.JDialog {
                     .addComponent(limitTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(closeButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -258,17 +258,21 @@ public class SearchItemDialog extends javax.swing.JDialog {
         itemTableModel.setRowCount(0);
         int length = text.length();
 
-        if (length == 2) {
-            List<Item> items = Find.itemBy$(text);
+        if (length < 3) {
+            List<Item> items = Find.itemBy$(text,1);
             fillTable(items);
             selectRow();
-        } else if (length > 2) {
+        } else {
             int limit = 10;
             try {
                 limit = Integer.parseInt(limitTextField.getText().trim());
             } catch (NumberFormatException numberFormatException) {
             }
             List<Item> items = Find.itemBy$(startingRadioButton.isSelected() ? text + "%" : "%" + text + "%", limit);
+            Item exactMatchItem = Manager.getInstance().find(Item.class, text);
+            if (exactMatchItem != null && !items.contains(exactMatchItem)) {
+                items.add(0,exactMatchItem);
+            }
             fillTable(items);
             selectRow();
         }

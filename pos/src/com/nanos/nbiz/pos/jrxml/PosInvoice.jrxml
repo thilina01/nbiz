@@ -17,9 +17,6 @@
      DATE_FORMAT(sale_invoice.`inv_time`,'%d-%m-%Y %H:%i') AS _DATE,
      sale_invoice.`customer_code` AS _CUSTOMER,
      sale_invoice.`customer_name` AS customer_name,
-     customer.`addressNumber` AS customer_addressNumber,
-     customer.`addressStreet` AS customer_addressStreet,
-     customer.`city` AS customer_city,
      sale_invoice_has_item.`discount` AS discount,
      sale_invoice.`discount` AS sale_invoice_discount,
      sale_invoice.`received_amount` AS sale_invoice_received_amount,
@@ -50,9 +47,6 @@ WHERE
 	<field name="customer_name" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="customer_addressNumber" class="java.lang.String"/>
-	<field name="customer_addressStreet" class="java.lang.String"/>
-	<field name="customer_city" class="java.lang.String"/>
 	<field name="discount" class="java.lang.Double">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
