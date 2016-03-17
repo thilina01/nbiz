@@ -72,7 +72,7 @@ public class Installer extends ModuleInstall {
             }
 //            Fixer.applyFix(); // You may enable this ***** Importent ****
         } else {
-            JOptionPane.showMessageDialog(this, "Unable to connect to database,", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Unable to connect to database,", "Error", JOptionPane.ERROR_MESSAGE);
             System.exit(0);
 //            try {
 //                URI uri = Installer.class.getResource("db.sql").toURI();

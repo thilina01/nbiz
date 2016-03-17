@@ -35,6 +35,8 @@
                 <package>net.sf.jasperreports.components.headertoolbar.actions</package>
                 <package>net.sf.jasperreports.components.headertoolbar.json</package>
                 <package>net.sf.jasperreports.components.iconlabel</package>
+                <package>net.sf.jasperreports.components.items</package>
+                <package>net.sf.jasperreports.components.items.fill</package>
                 <package>net.sf.jasperreports.components.list</package>
                 <package>net.sf.jasperreports.components.map</package>
                 <package>net.sf.jasperreports.components.map.fill</package>
@@ -64,6 +66,7 @@
                 <package>net.sf.jasperreports.data.excel</package>
                 <package>net.sf.jasperreports.data.hibernate</package>
                 <package>net.sf.jasperreports.data.hibernate.spring</package>
+                <package>net.sf.jasperreports.data.http</package>
                 <package>net.sf.jasperreports.data.jdbc</package>
                 <package>net.sf.jasperreports.data.jndi</package>
                 <package>net.sf.jasperreports.data.json</package>
@@ -94,6 +97,7 @@
                 <package>net.sf.jasperreports.engine.export.zip</package>
                 <package>net.sf.jasperreports.engine.fill</package>
                 <package>net.sf.jasperreports.engine.fonts</package>
+                <package>net.sf.jasperreports.engine.part</package>
                 <package>net.sf.jasperreports.engine.print</package>
                 <package>net.sf.jasperreports.engine.query</package>
                 <package>net.sf.jasperreports.engine.scriptlets</package>
@@ -111,6 +115,7 @@
                 <package>net.sf.jasperreports.extensions</package>
                 <package>net.sf.jasperreports.functions</package>
                 <package>net.sf.jasperreports.functions.annotations</package>
+                <package>net.sf.jasperreports.functions.standard</package>
                 <package>net.sf.jasperreports.governors</package>
                 <package>net.sf.jasperreports.j2ee.servlets</package>
                 <package>net.sf.jasperreports.olap</package>
@@ -119,6 +124,8 @@
                 <package>net.sf.jasperreports.olap.olap4j</package>
                 <package>net.sf.jasperreports.olap.result</package>
                 <package>net.sf.jasperreports.olap.xmla</package>
+                <package>net.sf.jasperreports.parts</package>
+                <package>net.sf.jasperreports.parts.subreport</package>
                 <package>net.sf.jasperreports.renderers</package>
                 <package>net.sf.jasperreports.repo</package>
                 <package>net.sf.jasperreports.search</package>
@@ -136,16 +143,20 @@
                 <package>org.w3c.tools.codec</package>
             </public-packages>
             <class-path-extension>
-                <runtime-relative-path>ext/jasperreports-fonts-5.6.0.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/jasperreports-fonts-5.6.0.jar</binary-origin>
+                <runtime-relative-path>ext/jasperreports-6.2.0.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/jasperreports-6.2.0.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/jasperreports-5.6.0.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/jasperreports-5.6.0.jar</binary-origin>
+                <runtime-relative-path>ext/jasperreports-functions-6.2.0.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/jasperreports-functions-6.2.0.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
                 <runtime-relative-path>ext/servlet-api-2.4.jar</runtime-relative-path>
                 <binary-origin>release/modules/ext/servlet-api-2.4.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/jasperreports-fonts-6.2.0.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/jasperreports-fonts-6.2.0.jar</binary-origin>
             </class-path-extension>
         </data>
     </configuration>

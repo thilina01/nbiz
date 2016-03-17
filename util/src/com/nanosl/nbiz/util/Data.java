@@ -51,8 +51,8 @@ public class Data {
     public static String getInvoiceNo() {
         manager.clearCache();
         General general = manager.findOne(General.class);
-        
-        System.out.println(general+" ***************** General******");
+
+        System.out.println(general + " ***************** General******");
         if (general == null) {
             general = new General();
             general.setInvoiceNo("0");
@@ -147,12 +147,21 @@ public class Data {
     public static Map<String, Object> getParams() {
         Map<String, Object> params = new LinkedHashMap<>();
         try {
-            params.put("company", getCompany().getName());
-            params.put("address", getCompany().getAddressNumber() + " " + getCompany().getAddressStreet() + " " + getCompany().getAddressCity());
-            params.put("phone", getCompany().getContactOne() + " " + getCompany().getContactTwo());
-            params.put("email", getCompany().getEmail());
-            params.put("fax", getCompany().getFax());
-            params.put("web", getCompany().getWeb());
+            String companyName = getCompany().getName();
+            String addressNumber = getCompany().getAddressNumber();
+            String addressStreet = getCompany().getAddressStreet();
+            String city = getCompany().getAddressCity();
+            String contactOne = getCompany().getContactOne();
+            String contactTwo = getCompany().getContactTwo();
+            String email = getCompany().getEmail();
+            String fax = getCompany().getFax();
+            String web = getCompany().getWeb();
+            params.put("company", companyName == null ? "" : companyName);
+            params.put("address", addressNumber == null ? "" : addressNumber + " " + addressStreet == null ? "" : addressStreet + " " + city == null ? "" : city);
+            params.put("phone", contactOne == null ? "" : contactOne + " " + contactTwo == null ? "" : contactTwo);
+            params.put("email", email == null ? "" : email);
+            params.put("fax", fax == null ? "" : fax);
+            params.put("web", web == null ? "" : web);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Update Your Company Information");
             TopComponent tc = WindowManager.getDefault().findTopComponent("CompanyTopComponent");

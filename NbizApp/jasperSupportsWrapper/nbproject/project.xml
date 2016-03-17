@@ -120,6 +120,13 @@
                 <package>org.apache.commons.net.time</package>
                 <package>org.apache.commons.net.util</package>
                 <package>org.apache.commons.net.whois</package>
+                <package>org.joda.time</package>
+                <package>org.joda.time.base</package>
+                <package>org.joda.time.chrono</package>
+                <package>org.joda.time.convert</package>
+                <package>org.joda.time.field</package>
+                <package>org.joda.time.format</package>
+                <package>org.joda.time.tz</package>
             </public-packages>
             <class-path-extension>
                 <runtime-relative-path>ext/itext-2.1.3.jar</runtime-relative-path>
@@ -152,6 +159,10 @@
             <class-path-extension>
                 <runtime-relative-path>ext/iText-5.0.5.jar</runtime-relative-path>
                 <binary-origin>release/modules/ext/iText-5.0.5.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/joda-time-2.4.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/joda-time-2.4.jar</binary-origin>
             </class-path-extension>
         </data>
     </configuration>

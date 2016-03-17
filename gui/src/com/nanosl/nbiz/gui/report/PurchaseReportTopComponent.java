@@ -10,13 +10,20 @@ import com.nanosl.nbiz.util.Export;
 import static com.nanosl.nbiz.util.Format.yyyy_MM_dd;
 import com.nanosl.nbiz.util.NTopComponent;
 import entity.PurchaseInvoice;
+import entity.PurchaseInvoiceHasItem;
+import entity.PurchaseInvoicePK;
+import entity.Stock;
 import entity.Supplier;
 import java.awt.Component;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import javax.swing.JComponent;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.netbeans.api.settings.ConvertAsProperties;
@@ -76,6 +83,7 @@ public final class PurchaseReportTopComponent extends NTopComponent {
         supplierCheckBox = new javax.swing.JCheckBox();
         supplierComboBox = new javax.swing.JComboBox();
         exportButton = new javax.swing.JButton();
+        deleteButton = new javax.swing.JButton();
 
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
@@ -163,6 +171,13 @@ public final class PurchaseReportTopComponent extends NTopComponent {
             }
         });
 
+        org.openide.awt.Mnemonics.setLocalizedText(deleteButton, org.openide.util.NbBundle.getMessage(PurchaseReportTopComponent.class, "PurchaseReportTopComponent.deleteButton.text")); // NOI18N
+        deleteButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -182,7 +197,8 @@ public final class PurchaseReportTopComponent extends NTopComponent {
                         .addComponent(supplierCheckBox)
                         .addGap(18, 18, 18)
                         .addComponent(supplierComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(deleteButton))
                     .addComponent(masterScrollPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 812, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addComponent(exportButton)
@@ -200,7 +216,8 @@ public final class PurchaseReportTopComponent extends NTopComponent {
                     .addComponent(endDatePicker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(fillButton)
                     .addComponent(supplierCheckBox)
-                    .addComponent(supplierComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(supplierComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(deleteButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(masterScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 406, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -280,10 +297,36 @@ public final class PurchaseReportTopComponent extends NTopComponent {
     }//GEN-LAST:event_supplierComboBoxKeyPressed
 
     private void exportButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportButtonActionPerformed
-Export.toExcel(table, yyyy_MM_dd.format(makeStartDate(startDatePicker.getDate())) + " to " + yyyy_MM_dd.format(makeEndDate(endDatePicker.getDate())), getName().replace(" Window", ""));
+        Export.toExcel(table, yyyy_MM_dd.format(makeStartDate(startDatePicker.getDate())) + " to " + yyyy_MM_dd.format(makeEndDate(endDatePicker.getDate())), getName().replace(" Window", ""));
     }//GEN-LAST:event_exportButtonActionPerformed
 
+    private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
+        int row = table.getSelectedRow();
+        if (row >= 0 && JOptionPane.showConfirmDialog(this, "Are you sure to delete invoice????") == JOptionPane.YES_OPTION) {
+            String invoiceNumber = table.getValueAt(row, 4).toString();
+            String supperCode = table.getValueAt(row, 2).toString();
+            PurchaseInvoice purchaseInvoice = manager.find(PurchaseInvoice.class, new PurchaseInvoicePK(invoiceNumber, supperCode));
+            Collection<PurchaseInvoiceHasItem> purchaseInvoiceHasItems = purchaseInvoice.getPurchaseInvoiceHasItemCollection();
+            List<Serializable> serializables = new ArrayList<>();
+//            System.out.println("purchaseInvoiceHasItems.size "+purchaseInvoiceHasItems.size());
+            for (PurchaseInvoiceHasItem purchaseInvoiceHasItem : purchaseInvoiceHasItems) {
+                Stock stock = purchaseInvoiceHasItem.getItem().getStock();
+//                System.out.println("stock.getQuantity " + stock.getQuantity());
+//                System.out.println("next.getQuantity " + purchaseInvoiceHasItem.getQuantity());
+//                System.out.println("next.getFreeQuantity " + purchaseInvoiceHasItem.getFreeQuantity());
+                stock.setQuantity(stock.getQuantity() - (purchaseInvoiceHasItem.getQuantity() + purchaseInvoiceHasItem.getFreeQuantity()));
+                serializables.add(stock);
+            }
+            manager.update(serializables);
+            manager.delete(purchaseInvoice);
+            fill();
+        }
+//        purchaseInvoice.setPurchaseInvoiceHasItemCollection(new ArrayList<>());
+//        manager.update(purchaseInvoice);
+    }//GEN-LAST:event_deleteButtonActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton deleteButton;
     private org.jdesktop.swingx.JXDatePicker endDatePicker;
     private javax.swing.JButton exportButton;
     private javax.swing.JButton fillButton;

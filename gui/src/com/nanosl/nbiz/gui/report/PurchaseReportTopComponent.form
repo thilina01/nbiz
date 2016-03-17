@@ -61,7 +61,8 @@
                           <Component id="supplierCheckBox" min="-2" max="-2" attributes="0"/>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Component id="supplierComboBox" min="-2" pref="239" max="-2" attributes="0"/>
-                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                          <EmptySpace max="32767" attributes="0"/>
+                          <Component id="deleteButton" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <Component id="masterScrollPane" alignment="1" pref="812" max="32767" attributes="1"/>
                       <Group type="102" alignment="1" attributes="0">
@@ -85,6 +86,7 @@
                       <Component id="fillButton" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="supplierCheckBox" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="supplierComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="deleteButton" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="masterScrollPane" pref="406" max="32767" attributes="0"/>
@@ -247,6 +249,16 @@
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="exportButtonActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JButton" name="deleteButton">
+          <Properties>
+            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+              <ResourceString bundle="com/nanosl/nbiz/gui/report/Bundle.properties" key="PurchaseReportTopComponent.deleteButton.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+            </Property>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="deleteButtonActionPerformed"/>
           </Events>
         </Component>
       </SubComponents>

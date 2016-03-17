@@ -793,7 +793,7 @@ public final class POSTopComponent extends NTopComponent {
             case KeyEvent.VK_F2:
 //                break;
             default:
-                if ((keyCode > 47 && keyCode < 58) || (keyCode > 64 && keyCode < 91)|| (keyCode > 95 && keyCode < 106)) {
+                if ((keyCode > 47 && keyCode < 58) || (keyCode > 64 && keyCode < 91) || (keyCode > 95 && keyCode < 106)) {
                     searchItem(evt.getKeyChar() + "");
                 }
                 break;
@@ -1155,9 +1155,9 @@ public final class POSTopComponent extends NTopComponent {
             totalAmount1 = Double.parseDouble(totalAmountText);
         } catch (NumberFormatException e) {
         }
-        if (totalAmount1 == 0) {
-            return;
-        }
+//        if (totalAmount1 == 0) {
+//            return;
+//        }
         try {
             paidAmount = Double.parseDouble(paidAmountText);
         } catch (NumberFormatException e) {
@@ -1832,29 +1832,16 @@ public final class POSTopComponent extends NTopComponent {
 //            SaleInvoicePaymentView.getInstance().fill(saleInvoice);
 //            SaleInvoicePaymentView.display();
             if (printCheckBox.isSelected()) {
-                try {
-                    URL url = getClass().getResource("/com/nanos/nbiz/pos/jrxml/PosInvoice.jasper");
-                    Object object = JRLoader.loadObject(url);//"src/com/nanosl/nbiz/gui/jrxml/report1.jasper"
-                    if (object == null) {
-                        showError("Unable to print");
-                        return;
-                    }
-                    JasperReport report = (JasperReport) object;
-                    Map<String, Object> params = Data.getParams();
-                    params.put("invoice", invoiceNumber);
-                    Printer.printPosInvoice(report, params);
-                } catch (JRException ex) {
-                    Exceptions.printStackTrace(ex);
-                }
+                printPOS(invoiceNumber);
             }
-            showSuccess("Invoice: " + invoiceNumber + " Update success");
+            showSuccess("Invoice: " + invoiceNumber + " Updated");
             if (!edit) {
                 Data.setInvoiceNo(invoiceNumber);
                 Data.setReceiptNo(ReceiptNumber);
             }
             clear();
-            lastInvoiceNumberField.setText("Last : " + invoiceNumber);
-            com.nanosl.nbiz.util.Data.updateSales();
+            lastInvoiceNumberField.setText(invoiceNumber);
+//            com.nanosl.nbiz.util.Data.updateSales(); 
         } else {
             showError("Update failed");
         }
@@ -1885,5 +1872,22 @@ public final class POSTopComponent extends NTopComponent {
         calcRemaining();
         totalDiscountField.requestFocus();
         totalDiscountField.selectAll();
+    }
+
+    private void printPOS(String invoiceNumber) {
+        try {
+            URL url = getClass().getResource("/com/nanos/nbiz/pos/jrxml/PosInvoice.jasper");
+            Object object = JRLoader.loadObject(url);//"src/com/nanosl/nbiz/gui/jrxml/report1.jasper"
+            if (object == null) {
+                showError("Unable to print");
+                return;
+            }
+            JasperReport report = (JasperReport) object;
+            Map<String, Object> params = Data.getParams();
+            params.put("invoice", invoiceNumber);
+            Printer.printPosInvoice(report, params);
+        } catch (JRException ex) {
+            Exceptions.printStackTrace(ex);
+        }
     }
 }
