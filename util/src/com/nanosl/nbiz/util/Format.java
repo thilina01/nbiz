@@ -27,6 +27,7 @@ public interface Format {
     public static final NumberFormat nf0d = new DecimalFormat("#0");
     public static final NumberFormat nf1d = new DecimalFormat("#0.0");
     public static final NumberFormat nf2d = new DecimalFormat("#0.00");
+    public static final NumberFormat nf3p2d = new DecimalFormat("#000.00");
     public static final NumberFormat nf2dComma = new DecimalFormat("#,###.00");
     public static final NumberFormat nf3d = new DecimalFormat("#0.000");
 }

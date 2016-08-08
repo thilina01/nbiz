@@ -870,8 +870,9 @@ public final class PurchaseInvoiceTopComponent extends NTopComponent {
             showError("Invoice Already Updated!");
             return;
         }
+        String totalDiscountText = totalDiscountTextField.getText();
         double invoiceAmount = Double.valueOf(totalAmountLabel.getText());
-        double invoiceDiscount = Double.valueOf(totalDiscountTextField.getText());
+        double invoiceDiscount = Double.valueOf(totalDiscountText.equals("") ? "0.0" : totalDiscountText);
         purchaseInvoice = new PurchaseInvoice(invoiceNumber, supplier.getCode());
         purchaseInvoice.setSupplier(supplier);
         purchaseInvoice.setAmount(invoiceAmount);

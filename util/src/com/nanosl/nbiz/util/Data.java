@@ -157,8 +157,8 @@ public class Data {
             String fax = getCompany().getFax();
             String web = getCompany().getWeb();
             params.put("company", companyName == null ? "" : companyName);
-            params.put("address", addressNumber == null ? "" : addressNumber + " " + addressStreet == null ? "" : addressStreet + " " + city == null ? "" : city);
-            params.put("phone", contactOne == null ? "" : contactOne + " " + contactTwo == null ? "" : contactTwo);
+            params.put("address", (addressNumber == null ? "" : addressNumber )+ " " +( addressStreet == null ? "" : addressStreet) + " " + (city == null ? "" : city));
+            params.put("phone", (contactOne == null ? "" : contactOne) + " " + (contactTwo == null ? "" : contactTwo));
             params.put("email", email == null ? "" : email);
             params.put("fax", fax == null ? "" : fax);
             params.put("web", web == null ? "" : web);

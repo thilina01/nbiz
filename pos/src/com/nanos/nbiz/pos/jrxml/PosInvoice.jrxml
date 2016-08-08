@@ -76,7 +76,7 @@ WHERE
 	</background>
 	<title>
 		<band height="62" splitType="Stretch">
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="40" y="37" width="50" height="12" uuid="add2e907-f3d9-45d7-a651-75efa1b50b55"/>
 				<textElement>
 					<font size="8"/>
@@ -90,7 +90,7 @@ WHERE
 				</textElement>
 				<text><![CDATA[INVOICE:]]></text>
 			</staticText>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="109" y="37" width="73" height="12" uuid="566d76d8-15f0-4698-a898-fec9d0a2212d"/>
 				<textElement textAlignment="Right">
 					<font size="8"/>
@@ -104,7 +104,7 @@ WHERE
 				</textElement>
 				<text><![CDATA[DATE:]]></text>
 			</staticText>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="0" y="48" width="184" height="12" uuid="7d458869-0a41-4c19-b89b-f298e665b7a6"/>
 				<textElement textAlignment="Center">
 					<font size="8"/>
@@ -117,21 +117,21 @@ WHERE
 			<line>
 				<reportElement x="0" y="61" width="184" height="1" uuid="fb09cdba-98de-4868-aa26-af57b5565981"/>
 			</line>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="0" y="0" width="184" height="15" uuid="b4ae14be-401f-4c4f-aa24-b17139cbe8b2"/>
 				<textElement textAlignment="Center">
 					<font size="10" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{company}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="0" y="14" width="184" height="12" uuid="377b4196-66f5-4529-8400-5e58eab6ae29"/>
 				<textElement textAlignment="Center">
 					<font size="8" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{address}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="0" y="25" width="184" height="12" uuid="97aa928a-04e0-4d28-b89e-f52cb4c7dd45"/>
 				<textElement textAlignment="Center">
 					<font size="8" isBold="true"/>
@@ -180,28 +180,28 @@ WHERE
 	</columnHeader>
 	<detail>
 		<band height="23" splitType="Stretch">
-			<textField pattern="###0.00">
+			<textField pattern="###0.00" isBlankWhenNull="true">
 				<reportElement x="3" y="11" width="50" height="12" uuid="8a93dcf8-81c7-42c5-9e1f-0745fc78d4d9"/>
 				<textElement textAlignment="Right">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Qty}]]></textFieldExpression>
 			</textField>
-			<textField pattern="###0.00">
+			<textField pattern="###0.00" isBlankWhenNull="true">
 				<reportElement x="52" y="11" width="68" height="12" uuid="3a77aeee-dba5-4deb-8491-470fae275010"/>
 				<textElement textAlignment="Right">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Rate}]]></textFieldExpression>
 			</textField>
-			<textField pattern="###0.00">
+			<textField pattern="###0.00" isBlankWhenNull="true">
 				<reportElement x="130" y="11" width="52" height="12" uuid="2706a466-9e0f-44bf-84b0-b5a7c0313462"/>
 				<textElement textAlignment="Right">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Amount}-$F{discount}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="3" y="0" width="181" height="12" uuid="90178cf8-69bf-4fd9-9325-41578918a50c"/>
 				<textElement>
 					<font size="8"/>
@@ -219,7 +219,7 @@ WHERE
 				</textElement>
 				<text><![CDATA[TOTAL AMOUNT:]]></text>
 			</staticText>
-			<textField pattern="###0.00">
+			<textField pattern="###0.00" isBlankWhenNull="true">
 				<reportElement x="135" y="14" width="47" height="12" uuid="c9b807f8-6e7e-47c2-b920-93d72582cf0c"/>
 				<textElement textAlignment="Right">
 					<font size="8" isBold="true"/>
@@ -239,7 +239,7 @@ WHERE
 			<line>
 				<reportElement x="0" y="70" width="183" height="1" uuid="fac54a52-e63f-4e2b-bd40-69c163e86165"/>
 			</line>
-			<textField pattern="###0.00">
+			<textField pattern="###0.00" isBlankWhenNull="true">
 				<reportElement x="135" y="25" width="47" height="12" uuid="72279f33-eaca-4f10-9573-6f84ee2445be"/>
 				<textElement textAlignment="Right">
 					<font size="8" isBold="true"/>
@@ -274,7 +274,7 @@ WHERE
 				</textElement>
 				<text><![CDATA[BILL TOTAL:]]></text>
 			</staticText>
-			<textField pattern="###0.00">
+			<textField pattern="###0.00" isBlankWhenNull="true">
 				<reportElement x="135" y="2" width="47" height="12" uuid="5a1795be-fec4-43a8-9c46-3f75c42bb860"/>
 				<textElement textAlignment="Right">
 					<font size="8" isBold="true"/>
@@ -295,7 +295,7 @@ WHERE
 				</textElement>
 				<text><![CDATA[ITEMS:]]></text>
 			</staticText>
-			<textField pattern="###0.00">
+			<textField pattern="###0.00" isBlankWhenNull="true">
 				<reportElement x="135" y="48" width="47" height="12" uuid="74531aaa-e02e-44f8-ba38-26c59f807699"/>
 				<textElement textAlignment="Right">
 					<font size="8" isBold="true"/>
@@ -316,14 +316,14 @@ WHERE
 				</textElement>
 				<text><![CDATA[BALANCE]]></text>
 			</staticText>
-			<textField pattern="###0.00">
+			<textField pattern="###0.00" isBlankWhenNull="true">
 				<reportElement x="135" y="58" width="47" height="12" uuid="a7821b6e-c970-472c-9e56-7fbd8b6b6d2c"/>
 				<textElement textAlignment="Right">
 					<font size="8" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{sale_invoice_received_amount} - $F{sale_invoice_amount}]]></textFieldExpression>
 			</textField>
-			<textField pattern="###0.00">
+			<textField pattern="###0.00" isBlankWhenNull="true">
 				<reportElement x="135" y="36" width="47" height="12" uuid="75a03dbd-7ca9-4329-b83b-0269a3810284"/>
 				<textElement textAlignment="Right">
 					<font size="8" isBold="true"/>
