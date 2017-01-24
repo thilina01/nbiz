@@ -8,11 +8,11 @@ import com.nanosl.nbiz.util.Combo;
 import com.nanosl.nbiz.util.Data;
 import com.nanosl.nbiz.util.Export;
 import static com.nanosl.nbiz.util.Format.nf2d;
-import static com.nanosl.nbiz.util.Format.yyyy_MM_dd;
 import query.Find;
 import com.nanosl.nbiz.util.NTopComponent;
 import entity.Item;
 import entity.ItemType;
+import entity.PriceList;
 import entity.Stock;
 import entity.Supplier;
 import java.awt.Component;
@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 import javax.swing.table.DefaultTableModel;
 import net.sf.jasperreports.engine.JRException;
@@ -336,6 +337,34 @@ public final class StockTopComponent extends NTopComponent {
     }// </editor-fold>//GEN-END:initComponents
 
     private void tableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableMouseClicked
+        if (evt.getClickCount() > 1) {
+            String itemCode = table.getValueAt(table.getSelectedRow(), 1).toString();
+            String quantity = table.getValueAt(table.getSelectedRow(), 4).toString();
+            String cost = table.getValueAt(table.getSelectedRow(), 5).toString();
+            String selling = table.getValueAt(table.getSelectedRow(), 7).toString();
+
+            String newQuantity = JOptionPane.showInputDialog(this, "Quantity for " + itemCode, quantity);
+            String newCost = JOptionPane.showInputDialog(this, "Cost for " + itemCode, cost);
+            String newSelling = JOptionPane.showInputDialog(this, "Selling for " + itemCode, selling);
+
+            if (quantity != newQuantity || cost != newCost || selling != newSelling) {
+                Item item = manager.find(Item.class, itemCode);
+                PriceList priceList = item.getPriceList();
+                Stock stock = item.getStock();
+
+                priceList.setCostPack(Double.parseDouble(newCost));
+                priceList.setSellingPack(Double.parseDouble(newSelling));
+
+                stock.setQuantity(Double.parseDouble(newQuantity));
+
+                manager.update(priceList);
+                manager.update(stock);
+
+                fillTable();
+            }
+
+            //showMessage("Selected: " + itemCode);
+        }
     }//GEN-LAST:event_tableMouseClicked
 
     private void tableMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableMouseReleased
@@ -612,14 +641,9 @@ public final class StockTopComponent extends NTopComponent {
 
     private void printStock() {
         try {
-            String fileName = supplierCheckBox.isSelected() ? "stockBySupplier" : "stock";
+            String fileName = supplierCheckBox.isSelected() ? typeCheckBox.isSelected() ? "stockBySupplierAndItemType" : "stockBySupplier" : "stock";
             URL url = getClass().getResource("/com/nanosl/nbiz/gui/jrxml/" + fileName + ".jasper");
-            Object object = JRLoader.loadObject(url);//"src/com/nanosl/nbiz/gui/jrxml/report1.jasper"
-            if (object == null) {
-                showError("Unable to print");
-                return;
-            }
-            JasperReport report = (JasperReport) object;
+
             Map<String, Object> params = Data.getParams();
             if (supplierCheckBox.isSelected()) {
                 Object o = supplierComboBox.getSelectedItem();
@@ -628,6 +652,21 @@ public final class StockTopComponent extends NTopComponent {
                     params.put("supplierCode", supplier.getCode());
                 }
             }
+            if (typeCheckBox.isSelected()) {
+                Object o = itemTypeComboBox.getSelectedItem();
+                if (o instanceof ItemType) {
+                    ItemType itemType = (ItemType) o;
+                    params.put("itemTypeType", itemType.getType());
+                }
+            }
+
+            Object object = JRLoader.loadObject(url);//"src/com/nanosl/nbiz/gui/jrxml/report1.jasper"
+            if (object == null) {
+                showError("Unable to print");
+                return;
+            }
+            JasperReport report = (JasperReport) object;
+
             printViewTopComponent.print(report, params);
 
         } catch (JRException ex) {
