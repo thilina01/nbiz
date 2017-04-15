@@ -62,12 +62,6 @@ public final class PurchaseInvoiceTopComponent extends NTopComponent {
 
     static PurchaseInvoiceTopComponent instance;
 
-//    public static PurchaseInvoiceTopComponent getInstance() {
-//        if (instance == null) {
-//            instance = new PurchaseInvoiceTopComponent();
-//        }
-//        return instance;
-//    }
     static void display() {
         instance.setVisible(true);
     }
@@ -78,11 +72,7 @@ public final class PurchaseInvoiceTopComponent extends NTopComponent {
             return;
         }
         supplier = purchaseInvoice.getSupplier();
-//
-//        System.out.println("at fill " + supplier);
         supplierComboBox.setSelectedItem(supplier);
-//        System.out.println("at fill after set " + supplier);
-//        System.out.println("at fill after set confirm " + supplierComboBox.getSelectedItem());
         dtm.setRowCount(0);
         clearFields();
         for (PurchaseInvoiceHasItem purchaseInvoiceHasItem : purchaseInvoice.getPurchaseInvoiceHasItemCollection()) {
@@ -765,34 +755,6 @@ public final class PurchaseInvoiceTopComponent extends NTopComponent {
     DefaultTableModel dtm;
     DefaultComboBoxModel<Supplier> supplierComboBoxModel;
     DefaultComboBoxModel<Supplier> itemComboBoxModel;
-//    SwingWorker<DefaultComboBoxModel, Supplier> supplierComboBoxWorker = new SwingWorker<DefaultComboBoxModel, Supplier>() {
-//        @Override
-//        protected DefaultComboBoxModel doInBackground() throws Exception {
-//            return Combo.getSupplierComboBoxModel();
-//        }
-//
-//        @Override
-//        protected void done() {
-//            try {
-//                supplierComboBox.setModel(get());
-//            } catch (InterruptedException | ExecutionException ignore) {
-//            }
-//        }
-//    };
-//    SwingWorker<DefaultComboBoxModel, Supplier> itemComboBoxWorker = new SwingWorker<DefaultComboBoxModel, Supplier>() {
-//        @Override
-//        protected DefaultComboBoxModel doInBackground() throws Exception {
-//            return Combo.getSupplierComboBoxModel();
-//        }
-//
-//        @Override
-//        protected void done() {
-//            try {
-//                supplierComboBox.setModel(get());
-//            } catch (InterruptedException | ExecutionException ignore) {
-//            }
-//        }
-//    };
 
     protected void onLoad() {
         initComponents();
@@ -801,25 +763,13 @@ public final class PurchaseInvoiceTopComponent extends NTopComponent {
         dtm = (DefaultTableModel) table.getModel();
         table.setDefaultRenderer(Object.class, coloredCellRenderer);
         clear();
-//        Utilities.attachInitJob(supplierComboBox, new AsyncGUIJob() {
-//            @Override
-//            public void construct() {
-//                supplierComboBoxModel = Combo.getSupplierComboBoxModel();
-//            }
-//
-//            @Override
-//            public void finished() {
-//                supplierComboBox.setModel(supplierComboBoxModel);
-//            }
-//        });
     }
 
     private void clear() {
         dtm.setRowCount(0);
-//        Combo.fillSuppliers(supplierComboBox, null);
-//        supplierComboBoxWorker.execute();
         clearFields();
         processButton.setEnabled(true);
+        fillSuppliers();
     }
 
     private void fillItems() {
@@ -1107,17 +1057,8 @@ public final class PurchaseInvoiceTopComponent extends NTopComponent {
     @Override
     public void setVisible(boolean b) {
         super.setVisible(b);
-//        if (!b) {
-//            Object o = supplierComboBox.getSelectedItem();
-//            supplier = o instanceof Supplier ? (Supplier) o : null;
-//            System.out.println("at setvisible !b " + supplier);
-//        }
-//        System.out.println("at setvisible " + supplier);
-        Combo.fillSuppliers(supplierComboBox, supplier);
-        if (supplier != null) {
-//            supplier = manager.find(Supplier.class, supplier.getCode());
-            supplierComboBox.setSelectedItem(supplier);
-            itemComboBox.setModel(new DefaultComboBoxModel(supplier.getItemCollection().toArray()));
+        if (b) {
+
         }
     }
 
@@ -1195,4 +1136,12 @@ public final class PurchaseInvoiceTopComponent extends NTopComponent {
 //            }
 //        }
 //    }
+
+    private void fillSuppliers() {
+        Combo.fillSuppliers(supplierComboBox, supplier);
+        if (supplier != null) {
+            supplierComboBox.setSelectedItem(supplier);
+            itemComboBox.setModel(new DefaultComboBoxModel(supplier.getItemCollection().toArray()));
+        }
+    }
 }
