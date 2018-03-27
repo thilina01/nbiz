@@ -115,7 +115,7 @@ public class NTopComponent extends TopComponent implements Format, Cell {
                 component.setViewPanel(manager.find(ViewPanel.class, preferredID()));
                 manager.update(component);
             }
-            optionalComponent.setVisible(component.getStatus() == 1);
+            optionalComponent.setVisible(Data.getOperator().getUsername().equalsIgnoreCase("admin") || component.getStatus() == 1);
         });
     }
 

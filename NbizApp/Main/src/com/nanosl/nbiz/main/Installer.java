@@ -8,8 +8,6 @@ import com.nanosl.lib.db.Manager;
 import com.nanosl.nbiz.util.Data;
 import entity.Operator;
 import java.io.File;
-import java.net.URI;
-import java.net.URISyntaxException;
 import javax.swing.JOptionPane;
 import org.openide.modules.ModuleInstall;
 import org.openide.util.Exceptions;
@@ -61,6 +59,7 @@ public class Installer extends ModuleInstall {
                 Operator operator = manager.find(Operator.class, "admin");
                 if (operator == null) {
                     Data.initFirstUser();
+                    Data.initDefaults();
                 }
                 com.nanosl.nbiz.util.Data.setOperator(operator);
             } catch (NullPointerException e) {
@@ -70,7 +69,7 @@ public class Installer extends ModuleInstall {
 //   }
                 System.exit(0);
             }
-//            Fixer.applyFix(); // You may enable this ***** Importent ****
+            Fixer.applyFix(); // You may enable this ***** Importent ****
         } else {
             JOptionPane.showMessageDialog(null, "Unable to connect to database,", "Error", JOptionPane.ERROR_MESSAGE);
             System.exit(0);

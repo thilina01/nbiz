@@ -20,8 +20,8 @@ import org.openide.util.Exceptions;
  * @author Thilina
  */
 public class Fixer {
-    
-   static String x20150709a = "CREATE TABLE IF NOT EXISTS `issued_cheque_has_purchase_invoice` ("
+
+    static String x20150709a = "CREATE TABLE IF NOT EXISTS `issued_cheque_has_purchase_invoice` ("
             + " `issued_cheque_cheque_number` varchar(30) NOT NULL,"
             + " `purchase_invoice_inv_no` varchar(20) NOT NULL,"
             + " `purchase_invoice_supplier_code` varchar(10) NOT NULL,"
@@ -41,10 +41,10 @@ public class Fixer {
 // + " CONSTRAINT `fk_optional_component_view_panel1` FOREIGN KEY (`view_panel_view_panel`) REFERENCES `view_panel` (`view_panel`) ON DELETE NO ACTION ON UPDATE NO ACTION"
 // + ") ENGINE=InnoDB DEFAULT CHARSET=latin1;";
 //
-   static String x20150709b = "ALTER TABLE `issued_cheque` "
+    static String x20150709b = "ALTER TABLE `issued_cheque` "
             + "CHANGE COLUMN `issued_date` `issued_date` DATETIME NULL DEFAULT NULL ;";
 
-   static String createTableToolBarButton = "CREATE TABLE IF NOT EXISTS `tool_bar_button` ("
+    static String createTableToolBarButton = "CREATE TABLE IF NOT EXISTS `tool_bar_button` ("
             + " `component_name` VARCHAR(150) NOT NULL,"
             + " `button_text` VARCHAR(45) NULL,"
             + " `icon_path` VARCHAR(1000) NULL,"
@@ -52,28 +52,28 @@ public class Fixer {
             + " PRIMARY KEY (`component_name`))"
             + " ENGINE = InnoDB";
 
-   static String x20150711 = "ALTER TABLE `item` CHANGE COLUMN `disable` `status` INT(11) NULL DEFAULT '0' ;";
-   static String CREATE_TABLE_FIX = "CREATE TABLE IF NOT EXISTS `fix` ("
+    static String x20150711 = "ALTER TABLE `item` CHANGE COLUMN `disable` `status` INT(11) NULL DEFAULT '0' ;";
+    static String CREATE_TABLE_FIX = "CREATE TABLE IF NOT EXISTS `fix` ("
             + " `fix_id` VARCHAR(100) NOT NULL,"
             + " PRIMARY KEY (`fix_id`))"
             + " ENGINE = InnoDB";
 
-   static String ADD_paid_by_credit_card_TO_sale_invoice = "ALTER TABLE `sale_invoice` ADD COLUMN `paid_by_credit_card` double NULL AFTER `paid_amount`;";
-   static String x20150712b = "ALTER TABLE `employee` ADD COLUMN `person_nic` VARCHAR(10) NOT NULL AFTER `code`;";
-   static String x20150716a = "ALTER TABLE `supplier` ADD COLUMN `vat` VARCHAR(20) NULL;";
-   static String x20150716b = "ALTER TABLE `supplier` ADD COLUMN `svat` VARCHAR(20) NULL;";
-   static String x20150716c = "ALTER TABLE `company` ADD COLUMN `vat` VARCHAR(20) NULL;";
-   static String x20150716d = "ALTER TABLE `company` ADD COLUMN `svat` VARCHAR(20) NULL;";
-   static String addAccountAccountNoToSaleCheque = "ALTER TABLE `sale_cheque` ADD COLUMN `account_account_no` VARCHAR(50) NULL;";
-   static String addAccountBankCodeToSaleCheque = "ALTER TABLE `sale_cheque` ADD COLUMN `account_bank_code` VARCHAR(30) NULL;";
-   static String addcustomerCodeToCollectionReceipt = "ALTER TABLE `collection_receipt` ADD COLUMN `customer_code` VARCHAR(20) NULL;";
-   static String addQuotation_noToGeneral = "ALTER TABLE `general` ADD COLUMN `quotation_no` VARCHAR(10) NULL;";
-   static String addCreditToCustomer = "ALTER TABLE `customer` ADD COLUMN `credit` DOUBLE;";
-   static String addAmountInCashToCollectionReceipt = "ALTER TABLE `collection_receipt` ADD COLUMN `amount_in_cash` DOUBLE;";
-   static String addAccountAccountNoToIssuedCheque = "ALTER TABLE `issued_cheque` ADD COLUMN `account_account_no` VARCHAR(50) NULL;";
-   static String addAccountBankCodeToIssuedCheque = "ALTER TABLE `issued_cheque` ADD COLUMN `account_bank_code` VARCHAR(30) NULL;";
-   static String addFreeQuantityToPurchaseInvoiceHasItem = "ALTER TABLE `purchase_invoice_has_item` ADD COLUMN `free_quantity` DOUBLE;";
-   static String x20150717a = "CREATE TABLE IF NOT EXISTS `svat` ("
+    static String ADD_paid_by_credit_card_TO_sale_invoice = "ALTER TABLE `sale_invoice` ADD COLUMN `paid_by_credit_card` double NULL AFTER `paid_amount`;";
+    static String x20150712b = "ALTER TABLE `employee` ADD COLUMN `person_nic` VARCHAR(10) NOT NULL AFTER `code`;";
+    static String x20150716a = "ALTER TABLE `supplier` ADD COLUMN `vat` VARCHAR(20) NULL;";
+    static String x20150716b = "ALTER TABLE `supplier` ADD COLUMN `svat` VARCHAR(20) NULL;";
+    static String x20150716c = "ALTER TABLE `company` ADD COLUMN `vat` VARCHAR(20) NULL;";
+    static String x20150716d = "ALTER TABLE `company` ADD COLUMN `svat` VARCHAR(20) NULL;";
+    static String addAccountAccountNoToSaleCheque = "ALTER TABLE `sale_cheque` ADD COLUMN `account_account_no` VARCHAR(50) NULL;";
+    static String addAccountBankCodeToSaleCheque = "ALTER TABLE `sale_cheque` ADD COLUMN `account_bank_code` VARCHAR(30) NULL;";
+    static String addcustomerCodeToCollectionReceipt = "ALTER TABLE `collection_receipt` ADD COLUMN `customer_code` VARCHAR(20) NULL;";
+    static String addQuotation_noToGeneral = "ALTER TABLE `general` ADD COLUMN `quotation_no` VARCHAR(10) NULL;";
+    static String addCreditToCustomer = "ALTER TABLE `customer` ADD COLUMN `credit` DOUBLE;";
+    static String addAmountInCashToCollectionReceipt = "ALTER TABLE `collection_receipt` ADD COLUMN `amount_in_cash` DOUBLE;";
+    static String addAccountAccountNoToIssuedCheque = "ALTER TABLE `issued_cheque` ADD COLUMN `account_account_no` VARCHAR(50) NULL;";
+    static String addAccountBankCodeToIssuedCheque = "ALTER TABLE `issued_cheque` ADD COLUMN `account_bank_code` VARCHAR(30) NULL;";
+    static String addFreeQuantityToPurchaseInvoiceHasItem = "ALTER TABLE `purchase_invoice_has_item` ADD COLUMN `free_quantity` DOUBLE;";
+    static String x20150717a = "CREATE TABLE IF NOT EXISTS `svat` ("
             + " `serial_number` INT NOT NULL,"
             + " `svat_amount` DOUBLE NULL,"
             + " `purchasing_amount` DOUBLE NULL,"
@@ -88,7 +88,7 @@ public class Fixer {
             + " ON DELETE NO ACTION"
             + " ON UPDATE NO ACTION)"
             + " ENGINE = InnoDB";
-   static String CREATE_TABLE_PERSON = "CREATE TABLE IF NOT EXISTS `person` ("
+    static String CREATE_TABLE_PERSON = "CREATE TABLE IF NOT EXISTS `person` ("
             + "  `nic` VARCHAR(10) NOT NULL,"
             + "  `name` VARCHAR(250) NULL,"
             + "  `address` VARCHAR(150) NULL,"
@@ -99,7 +99,7 @@ public class Fixer {
             + "  PRIMARY KEY (`nic`))"
             + "  ENGINE = InnoDB";
 
-   static String CREATE_TABLE_QUOTATION = "CREATE TABLE IF NOT EXISTS `quotation` ("
+    static String CREATE_TABLE_QUOTATION = "CREATE TABLE IF NOT EXISTS `quotation` ("
             + "  `quotation_no` varchar(255) NOT NULL,"
             + "  `amount` double DEFAULT NULL,"
             + "  `discount` double DEFAULT NULL,"
@@ -111,7 +111,7 @@ public class Fixer {
             + "  `employee_code` varchar(255) DEFAULT NULL,"
             + "  PRIMARY KEY (`quotation_no`)"
             + ") ENGINE=InnoDB";
-   static String CREATE_TABLE_quotation_has_item = "CREATE TABLE IF NOT EXISTS `quotation_has_item` ("
+    static String CREATE_TABLE_quotation_has_item = "CREATE TABLE IF NOT EXISTS `quotation_has_item` ("
             + "  `cost` double DEFAULT NULL,"
             + "  `discount` double DEFAULT NULL,"
             + "  `quantity` double DEFAULT NULL,"
@@ -120,7 +120,7 @@ public class Fixer {
             + "  `item_code` varchar(255) NOT NULL,"
             + "  PRIMARY KEY (`quotation_quotation_no`,`item_code`)"
             + ") ENGINE=InnoDB";
-   static String CREATE_TABLE_account = "CREATE TABLE IF NOT EXISTS `account` ("
+    static String CREATE_TABLE_account = "CREATE TABLE IF NOT EXISTS `account` ("
             + "  `account_no` VARCHAR(50) NOT NULL,"
             + "  `balance` DOUBLE NULL,"
             + "  `bank_code` VARCHAR(30) NOT NULL,"
@@ -132,13 +132,13 @@ public class Fixer {
             + "    ON DELETE NO ACTION"
             + "    ON UPDATE NO ACTION)"
             + "ENGINE = InnoDB";
-   static String CREATE_TABLE_cash_box = "CREATE TABLE IF NOT EXISTS `cash_box` ("
+    static String CREATE_TABLE_cash_box = "CREATE TABLE IF NOT EXISTS `cash_box` ("
             + "  `id` VARCHAR(10) NOT NULL,"
             + "  `description` VARCHAR(45) NULL,"
             + "  `balance` DOUBLE NULL,"
             + "  PRIMARY KEY (`id`))"
             + "ENGINE = InnoDB";
-   static String CREATE_TABLE_cash_log = "CREATE TABLE IF NOT EXISTS `cash_log` ("
+    static String CREATE_TABLE_cash_log = "CREATE TABLE IF NOT EXISTS `cash_log` ("
             + "  `log_time` DATETIME NOT NULL,"
             + "  `amount` DOUBLE NULL,"
             + "  `box_balance` DOUBLE NULL,"
@@ -153,6 +153,24 @@ public class Fixer {
             + "    ON DELETE NO ACTION"
             + "    ON UPDATE NO ACTION)"
             + "ENGINE = InnoDB";
+
+    static String CREATE_TABLE_item_category = "CREATE TABLE  IF NOT EXISTS `item_category` ("
+            + "  `category` varchar(255) NOT NULL, "
+            + "  PRIMARY KEY (`category`)"
+            + ") ENGINE=InnoDB";
+    static String addItemCategoryCategoryToItemType = "ALTER TABLE `item_type` ADD COLUMN `item_category_category` VARCHAR(30) NULL;";
+
+    static String addAccountNumberToSupplier = "ALTER TABLE `supplier` ADD COLUMN `account_number` VARCHAR(50) NULL;";
+    static String addBankCodeToSupplier = "ALTER TABLE `supplier` ADD COLUMN `bank_code` VARCHAR(50) NULL;";
+    static String addBankNameToSupplier = "ALTER TABLE `supplier` ADD COLUMN `bank_name` VARCHAR(50) NULL;";
+    static String addBankBranchCodeToSupplier = "ALTER TABLE `supplier` ADD COLUMN `bank_branch_code` VARCHAR(50) NULL;";
+    static String addBankBranchNameToSupplier = "ALTER TABLE `supplier` ADD COLUMN `bank_branch_name` VARCHAR(50) NULL;";
+    static String addFinanceContactPersonToSupplier = "ALTER TABLE `supplier` ADD COLUMN `finance_contact_person` VARCHAR(50) NULL;";
+    static String addFinanceContactEmailToSupplier = "ALTER TABLE `supplier` ADD COLUMN `finance_contact_email` VARCHAR(50) NULL;";
+    static String addFinanceContactPhoneToSupplier = "ALTER TABLE `supplier` ADD COLUMN `finance_contact_phone` VARCHAR(50) NULL;";
+    static String addSvatContactPersonToSupplier = "ALTER TABLE `supplier` ADD COLUMN `svat_contact_person` VARCHAR(50) NULL;";
+    static String addSvatContactEmailToSupplier = "ALTER TABLE `supplier` ADD COLUMN `svat_contact_email` VARCHAR(50) NULL;";
+    static String addSvatContactPhoneToSupplier = "ALTER TABLE `supplier` ADD COLUMN `svat_contact_phone` VARCHAR(50) NULL;";
 
     public static void applyFix() {
         Map<String, String> queryMap = new HashMap();
@@ -184,7 +202,19 @@ public class Fixer {
 //        queryMap.put("CREATE_TABLE_cash_log", CREATE_TABLE_cash_log);
 //        queryMap.put("addAccountAccountNoToIssuedCheque", addAccountAccountNoToIssuedCheque);
 //        queryMap.put("addAccountBankCodeToIssuedCheque", addAccountBankCodeToIssuedCheque);
-
+//        queryMap.put("CREATE_TABLE_item_category", CREATE_TABLE_item_category);
+//        queryMap.put("addItemCategoryCategoryToItemType", addItemCategoryCategoryToItemType);
+        queryMap.put("addAccountNumberToSupplier", addAccountNumberToSupplier);
+        queryMap.put("addBankCodeToSupplier", addBankCodeToSupplier);
+        queryMap.put("addBankNameToSupplier", addBankNameToSupplier);
+        queryMap.put("addBankBranchCodeToSupplier", addBankBranchCodeToSupplier);
+        queryMap.put("addBankBranchNameToSupplier", addBankBranchNameToSupplier);
+        queryMap.put("addFinanceContactPersonToSupplier", addFinanceContactPersonToSupplier);
+        queryMap.put("addFinanceContactEmailToSupplier", addFinanceContactEmailToSupplier);
+        queryMap.put("addFinanceContactPhoneToSupplier", addFinanceContactPhoneToSupplier);
+        queryMap.put("addSvatContactPersonToSupplier", addSvatContactPersonToSupplier);
+        queryMap.put("addSvatContactEmailToSupplier", addSvatContactEmailToSupplier);
+        queryMap.put("addSvatContactPhoneToSupplier", addSvatContactPhoneToSupplier);
         List<Fix> fixs = Manager.getInstance().find(Fix.class);
         for (Fix next : fixs) {
             queryMap.remove(next.getFixId());

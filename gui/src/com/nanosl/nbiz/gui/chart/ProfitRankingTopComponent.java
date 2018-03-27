@@ -227,7 +227,7 @@ public final class ProfitRankingTopComponent extends NTopComponent {
                         + "INNER JOIN item ON sale_invoice_has_item.item_code = item.code "
                         + "WHERE "
                         + "sale_invoice.inv_time  BETWEEN '" + yyyy_MM_dd.format(makeStartDate(java.sql.Date.valueOf(startDatePicker.getValue()))) + " 00:00:00' AND '" + yyyy_MM_dd.format(makeEndDate(java.sql.Date.valueOf(endDatePicker.getValue()))) + " 23:59:59' AND item.description != 'OTHER' "
-                        + "GROUP BY sale_invoice_has_item.item_code "
+                        + "GROUP BY sale_invoice_has_item.item_code, sale_invoice_has_item.rate, sale_invoice_has_item.cost "
                         + "ORDER BY x DESC "
                         + "LIMIT " + Integer.parseInt(topTextField.getText().trim());
 //                System.out.println(x);

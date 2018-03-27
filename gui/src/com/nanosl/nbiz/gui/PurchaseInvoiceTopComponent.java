@@ -792,6 +792,10 @@ public final class PurchaseInvoiceTopComponent extends NTopComponent {
 
     private void fillItems() {
         Supplier supplier = (Supplier) supplierComboBox.getSelectedItem();
+        if(supplier == null ){
+            showError("Supplier not selected!");
+            return;
+        }
         supplier = manager.find(Supplier.class, supplier.getCode());
         if (supplier.getCode().equals("000")) {
             LastCode lastCode = manager.find(LastCode.class, "SUPPLIERINVOICE");

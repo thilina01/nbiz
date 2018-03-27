@@ -43,14 +43,14 @@ import util.ToString;
     "HINT_ConfigTopComponent=This is a Config window"
 })
 public final class ConfigTopComponent extends NTopComponent {
-
+    
     DefaultListModel fieldListModel, classListModel;
-
+    
     public ConfigTopComponent() {
         initComponents();
         setName(Bundle.CTL_ConfigTopComponent());
         setToolTipText(Bundle.HINT_ConfigTopComponent());
-
+        
     }
 
     /**
@@ -74,8 +74,10 @@ public final class ConfigTopComponent extends NTopComponent {
         jButton1 = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
+        jPanel2 = new javax.swing.JPanel();
+        minPosCheckBox = new javax.swing.JCheckBox();
 
-        jPanel1.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(org.openide.util.NbBundle.getMessage(ConfigTopComponent.class, "ConfigTopComponent.jPanel1.border.title"))); // NOI18N
 
         classList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
@@ -184,6 +186,32 @@ public final class ConfigTopComponent extends NTopComponent {
                 .addContainerGap())
         );
 
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(org.openide.util.NbBundle.getMessage(ConfigTopComponent.class, "ConfigTopComponent.jPanel2.border.title"))); // NOI18N
+
+        org.openide.awt.Mnemonics.setLocalizedText(minPosCheckBox, org.openide.util.NbBundle.getMessage(ConfigTopComponent.class, "ConfigTopComponent.minPosCheckBox.text")); // NOI18N
+        minPosCheckBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                minPosCheckBoxActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(minPosCheckBox)
+                .addContainerGap(216, Short.MAX_VALUE))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(minPosCheckBox)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -191,13 +219,17 @@ public final class ConfigTopComponent extends NTopComponent {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -207,7 +239,7 @@ public final class ConfigTopComponent extends NTopComponent {
     }//GEN-LAST:event_reloadButtonActionPerformed
 
     private void classListPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_classListPropertyChange
-
+        
 
     }//GEN-LAST:event_classListPropertyChange
 
@@ -232,13 +264,22 @@ public final class ConfigTopComponent extends NTopComponent {
             }
             patternTextField.setText(pattern);
             savePattern(pattern);
-
+            
         }
     }//GEN-LAST:event_fieldListMouseClicked
 
     private void patternTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_patternTextFieldActionPerformed
         savePattern(patternTextField.getText());
     }//GEN-LAST:event_patternTextFieldActionPerformed
+
+    private void minPosCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_minPosCheckBoxActionPerformed
+        Config config = manager.find(Config.class, "MinPos");
+        if (config == null) {
+            config = new Config("MinPos");
+        }
+        config.setConfigValue(minPosCheckBox.isSelected() + "");
+        manager.update(config);
+    }//GEN-LAST:event_minPosCheckBoxActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JList classList;
@@ -247,10 +288,12 @@ public final class ConfigTopComponent extends NTopComponent {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JCheckBox minPosCheckBox;
     private javax.swing.JTextField patternTextField;
     private javax.swing.JButton reloadButton;
     private javax.swing.JTextField sampleTextField;
@@ -259,39 +302,43 @@ public final class ConfigTopComponent extends NTopComponent {
     public void setVisible(boolean aFlag) {
         super.setVisible(aFlag);
         fillClassList();
+        setMinPosStatus();
     }
-
+    
     @Override
     public void componentOpened() {
         // TODO add custom code on component opening
     }
-
+    
     @Override
     public void componentClosed() {
         // TODO add custom code on component closing
     }
-
+    
     void writeProperties(java.util.Properties p) {
         // better to version settings since initial version as advocated at
         // http://wiki.apidesign.org/wiki/PropertyFiles
         p.setProperty("version", "1.0");
         // TODO store your settings
     }
-
+    
     void readProperties(java.util.Properties p) {
         String version = p.getProperty("version");
         // TODO read your settings according to their version
     }
-
+    
     private void fillClassList() {
         classListModel = new DefaultListModel();
         List<Config> configs = manager.find(Config.class);
         for (Config config : configs) {
+            if (config.getConfigKey().equalsIgnoreCase("minpos")) {
+                continue;
+            }
             classListModel.addElement(config.getConfigKey());
         }
         classList.setModel(classListModel);
     }
-
+    
     private void fillFieldList() {
         try {
             fieldListModel = new DefaultListModel();
@@ -316,7 +363,7 @@ public final class ConfigTopComponent extends NTopComponent {
         } catch (ClassNotFoundException e) {
         }
     }
-
+    
     private void fillSample(String className) {
         sampleTextField.setText("");
         try {
@@ -330,7 +377,7 @@ public final class ConfigTopComponent extends NTopComponent {
             Exceptions.printStackTrace(ex);
         }
     }
-
+    
     private void savePattern(String pattern) {
         String className = classList.getSelectedValue().toString();
         Config config = manager.find(Config.class, className);
@@ -338,5 +385,11 @@ public final class ConfigTopComponent extends NTopComponent {
         manager.update(config);
         ToString.remove(className);
         fillSample(className);
+    }
+    
+    private void setMinPosStatus() {
+        Config config = manager.find(Config.class, "MinPos");        
+        boolean minPosStatus = (config != null && config.getConfigValue().equalsIgnoreCase("true"));
+        minPosCheckBox.setSelected(minPosStatus);        
     }
 }

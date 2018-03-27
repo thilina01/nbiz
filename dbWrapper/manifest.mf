@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
 OpenIDE-Module: com.nanosl.nbiz.db
 OpenIDE-Module-Localizing-Bundle: com/nanosl/nbiz/db/Bundle.properties
-OpenIDE-Module-Specification-Version: 1.2.9.6.1
+OpenIDE-Module-Specification-Version: 1.2.9.6.3
 

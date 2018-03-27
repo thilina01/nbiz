@@ -733,6 +733,17 @@ public final class SupplierTopComponent extends NTopComponent {
             faxField.setText(supplier.getFax());
             vatTextField.setText(supplier.getVat());
             svatTextField.setText(supplier.getSvat());
+            accountNumberTextField.setText(supplier.getAccountNumber());
+            bankCodeTextField.setText(supplier.getBankCode());
+            bankNameTextField.setText(supplier.getBankName());
+            bankBranchCodeTextField.setText(supplier.getBankBranchCode());
+            bankBranchNameTextField.setText(supplier.getBankBranchName());
+            financeContactPersonTextField.setText(supplier.getFinanceContactPerson());
+            financeContactEmailTextField.setText(supplier.getFinanceContactEmail());
+            financeContactPhoneTextField.setText(supplier.getFinanceContactPhone());
+            svatContactPersonTextField.setText(supplier.getSvatContactPerson());
+            svatContactEmailTextField.setText(supplier.getSvatContactEmail());
+            svatContactPhoneTextField.setText(supplier.getSvatContactPhone());
             notesField.setText(supplier.getNotes());
             townComboBox.setSelectedItem(supplier.getTown());
         }
@@ -756,6 +767,18 @@ public final class SupplierTopComponent extends NTopComponent {
         vatTextField.setText("");
         svatTextField.setText("");
         notesField.setText("");
+        accountNumberTextField.setText("");
+        bankNameTextField.setText("");
+        bankBranchNameTextField.setText("");
+        bankCodeTextField.setText("");
+        bankBranchCodeTextField.setText("");
+        financeContactPersonTextField.setText("");
+        financeContactEmailTextField.setText("");
+        financeContactPhoneTextField.setText("");
+        svatContactPersonTextField.setText("");
+        svatContactEmailTextField.setText("");
+        svatContactPhoneTextField.setText("");
+
         if (townComboBox.getItemCount() > 0) {
             townComboBox.setSelectedIndex(0);
         }
@@ -793,6 +816,18 @@ public final class SupplierTopComponent extends NTopComponent {
         supplier.setNotes(notes);
         supplier.setTown((Town) townComboBox.getSelectedItem());
 //        supplier.setBank((Bank) bankComboBox.getSelectedItem());
+
+        supplier.setAccountNumber(accountNumberTextField.getText().trim());
+        supplier.setBankCode(bankCodeTextField.getText().trim());
+        supplier.setBankName(bankNameTextField.getText().trim());
+        supplier.setBankBranchCode(bankBranchCodeTextField.getText().trim());
+        supplier.setBankBranchName(bankBranchNameTextField.getText().trim());
+        supplier.setFinanceContactPerson(financeContactPersonTextField.getText().trim());
+        supplier.setFinanceContactEmail(financeContactEmailTextField.getText().trim());
+        supplier.setFinanceContactPhone(financeContactPhoneTextField.getText().trim());
+        supplier.setSvatContactPerson(svatContactPersonTextField.getText().trim());
+        supplier.setSvatContactEmail(svatContactEmailTextField.getText().trim());
+        supplier.setSvatContactPhone(svatContactPhoneTextField.getText().trim());
         if (controller.update(supplier)) {
             clear();
             return;

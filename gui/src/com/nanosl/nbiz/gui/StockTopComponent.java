@@ -622,12 +622,12 @@ public final class StockTopComponent extends NTopComponent {
     };
 
     private void fillItemTypes() {
+        // List<ItemType> itemTypes = manager.find(ItemType.class);
+        // if (itemTypes.isEmpty()) {
+        //     manager.update(new ItemType("ITEM"));
+        //     manager.update(new ItemType("METERIAL"));
+        // }
         List<ItemType> itemTypes = manager.find(ItemType.class);
-        if (itemTypes.isEmpty()) {
-            manager.update(new ItemType("ITEM"));
-            manager.update(new ItemType("METERIAL"));
-        }
-        itemTypes = manager.find(ItemType.class);
         itemTypeComboBox.setModel(new DefaultComboBoxModel(itemTypes.toArray()));
     }
 

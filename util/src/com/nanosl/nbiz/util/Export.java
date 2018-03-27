@@ -163,7 +163,13 @@ public class Export {
                 //Create cell
                 xSSFCell = xSSFRow.createCell(j);
                 Object value = model.getValueAt(x, j);
-                xSSFCell.setCellValue(value == null ? "" : value.toString()); //Write value
+                String valueString = value == null ? "" : value.toString();
+
+                if (valueString.matches("\\d*\\.?\\d*") && !valueString.equals("")) {
+                    xSSFCell.setCellValue(Double.parseDouble(valueString)); //Write double value
+                } else {
+                    xSSFCell.setCellValue(valueString); //Write string value
+                }
             }
         }
         for (int columnNumber = 0; columnNumber < columnCount; columnNumber++) {

@@ -2,11 +2,16 @@ package com.nanosl.nbiz.util;
 
 import com.nanosl.lib.db.Manager;
 import entity.Company;
+import entity.Customer;
 import entity.Employee;
 import entity.EmployeePosition;
 import entity.General;
+import entity.Item;
+import entity.ItemCategory;
+import entity.ItemType;
 import entity.Operator;
 import entity.Person;
+import entity.Supplier;
 import entity.ViewPanel;
 import java.io.IOException;
 import java.io.Serializable;
@@ -157,7 +162,7 @@ public class Data {
             String fax = getCompany().getFax();
             String web = getCompany().getWeb();
             params.put("company", companyName == null ? "" : companyName);
-            params.put("address", (addressNumber == null ? "" : addressNumber )+ " " +( addressStreet == null ? "" : addressStreet) + " " + (city == null ? "" : city));
+            params.put("address", (addressNumber == null ? "" : addressNumber) + " " + (addressStreet == null ? "" : addressStreet) + " " + (city == null ? "" : city));
             params.put("phone", (contactOne == null ? "" : contactOne) + " " + (contactTwo == null ? "" : contactTwo));
             params.put("email", email == null ? "" : email);
             params.put("fax", fax == null ? "" : fax);
@@ -183,19 +188,63 @@ public class Data {
         EmployeePosition employeePosition = new EmployeePosition("ADMIN");
         employee.setEmployeePosition(employeePosition);
         operator.setEmployee(employee);
-        ViewPanel viewPanel = new ViewPanel("PermissionTopComponent");
         Collection<Operator> operators = new ArrayList<>();
         operators.add(operator);
-        viewPanel.setOperatorCollection(operators);
+        ViewPanel PermissionTopComponent = new ViewPanel("PermissionTopComponent");
+        ViewPanel CompanyTopComponent = new ViewPanel("CompanyTopComponent");
+        PermissionTopComponent.setOperatorCollection(operators);
+        CompanyTopComponent.setOperatorCollection(operators);
         Collection<ViewPanel> viewPanels = new ArrayList<>();
-        viewPanels.add(viewPanel);
+        viewPanels.add(PermissionTopComponent);
+        viewPanels.add(CompanyTopComponent);
         operator.setViewPanelCollection(viewPanels);
         List<Serializable> serializables = new ArrayList<>();
         serializables.add(person);
         serializables.add(employeePosition);
         serializables.add(employee);
-        serializables.add(viewPanel);
+        serializables.add(PermissionTopComponent);
+        serializables.add(CompanyTopComponent);
         serializables.add(operator);
+        manager.update(serializables);
+    }
+
+    public static void initDefaults() {
+
+        List<Serializable> serializables = new ArrayList<>();
+
+        if (manager.find(ItemType.class).isEmpty()) {
+            serializables.add(new ItemType("DEFAULT"));
+        }
+
+        if (manager.find(Item.class).isEmpty()) {
+            serializables.add(new Item("DEFAULT"));
+        }
+
+        if (manager.find(Customer.class).isEmpty()) {
+            serializables.add(new Customer("DEFAULT"));
+        }
+
+        if (manager.find(ItemCategory.class).isEmpty()) {
+            serializables.add(new ItemCategory("DEFAULT"));
+        }
+
+        if (manager.find(Supplier.class).isEmpty()) {
+            serializables.add(new Supplier("DEFAULT"));
+        }
+
+        if (manager.find(Company.class).isEmpty()) {
+            WindowManager.getDefault().invokeWhenUIReady(new Runnable() {
+                @Override
+                public void run() {
+                    TopComponent tc = WindowManager.getDefault().findTopComponent("CompanyTopComponent");
+                    if (tc != null) {
+                        tc.open();
+                        tc.requestActive();
+                    }
+                }
+            });
+        }
+
         manager.update(serializables);
     }
 

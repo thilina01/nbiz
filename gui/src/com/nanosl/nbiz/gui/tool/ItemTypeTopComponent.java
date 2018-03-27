@@ -4,11 +4,13 @@
  */
 package com.nanosl.nbiz.gui.tool;
 
+import com.nanosl.nbiz.util.Combo;
 import com.nanosl.nbiz.util.NTopComponent;
+import entity.ItemCategory;
 import entity.ItemType;
-import entity.Town;
 import java.util.Iterator;
 import java.util.List;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import org.netbeans.api.settings.ConvertAsProperties;
@@ -16,6 +18,7 @@ import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
+import org.openide.windows.WindowManager;
 
 /**
  * Top component which displays something.
@@ -63,6 +66,9 @@ public final class ItemTypeTopComponent extends NTopComponent {
         updateButton = new javax.swing.JButton();
         deleteButton = new javax.swing.JButton();
         clearButton = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
+        itemCategoryComboBox = new javax.swing.JComboBox();
+        newCategoryButton = new javax.swing.JButton();
 
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
@@ -72,14 +78,14 @@ public final class ItemTypeTopComponent extends NTopComponent {
 
             },
             new String [] {
-                "#", "Type"
+                "#", "Type", "Category"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.String.class
+                java.lang.Object.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false
+                false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -99,12 +105,12 @@ public final class ItemTypeTopComponent extends NTopComponent {
             }
         });
         masterTable.addAncestorListener(new javax.swing.event.AncestorListener() {
-            public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
+            public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
+                masterTableAncestorAdded(evt);
             }
             public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
             }
-            public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
-                masterTableAncestorAdded(evt);
+            public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
             }
         });
         masterTable.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -113,6 +119,11 @@ public final class ItemTypeTopComponent extends NTopComponent {
             }
         });
         masterScrollPane.setViewportView(masterTable);
+        if (masterTable.getColumnModel().getColumnCount() > 0) {
+            masterTable.getColumnModel().getColumn(0).setHeaderValue(org.openide.util.NbBundle.getMessage(ItemTypeTopComponent.class, "ItemTypeTopComponent.masterTable.columnModel.title0")); // NOI18N
+            masterTable.getColumnModel().getColumn(1).setHeaderValue(org.openide.util.NbBundle.getMessage(ItemTypeTopComponent.class, "ItemTypeTopComponent.masterTable.columnModel.title1")); // NOI18N
+            masterTable.getColumnModel().getColumn(2).setHeaderValue(org.openide.util.NbBundle.getMessage(ItemTypeTopComponent.class, "ItemTypeTopComponent.masterTable.columnModel.title2")); // NOI18N
+        }
 
         typeField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -143,26 +154,50 @@ public final class ItemTypeTopComponent extends NTopComponent {
             }
         });
 
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel2, org.openide.util.NbBundle.getMessage(ItemTypeTopComponent.class, "ItemTypeTopComponent.jLabel2.text")); // NOI18N
+
+        itemCategoryComboBox.setName("itemCategoryComboBox"); // NOI18N
+        itemCategoryComboBox.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                itemCategoryComboBoxKeyPressed(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(newCategoryButton, org.openide.util.NbBundle.getMessage(ItemTypeTopComponent.class, "ItemTypeTopComponent.newCategoryButton.text")); // NOI18N
+        newCategoryButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                newCategoryButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(updateButton)
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(itemCategoryComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(deleteButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(clearButton))
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(newCategoryButton))
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                             .addComponent(codeLabel)
-                            .addGap(7, 7, 7)
+                            .addGap(43, 43, 43)
                             .addComponent(typeField))
-                        .addComponent(masterScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 381, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(masterScrollPane, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 381, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(updateButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(deleteButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(clearButton)
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -173,6 +208,11 @@ public final class ItemTypeTopComponent extends NTopComponent {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(codeLabel)
                     .addComponent(typeField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(itemCategoryComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(newCategoryButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(clearButton)
@@ -194,8 +234,8 @@ public final class ItemTypeTopComponent extends NTopComponent {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -233,13 +273,31 @@ public final class ItemTypeTopComponent extends NTopComponent {
     private void clearButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearButtonActionPerformed
         clear();
     }//GEN-LAST:event_clearButtonActionPerformed
+
+    private void itemCategoryComboBoxKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_itemCategoryComboBoxKeyPressed
+        if (evt.getKeyCode() == 10) {
+            updateButton.requestFocus();
+        }
+    }//GEN-LAST:event_itemCategoryComboBoxKeyPressed
+
+    private void newCategoryButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newCategoryButtonActionPerformed
+        TopComponent tc = WindowManager.getDefault().findTopComponent("ItemCategoryTopComponent");
+        if (tc != null) {
+            tc.open();
+            tc.requestActive();
+        }
+    }//GEN-LAST:event_newCategoryButtonActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton clearButton;
     private javax.swing.JLabel codeLabel;
     private javax.swing.JButton deleteButton;
+    private javax.swing.JComboBox itemCategoryComboBox;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane masterScrollPane;
     private javax.swing.JTable masterTable;
+    private javax.swing.JButton newCategoryButton;
     private javax.swing.JTextField typeField;
     private javax.swing.JButton updateButton;
     // End of variables declaration//GEN-END:variables
@@ -275,8 +333,10 @@ public final class ItemTypeTopComponent extends NTopComponent {
             typeField.requestFocus();
             return;
         }
-
         ItemType itemType = new ItemType(type);
+
+        ItemCategory selectedItemCategory = (ItemCategory) itemCategoryComboBox.getSelectedItem();
+        itemType.setItemCategoryCategory(selectedItemCategory);
         itemType.setType(type);
         if (manager.update(itemType)) {
             clear();
@@ -318,7 +378,7 @@ public final class ItemTypeTopComponent extends NTopComponent {
         int i = 0;
         for (Iterator<ItemType> it = rootAreas.iterator(); it.hasNext();) {
             ItemType itemType = it.next();
-            Object[] row = {++i, itemType.getType()};
+            Object[] row = {++i, itemType.getType(), itemType.getItemCategoryCategory()};
             tableModel.addRow(row);
 
         }
@@ -328,7 +388,9 @@ public final class ItemTypeTopComponent extends NTopComponent {
 
         int row = masterTable.getSelectedRow();
         if (row > -1) {
+            ItemType itemType = manager.find(ItemType.class, masterTable.getValueAt(row, 1));
             typeField.setText("" + masterTable.getValueAt(row, 1));
+            itemCategoryComboBox.setSelectedItem(itemType.getItemCategoryCategory());
         }
     }
 
@@ -337,5 +399,27 @@ public final class ItemTypeTopComponent extends NTopComponent {
         tableModel = (DefaultTableModel) masterTable.getModel();
         masterTable.setDefaultRenderer(Object.class, coloredCellRenderer);
         clear();
+    }
+
+    ItemCategory itemCategory;
+
+    @Override
+    public void setVisible(boolean b) {
+        super.setVisible(b);
+        if (!b) {
+            Object o = itemCategoryComboBox.getSelectedItem();
+            itemCategory = o instanceof ItemCategory ? (ItemCategory) o : null;
+        }
+        Combo.fillItemCategories(itemCategoryComboBox, itemCategory);
+        fillItemCategories();
+    }
+
+    private void fillItemCategories() {
+        // List<ItemCategory> itemCategoryList = manager.find(ItemCategory.class);
+        // if (itemCategoryList.isEmpty()) {
+        //     manager.update(new ItemCategory("DEFAULT"));
+        // }
+        List<ItemCategory> itemCategoryList = manager.find(ItemCategory.class);
+        itemCategoryComboBox.setModel(new DefaultComboBoxModel(itemCategoryList.toArray()));
     }
 }

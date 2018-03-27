@@ -12,6 +12,7 @@ import entity.Customer;
 import entity.Employee;
 import entity.ExpensesType;
 import entity.Item;
+import entity.ItemCategory;
 import entity.ItemType;
 import entity.SaleInvoice;
 import entity.Supplier;
@@ -120,6 +121,27 @@ public class Combo {
         comboBoxWorker.execute();
     }
 
+    public static void fillItemCategories(final JComboBox<ItemCategory> comboBox, final ItemCategory toSelect) {
+        SwingWorker<DefaultComboBoxModel<ItemCategory>, ItemCategory> comboBoxWorker = new SwingWorker<DefaultComboBoxModel<ItemCategory>, ItemCategory>() {
+            @Override
+            protected DefaultComboBoxModel<ItemCategory> doInBackground() throws Exception {
+                return getItemCategoryComboBoxModel();
+            }
+
+            @Override
+            protected void done() {
+                try {
+                    comboBox.setModel(get());
+                    if (toSelect != null) {
+                        comboBox.setSelectedItem(toSelect);
+                    }
+                } catch (InterruptedException | ExecutionException ignore) {
+                }
+            }
+        };
+        comboBoxWorker.execute();
+    }
+
     public static void fillTowns(JComboBox<Town> jcb) {
         List<Town> towns = manager.find(Town.class);
         if (towns != null) {
@@ -192,6 +214,16 @@ public class Combo {
         List<ItemType> itemTypes = manager.find(ItemType.class);
         if (itemTypes != null) {
             ItemType[] ses = itemTypes.toArray(new ItemType[0]);
+            Arrays.sort(ses);
+            return new DefaultComboBoxModel<>(ses);
+        }
+        return new DefaultComboBoxModel<>();
+    }
+
+    public static DefaultComboBoxModel<ItemCategory> getItemCategoryComboBoxModel() {
+        List<ItemCategory> itemCategoryList = manager.find(ItemCategory.class);
+        if (itemCategoryList != null) {
+            ItemCategory[] ses = itemCategoryList.toArray(new ItemCategory[0]);
             Arrays.sort(ses);
             return new DefaultComboBoxModel<>(ses);
         }

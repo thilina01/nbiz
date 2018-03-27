@@ -49,18 +49,22 @@ public final class BackupButtonActionListener implements ActionListener {
             @Override
             public void run() {
                 String path = Manager.getInstance().backup();
-                source = new File(path);
-                jDialog = new JDialog();
-                jDialog.setTitle("Backup To:");
-                jDialog.setSize(200, 70);
-                jDialog.setLocationRelativeTo(null);
-                comboBox = new JComboBox<>(File.listRoots());
-                comboBox.removeItem(source.toPath().getRoot().toFile());
-                comboBox.setSelectedIndex(comboBox.getItemCount() - 1);
-                comboBox.addKeyListener(itemComboBoxKeyAdapter);
-                jDialog.add(comboBox);
-                jDialog.setVisible(true);
-                comboBox.requestFocus();
+                if (path != null) {
+                    source = new File(path);
+                    jDialog = new JDialog();
+                    jDialog.setTitle("Backup To:");
+                    jDialog.setSize(200, 70);
+                    jDialog.setLocationRelativeTo(null);
+                    comboBox = new JComboBox<>(File.listRoots());
+                    comboBox.removeItem(source.toPath().getRoot().toFile());
+                    comboBox.setSelectedIndex(comboBox.getItemCount() - 1);
+                    comboBox.addKeyListener(itemComboBoxKeyAdapter);
+                    jDialog.add(comboBox);
+                    jDialog.setVisible(true);
+                    comboBox.requestFocus();
+                }else{
+                NotificationDisplayer.getDefault().notify("Backup failed", null, "", null);                    
+                }
             }
         }.start();
     }

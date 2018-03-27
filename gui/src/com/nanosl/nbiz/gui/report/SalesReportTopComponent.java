@@ -10,6 +10,7 @@ import com.nanosl.nbiz.util.Export;
 import com.nanosl.nbiz.util.FindMySql;
 import static com.nanosl.nbiz.util.Format.yyyy_MM_dd;
 import com.nanosl.nbiz.util.NTopComponent;
+import entity.ItemCategory;
 import entity.ItemType;
 import entity.Supplier;
 import java.awt.Component;
@@ -80,6 +81,8 @@ public final class SalesReportTopComponent extends NTopComponent {
         supplierComboBox = new javax.swing.JComboBox();
         typeCheckBox = new javax.swing.JCheckBox();
         exportButton = new javax.swing.JButton();
+        categoryCheckBox = new javax.swing.JCheckBox();
+        itemCategoryComboBox = new javax.swing.JComboBox();
 
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
@@ -172,6 +175,15 @@ public final class SalesReportTopComponent extends NTopComponent {
             }
         });
 
+        org.openide.awt.Mnemonics.setLocalizedText(categoryCheckBox, org.openide.util.NbBundle.getMessage(SalesReportTopComponent.class, "SalesReportTopComponent.categoryCheckBox.text")); // NOI18N
+
+        itemCategoryComboBox.setName("itemCategoryComboBox"); // NOI18N
+        itemCategoryComboBox.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                itemCategoryComboBoxKeyPressed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -183,7 +195,7 @@ public final class SalesReportTopComponent extends NTopComponent {
                         .addComponent(exportButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(totalLabel))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 922, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -200,7 +212,11 @@ public final class SalesReportTopComponent extends NTopComponent {
                         .addComponent(typeCheckBox)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(itemTypeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(categoryCheckBox)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(itemCategoryComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 21, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -208,6 +224,9 @@ public final class SalesReportTopComponent extends NTopComponent {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(categoryCheckBox)
+                        .addComponent(itemCategoryComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(supplierCheckBox)
                         .addComponent(supplierComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -268,19 +287,27 @@ public final class SalesReportTopComponent extends NTopComponent {
     }//GEN-LAST:event_itemTypeComboBoxKeyPressed
 
     private void exportButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportButtonActionPerformed
-        System.out.println("1 " + getName());
-        System.out.println("2 " + getDisplayName());
-        System.out.println("3 " + getHtmlDisplayName());
-        System.out.println("3 " + getShortName());
-        System.out.println("3 " + getUIClassID());
+//        System.out.println("1 " + getName());
+//        System.out.println("2 " + getDisplayName());
+//        System.out.println("3 " + getHtmlDisplayName());
+//        System.out.println("3 " + getShortName());
+//        System.out.println("3 " + getUIClassID());
 
         Export.toExcel(table, yyyy_MM_dd.format(makeStartDate(startDatePicker.getDate())) + " to " + yyyy_MM_dd.format(makeEndDate(endDatePicker.getDate())), getName().replace(" Window", ""));
     }//GEN-LAST:event_exportButtonActionPerformed
 
+    private void itemCategoryComboBoxKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_itemCategoryComboBoxKeyPressed
+        if (evt.getKeyCode() == 10) {
+            fill();
+        }
+    }//GEN-LAST:event_itemCategoryComboBoxKeyPressed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JCheckBox categoryCheckBox;
     private org.jdesktop.swingx.JXDatePicker endDatePicker;
     private javax.swing.JButton exportButton;
     private javax.swing.JButton fillButton;
+    private javax.swing.JComboBox itemCategoryComboBox;
     private javax.swing.JComboBox itemTypeComboBox;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
@@ -305,13 +332,24 @@ public final class SalesReportTopComponent extends NTopComponent {
 
             Supplier supplier = (Supplier) supplierComboBox.getSelectedItem();
             ItemType itemType = (ItemType) itemTypeComboBox.getSelectedItem();
-            ResultSet res = supplierCheckBox.isSelected()
-                    ? typeCheckBox.isSelected()
-                            ? FindMySql.saleItemProfitBySupplierAndItemTypeBetweenDates(startDate, endDate, supplier.getCode(), itemType.getType())
-                            : FindMySql.saleItemProfitBySupplierBetweenDates(startDate, endDate, supplier.getCode())
-                    : typeCheckBox.isSelected()
-                            ? FindMySql.saleItemProfitByItemTypeBetweenDates(startDate, endDate, itemType)
-                            : FindMySql.saleItemProfitBetweenDates(startDate, endDate);
+            ItemCategory itemCategory = (ItemCategory) itemCategoryComboBox.getSelectedItem();
+//            ResultSet res = supplierCheckBox.isSelected()
+//                    ? typeCheckBox.isSelected()
+//                    ? FindMySql.saleItemProfitBySupplierAndItemTypeBetweenDates(startDate, endDate, supplier.getCode(), itemType.getType())
+//                    : FindMySql.saleItemProfitBySupplierBetweenDates(startDate, endDate, supplier.getCode())
+//                    : typeCheckBox.isSelected()
+//                    ? FindMySql.saleItemProfitByItemTypeBetweenDates(startDate, endDate, itemType)
+//                    : FindMySql.saleItemProfitBetweenDates(startDate, endDate);
+            ResultSet res = FindMySql.saleItemProfitBySupplier$ItemType$ItemCategory$BetweenDates(
+                    startDate, endDate,
+                    supplierCheckBox.isSelected() ? supplier.getCode() : null,
+                    typeCheckBox.isSelected() ? itemType.getType() : null,
+                    categoryCheckBox.isSelected() ? itemCategory.getCategory() : null
+            );
+
+            if (res == null) {
+                return;
+            }
             while (res.next()) {
                 String code = res.getString("Code");
                 String item = res.getString("Item");
@@ -371,8 +409,10 @@ public final class SalesReportTopComponent extends NTopComponent {
         table.setDefaultRenderer(Object.class, coloredCellRenderer);
         AutoCompleteDecorator.decorate(supplierComboBox);
         AutoCompleteDecorator.decorate(itemTypeComboBox);
+        AutoCompleteDecorator.decorate(itemCategoryComboBox);
         setComboBoxKeyAdapters(supplierComboBox);
         setComboBoxKeyAdapters(itemTypeComboBox);
+        setComboBoxKeyAdapters(itemCategoryComboBox);
 
     }
 
@@ -390,19 +430,31 @@ public final class SalesReportTopComponent extends NTopComponent {
                 case "itemTypeComboBox":
                     component1.addKeyListener(itemTypeComboBoxKeyAdapter);
                     break;
+                case "itemCategoryComboBox":
+                    component1.addKeyListener(itemCategoryComboBoxKeyAdapter);
+                    break;
             }
         }
     }
+    
     KeyAdapter supplierComboBoxKeyAdapter = new java.awt.event.KeyAdapter() {
         @Override
         public void keyPressed(KeyEvent evt) {
             supplierComboBoxKeyPressed(evt);
         }
     };
+    
     KeyAdapter itemTypeComboBoxKeyAdapter = new java.awt.event.KeyAdapter() {
         @Override
         public void keyPressed(KeyEvent evt) {
             itemTypeComboBoxKeyPressed(evt);
+        }
+    };
+    
+    KeyAdapter itemCategoryComboBoxKeyAdapter = new java.awt.event.KeyAdapter() {
+        @Override
+        public void keyPressed(KeyEvent evt) {
+            itemCategoryComboBoxKeyPressed(evt);
         }
     };
 
@@ -410,18 +462,25 @@ public final class SalesReportTopComponent extends NTopComponent {
     public void setVisible(boolean b) {
         super.setVisible(b);
         Combo.fillSuppliers(supplierComboBox, null);
+        Combo.fillItemCategories(itemCategoryComboBox, null);
         fillItemTypes();
+        fillItemCategoryComboBox();
         fill();
     }
 
     private void fillItemTypes() {
+        // List<ItemType> itemTypes = manager.find(ItemType.class);
+        // if (itemTypes.isEmpty()) {
+        //     manager.update(new ItemType("ITEM"));
+        //     manager.update(new ItemType("METERIAL"));
+        // }
         List<ItemType> itemTypes = manager.find(ItemType.class);
-        if (itemTypes.isEmpty()) {
-            manager.update(new ItemType("ITEM"));
-            manager.update(new ItemType("METERIAL"));
-        }
-        itemTypes = manager.find(ItemType.class);
         itemTypeComboBox.setModel(new DefaultComboBoxModel(itemTypes.toArray()));
+    }
+
+    private void fillItemCategoryComboBox() {
+        List<ItemCategory> itemCategoryList = manager.find(ItemCategory.class);
+        itemCategoryComboBox.setModel(new DefaultComboBoxModel(itemCategoryList.toArray()));
     }
 
     private void fill() {

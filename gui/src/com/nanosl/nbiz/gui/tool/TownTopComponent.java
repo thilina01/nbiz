@@ -309,15 +309,18 @@ public final class TownTopComponent extends NTopComponent {
             return;
         }
 
+        List<Serializable> serializables = new ArrayList<Serializable>();
         Town town = new Town(code);
         int index = towns.indexOf(town);
         town = index == -1 ? town : towns.get(index);
         town.setName(name);
         RootArea rootArea = (RootArea) rootAreaComboBox.getSelectedItem();
-        town.setRootArea(rootArea);
-        rootArea.getTownCollection().add(town);
-        List<Serializable> serializables = new ArrayList<Serializable>();
-        serializables.add(rootArea);
+        if (rootArea != null) {
+
+            town.setRootArea(rootArea);
+            rootArea.getTownCollection().add(town);
+            serializables.add(rootArea);
+        }
         serializables.add(town);
         if (manager.update(serializables)) {
             clear();

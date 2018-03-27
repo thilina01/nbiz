@@ -244,26 +244,28 @@ public final class ItemSalesReportTopComponent extends NTopComponent {
             ResultSet resultSet = FindMySql.itemTotalSaleBetweenDates(startDate, endDate);//113, 0, 1
             int rowNumber = 1;
             double totalCost = 0, totalAmount = 0, totlProfit = 0;
-            while (resultSet.next()) {
-                double quantity = resultSet.getDouble("quantity");
-                double cost = resultSet.getDouble("cost");
-                double itemTotalIncome = resultSet.getDouble("value");
-                double itemTotalCost = cost * quantity;
-                double profit = itemTotalIncome - itemTotalCost;
-                totalCost += itemTotalCost;
-                totalAmount += itemTotalIncome;
-                totlProfit += profit;
-                Object[] row = {
-                    rowNumber++,
-                    resultSet.getString("code") + resultSet.getString("description"),
-                    nf2d.format(quantity),
-                    nf2d.format(resultSet.getDouble("price")),
-                    nf2d.format(itemTotalIncome),
-                    nf2d.format(cost),
-                    nf2d.format(itemTotalCost),
-                    nf2d.format(profit)
-                };
-                tableModel.addRow(row);
+            if (!resultSet.isClosed()) {
+                while (resultSet.next()) {
+                    double quantity = resultSet.getDouble("quantity");
+                    double cost = resultSet.getDouble("cost");
+                    double itemTotalIncome = resultSet.getDouble("value");
+                    double itemTotalCost = cost * quantity;
+                    double profit = itemTotalIncome - itemTotalCost;
+                    totalCost += itemTotalCost;
+                    totalAmount += itemTotalIncome;
+                    totlProfit += profit;
+                    Object[] row = {
+                        rowNumber++,
+                        resultSet.getString("code") + resultSet.getString("description"),
+                        nf2d.format(quantity),
+                        nf2d.format(resultSet.getDouble("price")),
+                        nf2d.format(itemTotalIncome),
+                        nf2d.format(cost),
+                        nf2d.format(itemTotalCost),
+                        nf2d.format(profit)
+                    };
+                    tableModel.addRow(row);
+                }
             }
             totalLabel.setText("Total[ Cost: " + nf2d.format(totalCost) + "   Income: " + nf2d.format(totalAmount) + "   Profit: " + nf2d.format(totlProfit) + "]");
         } catch (SQLException ex) {
@@ -338,7 +340,7 @@ public final class ItemSalesReportTopComponent extends NTopComponent {
         if (!firstDate.equals(lastDate)) {
             fileName = fileName + " to " + lastDate;
         }
-        String path = "C:/Users/" + osUser + "/Documents/" + fileName+".ser";
+        String path = "C:/Users/" + osUser + "/Documents/" + fileName + ".ser";
         try {
             FileOutputStream fileOut = new FileOutputStream(path);
             ObjectOutputStream out = new ObjectOutputStream(fileOut);

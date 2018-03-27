@@ -90,7 +90,7 @@ public final class ChequeTopComponent extends NTopComponent {
 //        }
 //        System.out.println("at setvisible " + supplier);
         Combo.fillSuppliers(supplierComboBox, null);
-        Combo.fillBanks(accountComboBox);
+        Combo.fillAccounts(accountComboBox);
         fill();
     }
 

@@ -5,6 +5,7 @@
 package com.nanosl.nbiz.gui;
 
 import com.nanosl.nbiz.util.Combo;
+import com.nanosl.nbiz.util.Data;
 import com.nanosl.nbiz.util.Format;
 import static com.nanosl.nbiz.util.Format.nf2d;
 import com.nanosl.nbiz.util.NTopComponent;
@@ -27,6 +28,8 @@ import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.netbeans.api.progress.ProgressHandle;
 import org.netbeans.api.progress.ProgressHandleFactory;
@@ -91,22 +94,25 @@ public final class ItemTopComponent extends NTopComponent {
         updateButton = new javax.swing.JButton();
         deleteButton = new javax.swing.JButton();
         clearButton = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
-        minimumLimitTextField = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         itemTypeComboBox = new javax.swing.JComboBox();
         disableCheckBox = new javax.swing.JCheckBox();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
         costTextField = new javax.swing.JTextField();
         sellingPriceTextField = new javax.swing.JTextField();
-        quantityTextField = new javax.swing.JTextField();
         newTypeButton = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
         profitPercentageTextField = new javax.swing.JTextField();
+        quantityPanel = new javax.swing.JPanel();
+        jLabel5 = new javax.swing.JLabel();
+        minimumLimitTextField = new javax.swing.JTextField();
+        quantityTextField = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
+        newSupplierButton = new javax.swing.JButton();
         searchTextField = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
+        loadAllButton = new javax.swing.JButton();
 
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
@@ -210,14 +216,6 @@ public final class ItemTopComponent extends NTopComponent {
             }
         });
 
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(ItemTopComponent.class, "ItemTopComponent.jLabel1.text")); // NOI18N
-
-        minimumLimitTextField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                minimumLimitTextFieldActionPerformed(evt);
-            }
-        });
-
         org.openide.awt.Mnemonics.setLocalizedText(jLabel2, org.openide.util.NbBundle.getMessage(ItemTopComponent.class, "ItemTopComponent.jLabel2.text")); // NOI18N
 
         itemTypeComboBox.setName("itemTypeComboBox"); // NOI18N
@@ -233,8 +231,6 @@ public final class ItemTopComponent extends NTopComponent {
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel4, org.openide.util.NbBundle.getMessage(ItemTopComponent.class, "ItemTopComponent.jLabel4.text")); // NOI18N
 
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel5, org.openide.util.NbBundle.getMessage(ItemTopComponent.class, "ItemTopComponent.jLabel5.text")); // NOI18N
-
         costTextField.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
         costTextField.setText(org.openide.util.NbBundle.getMessage(ItemTopComponent.class, "ItemTopComponent.costTextField.text")); // NOI18N
         costTextField.addActionListener(new java.awt.event.ActionListener() {
@@ -248,14 +244,6 @@ public final class ItemTopComponent extends NTopComponent {
         sellingPriceTextField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 sellingPriceTextFieldActionPerformed(evt);
-            }
-        });
-
-        quantityTextField.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
-        quantityTextField.setText(org.openide.util.NbBundle.getMessage(ItemTopComponent.class, "ItemTopComponent.quantityTextField.text")); // NOI18N
-        quantityTextField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                quantityTextFieldActionPerformed(evt);
             }
         });
 
@@ -275,6 +263,60 @@ public final class ItemTopComponent extends NTopComponent {
             }
         });
 
+        quantityPanel.setName("quantityPanel"); // NOI18N
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel5, org.openide.util.NbBundle.getMessage(ItemTopComponent.class, "ItemTopComponent.jLabel5.text")); // NOI18N
+
+        minimumLimitTextField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                minimumLimitTextFieldActionPerformed(evt);
+            }
+        });
+
+        quantityTextField.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
+        quantityTextField.setText(org.openide.util.NbBundle.getMessage(ItemTopComponent.class, "ItemTopComponent.quantityTextField.text")); // NOI18N
+        quantityTextField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                quantityTextFieldActionPerformed(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(ItemTopComponent.class, "ItemTopComponent.jLabel1.text")); // NOI18N
+
+        javax.swing.GroupLayout quantityPanelLayout = new javax.swing.GroupLayout(quantityPanel);
+        quantityPanel.setLayout(quantityPanelLayout);
+        quantityPanelLayout.setHorizontalGroup(
+            quantityPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(quantityPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel5)
+                .addGap(18, 18, 18)
+                .addComponent(quantityTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel1)
+                .addGap(28, 28, 28)
+                .addComponent(minimumLimitTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+        quantityPanelLayout.setVerticalGroup(
+            quantityPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(quantityPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(quantityPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(minimumLimitTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5)
+                    .addComponent(quantityTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
+        );
+
+        org.openide.awt.Mnemonics.setLocalizedText(newSupplierButton, org.openide.util.NbBundle.getMessage(ItemTopComponent.class, "ItemTopComponent.newSupplierButton.text")); // NOI18N
+        newSupplierButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                newSupplierButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -289,24 +331,20 @@ public final class ItemTopComponent extends NTopComponent {
                             .addComponent(supplierLabel)
                             .addComponent(brandLabel))
                         .addGap(39, 39, 39)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(codeField, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(disableCheckBox)
                                 .addGap(68, 68, 68)
                                 .addComponent(jLabel2))
-                            .addComponent(brandField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(supplierComboBox, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(descriptionField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(28, 28, 28)
-                        .addComponent(minimumLimitTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel7)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(profitPercentageTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(brandField, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(descriptionField, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(supplierComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(newSupplierButton))))
+                    .addComponent(quantityPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
@@ -323,12 +361,13 @@ public final class ItemTopComponent extends NTopComponent {
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel3)
                             .addComponent(jLabel4)
-                            .addComponent(jLabel5))
+                            .addComponent(jLabel7))
                         .addGap(18, 18, 18)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(costTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(sellingPriceTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(quantityTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(costTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(sellingPriceTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(profitPercentageTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
@@ -353,22 +392,21 @@ public final class ItemTopComponent extends NTopComponent {
                     .addComponent(supplierLabel)
                     .addComponent(supplierComboBox)
                     .addComponent(jLabel3)
-                    .addComponent(costTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(costTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(newSupplierButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(brandLabel)
                     .addComponent(brandField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel5)
-                    .addComponent(quantityTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(minimumLimitTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(clearButton)
-                    .addComponent(deleteButton)
-                    .addComponent(updateButton)
                     .addComponent(jLabel7)
                     .addComponent(profitPercentageTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(clearButton)
+                        .addComponent(deleteButton)
+                        .addComponent(updateButton))
+                    .addComponent(quantityPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
@@ -381,6 +419,13 @@ public final class ItemTopComponent extends NTopComponent {
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel6, org.openide.util.NbBundle.getMessage(ItemTopComponent.class, "ItemTopComponent.jLabel6.text")); // NOI18N
 
+        org.openide.awt.Mnemonics.setLocalizedText(loadAllButton, org.openide.util.NbBundle.getMessage(ItemTopComponent.class, "ItemTopComponent.loadAllButton.text")); // NOI18N
+        loadAllButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                loadAllButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -388,12 +433,13 @@ public final class ItemTopComponent extends NTopComponent {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(masterScrollPane)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 6, Short.MAX_VALUE))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(masterScrollPane, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(loadAllButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel6)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(searchTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -403,12 +449,13 @@ public final class ItemTopComponent extends NTopComponent {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(masterScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 301, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(masterScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 276, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(searchTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel6))
-                .addGap(13, 13, 13)
+                    .addComponent(jLabel6)
+                    .addComponent(loadAllButton))
+                .addGap(18, 18, 18)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -568,6 +615,18 @@ public final class ItemTopComponent extends NTopComponent {
         sellingPriceTextField.selectAll();
     }//GEN-LAST:event_profitPercentageTextFieldActionPerformed
 
+    private void newSupplierButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newSupplierButtonActionPerformed
+        TopComponent tc = WindowManager.getDefault().findTopComponent("SupplierTopComponent");
+        if (tc != null) {
+            tc.open();
+            tc.requestActive();
+        }
+    }//GEN-LAST:event_newSupplierButtonActionPerformed
+
+    private void loadAllButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadAllButtonActionPerformed
+        fillTable();
+    }//GEN-LAST:event_loadAllButtonActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField brandField;
     private javax.swing.JLabel brandLabel;
@@ -589,11 +648,14 @@ public final class ItemTopComponent extends NTopComponent {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JButton loadAllButton;
     private javax.swing.JScrollPane masterScrollPane;
     private javax.swing.JTable masterTable;
     private javax.swing.JTextField minimumLimitTextField;
+    private javax.swing.JButton newSupplierButton;
     private javax.swing.JButton newTypeButton;
     private javax.swing.JTextField profitPercentageTextField;
+    private javax.swing.JPanel quantityPanel;
     private javax.swing.JTextField quantityTextField;
     private javax.swing.JTextField searchTextField;
     private javax.swing.JTextField sellingPriceTextField;
@@ -602,6 +664,7 @@ public final class ItemTopComponent extends NTopComponent {
     private javax.swing.JButton updateButton;
     // End of variables declaration//GEN-END:variables
     DefaultTableModel tableModel;
+    TableColumn tableColumn;
 
     private void fill() {
         clearFields();
@@ -646,6 +709,10 @@ public final class ItemTopComponent extends NTopComponent {
             double quantity = Double.parseDouble(quantityString);
 
             Supplier supplier = (Supplier) supplierComboBox.getSelectedItem();
+            if (supplier == null) {
+                supplierComboBox.requestFocus();
+                return;
+            }
             Item item = manager.find(Item.class, code);
             List<Serializable> serializables = new ArrayList<>();
             if (item == null) {
@@ -804,6 +871,7 @@ public final class ItemTopComponent extends NTopComponent {
         KeyAdapter();
         tableModel = (DefaultTableModel) masterTable.getModel();
         masterTable.setDefaultRenderer(Object.class, coloredCellRenderer);
+        optionalComponents.add(quantityPanel);
 //        clear();
     }
 
@@ -816,12 +884,12 @@ public final class ItemTopComponent extends NTopComponent {
 //        supplierComboBox.setModel(new DefaultComboBoxModel(manager.find(Supplier.class).toArray()));
 //    }
     private void fillItemTypes() {
+        // List<ItemType> itemTypes = manager.find(ItemType.class);
+        // if (itemTypes.isEmpty()) {
+        //     manager.update(new ItemType("ITEM"));
+        //     manager.update(new ItemType("METERIAL"));
+        // }
         List<ItemType> itemTypes = manager.find(ItemType.class);
-        if (itemTypes.isEmpty()) {
-            manager.update(new ItemType("ITEM"));
-            manager.update(new ItemType("METERIAL"));
-        }
-        itemTypes = manager.find(ItemType.class);
         itemTypeComboBox.setModel(new DefaultComboBoxModel(itemTypes.toArray()));
     }
     KeyAdapter supplierComboBoxKeyAdapter = new java.awt.event.KeyAdapter() {
@@ -895,6 +963,24 @@ public final class ItemTopComponent extends NTopComponent {
         Combo.fillSuppliers(supplierComboBox, supplier);
         Combo.fillItemTypes(itemTypeComboBox, itemType);
         fillItemTypes();
+
+        //hiding quantity column for all users other than admin
+        TableColumnModel tcm = masterTable.getColumnModel();
+        if (!Data.getOperator().getUsername().equalsIgnoreCase("admin")) {
+            if (tcm.getColumnCount() == 6) {
+                tableColumn = tcm.getColumn(5);
+                if (tableColumn != null) {
+                    tcm.removeColumn(tableColumn);
+                }
+            }
+        } else {
+            if (tcm.getColumnCount() == 5) {
+                if (tableColumn != null) {
+                    tcm.addColumn(tableColumn);
+                }
+            }
+        }
+
 //        if (supplier != null) {
 //            supplier = manager.find(Supplier.class, supplier.getCode());
 //            supplierComboBox.setSelectedItem(supplier);

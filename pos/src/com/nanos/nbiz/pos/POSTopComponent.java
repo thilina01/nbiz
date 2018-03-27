@@ -17,6 +17,7 @@ import com.nanosl.nbiz.util.Printer;
 import entity.CashBox;
 import entity.CashLog;
 import entity.CollectionReceipt;
+import entity.Config;
 import entity.Customer;
 import entity.Employee;
 import entity.Item;
@@ -96,11 +97,6 @@ public final class POSTopComponent extends NTopComponent {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        datePicker = new com.nanosl.lib.date.JXDatePicker();
-        jLabel1 = new javax.swing.JLabel();
-        invoiceNumberField = new javax.swing.JTextField();
-        jLabel3 = new javax.swing.JLabel();
-        customerComboBox = new javax.swing.JComboBox<>();
         jLabel4 = new javax.swing.JLabel();
         itemComboBox = new javax.swing.JComboBox<>();
         jLabel5 = new javax.swing.JLabel();
@@ -122,7 +118,6 @@ public final class POSTopComponent extends NTopComponent {
         paidAmountField = new javax.swing.JTextField();
         remainingAmountLabel = new javax.swing.JLabel();
         remainingAmountField = new javax.swing.JTextField();
-        searchCustomerButton = new javax.swing.JButton();
         printCheckBox = new javax.swing.JCheckBox();
         anotherButton = new javax.swing.JButton();
         searchItemButton = new javax.swing.JButton();
@@ -139,54 +134,18 @@ public final class POSTopComponent extends NTopComponent {
         quotationCheckBox = new javax.swing.JCheckBox();
         jLabel10 = new javax.swing.JLabel();
         discountPercentageField = new javax.swing.JTextField();
+        invoicePanel = new javax.swing.JPanel();
+        invoiceNumberField = new javax.swing.JTextField();
         invoiceCheckBox = new javax.swing.JCheckBox();
+        jPanel4 = new javax.swing.JPanel();
+        datePicker = new com.nanosl.lib.date.JXDatePicker();
+        jLabel1 = new javax.swing.JLabel();
+        customerPanel = new javax.swing.JPanel();
+        customerComboBox = new javax.swing.JComboBox<>();
+        searchCustomerButton = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
 
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-
-        datePicker.setName("datePicker"); // NOI18N
-        datePicker.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                datePickerKeyPressed(evt);
-            }
-        });
-
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(POSTopComponent.class, "POSTopComponent.jLabel1.text")); // NOI18N
-
-        invoiceNumberField.setEditable(false);
-        invoiceNumberField.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
-        invoiceNumberField.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
-        invoiceNumberField.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                invoiceNumberFieldMouseClicked(evt);
-            }
-        });
-        invoiceNumberField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                invoiceNumberFieldActionPerformed(evt);
-            }
-        });
-        invoiceNumberField.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                invoiceNumberFieldKeyPressed(evt);
-            }
-        });
-
-        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel3, org.openide.util.NbBundle.getMessage(POSTopComponent.class, "POSTopComponent.jLabel3.text")); // NOI18N
-
-        customerComboBox.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
-        customerComboBox.setName("customerComboBox"); // NOI18N
-        customerComboBox.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                customerComboBoxFocusGained(evt);
-            }
-        });
-        customerComboBox.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                customerComboBoxKeyPressed(evt);
-            }
-        });
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(jLabel4, org.openide.util.NbBundle.getMessage(POSTopComponent.class, "POSTopComponent.jLabel4.text")); // NOI18N
@@ -347,6 +306,7 @@ public final class POSTopComponent extends NTopComponent {
 
         quantityLabel.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(quantityLabel, org.openide.util.NbBundle.getMessage(POSTopComponent.class, "POSTopComponent.quantityLabel.text")); // NOI18N
+        quantityLabel.setName("quantityLabel"); // NOI18N
 
         paidAmountLabel.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(paidAmountLabel, org.openide.util.NbBundle.getMessage(POSTopComponent.class, "POSTopComponent.paidAmountLabel.text")); // NOI18N
@@ -377,14 +337,6 @@ public final class POSTopComponent extends NTopComponent {
         remainingAmountField.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         remainingAmountField.setForeground(new java.awt.Color(51, 0, 102));
         remainingAmountField.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
-
-        searchCustomerButton.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
-        org.openide.awt.Mnemonics.setLocalizedText(searchCustomerButton, org.openide.util.NbBundle.getMessage(POSTopComponent.class, "POSTopComponent.searchCustomerButton.text")); // NOI18N
-        searchCustomerButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                searchCustomerButtonActionPerformed(evt);
-            }
-        });
 
         printCheckBox.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(printCheckBox, org.openide.util.NbBundle.getMessage(POSTopComponent.class, "POSTopComponent.printCheckBox.text")); // NOI18N
@@ -559,6 +511,27 @@ public final class POSTopComponent extends NTopComponent {
             }
         });
 
+        invoicePanel.setName("invoicePanel"); // NOI18N
+
+        invoiceNumberField.setEditable(false);
+        invoiceNumberField.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
+        invoiceNumberField.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
+        invoiceNumberField.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                invoiceNumberFieldMouseClicked(evt);
+            }
+        });
+        invoiceNumberField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                invoiceNumberFieldActionPerformed(evt);
+            }
+        });
+        invoiceNumberField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                invoiceNumberFieldKeyPressed(evt);
+            }
+        });
+
         invoiceCheckBox.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(invoiceCheckBox, org.openide.util.NbBundle.getMessage(POSTopComponent.class, "POSTopComponent.invoiceCheckBox.text")); // NOI18N
         invoiceCheckBox.addActionListener(new java.awt.event.ActionListener() {
@@ -566,6 +539,108 @@ public final class POSTopComponent extends NTopComponent {
                 invoiceCheckBoxActionPerformed(evt);
             }
         });
+
+        javax.swing.GroupLayout invoicePanelLayout = new javax.swing.GroupLayout(invoicePanel);
+        invoicePanel.setLayout(invoicePanelLayout);
+        invoicePanelLayout.setHorizontalGroup(
+            invoicePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(invoicePanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(invoiceCheckBox)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(invoiceNumberField, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+        invoicePanelLayout.setVerticalGroup(
+            invoicePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(invoicePanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(invoicePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(invoiceNumberField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(invoiceCheckBox))
+                .addContainerGap())
+        );
+
+        datePicker.setName("datePicker"); // NOI18N
+        datePicker.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                datePickerKeyPressed(evt);
+            }
+        });
+
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(POSTopComponent.class, "POSTopComponent.jLabel1.text")); // NOI18N
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1)
+                .addGap(18, 18, 18)
+                .addComponent(datePicker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel1)
+                    .addComponent(datePicker, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+
+        customerPanel.setName("customerPanel"); // NOI18N
+
+        customerComboBox.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
+        customerComboBox.setName("customerComboBox"); // NOI18N
+        customerComboBox.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                customerComboBoxFocusGained(evt);
+            }
+        });
+        customerComboBox.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                customerComboBoxKeyPressed(evt);
+            }
+        });
+
+        searchCustomerButton.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(searchCustomerButton, org.openide.util.NbBundle.getMessage(POSTopComponent.class, "POSTopComponent.searchCustomerButton.text")); // NOI18N
+        searchCustomerButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                searchCustomerButtonActionPerformed(evt);
+            }
+        });
+
+        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel3, org.openide.util.NbBundle.getMessage(POSTopComponent.class, "POSTopComponent.jLabel3.text")); // NOI18N
+
+        javax.swing.GroupLayout customerPanelLayout = new javax.swing.GroupLayout(customerPanel);
+        customerPanel.setLayout(customerPanelLayout);
+        customerPanelLayout.setHorizontalGroup(
+            customerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(customerPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(customerComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 349, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(searchCustomerButton)
+                .addContainerGap())
+        );
+        customerPanelLayout.setVerticalGroup(
+            customerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(customerPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(customerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(customerComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(searchCustomerButton))
+                .addContainerGap())
+        );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -597,7 +672,7 @@ public final class POSTopComponent extends NTopComponent {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(printCheckBox))
                             .addComponent(receiptPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 63, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -625,47 +700,40 @@ public final class POSTopComponent extends NTopComponent {
                             .addComponent(paidAmountField)
                             .addComponent(totalAmountField, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel5)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(quantityField, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel6)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(priceField, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel7)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(discountField, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(invoiceCheckBox)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(invoiceNumberField, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel1)
-                        .addGap(18, 18, 18)
-                        .addComponent(datePicker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(customerComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 349, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(searchCustomerButton)))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel5)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(quantityField, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel6)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(priceField, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel7)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(discountField, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(invoicePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(customerPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(invoiceNumberField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel1)
-                        .addComponent(jLabel3)
-                        .addComponent(customerComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(searchCustomerButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(invoiceCheckBox))
-                    .addComponent(datePicker, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(invoicePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(customerPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 5, Short.MAX_VALUE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
                     .addComponent(itemComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -681,7 +749,7 @@ public final class POSTopComponent extends NTopComponent {
                     .addComponent(discountField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(quotationCheckBox))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 287, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 264, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -1027,12 +1095,14 @@ public final class POSTopComponent extends NTopComponent {
     private javax.swing.JComboBox cashBoxComboBox;
     private javax.swing.JButton clearButton;
     private javax.swing.JComboBox<Customer> customerComboBox;
+    private javax.swing.JPanel customerPanel;
     private org.jdesktop.swingx.JXDatePicker datePicker;
     private javax.swing.JTextField discountField;
     private javax.swing.JTextField discountPercentageField;
     private javax.swing.JComboBox employeeComboBox;
     private javax.swing.JCheckBox invoiceCheckBox;
     private javax.swing.JTextField invoiceNumberField;
+    private javax.swing.JPanel invoicePanel;
     private javax.swing.JComboBox<Item> itemComboBox;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -1046,6 +1116,7 @@ public final class POSTopComponent extends NTopComponent {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField lastInvoiceNumberField;
     private javax.swing.JTextField paidAmountField;
@@ -1076,6 +1147,9 @@ public final class POSTopComponent extends NTopComponent {
         initComponents();
         optionalComponents.add(receiptPanel);
         optionalComponents.add(employeeComboBox);
+        optionalComponents.add(invoicePanel);
+        optionalComponents.add(customerPanel);
+        optionalComponents.add(quantityLabel);
 //        setVisible(true);
         AutoCompleteDecorator.decorate(itemComboBox);
         setComboBoxKeyAdapters(itemComboBox);
@@ -1189,6 +1263,10 @@ public final class POSTopComponent extends NTopComponent {
             discount = Double.valueOf(discountField.getText().trim());
         } catch (NumberFormatException e) {
         }
+        if (quantity == 0) {
+            showError("Quantity Required");
+            return;
+        }  
         for (int i = 0; i < table.getRowCount(); i++) {
 
             if (description.equalsIgnoreCase("OTHER")) {
@@ -1203,11 +1281,7 @@ public final class POSTopComponent extends NTopComponent {
         }
         item = manager.find(Item.class, item.getCode());
 
-        if (quantity
-                == 0) {
-            showError("Quantity Required");
-            return;
-        }
+
 
         if (quantity > availableQuantity) {
             showError("Out of stock!");
@@ -1518,8 +1592,8 @@ public final class POSTopComponent extends NTopComponent {
 
         Customer customer = (Customer) customerComboBox.getSelectedItem();
         System.currentTimeMillis();
-
-        Quotation quotation = new Quotation(System.currentTimeMillis() + "");
+        String quotationId = System.currentTimeMillis() + "";
+        Quotation quotation = new Quotation(quotationId);
 
         quotation.setCustomer(customer);
         quotation.setCustomerName(customer.getName());
@@ -1594,6 +1668,9 @@ public final class POSTopComponent extends NTopComponent {
 //                    Exceptions.printStackTrace(ex);
 //                }
 //            }
+            if (printCheckBox.isSelected()) {
+                printPOS(quotationId);
+            }
             showSuccess("Quotation Updated");
 
             clear();
@@ -1834,7 +1911,7 @@ public final class POSTopComponent extends NTopComponent {
             if (printCheckBox.isSelected()) {
                 printPOS(invoiceNumber);
             }
-            showSuccess("Invoice: " + invoiceNumber + " Updated");
+            showSuccess("Invoice Updated");//: " + invoiceNumber + "
             if (!edit) {
                 Data.setInvoiceNo(invoiceNumber);
                 Data.setReceiptNo(ReceiptNumber);
@@ -1874,17 +1951,25 @@ public final class POSTopComponent extends NTopComponent {
         totalDiscountField.selectAll();
     }
 
-    private void printPOS(String invoiceNumber) {
+    private void printPOS(String invoiceOrQuotationId) {
         try {
-            URL url = getClass().getResource("/com/nanos/nbiz/pos/jrxml/PosInvoice.jasper");
+            URL url = getClass().getResource("/com/nanos/nbiz/pos/jrxml/PosInvoiceMin.jasper");
             Object object = JRLoader.loadObject(url);//"src/com/nanosl/nbiz/gui/jrxml/report1.jasper"
             if (object == null) {
                 showError("Unable to print");
                 return;
             }
+
+            Config config = manager.find(Config.class, "MinPos");
+            boolean minPosStatus = (config != null && config.getConfigValue().equalsIgnoreCase("true"));
             JasperReport report = (JasperReport) object;
             Map<String, Object> params = Data.getParams();
-            params.put("invoice", invoiceNumber);
+            if (quotationCheckBox.isSelected()) {
+                params.put("quotation", invoiceOrQuotationId);
+            } else {
+                params.put("invoice", invoiceOrQuotationId);
+            }
+            params.put("min", minPosStatus);//this will remove invoice date, time, number and powerd by info
             Printer.printPosInvoice(report, params);
         } catch (JRException ex) {
             Exceptions.printStackTrace(ex);

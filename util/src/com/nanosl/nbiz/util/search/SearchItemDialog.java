@@ -14,6 +14,7 @@ import entity.Stock;
 import java.awt.event.KeyEvent;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
 import org.openide.windows.TopComponent;
 import org.openide.windows.WindowManager;
 import query.Find;
@@ -37,6 +38,10 @@ public class SearchItemDialog extends javax.swing.JDialog {
         super(parent, modal);
         setUndecorated(true);
         initComponents();
+        //Temporarily hiding quantity column [to do: do not hide column for admin]
+        TableColumnModel tcm = itemTable.getColumnModel();
+        tcm.removeColumn(tcm.getColumn(4));
+        
         itemTable.setDefaultRenderer(Object.class, coloredCellRenderer);
         itemTableModel = (DefaultTableModel) itemTable.getModel();
 //        getRootPane().setBorder( BorderFactory.createLineBorder(Color.blue) );
@@ -259,7 +264,7 @@ public class SearchItemDialog extends javax.swing.JDialog {
         int length = text.length();
 
         if (length < 3) {
-            List<Item> items = Find.itemBy$(text,1);
+            List<Item> items = Find.itemBy$(text, 1);
             fillTable(items);
             selectRow();
         } else {
@@ -271,7 +276,7 @@ public class SearchItemDialog extends javax.swing.JDialog {
             List<Item> items = Find.itemBy$(startingRadioButton.isSelected() ? text + "%" : "%" + text + "%", limit);
             Item exactMatchItem = Manager.getInstance().find(Item.class, text);
             if (exactMatchItem != null && !items.contains(exactMatchItem)) {
-                items.add(0,exactMatchItem);
+                items.add(0, exactMatchItem);
             }
             fillTable(items);
             selectRow();

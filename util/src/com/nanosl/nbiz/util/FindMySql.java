@@ -75,7 +75,7 @@ public class FindMySql {
             + "WHERE "
             + "sale_invoice.inv_time BETWEEN ? AND ? "
             + "AND sale_invoice.amount != 0 "
-            + "GROUP BY sale_invoice_has_item.item_code,sale_invoice_has_item.rate ";
+            + "GROUP BY sale_invoice_has_item.item_code, sale_invoice_has_item.rate, sale_invoice_has_item.cost ";
 
     private static final String quotationItemBySupplierBetweenDates
             = "SELECT "
@@ -111,7 +111,7 @@ public class FindMySql {
             + "sale_invoice.inv_time BETWEEN ? AND ? "
             + "AND item.supplier_code = ? "
             + "AND sale_invoice.amount != 0 "
-            + "GROUP BY sale_invoice_has_item.item_code,sale_invoice_has_item.rate ";
+            + "GROUP BY sale_invoice_has_item.item_code,sale_invoice_has_item.rate,sale_invoice_has_item.cost ";
 //
 
     private static final String quotationItemByItemTypeBetweenDates
@@ -148,7 +148,7 @@ public class FindMySql {
             + "sale_invoice.inv_time BETWEEN ? AND ? "
             + "AND item.item_type_type = ? "
             + "AND sale_invoice.amount != 0 "
-            + "GROUP BY sale_invoice_has_item.item_code,sale_invoice_has_item.rate ";
+            + "GROUP BY sale_invoice_has_item.item_code,sale_invoice_has_item.rate, sale_invoice_has_item.cost ";
 
     //
     private static final String quotationItemBySupplierAndItemTypeBetweenDates
@@ -187,7 +187,7 @@ public class FindMySql {
             + "AND item.supplier_code = ? "
             + "AND item.item_type_type = ? "
             + "AND sale_invoice.amount != 0 "
-            + "GROUP BY sale_invoice_has_item.item_code,sale_invoice_has_item.rate ";
+            + "GROUP BY sale_invoice_has_item.item_code,sale_invoice_has_item.rate, sale_invoice_has_item.cost ";
 
     private static final String itemTotalSaleBetweenDates = "SELECT "
             + "sale_invoice_has_item.item_code as 'code', "
@@ -395,6 +395,44 @@ public class FindMySql {
             preparedStatement.setString(2, yyyy_MM_dd.format(endDate) + " 23:59:59");
             preparedStatement.setString(3, supplierCode);
             preparedStatement.setString(4, itemType);
+            res = preparedStatement.executeQuery();
+        } catch (SQLException ex) {
+            Errors.reportError(ex);
+        }
+        return res;
+    }
+    
+    public static ResultSet saleItemProfitBySupplier$ItemType$ItemCategory$BetweenDates(Date startDate, Date endDate, String supplierCode, String itemType, String itemCategory) {
+        connect();
+        try {
+            String sql 
+            = "SELECT "
+            + "item.`code` as 'Code', "
+            + "item.description as 'Item', "
+            + "Sum(sale_invoice_has_item.quantity) AS Quantity, "
+            + "sale_invoice_has_item.rate AS Rate,"
+            + "( Rate *  SUM(sale_invoice_has_item.quantity) ) AS Income, "
+            + "sale_invoice_has_item.cost AS `Item Cost`, "
+            + "( Cost *  SUM(sale_invoice_has_item.quantity) ) AS `Total Cost`, "
+            + "( Rate *  SUM(sale_invoice_has_item.quantity) ) - ( Cost *  SUM(sale_invoice_has_item.quantity) ) AS Profit "
+            + "FROM "
+            + "sale_invoice_has_item "
+            + "INNER JOIN item ON item.`code` = sale_invoice_has_item.item_code "
+            + "INNER JOIN item_type ON item_type.`type` = item.item_type_type "
+            + "INNER JOIN sale_invoice ON sale_invoice.inv_no = sale_invoice_has_item.sale_invoice_inv_no "
+            + "WHERE "
+            + "sale_invoice.inv_time BETWEEN ? AND ? ";
+            
+            sql += supplierCode!=null ?"AND item.supplier_code = '"+supplierCode+"' ":"";
+            sql += itemType !=null ?"AND item.item_type_type = '"+itemType+"' ":"";
+            sql += itemCategory != null ? "AND item_type.item_category_category = '"+itemCategory+"' ":"";
+            
+            sql += "AND sale_invoice.amount != 0 ";
+            sql += "GROUP BY sale_invoice_has_item.item_code,sale_invoice_has_item.rate, sale_invoice_has_item.cost ";
+            
+            preparedStatement = con.prepareStatement(sql);
+            preparedStatement.setString(1, yyyy_MM_dd.format(startDate) + " 00:00:00");
+            preparedStatement.setString(2, yyyy_MM_dd.format(endDate) + " 23:59:59");
             res = preparedStatement.executeQuery();
         } catch (SQLException ex) {
             Errors.reportError(ex);
