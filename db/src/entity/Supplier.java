@@ -68,6 +68,28 @@ public class Supplier implements Serializable, Comparable<Supplier> {
     private String vat;
     @Column(name = "svat")
     private String svat;
+    @Column(name = "account_number")
+    private String accountNumber;
+    @Column(name = "bank_code")
+    private String bankCode;
+    @Column(name = "bank_name")
+    private String bankName;
+    @Column(name = "bank_branch_code")
+    private String bankBranchCode;
+    @Column(name = "bank_branch_name")
+    private String bankBranchName;
+    @Column(name = "finance_contact_person")
+    private String financeContactPerson;
+    @Column(name = "finance_contact_email")
+    private String financeContactEmail;
+    @Column(name = "finance_contact_phone")
+    private String financeContactPhone;
+    @Column(name = "svat_contact_person")
+    private String svatContactPerson;
+    @Column(name = "svat_contact_email")
+    private String svatContactEmail;
+    @Column(name = "svat_contact_phone")
+    private String svatContactPhone;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "supplier")
     private Collection<SupplierHasBank> supplierHasBankCollection;
     @JoinColumn(name = "town_code", referencedColumnName = "code")
@@ -173,6 +195,94 @@ public class Supplier implements Serializable, Comparable<Supplier> {
 
     public void setSvat(String svat) {
         this.svat = svat;
+    }
+
+    public String getAccountNumber() {
+        return accountNumber;
+    }
+
+    public void setAccountNumber(String accountNumber) {
+        this.accountNumber = accountNumber;
+    }
+
+    public String getBankCode() {
+        return bankCode;
+    }
+
+    public void setBankCode(String bankCode) {
+        this.bankCode = bankCode;
+    }
+
+    public String getBankName() {
+        return bankName;
+    }
+
+    public void setBankName(String bankName) {
+        this.bankName = bankName;
+    }
+
+    public String getBankBranchCode() {
+        return bankBranchCode;
+    }
+
+    public void setBankBranchCode(String bankBranchCode) {
+        this.bankBranchCode = bankBranchCode;
+    }
+
+    public String getBankBranchName() {
+        return bankBranchName;
+    }
+
+    public void setBankBranchName(String bankBranchName) {
+        this.bankBranchName = bankBranchName;
+    }
+
+    public String getFinanceContactPerson() {
+        return financeContactPerson;
+    }
+
+    public void setFinanceContactPerson(String financeContactPerson) {
+        this.financeContactPerson = financeContactPerson;
+    }
+
+    public String getFinanceContactEmail() {
+        return financeContactEmail;
+    }
+
+    public void setFinanceContactEmail(String financeContactEmail) {
+        this.financeContactEmail = financeContactEmail;
+    }
+
+    public String getFinanceContactPhone() {
+        return financeContactPhone;
+    }
+
+    public void setFinanceContactPhone(String financeContactPhone) {
+        this.financeContactPhone = financeContactPhone;
+    }
+
+    public String getSvatContactPerson() {
+        return svatContactPerson;
+    }
+
+    public void setSvatContactPerson(String svatContactPerson) {
+        this.svatContactPerson = svatContactPerson;
+    }
+
+    public String getSvatContactEmail() {
+        return svatContactEmail;
+    }
+
+    public void setSvatContactEmail(String svatContactEmail) {
+        this.svatContactEmail = svatContactEmail;
+    }
+
+    public String getSvatContactPhone() {
+        return svatContactPhone;
+    }
+
+    public void setSvatContactPhone(String svatContactPhone) {
+        this.svatContactPhone = svatContactPhone;
     }
 
     @XmlTransient

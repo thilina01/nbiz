@@ -11,6 +11,8 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -37,7 +39,10 @@ public class ItemType implements Serializable {
     private String type;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "itemTypeType")
     private Collection<Item> itemCollection;
-
+    @JoinColumn(name = "item_category_category", referencedColumnName = "category")
+    @ManyToOne(optional = true)
+    private ItemCategory itemCategoryCategory;
+    
     public ItemType() {
     }
 
@@ -60,6 +65,14 @@ public class ItemType implements Serializable {
 
     public void setItemCollection(Collection<Item> itemCollection) {
         this.itemCollection = itemCollection;
+    }
+
+    public ItemCategory getItemCategoryCategory() {
+        return itemCategoryCategory;
+    }
+
+    public void setItemCategoryCategory(ItemCategory itemCategoryCategory) {
+        this.itemCategoryCategory = itemCategoryCategory;
     }
 
     @Override

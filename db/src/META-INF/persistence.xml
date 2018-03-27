@@ -66,6 +66,7 @@
     <class>entity.Account</class>
     <class>entity.CashBox</class>
     <class>entity.CashLog</class>
+    <class>entity.ItemCategory</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/cbis?zeroDateTimeBehavior=convertToNull"/>
       <property name="javax.persistence.jdbc.password" value="123"/>
