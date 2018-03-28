@@ -62,8 +62,9 @@ public final class BackupButtonActionListener implements ActionListener {
                     jDialog.add(comboBox);
                     jDialog.setVisible(true);
                     comboBox.requestFocus();
-                }else{
-                NotificationDisplayer.getDefault().notify("Backup failed", null, "", null);                    
+                } else {
+                    ImageIcon imageIcon = new javax.swing.ImageIcon(BackupButtonActionListener.class.getResource("/com/nanosl/nbiz/util/resources/cancel16.png"));
+                    NotificationDisplayer.getDefault().notify("Backup failed", imageIcon, "", null);
                 }
             }
         }.start();
