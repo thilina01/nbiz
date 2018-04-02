@@ -548,7 +548,7 @@ public final class POSTopComponent extends NTopComponent {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.ipadx = 75;
+        gridBagConstraints.ipadx = 100;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 0);
         jPanel2.add(discountPercentageField, gridBagConstraints);
@@ -582,7 +582,7 @@ public final class POSTopComponent extends NTopComponent {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.ipadx = 75;
+        gridBagConstraints.ipadx = 100;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 0);
         jPanel2.add(paidByCCField, gridBagConstraints);
@@ -615,7 +615,10 @@ public final class POSTopComponent extends NTopComponent {
         jPanel2.add(jLabel9, gridBagConstraints);
 
         employeeComboBox.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
+        employeeComboBox.setMaximumSize(new java.awt.Dimension(30, 29));
+        employeeComboBox.setMinimumSize(new java.awt.Dimension(30, 29));
         employeeComboBox.setName("employeeComboBox"); // NOI18N
+        employeeComboBox.setPreferredSize(new java.awt.Dimension(30, 29));
         employeeComboBox.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 employeeComboBoxMouseClicked(evt);
@@ -634,7 +637,7 @@ public final class POSTopComponent extends NTopComponent {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.ipadx = 162;
+        gridBagConstraints.ipadx = 100;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 0);
         jPanel2.add(employeeComboBox, gridBagConstraints);
@@ -659,7 +662,7 @@ public final class POSTopComponent extends NTopComponent {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.ipadx = 135;
+        gridBagConstraints.ipadx = 100;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.SOUTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 0);
         jPanel2.add(paidAmountField, gridBagConstraints);
@@ -687,7 +690,7 @@ public final class POSTopComponent extends NTopComponent {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.ipadx = 135;
+        gridBagConstraints.ipadx = 100;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.SOUTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 0);
         jPanel2.add(totalDiscountField, gridBagConstraints);
@@ -700,7 +703,7 @@ public final class POSTopComponent extends NTopComponent {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 3;
-        gridBagConstraints.ipadx = 135;
+        gridBagConstraints.ipadx = 100;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.SOUTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 0);
         jPanel2.add(remainingAmountField, gridBagConstraints);
@@ -727,7 +730,7 @@ public final class POSTopComponent extends NTopComponent {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.ipadx = 135;
+        gridBagConstraints.ipadx = 100;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.SOUTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 0);
         jPanel2.add(totalAmountField, gridBagConstraints);
