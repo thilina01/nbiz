@@ -1595,6 +1595,7 @@ public final class POSTopComponent extends NTopComponent {
         Combo.fillSaleInvoice(saleInvoiceComboBox, null);
         Combo.fillCashBoxes(cashBoxComboBox);
         Combo.fillEmployees(employeeComboBox);
+        employeeComboBox.setSelectedItem(null);
 //        Combo.fillItems(itemComboBox);
 //
 //        List<SaleInvoice> saleInvoices = manager.findLimit(SaleInvoice.class, 10);
