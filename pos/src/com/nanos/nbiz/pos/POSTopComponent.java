@@ -1103,7 +1103,11 @@ public final class POSTopComponent extends NTopComponent {
     }//GEN-LAST:event_saleInvoiceComboBoxActionPerformed
 
     private void paidByCCFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_paidByCCFieldActionPerformed
-        paidAmountField.requestFocus();
+        if (employeeComboBox.isVisible()) {
+            employeeComboBox.requestFocus();
+        } else {
+            paidAmountField.requestFocus();
+        }
     }//GEN-LAST:event_paidByCCFieldActionPerformed
 
     private void paidByCCFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_paidByCCFieldFocusGained
