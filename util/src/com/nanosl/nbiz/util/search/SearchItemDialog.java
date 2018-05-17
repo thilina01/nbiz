@@ -41,7 +41,7 @@ public class SearchItemDialog extends javax.swing.JDialog {
         //Temporarily hiding quantity column [to do: do not hide column for admin]
         TableColumnModel tcm = itemTable.getColumnModel();
         tcm.removeColumn(tcm.getColumn(4));
-        
+
         itemTable.setDefaultRenderer(Object.class, coloredCellRenderer);
         itemTableModel = (DefaultTableModel) itemTable.getModel();
 //        getRootPane().setBorder( BorderFactory.createLineBorder(Color.blue) );
@@ -238,18 +238,19 @@ public class SearchItemDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_itemTableMouseClicked
 
     private void searchTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchTextFieldActionPerformed
-        if (itemTable.getRowCount() > 0) {
+        if (itemTable.getRowCount() > 0 && searchTextField.getText().trim().length() > 0) {
             int selectedRow = itemTable.getSelectedRow();
             setItem(Manager.getInstance().find(Item.class, itemTable.getValueAt(selectedRow < 0 ? 0 : selectedRow, 0).toString()));
             dispose();
         } else {
-            setItem(Manager.getInstance().find(Item.class, searchTextField.getText().trim()));
+            setItem(null);
             dispose();
         }
     }//GEN-LAST:event_searchTextFieldActionPerformed
 
     private void searchTextFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchTextFieldKeyReleased
-        if (evt.getKeyCode() == 27) {
+        String text = searchTextField.getText().trim();
+        if (evt.getKeyCode() == 27 || (evt.getKeyCode() == 10 && text.length() == 0)) {
             dispose();
             return;
         } else if (evt.getKeyCode() == KeyEvent.VK_DOWN) {
@@ -259,7 +260,6 @@ public class SearchItemDialog extends javax.swing.JDialog {
                 return;
             }
         }
-        String text = searchTextField.getText().trim();
         itemTableModel.setRowCount(0);
         int length = text.length();
 
