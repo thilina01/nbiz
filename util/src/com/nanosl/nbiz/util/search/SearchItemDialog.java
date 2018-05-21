@@ -250,7 +250,7 @@ public class SearchItemDialog extends javax.swing.JDialog {
 
     private void searchTextFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchTextFieldKeyReleased
         String text = searchTextField.getText().trim();
-        if (evt.getKeyCode() == 27 || (evt.getKeyCode() == 10 && text.length() == 0)) {
+        if (evt.getKeyCode() == 27) {
             dispose();
             return;
         } else if (evt.getKeyCode() == KeyEvent.VK_DOWN) {
