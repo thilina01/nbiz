@@ -87,6 +87,7 @@ public final class POSTopComponent extends NTopComponent {
         setName(Bundle.CTL_POSTopComponent());
         setToolTipText(Bundle.HINT_POSTopComponent());
         itemComboBox.setVisible(false);
+        itemTextField.setVisible(false);
     }
 
     /**
@@ -183,9 +184,19 @@ public final class POSTopComponent extends NTopComponent {
         org.openide.awt.Mnemonics.setLocalizedText(jLabel5, org.openide.util.NbBundle.getMessage(POSTopComponent.class, "POSTopComponent.jLabel5.text")); // NOI18N
 
         quantityField.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
+        quantityField.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                quantityFieldFocusGained(evt);
+            }
+        });
         quantityField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 quantityFieldActionPerformed(evt);
+            }
+        });
+        quantityField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                quantityFieldKeyReleased(evt);
             }
         });
 
@@ -918,7 +929,7 @@ public final class POSTopComponent extends NTopComponent {
     private void customerComboBoxKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_customerComboBoxKeyPressed
         if (evt.getKeyCode() == 10) {
             // itemComboBox.requestFocus();
-            itemTextField.requestFocus();
+            searchItemButton.requestFocus();
         } else if (evt.getKeyCode() == KeyEvent.VK_F2) {
             searchCustomer();
         }
@@ -952,8 +963,6 @@ public final class POSTopComponent extends NTopComponent {
 
     private void priceFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_priceFieldActionPerformed
         addToTable();
-        itemTextField.requestFocus();
-        //itemComboBox.requestFocus();
     }//GEN-LAST:event_priceFieldActionPerformed
 
     private void tableKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tableKeyReleased
@@ -990,8 +999,6 @@ public final class POSTopComponent extends NTopComponent {
 
     private void discountFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_discountFieldActionPerformed
         addToTable();
-        itemTextField.requestFocus();
-        //itemComboBox.requestFocus();
     }//GEN-LAST:event_discountFieldActionPerformed
 
     private void paidAmountFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_paidAmountFieldActionPerformed
@@ -1022,7 +1029,7 @@ public final class POSTopComponent extends NTopComponent {
     }//GEN-LAST:event_customerComboBoxFocusGained
 
     private void itemComboBoxFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_itemComboBoxFocusGained
-        StatusDisplayer.getDefault().setStatusText("F2 for Search");
+        StatusDisplayer.getDefault().setStatusText("F2 for Search Item");
     }//GEN-LAST:event_itemComboBoxFocusGained
 
     private void anotherButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_anotherButtonActionPerformed
@@ -1191,9 +1198,20 @@ public final class POSTopComponent extends NTopComponent {
 
     private void itemTextFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_itemTextFieldFocusGained
         quantityField.requestFocus();
-        if (item == null)
+        if (item == null) {
             searchItem("");
+        }
     }//GEN-LAST:event_itemTextFieldFocusGained
+
+    private void quantityFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_quantityFieldKeyReleased
+        if (evt.getKeyCode() == KeyEvent.VK_F2) {
+            searchItem("");
+        }
+    }//GEN-LAST:event_quantityFieldKeyReleased
+
+    private void quantityFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_quantityFieldFocusGained
+        StatusDisplayer.getDefault().setStatusText("F2 for Search Item");
+    }//GEN-LAST:event_quantityFieldFocusGained
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton anotherButton;
@@ -1291,6 +1309,7 @@ public final class POSTopComponent extends NTopComponent {
 //        itemComboBoxWorker.execute();
         clearFields();
         datePicker.setDate(new Date());
+        searchItemButton.requestFocus();
     }
 
     private void clearFields() {
@@ -1308,7 +1327,7 @@ public final class POSTopComponent extends NTopComponent {
         discountPercentageField.setText("");
         //itemComboBox.requestFocus();        
         itemLabel.setText("None");
-        itemTextField.requestFocus();
+        searchItemButton.requestFocus();
         employeeComboBox.setSelectedItem(null);
 //        receiptNumberField.setText(Data.getReceiptNo());
     }
@@ -1443,6 +1462,7 @@ public final class POSTopComponent extends NTopComponent {
         itemTextField.setText("");
         itemLabel.setText("None");
         calcTotal();
+        searchItem("");
     }
 
     @Override
@@ -1454,7 +1474,7 @@ public final class POSTopComponent extends NTopComponent {
 //        Combo.fillItems(itemComboBox);
 //        customerComboBox.requestFocus();
         //itemComboBox.requestFocus();
-        itemTextField.requestFocus();
+        searchItemButton.requestFocus();
     }
 
     private void process() {
@@ -1484,7 +1504,7 @@ public final class POSTopComponent extends NTopComponent {
 
     @Override
     public void componentOpened() {
-        customerComboBox.requestFocus();
+        searchItemButton.requestFocus();
     }
 
     @Override
@@ -1510,7 +1530,7 @@ public final class POSTopComponent extends NTopComponent {
         if (customer != null) {
             customerComboBox.setSelectedItem(customer);
             //itemComboBox.requestFocus();            
-            itemTextField.requestFocus();
+            searchItemButton.requestFocus();
         } else {
             customerComboBox.requestFocus();
         }
@@ -2140,7 +2160,7 @@ public final class POSTopComponent extends NTopComponent {
                 if ((keyCode > 47 && keyCode < 58) || (keyCode > 64 && keyCode < 91) || (keyCode > 95 && keyCode < 106)) {
                     String string = itemTextField.getText().trim();
                     itemTextField.setText("");
-                    searchItem(string+ "");
+                    searchItem(string + "");
                 }
                 break;
         }
