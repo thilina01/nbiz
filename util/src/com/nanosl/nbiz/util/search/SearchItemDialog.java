@@ -242,7 +242,7 @@ public class SearchItemDialog extends javax.swing.JDialog {
             int selectedRow = itemTable.getSelectedRow();
             setItem(Manager.getInstance().find(Item.class, itemTable.getValueAt(selectedRow < 0 ? 0 : selectedRow, 0).toString()));
             dispose();
-        } else {
+        } else if (itemTable.getRowCount() == 0 && searchTextField.getText().trim().length() == 0) {
             setItem(null);
             dispose();
         }
