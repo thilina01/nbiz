@@ -12,6 +12,7 @@ import entity.Item;
 import entity.PriceList;
 import entity.Stock;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
@@ -262,27 +263,26 @@ public class SearchItemDialog extends javax.swing.JDialog {
         }
         itemTableModel.setRowCount(0);
         int length = text.length();
-
-        if (length < 3) {
-            List<Item> items = Find.itemBy$(text, 1);
-            fillTable(items);
-            selectRow();
+        List<Item> items;
+        
+        if (length == 0) {
+            items = new ArrayList<>();
+        } else if (length < 3) {
+            items = Find.itemBy$(text, 1);
         } else {
             int limit = 10;
             try {
                 limit = Integer.parseInt(limitTextField.getText().trim());
             } catch (NumberFormatException numberFormatException) {
             }
-            List<Item> items = Find.itemBy$(startingRadioButton.isSelected() ? text + "%" : "%" + text + "%", limit);
+            items = Find.itemBy$(startingRadioButton.isSelected() ? text + "%" : "%" + text + "%", limit);
             Item exactMatchItem = Manager.getInstance().find(Item.class, text);
             if (exactMatchItem != null && !items.contains(exactMatchItem)) {
                 items.add(0, exactMatchItem);
             }
-            fillTable(items);
-            selectRow();
         }
-
-
+        fillTable(items);
+        selectRow();
     }//GEN-LAST:event_searchTextFieldKeyReleased
 
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
