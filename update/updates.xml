@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE module_updates PUBLIC "-//NetBeans//DTD Autoupdate Catalog 2.6//EN" "http://www.netbeans.org/dtds/autoupdate-catalog-2_6.dtd">
+<module_updates timestamp="42/16/00/04/12/2018">
+
+
+
+<module autoload="true" codenamebase="org.apache.poi" distribution="org-apache-poi.nbm" downloadsize="3314129" homepage="" license="AD9FBBC9" moduleauthor="" needsrestart="false" releasedate="2018/12/04" targetcluster="nbizapp">
+    <manifest AutoUpdate-Show-In-Client="true" OpenIDE-Module="org.apache.poi" OpenIDE-Module-Implementation-Version="181204" OpenIDE-Module-Java-Dependencies="Java &gt; 1.4" OpenIDE-Module-Name="Apache-POI" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Specification-Version="1.0"/>
+    
+</module>
+
+<module autoload="true" codenamebase="com.nanosl.nbiz.jasperwrapper" distribution="com-nanosl-nbiz-jasperwrapper.nbm" downloadsize="10211116" homepage="" license="AD9FBBC9" moduleauthor="" needsrestart="false" releasedate="2018/12/04" targetcluster="nbizapp">
+    <manifest AutoUpdate-Show-In-Client="false" OpenIDE-Module="com.nanosl.nbiz.jasperwrapper" OpenIDE-Module-Implementation-Version="181204" OpenIDE-Module-Java-Dependencies="Java &gt; 1.8" OpenIDE-Module-Module-Dependencies="com.nanosl.nbiz.jaspersupport &gt; 1.0" OpenIDE-Module-Name="jasperreportsWrapper" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Specification-Version="1.1.2"/>
+    
+</module>
+
+<module autoload="true" codenamebase="com.nanosl.nbiz.jaspersupport" distribution="com-nanosl-nbiz-jaspersupport.nbm" downloadsize="3426948" homepage="" license="AD9FBBC9" moduleauthor="" needsrestart="false" releasedate="2018/12/04" targetcluster="nbizapp">
+    <manifest AutoUpdate-Show-In-Client="false" OpenIDE-Module="com.nanosl.nbiz.jaspersupport" OpenIDE-Module-Implementation-Version="181204" OpenIDE-Module-Java-Dependencies="Java &gt; 1.8" OpenIDE-Module-Module-Dependencies="org.apache.poi &gt; 1.0" OpenIDE-Module-Name="jasperSupports" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Specification-Version="1.1.3"/>
+    
+</module>
+
+<module autoload="true" codenamebase="com.nanosl.nbiz.mysqlwrapper" distribution="com-nanosl-nbiz-mysqlwrapper.nbm" downloadsize="625424" homepage="" license="AD9FBBC9" moduleauthor="" needsrestart="false" releasedate="2018/12/04" targetcluster="nbizapp">
+    <manifest AutoUpdate-Show-In-Client="false" OpenIDE-Module="com.nanosl.nbiz.mysqlwrapper" OpenIDE-Module-Implementation-Version="181204" OpenIDE-Module-Java-Dependencies="Java &gt; 1.4" OpenIDE-Module-Name="mysql-connector-java" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Specification-Version="1.0.2"/>
+    
+</module>
+
+<module autoload="true" codenamebase="com.nanosl.nbiz.db" distribution="com-nanosl-nbiz-db.nbm" downloadsize="36699" homepage="" license="AD9FBBC9" moduleauthor="" needsrestart="false" releasedate="2018/12/04" targetcluster="nbizapp">
+    <manifest AutoUpdate-Show-In-Client="false" OpenIDE-Module="com.nanosl.nbiz.db" OpenIDE-Module-Implementation-Version="181204" OpenIDE-Module-Java-Dependencies="Java &gt; 1.7" OpenIDE-Module-Module-Dependencies="com.nanosl.nbiz.eclipselinkwrapper &gt; 1.0, com.nanosl.nbiz.nanolibWrapper &gt; 1.0" OpenIDE-Module-Name="NbiZ dbWrapper" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Specification-Version="1.2.9.6.3"/>
+    
+</module>
+
+<module autoload="true" codenamebase="com.nanosl.nbiz.eclipselinkwrapper" distribution="com-nanosl-nbiz-eclipselinkwrapper.nbm" downloadsize="3450022" homepage="" license="AD9FBBC9" moduleauthor="" needsrestart="false" releasedate="2018/12/04" targetcluster="nbizapp">
+    <manifest AutoUpdate-Show-In-Client="false" OpenIDE-Module="com.nanosl.nbiz.eclipselinkwrapper" OpenIDE-Module-Implementation-Version="181204" OpenIDE-Module-Java-Dependencies="Java &gt; 1.4" OpenIDE-Module-Name="NbiZ eclipselink" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Specification-Version="1.0"/>
+    
+</module>
+
+<module codenamebase="com.nanosl.nbiz.gui" distribution="com-nanosl-nbiz-gui.nbm" downloadsize="1463062" homepage="" license="AD9FBBC9" moduleauthor="" needsrestart="false" releasedate="2018/12/04" targetcluster="nbizapp">
+    <manifest AutoUpdate-Show-In-Client="true" OpenIDE-Module="com.nanosl.nbiz.gui" OpenIDE-Module-Implementation-Version="181204" OpenIDE-Module-Java-Dependencies="Java &gt; 1.8" OpenIDE-Module-Module-Dependencies="com.nanosl.nbiz.db &gt; 1.0, com.nanosl.nbiz.jaspersupport &gt; 1.0, com.nanosl.nbiz.jasperwrapper &gt; 1.1, com.nanosl.nbiz.nanolibWrapper &gt; 1.0, com.nanosl.nbiz.swingXWrapper &gt; 1.0, com.nanosl.nbiz.util &gt; 1.0, org.netbeans.api.progress/1 &gt; 1.35.1, org.netbeans.api.progress.nb &gt; 1.46.1, org.netbeans.modules.settings/1 &gt; 1.38.2, org.openide.awt &gt; 7.55.1, org.openide.dialogs &gt; 7.28.1, org.openide.modules &gt; 7.35.1, org.openide.util &gt; 8.29.3, org.openide.util.lookup &gt; 8.19.1, org.openide.util.ui &gt; 9.4.1, org.openide.windows &gt; 6.60.1" OpenIDE-Module-Name="NbiZ GUI" OpenIDE-Module-Requires="org.openide.windows.WindowManager, org.openide.modules.ModuleFormat1" OpenIDE-Module-Specification-Version="2.0.5.4"/>
+    
+</module>
+
+<module codenamebase="com.nanosl.nbiz.login" distribution="com-nanosl-nbiz-login.nbm" downloadsize="11023" homepage="" license="AD9FBBC9" moduleauthor="" needsrestart="false" releasedate="2018/12/04" targetcluster="nbizapp">
+    <manifest AutoUpdate-Show-In-Client="true" OpenIDE-Module="com.nanosl.nbiz.login" OpenIDE-Module-Implementation-Version="181204" OpenIDE-Module-Java-Dependencies="Java &gt; 1.7" OpenIDE-Module-Module-Dependencies="com.nanosl.nbiz.db &gt; 1.0, com.nanosl.nbiz.nanolibWrapper &gt; 1.0, com.nanosl.nbiz.util &gt; 1.0, org.openide.awt &gt; 7.55.1, org.openide.dialogs &gt; 7.28.1, org.openide.modules &gt; 7.35.1, org.openide.util &gt; 8.29.3, org.openide.util.lookup &gt; 8.25.1, org.openide.util.ui &gt; 9.4.1, org.openide.windows &gt; 6.71.1" OpenIDE-Module-Name="NbiZ Login" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Specification-Version="1.1.7"/>
+    
+</module>
+
+<module codenamebase="com.nanosl.nbiz.main" distribution="com-nanosl-nbiz-main.nbm" downloadsize="22738" homepage="" license="AD9FBBC9" moduleauthor="" needsrestart="false" releasedate="2018/12/04" targetcluster="nbizapp">
+    <manifest AutoUpdate-Show-In-Client="true" OpenIDE-Module="com.nanosl.nbiz.main" OpenIDE-Module-Implementation-Version="181204" OpenIDE-Module-Java-Dependencies="Java &gt; 1.8" OpenIDE-Module-Module-Dependencies="com.nanosl.nbiz.db &gt; 1.0, com.nanosl.nbiz.mysqlwrapper &gt; 1.0, com.nanosl.nbiz.nanolibWrapper &gt; 1.0, com.nanosl.nbiz.util &gt; 1.0, org.netbeans.modules.autoupdate.services &gt; 1.39.2, org.openide.awt &gt; 7.61.1, org.openide.dialogs &gt; 7.41.1, org.openide.modules &gt; 7.35.1, org.openide.util &gt; 8.29.3" OpenIDE-Module-Name="NbiZ Main" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Specification-Version="1.3.4.1.4"/>
+    
+</module>
+
+<module autoload="true" codenamebase="com.nanosl.nbiz.nanolibWrapper" distribution="com-nanosl-nbiz-nanolibWrapper.nbm" downloadsize="2607133" homepage="" license="AD9FBBC9" moduleauthor="" needsrestart="false" releasedate="2018/12/04" targetcluster="nbizapp">
+    <manifest AutoUpdate-Show-In-Client="false" OpenIDE-Module="com.nanosl.nbiz.nanolibWrapper" OpenIDE-Module-Implementation-Version="181204" OpenIDE-Module-Java-Dependencies="Java &gt; 1.7" OpenIDE-Module-Module-Dependencies="com.nanosl.nbiz.eclipselinkwrapper &gt; 1.0, com.nanosl.nbiz.mysqlwrapper &gt; 1.0, com.nanosl.nbiz.swingXWrapper &gt; 1.0" OpenIDE-Module-Name="NbiZ nanolibWrapper" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Specification-Version="1.3.6.6"/>
+    
+</module>
+
+<module codenamebase="com.nanos.nbiz.pos" distribution="com-nanos-nbiz-pos.nbm" downloadsize="1181244" homepage="" license="AD9FBBC9" moduleauthor="" needsrestart="false" releasedate="2018/12/04" targetcluster="nbizapp">
+    <manifest AutoUpdate-Show-In-Client="true" OpenIDE-Module="com.nanos.nbiz.pos" OpenIDE-Module-Implementation-Version="181204" OpenIDE-Module-Java-Dependencies="Java &gt; 1.7" OpenIDE-Module-Module-Dependencies="com.nanosl.nbiz.db &gt; 1.0, com.nanosl.nbiz.jaspersupport &gt; 1.0, com.nanosl.nbiz.jasperwrapper &gt; 1.1, com.nanosl.nbiz.nanolibWrapper &gt; 1.0, com.nanosl.nbiz.swingXWrapper &gt; 1.0, com.nanosl.nbiz.util &gt; 1.4.3.3, org.netbeans.modules.settings/1 &gt; 1.38.2, org.openide.awt &gt; 7.55.1, org.openide.modules &gt; 7.39.1, org.openide.util &gt; 8.29.3, org.openide.util.lookup &gt; 8.19.1, org.openide.windows &gt; 6.60.1" OpenIDE-Module-Name="NbiZ POS" OpenIDE-Module-Requires="org.openide.windows.WindowManager, org.openide.modules.ModuleFormat1" OpenIDE-Module-Specification-Version="1.6.2.5"/>
+    
+</module>
+
+<module codenamebase="com.nanosl.nbiz.quicklaunch" distribution="com-nanosl-nbiz-quicklaunch.nbm" downloadsize="37198" homepage="" license="AD9FBBC9" moduleauthor="" needsrestart="false" releasedate="2018/12/04" targetcluster="nbizapp">
+    <manifest AutoUpdate-Show-In-Client="true" OpenIDE-Module="com.nanosl.nbiz.quicklaunch" OpenIDE-Module-Implementation-Version="181204" OpenIDE-Module-Java-Dependencies="Java &gt; 1.8" OpenIDE-Module-Module-Dependencies="com.nanosl.nbiz.db &gt; 1.2.9.5, com.nanosl.nbiz.nanolibWrapper &gt; 1.3.5, com.nanosl.nbiz.util &gt; 1.4.3.3, org.netbeans.modules.settings/1 &gt; 1.38.2, org.openide.awt &gt; 7.55.1, org.openide.modules &gt; 7.35.1, org.openide.util &gt; 8.29.3, org.openide.util.lookup &gt; 8.19.1, org.openide.windows &gt; 6.60.1" OpenIDE-Module-Name="NbiZ QuickLaunch" OpenIDE-Module-Requires="org.openide.windows.WindowManager, org.openide.modules.ModuleFormat1" OpenIDE-Module-Specification-Version="1.1.1"/>
+    
+</module>
+
+<module codenamebase="com.nanosl.nbiz.util" distribution="com-nanosl-nbiz-util.nbm" downloadsize="1179928" homepage="" license="AD9FBBC9" moduleauthor="" needsrestart="false" releasedate="2018/12/04" targetcluster="nbizapp">
+    <manifest AutoUpdate-Show-In-Client="true" OpenIDE-Module="com.nanosl.nbiz.util" OpenIDE-Module-Implementation-Version="181204" OpenIDE-Module-Java-Dependencies="Java &gt; 1.8" OpenIDE-Module-Module-Dependencies="com.nanosl.nbiz.db &gt; 1.0, com.nanosl.nbiz.eclipselinkwrapper &gt; 1.0, com.nanosl.nbiz.jaspersupport &gt; 1.1, com.nanosl.nbiz.jasperwrapper &gt; 1.1, com.nanosl.nbiz.nanolibWrapper &gt; 1.0, com.nanosl.nbiz.swingXWrapper &gt; 1.0, org.apache.poi &gt; 1.0, org.netbeans.modules.settings/1 &gt; 1.38.2, org.openide.awt &gt; 7.55.1, org.openide.dialogs &gt; 7.28.1, org.openide.modules &gt; 7.43.1, org.openide.util &gt; 8.29.3, org.openide.util.lookup &gt; 8.19.1, org.openide.windows &gt; 6.60.1" OpenIDE-Module-Name="NbiZ Util" OpenIDE-Module-Requires="org.openide.windows.WindowManager, org.openide.modules.ModuleFormat1" OpenIDE-Module-Specification-Version="1.4.5.4"/>
+    
+</module>
+
+<module autoload="true" codenamebase="com.nanosl.nbiz.swingXWrapper" distribution="com-nanosl-nbiz-swingXWrapper.nbm" downloadsize="371937" homepage="" license="AD9FBBC9" moduleauthor="" needsrestart="false" releasedate="2018/12/04" targetcluster="nbizapp">
+    <manifest AutoUpdate-Show-In-Client="false" OpenIDE-Module="com.nanosl.nbiz.swingXWrapper" OpenIDE-Module-Implementation-Version="181204" OpenIDE-Module-Java-Dependencies="Java &gt; 1.4" OpenIDE-Module-Name="swingxWrapper" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Specification-Version="1.0"/>
+    
+</module>
+
+<module codenamebase="com.nanosl.nbiz.tracker" distribution="com-nanosl-nbiz-tracker.nbm" downloadsize="3531" homepage="" license="AD9FBBC9" moduleauthor="" needsrestart="false" releasedate="2018/12/04" targetcluster="nbizapp">
+    <manifest AutoUpdate-Show-In-Client="true" OpenIDE-Module="com.nanosl.nbiz.tracker" OpenIDE-Module-Implementation-Version="181204" OpenIDE-Module-Java-Dependencies="Java &gt; 1.8" OpenIDE-Module-Module-Dependencies="com.nanosl.nbiz.util &gt; 1.4.3, org.openide.modules &gt; 7.43.1, org.openide.util &gt; 8.39.1" OpenIDE-Module-Name="tracker" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Specification-Version="1.0"/>
+    
+</module>
+
+<module_group name="Infrastructure">
+
+<module codenamebase="org.netbeans.modules.autoupdate.silentupdate" distribution="org-netbeans-modules-autoupdate-silentupdate.nbm" downloadsize="9951" homepage="" license="AD9FBBC9" moduleauthor="" needsrestart="false" releasedate="2018/12/04" targetcluster="nbizapp">
+    <manifest AutoUpdate-Show-In-Client="true" OpenIDE-Module="org.netbeans.modules.autoupdate.silentupdate" OpenIDE-Module-Display-Category="Infrastructure" OpenIDE-Module-Implementation-Version="181204" OpenIDE-Module-Java-Dependencies="Java &gt; 1.6" OpenIDE-Module-Long-Description="A service installing updates of your NetBeans Platform Application with as few as possible user's interactions." OpenIDE-Module-Module-Dependencies="org.netbeans.api.progress/1 &gt; 1.20, org.netbeans.api.progress.nb &gt; 1.46.1, org.netbeans.modules.autoupdate.services &gt; 1.20, org.openide.io &gt; 1.23, org.openide.modules &gt; 7.17, org.openide.util &gt; 8.6, org.openide.windows &gt; 6.33" OpenIDE-Module-Name="Silent Update" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="Silent Update of Application" OpenIDE-Module-Specification-Version="1.0.3"/>
+    
+</module>
+
+</module_group>
+
+<license name="AD9FBBC9" url="licenses/AD9FBBC9.license"/>
+</module_updates>
+
