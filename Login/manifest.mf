@@ -1,6 +1,0 @@
-Manifest-Version: 1.0
-OpenIDE-Module: com.nanosl.nbiz.login
-OpenIDE-Module-Install: com/nanosl/nbiz/login/Installer.class
-OpenIDE-Module-Localizing-Bundle: com/nanosl/nbiz/login/Bundle.properties
-OpenIDE-Module-Specification-Version: 1.1.7
-
