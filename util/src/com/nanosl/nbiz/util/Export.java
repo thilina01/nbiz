@@ -11,6 +11,7 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import javax.swing.JTable;
 import javax.swing.table.TableModel;
 import org.apache.poi.hssf.usermodel.HSSFCell;
@@ -218,6 +219,91 @@ public class Export {
         String exportFolder = userHomeFolder + File.separator + "Export";
         new File(exportFolder).mkdir();
         String yemi = exportFolder + File.separator + saveName + " on " + Format.yyyy_MM_dd_hh_mm_ss_a_Space.format(new Date()) + ".xlsx";
+        try (FileOutputStream fileOut = new FileOutputStream(yemi)) {
+            xSSFWorkbook.write(fileOut);
+            System.out.println("Written to: " + yemi);
+            if (Desktop.isDesktopSupported()) {
+                Desktop.getDesktop().open(new File(exportFolder));
+            }
+//                Runtime.getRuntime().exec(exportFolder);
+        } catch (IOException ex) {
+            Exceptions.printStackTrace(ex);
+        }
+    }
+
+    public static void toExcel(List<String> columnNames, List<List<String>> rows, String fileName) {
+//         TableModel model = jTable.getModel(); //Table model
+        int columnCount = columnNames.size(); // Number of columns in table
+        int rowCount = rows.size(); // Number of rows in table
+        if (rowCount == 0) {
+            return;
+        }
+        /**
+         * **************************************************
+         */
+
+        XSSFWorkbook xSSFWorkbook = new XSSFWorkbook();
+        XSSFSheet xSSFSheet = (XSSFSheet) xSSFWorkbook.createSheet(fileName);
+
+        //Create 
+        XSSFTable xSSFTable = xSSFSheet.createTable();
+        xSSFTable.setDisplayName("Test");
+        CTTable cttable = xSSFTable.getCTTable();
+
+        //Style configurations
+        CTTableStyleInfo cTTableStyleInfo = cttable.addNewTableStyleInfo();
+        cTTableStyleInfo.setName("TableStyleMedium2");
+        cTTableStyleInfo.setShowColumnStripes(false);
+        cTTableStyleInfo.setShowRowStripes(true);
+
+        //Set which area the table should be placed in
+        AreaReference areaReference = new AreaReference(new CellReference(0, 0), new CellReference(rowCount, columnCount - 1));
+        cttable.setRef(areaReference.formatAsString());
+        cttable.setId(1);
+        cttable.setName("Test");
+
+        CTTableColumns cTTableColumns = cttable.addNewTableColumns();
+        cTTableColumns.setCount(columnCount);
+        CTTableColumn cTTableColumn;
+        XSSFRow xSSFRow;
+        XSSFCell xSSFCell;
+
+        for (int i = 0; i < columnCount; i++) {
+            //Create column
+            cTTableColumn = cTTableColumns.addNewTableColumn();
+            cTTableColumn.setName("Column");
+            cTTableColumn.setId(i + 1);
+        }
+
+        //Create row
+        xSSFRow = xSSFSheet.createRow(0);
+        for (int j = 0; j < columnCount; j++) {
+            //Create cell
+            xSSFCell = xSSFRow.createCell(j);
+            xSSFCell.setCellValue(columnNames.get(j));
+        }
+
+        for (int x = 0; x < rowCount; x++) {
+            xSSFRow = xSSFSheet.createRow(x + 1);
+            for (int j = 0; j < columnCount; j++) {
+                //Create cell
+                xSSFCell = xSSFRow.createCell(j);
+                Object value =rows.get(x).get(j);// model.getValueAt(x, j);
+                String valueString = value == null ? "" : value.toString();
+
+                if (valueString.matches("\\d*\\.?\\d*") && !valueString.equals("")) {
+                    xSSFCell.setCellValue(Double.parseDouble(valueString)); //Write double value
+                } else {
+                    xSSFCell.setCellValue(valueString); //Write string value
+                }
+            }
+        }
+        for (int columnNumber = 0; columnNumber < columnCount; columnNumber++) {
+            xSSFSheet.autoSizeColumn(columnNumber);
+        }        String userHomeFolder = System.getProperty("user.home");
+        String exportFolder = userHomeFolder + File.separator + "Export";
+        new File(exportFolder).mkdir();
+        String yemi = exportFolder + File.separator + fileName + " on " + Format.yyyy_MM_dd_hh_mm_ss_a_Space.format(new Date()) + ".xlsx";
         try (FileOutputStream fileOut = new FileOutputStream(yemi)) {
             xSSFWorkbook.write(fileOut);
             System.out.println("Written to: " + yemi);
