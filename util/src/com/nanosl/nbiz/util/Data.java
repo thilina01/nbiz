@@ -38,19 +38,27 @@ public class Data {
     private static String version = "0.a.0";
     static Manager manager = Manager.getInstance();
 
-    public static Operator getOperator() {
-        manager.clearCache();
+    static int userCount = 0;
 
-        if (manager.count(Operator.class) == 0) {
+    static {
+        getUserCount();
+    }
+
+    public static Operator getOperator() {
+
+        if (userCount == 0) {
             Data.initFirstUser();
 //            first();
         }
-//        if (operator == null) {
+        if (operator == null) {
+            manager.clearCache();
+            operator = manager.find(Operator.class, "");
 //            operator = new Operator("admin");
 //            operator.setPassword("n");
 //            manager.update(operator);
-//        }
-        return manager.find(Operator.class, operator != null ? operator.getUsername() : "");
+        }
+//        operator = manager.find(Operator.class, operator != null ? operator.getUsername() : "");
+        return operator;
     }
 
     public static String getInvoiceNo() {
@@ -206,6 +214,9 @@ public class Data {
         serializables.add(CompanyTopComponent);
         serializables.add(operator);
         manager.update(serializables);
+
+            setOperator(manager.find(Operator.class, "admin"));
+        getUserCount();
     }
 
     public static void initDefaults() {
@@ -265,5 +276,10 @@ public class Data {
             }
         }).start();
 
+    }
+
+    private static int getUserCount() {
+        userCount = manager.count(Operator.class);
+        return userCount;
     }
 }
