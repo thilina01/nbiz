@@ -4,5 +4,5 @@ OpenIDE-Module: org.netbeans.modules.autoupdate.silentupdate
 OpenIDE-Module-Install: org/netbeans/modules/autoupdate/silentupdate/Activator.class
 OpenIDE-Module-Layer: org/netbeans/modules/autoupdate/silentupdate/resources/layer.xml
 OpenIDE-Module-Localizing-Bundle: org/netbeans/modules/autoupdate/silentupdate/resources/Bundle.properties
-OpenIDE-Module-Specification-Version: 1.0.2
+OpenIDE-Module-Specification-Version: 1.0.4
 

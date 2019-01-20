@@ -87,6 +87,8 @@ public final class PurchaseReportTopComponent extends NTopComponent {
         exportButton = new javax.swing.JButton();
         deleteButton = new javax.swing.JButton();
         exportForBarcodeButton = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        labelsPerRowTextField = new javax.swing.JTextField();
 
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
@@ -188,6 +190,10 @@ public final class PurchaseReportTopComponent extends NTopComponent {
             }
         });
 
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(PurchaseReportTopComponent.class, "PurchaseReportTopComponent.jLabel1.text")); // NOI18N
+
+        labelsPerRowTextField.setText(org.openide.util.NbBundle.getMessage(PurchaseReportTopComponent.class, "PurchaseReportTopComponent.labelsPerRowTextField.text")); // NOI18N
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -214,6 +220,10 @@ public final class PurchaseReportTopComponent extends NTopComponent {
                         .addComponent(exportButton)
                         .addGap(18, 18, 18)
                         .addComponent(exportForBarcodeButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(labelsPerRowTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(totalLabel)))
                 .addContainerGap())
@@ -236,7 +246,9 @@ public final class PurchaseReportTopComponent extends NTopComponent {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(totalLabel)
                     .addComponent(exportButton)
-                    .addComponent(exportForBarcodeButton))
+                    .addComponent(exportForBarcodeButton)
+                    .addComponent(jLabel1)
+                    .addComponent(labelsPerRowTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
@@ -340,6 +352,7 @@ public final class PurchaseReportTopComponent extends NTopComponent {
 
     private void exportForBarcodeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportForBarcodeButtonActionPerformed
         int selectedRow = table.getSelectedRow();
+        int labelsPerRow = Integer.valueOf(labelsPerRowTextField.getText().trim());
         if (selectedRow >= 0) {
             String invoiceNumber = table.getValueAt(selectedRow, 4).toString();
             String supperCode = table.getValueAt(selectedRow, 2).toString();
@@ -353,8 +366,8 @@ public final class PurchaseReportTopComponent extends NTopComponent {
             for (PurchaseInvoiceHasItem purchaseInvoiceHasItem : purchaseInvoiceHasItems) {
                 Item item = purchaseInvoiceHasItem.getItem();
                 int quantity = (int) (purchaseInvoiceHasItem.getQuantity() + purchaseInvoiceHasItem.getFreeQuantity());
-                int repeat = (quantity / 4);
-                repeat += repeat % 4 > 0 ? 1 : 0;
+                int repeat = (quantity / labelsPerRow);
+                repeat += repeat % labelsPerRow > 0 ? 1 : 0;
                 for (int i = 0; i < repeat; i++) {
                     List<String> row = Arrays.asList(
                             item.getCode(),
@@ -376,8 +389,10 @@ public final class PurchaseReportTopComponent extends NTopComponent {
     private javax.swing.JButton exportButton;
     private javax.swing.JButton exportForBarcodeButton;
     private javax.swing.JButton fillButton;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JTextField labelsPerRowTextField;
     private javax.swing.JScrollPane masterScrollPane;
     private org.jdesktop.swingx.JXDatePicker startDatePicker;
     private javax.swing.JCheckBox supplierCheckBox;
