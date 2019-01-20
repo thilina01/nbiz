@@ -108,14 +108,14 @@ public final class StockTopComponent extends NTopComponent {
 
             },
             new String [] {
-                "#", "Code", "Description", "Type", "Quantity", "Cost", "Total Cost", "Selling", "Total Selling", "Profit"
+                "#", "Code", "Description", "Type", "Brand", "Quantity", "Cost", "Total Cost", "Selling", "Total Selling", "Profit"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Double.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
+                java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Double.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false, false, false
+                false, false, false, false, false, false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -127,11 +127,11 @@ public final class StockTopComponent extends NTopComponent {
             }
         });
         table.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tableMouseClicked(evt);
-            }
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 tableMouseReleased(evt);
+            }
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tableMouseClicked(evt);
             }
         });
         table.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -148,18 +148,19 @@ public final class StockTopComponent extends NTopComponent {
             table.getColumnModel().getColumn(2).setHeaderValue(org.openide.util.NbBundle.getMessage(StockTopComponent.class, "StockTopComponent.table.columnModel.title2")); // NOI18N
             table.getColumnModel().getColumn(3).setPreferredWidth(150);
             table.getColumnModel().getColumn(3).setHeaderValue(org.openide.util.NbBundle.getMessage(StockTopComponent.class, "StockTopComponent.table.columnModel.title9")); // NOI18N
-            table.getColumnModel().getColumn(4).setHeaderValue(org.openide.util.NbBundle.getMessage(StockTopComponent.class, "StockTopComponent.table.columnModel.title3")); // NOI18N
-            table.getColumnModel().getColumn(4).setCellRenderer(rightAlignCell);
-            table.getColumnModel().getColumn(5).setHeaderValue(org.openide.util.NbBundle.getMessage(StockTopComponent.class, "StockTopComponent.table.columnModel.title4")); // NOI18N
+            table.getColumnModel().getColumn(4).setHeaderValue(org.openide.util.NbBundle.getMessage(StockTopComponent.class, "StockTopComponent.table.columnModel.title10")); // NOI18N
+            table.getColumnModel().getColumn(5).setHeaderValue(org.openide.util.NbBundle.getMessage(StockTopComponent.class, "StockTopComponent.table.columnModel.title3")); // NOI18N
             table.getColumnModel().getColumn(5).setCellRenderer(rightAlignCell);
-            table.getColumnModel().getColumn(6).setHeaderValue(org.openide.util.NbBundle.getMessage(StockTopComponent.class, "StockTopComponent.table.columnModel.title5")); // NOI18N
+            table.getColumnModel().getColumn(6).setHeaderValue(org.openide.util.NbBundle.getMessage(StockTopComponent.class, "StockTopComponent.table.columnModel.title4")); // NOI18N
             table.getColumnModel().getColumn(6).setCellRenderer(rightAlignCell);
-            table.getColumnModel().getColumn(7).setHeaderValue(org.openide.util.NbBundle.getMessage(StockTopComponent.class, "StockTopComponent.table.columnModel.title6")); // NOI18N
+            table.getColumnModel().getColumn(7).setHeaderValue(org.openide.util.NbBundle.getMessage(StockTopComponent.class, "StockTopComponent.table.columnModel.title5")); // NOI18N
             table.getColumnModel().getColumn(7).setCellRenderer(rightAlignCell);
-            table.getColumnModel().getColumn(8).setHeaderValue(org.openide.util.NbBundle.getMessage(StockTopComponent.class, "StockTopComponent.table.columnModel.title7")); // NOI18N
+            table.getColumnModel().getColumn(8).setHeaderValue(org.openide.util.NbBundle.getMessage(StockTopComponent.class, "StockTopComponent.table.columnModel.title6")); // NOI18N
             table.getColumnModel().getColumn(8).setCellRenderer(rightAlignCell);
-            table.getColumnModel().getColumn(9).setHeaderValue(org.openide.util.NbBundle.getMessage(StockTopComponent.class, "StockTopComponent.table.columnModel.title8")); // NOI18N
+            table.getColumnModel().getColumn(9).setHeaderValue(org.openide.util.NbBundle.getMessage(StockTopComponent.class, "StockTopComponent.table.columnModel.title7")); // NOI18N
             table.getColumnModel().getColumn(9).setCellRenderer(rightAlignCell);
+            table.getColumnModel().getColumn(10).setHeaderValue(org.openide.util.NbBundle.getMessage(StockTopComponent.class, "StockTopComponent.table.columnModel.title8")); // NOI18N
+            table.getColumnModel().getColumn(10).setCellRenderer(rightAlignCell);
         }
 
         org.openide.awt.Mnemonics.setLocalizedText(reloadButton, org.openide.util.NbBundle.getMessage(StockTopComponent.class, "StockTopComponent.reloadButton.text")); // NOI18N
@@ -339,8 +340,8 @@ public final class StockTopComponent extends NTopComponent {
     private void tableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableMouseClicked
         if (evt.getClickCount() > 1) {
             String itemCode = table.getValueAt(table.getSelectedRow(), 1).toString();
-            String quantity = table.getValueAt(table.getSelectedRow(), 4).toString();
-            String cost = table.getValueAt(table.getSelectedRow(), 5).toString();
+            String quantity = table.getValueAt(table.getSelectedRow(), 5).toString();
+            String cost = table.getValueAt(table.getSelectedRow(), 6).toString();
             String selling = table.getValueAt(table.getSelectedRow(), 7).toString();
 
             String newQuantity = JOptionPane.showInputDialog(this, "Quantity for " + itemCode, quantity);
@@ -403,11 +404,15 @@ public final class StockTopComponent extends NTopComponent {
     }//GEN-LAST:event_itemTypeComboBoxKeyPressed
 
     private void itemTypeComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemTypeComboBoxActionPerformed
-        fillTable();
+        if (typeCheckBox.isSelected()) {
+            fillTable();
+        }
     }//GEN-LAST:event_itemTypeComboBoxActionPerformed
 
     private void supplierComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_supplierComboBoxActionPerformed
-        fillTable();
+        if (supplierCheckBox.isSelected()) {
+            fillTable();
+        }
     }//GEN-LAST:event_supplierComboBoxActionPerformed
 
     private void supplierComboBoxKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_supplierComboBoxKeyPressed
@@ -571,6 +576,7 @@ public final class StockTopComponent extends NTopComponent {
                                 item.getCode(),
                                 item.getDescription(),
                                 item.getItemTypeType() == null ? "" : item.getItemTypeType().getType(),
+                                item.getBrand(),
                                 nf2d.format(quantity),
                                 nf2d.format(cost),
                                 nf2d.format(quantity * cost),
@@ -641,7 +647,7 @@ public final class StockTopComponent extends NTopComponent {
 
     private void printStock() {
         try {
-            String fileName = supplierCheckBox.isSelected() ? typeCheckBox.isSelected() ? "stockBySupplierAndItemType" : "stockBySupplier" : "stock";
+            String fileName = supplierCheckBox.isSelected() ? typeCheckBox.isSelected() ? "stockBySupplierAndItemType" : "stockBySupplier" :typeCheckBox.isSelected() ?"stockByItemType"  : "stock";
             URL url = getClass().getResource("/com/nanosl/nbiz/gui/jrxml/" + fileName + ".jasper");
 
             Map<String, Object> params = Data.getParams();

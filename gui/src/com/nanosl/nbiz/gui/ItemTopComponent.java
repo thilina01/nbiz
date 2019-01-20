@@ -121,11 +121,11 @@ public final class ItemTopComponent extends NTopComponent {
 
             },
             new String [] {
-                "#", "Code", "Description", "Cost", "Selling", "Quantity"
+                "#", "Code", "Description", "Type", "Brand", "Supplier", "Cost", "Selling", "Quantity"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false
+                false, false, false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -147,14 +147,20 @@ public final class ItemTopComponent extends NTopComponent {
             masterTable.getColumnModel().getColumn(0).setPreferredWidth(30);
             masterTable.getColumnModel().getColumn(0).setHeaderValue(org.openide.util.NbBundle.getMessage(ItemTopComponent.class, "ItemTopComponent.masterTable.columnModel.title0")); // NOI18N
             masterTable.getColumnModel().getColumn(1).setHeaderValue(org.openide.util.NbBundle.getMessage(ItemTopComponent.class, "ItemTopComponent.masterTable.columnModel.title1")); // NOI18N
-            masterTable.getColumnModel().getColumn(2).setPreferredWidth(400);
+            masterTable.getColumnModel().getColumn(2).setPreferredWidth(300);
             masterTable.getColumnModel().getColumn(2).setHeaderValue(org.openide.util.NbBundle.getMessage(ItemTopComponent.class, "ItemTopComponent.masterTable.columnModel.title2")); // NOI18N
-            masterTable.getColumnModel().getColumn(3).setHeaderValue(org.openide.util.NbBundle.getMessage(ItemTopComponent.class, "ItemTopComponent.masterTable.columnModel.title5")); // NOI18N
-            masterTable.getColumnModel().getColumn(3).setCellRenderer(rightAlignCell);
-            masterTable.getColumnModel().getColumn(4).setHeaderValue(org.openide.util.NbBundle.getMessage(ItemTopComponent.class, "ItemTopComponent.masterTable.columnModel.title6")); // NOI18N
-            masterTable.getColumnModel().getColumn(4).setCellRenderer(rightAlignCell);
-            masterTable.getColumnModel().getColumn(5).setHeaderValue(org.openide.util.NbBundle.getMessage(ItemTopComponent.class, "ItemTopComponent.masterTable.columnModel.title3")); // NOI18N
-            masterTable.getColumnModel().getColumn(5).setCellRenderer(rightAlignCell);
+            masterTable.getColumnModel().getColumn(3).setHeaderValue(org.openide.util.NbBundle.getMessage(ItemTopComponent.class, "ItemTopComponent.masterTable.columnModel.title6_1")); // NOI18N
+            masterTable.getColumnModel().getColumn(4).setHeaderValue(org.openide.util.NbBundle.getMessage(ItemTopComponent.class, "ItemTopComponent.masterTable.columnModel.title7")); // NOI18N
+            masterTable.getColumnModel().getColumn(5).setHeaderValue(org.openide.util.NbBundle.getMessage(ItemTopComponent.class, "ItemTopComponent.masterTable.columnModel.title8")); // NOI18N
+            masterTable.getColumnModel().getColumn(6).setPreferredWidth(50);
+            masterTable.getColumnModel().getColumn(6).setHeaderValue(org.openide.util.NbBundle.getMessage(ItemTopComponent.class, "ItemTopComponent.masterTable.columnModel.title5")); // NOI18N
+            masterTable.getColumnModel().getColumn(6).setCellRenderer(rightAlignCell);
+            masterTable.getColumnModel().getColumn(7).setPreferredWidth(50);
+            masterTable.getColumnModel().getColumn(7).setHeaderValue(org.openide.util.NbBundle.getMessage(ItemTopComponent.class, "ItemTopComponent.masterTable.columnModel.title6")); // NOI18N
+            masterTable.getColumnModel().getColumn(7).setCellRenderer(rightAlignCell);
+            masterTable.getColumnModel().getColumn(8).setPreferredWidth(50);
+            masterTable.getColumnModel().getColumn(8).setHeaderValue(org.openide.util.NbBundle.getMessage(ItemTopComponent.class, "ItemTopComponent.masterTable.columnModel.title3")); // NOI18N
+            masterTable.getColumnModel().getColumn(8).setCellRenderer(rightAlignCell);
         }
 
         brandField.addActionListener(new java.awt.event.ActionListener() {
@@ -599,6 +605,7 @@ public final class ItemTopComponent extends NTopComponent {
                     ++i,
                     item1.getCode(),
                     item1.getDescription(),
+                    item1.getItemTypeType(), item1.getBrand(), item1.getSupplier(),
                     Format.nf2d.format(item1.getPriceList().getCostPack()),
                     Format.nf2d.format(item1.getPriceList().getSellingPack()),
                     Format.nf2d.format(item1.getStock().getQuantity())
@@ -844,7 +851,7 @@ public final class ItemTopComponent extends NTopComponent {
 //                            manager.update(serializables);
                             double selling = priceList.getSellingPack() != null ? priceList.getSellingPack() : 0;
                             double cost = priceList.getCostPack() != null ? priceList.getCostPack() : 0;
-                            Object[] row = {++i, item.getCode(), item.getDescription(), nf2d.format(cost), nf2d.format(selling), nf2d.format(item.getStock().getQuantity())};
+                            Object[] row = {++i, item.getCode(), item.getDescription(), item.getItemTypeType(), item.getBrand(), item.getSupplier(), nf2d.format(cost), nf2d.format(selling), nf2d.format(item.getStock().getQuantity())};
                             publish(row);
                         }
                         p.finish();
