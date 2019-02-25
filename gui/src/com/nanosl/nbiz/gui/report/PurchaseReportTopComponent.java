@@ -9,6 +9,7 @@ import com.nanosl.nbiz.util.Combo;
 import com.nanosl.nbiz.util.Export;
 import static com.nanosl.nbiz.util.Format.yyyy_MM_dd;
 import com.nanosl.nbiz.util.NTopComponent;
+import com.thilina01.bixlp.BixLP;
 import entity.Item;
 import entity.PurchaseInvoice;
 import entity.PurchaseInvoiceHasItem;
@@ -35,6 +36,7 @@ import org.openide.util.NbBundle.Messages;
 import org.openide.windows.TopComponent;
 import org.openide.windows.WindowManager;
 import query.Find;
+import com.thilina01.bixlp.LabelData;
 
 /**
  * Top component which displays something.
@@ -89,6 +91,7 @@ public final class PurchaseReportTopComponent extends NTopComponent {
         exportForBarcodeButton = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         labelsPerRowTextField = new javax.swing.JTextField();
+        printBarcodesButton = new javax.swing.JButton();
 
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
@@ -194,6 +197,13 @@ public final class PurchaseReportTopComponent extends NTopComponent {
 
         labelsPerRowTextField.setText(org.openide.util.NbBundle.getMessage(PurchaseReportTopComponent.class, "PurchaseReportTopComponent.labelsPerRowTextField.text")); // NOI18N
 
+        org.openide.awt.Mnemonics.setLocalizedText(printBarcodesButton, org.openide.util.NbBundle.getMessage(PurchaseReportTopComponent.class, "PurchaseReportTopComponent.printBarcodesButton.text")); // NOI18N
+        printBarcodesButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                printBarcodesButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -224,6 +234,8 @@ public final class PurchaseReportTopComponent extends NTopComponent {
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(labelsPerRowTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(printBarcodesButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(totalLabel)))
                 .addContainerGap())
@@ -248,7 +260,8 @@ public final class PurchaseReportTopComponent extends NTopComponent {
                     .addComponent(exportButton)
                     .addComponent(exportForBarcodeButton)
                     .addComponent(jLabel1)
-                    .addComponent(labelsPerRowTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(labelsPerRowTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(printBarcodesButton))
                 .addContainerGap())
         );
 
@@ -383,6 +396,23 @@ public final class PurchaseReportTopComponent extends NTopComponent {
         }
     }//GEN-LAST:event_exportForBarcodeButtonActionPerformed
 
+    private void printBarcodesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_printBarcodesButtonActionPerformed
+        int selectedRow = table.getSelectedRow();
+        if (selectedRow >= 0) {
+            String invoiceNumber = table.getValueAt(selectedRow, 4).toString();
+            String supperCode = table.getValueAt(selectedRow, 2).toString();
+            PurchaseInvoice purchaseInvoice = manager.find(PurchaseInvoice.class, new PurchaseInvoicePK(invoiceNumber, supperCode));
+            Collection<PurchaseInvoiceHasItem> purchaseInvoiceHasItems = purchaseInvoice.getPurchaseInvoiceHasItemCollection();
+            List<LabelData> labelDataList = new ArrayList();
+            purchaseInvoiceHasItems.forEach((purchaseInvoiceHasItem) -> {
+                Item item = purchaseInvoiceHasItem.getItem();
+                int quantity = (int) (purchaseInvoiceHasItem.getQuantity() + purchaseInvoiceHasItem.getFreeQuantity());
+                labelDataList.add(new LabelData(item.getDescription(), item.getPriceList().getSellingPack(), item.getCode(), quantity));
+            });
+            BixLP.print(333, labelDataList);
+        }
+    }//GEN-LAST:event_printBarcodesButtonActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton deleteButton;
     private org.jdesktop.swingx.JXDatePicker endDatePicker;
@@ -394,6 +424,7 @@ public final class PurchaseReportTopComponent extends NTopComponent {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JTextField labelsPerRowTextField;
     private javax.swing.JScrollPane masterScrollPane;
+    private javax.swing.JButton printBarcodesButton;
     private org.jdesktop.swingx.JXDatePicker startDatePicker;
     private javax.swing.JCheckBox supplierCheckBox;
     private javax.swing.JComboBox supplierComboBox;
