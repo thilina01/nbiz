@@ -73,8 +73,12 @@ public final class BackupButtonActionListener implements ActionListener {
     private static void comboboxKeyPressed() {
         File drive = (File) comboBox.getSelectedItem();
         jDialog.dispose();
-        File destination = new File(drive.getPath() + "\\" + source.getName());
         ImageIcon imageIcon = new javax.swing.ImageIcon(BackupButtonActionListener.class.getResource("/com/nanosl/nbiz/util/resources/accept16.png"));
+        if (drive == null) {
+            NotificationDisplayer.getDefault().notify("Backup to default location", imageIcon, "", null);
+            return;
+        }
+        File destination = new File(drive.getPath() + "\\" + source.getName());
         if (!destination.exists()) {
             if (source.renameTo(destination)) {
                 NotificationDisplayer.getDefault().notify("Backup Complete", imageIcon, "", null);
