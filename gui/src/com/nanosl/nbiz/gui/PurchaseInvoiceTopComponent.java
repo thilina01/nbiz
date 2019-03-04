@@ -10,6 +10,8 @@ import com.nanosl.nbiz.util.FindMySql;
 import static com.nanosl.nbiz.util.Format.nf2d;
 import com.nanosl.nbiz.util.NTopComponent;
 import com.nanosl.nbiz.util.search.SearchItemDialog;
+import com.thilina01.bixlp.BixLP;
+import com.thilina01.bixlp.LabelData;
 import entity.Item;
 import entity.LastCode;
 import entity.PriceList;
@@ -24,6 +26,7 @@ import java.awt.event.KeyEvent;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComponent;
@@ -159,6 +162,7 @@ public final class PurchaseInvoiceTopComponent extends NTopComponent {
         freeField = new javax.swing.JTextField();
         searchButton = new javax.swing.JButton();
         refreshButton = new javax.swing.JButton();
+        printBarcodesButton = new javax.swing.JButton();
 
         datePicker.setName("datePicker"); // NOI18N
         datePicker.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -417,6 +421,13 @@ public final class PurchaseInvoiceTopComponent extends NTopComponent {
             }
         });
 
+        org.openide.awt.Mnemonics.setLocalizedText(printBarcodesButton, org.openide.util.NbBundle.getMessage(PurchaseInvoiceTopComponent.class, "PurchaseInvoiceTopComponent.printBarcodesButton.text")); // NOI18N
+        printBarcodesButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                printBarcodesButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -432,7 +443,9 @@ public final class PurchaseInvoiceTopComponent extends NTopComponent {
                                 .addComponent(clearButton)
                                 .addGap(18, 18, 18)
                                 .addComponent(refreshButton)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGap(12, 12, 12)
+                                .addComponent(printBarcodesButton)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jLabel9)
                                 .addGap(18, 18, 18)
                                 .addComponent(totalDiscountTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -468,33 +481,31 @@ public final class PurchaseInvoiceTopComponent extends NTopComponent {
                                 .addComponent(jLabel12)
                                 .addGap(18, 18, 18)
                                 .addComponent(freeField, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel4))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel3)
-                                    .addComponent(jLabel4))
+                                .addComponent(supplierComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel2)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(supplierComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jLabel2)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(invoiceNumberField, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(jLabel1)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(datePicker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(0, 0, Short.MAX_VALUE))
-                                    .addComponent(itemComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addComponent(invoiceNumberField, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jLabel1)
                                 .addGap(18, 18, 18)
-                                .addComponent(stockLabel)
-                                .addGap(18, 18, 18)
-                                .addComponent(searchButton)))
-                        .addContainerGap())))
+                                .addComponent(datePicker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(itemComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(18, 18, 18)
+                        .addComponent(stockLabel)
+                        .addGap(18, 18, 18)
+                        .addComponent(searchButton)))
+                .addContainerGap())
         );
 
         jPanel1Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {discountField, sellingTextField});
@@ -550,7 +561,8 @@ public final class PurchaseInvoiceTopComponent extends NTopComponent {
                     .addComponent(jLabel8)
                     .addComponent(totalAmountLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(processButton)
-                    .addComponent(clearButton))
+                    .addComponent(clearButton)
+                    .addComponent(printBarcodesButton))
                 .addContainerGap())
         );
 
@@ -721,7 +733,22 @@ public final class PurchaseInvoiceTopComponent extends NTopComponent {
         fillSuppliers();
         fillItems();
     }//GEN-LAST:event_refreshButtonActionPerformed
-    
+
+    private void printBarcodesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_printBarcodesButtonActionPerformed
+        if (table.getSelectedRowCount() > 0) {
+            List<LabelData> labelDataList = new ArrayList();
+            for (int i = 0; i < table.getSelectedRowCount(); i++) {
+                int rowIndex = table.getSelectedRows()[i];
+                labelDataList.add(new LabelData(
+                        table.getValueAt(rowIndex, 2).toString(),
+                        Double.valueOf(table.getValueAt(rowIndex, 9).toString()),
+                        table.getValueAt(rowIndex, 1).toString(),
+                        Double.valueOf(table.getValueAt(rowIndex, 4).toString()).intValue()));
+            }
+            BixLP.print(444, labelDataList);
+        }
+    }//GEN-LAST:event_printBarcodesButtonActionPerformed
+
     private void searchItem(String c) {
         SearchItemDialog searchItemDialog = new SearchItemDialog(null, true, c + "");
         Item item = searchItemDialog.getItem();
@@ -732,7 +759,7 @@ public final class PurchaseInvoiceTopComponent extends NTopComponent {
             itemComboBox.requestFocus();
         }
     }
-    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JRadioButton addToExistingRadioButton;
     private javax.swing.ButtonGroup buttonGroup1;
@@ -758,6 +785,7 @@ public final class PurchaseInvoiceTopComponent extends NTopComponent {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JRadioButton jRadioButton1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JButton printBarcodesButton;
     private javax.swing.JButton processButton;
     private javax.swing.JTextField quantityField;
     private javax.swing.JButton refreshButton;
@@ -792,7 +820,7 @@ public final class PurchaseInvoiceTopComponent extends NTopComponent {
 
     private void fillItems() {
         Supplier supplier = (Supplier) supplierComboBox.getSelectedItem();
-        if(supplier == null ){
+        if (supplier == null) {
             showError("Supplier not selected!");
             return;
         }

@@ -37,6 +37,7 @@ import org.openide.windows.TopComponent;
 import org.openide.windows.WindowManager;
 import query.Find;
 import com.thilina01.bixlp.LabelData;
+import java.util.Iterator;
 
 /**
  * Top component which displays something.
@@ -404,11 +405,12 @@ public final class PurchaseReportTopComponent extends NTopComponent {
             PurchaseInvoice purchaseInvoice = manager.find(PurchaseInvoice.class, new PurchaseInvoicePK(invoiceNumber, supperCode));
             Collection<PurchaseInvoiceHasItem> purchaseInvoiceHasItems = purchaseInvoice.getPurchaseInvoiceHasItemCollection();
             List<LabelData> labelDataList = new ArrayList();
-            purchaseInvoiceHasItems.forEach((purchaseInvoiceHasItem) -> {
+            for (Iterator iterator = purchaseInvoiceHasItems.iterator(); iterator.hasNext();) {
+                PurchaseInvoiceHasItem purchaseInvoiceHasItem = (PurchaseInvoiceHasItem) iterator.next();
                 Item item = purchaseInvoiceHasItem.getItem();
                 int quantity = (int) (purchaseInvoiceHasItem.getQuantity() + purchaseInvoiceHasItem.getFreeQuantity());
-                labelDataList.add(new LabelData(item.getDescription(), item.getPriceList().getSellingPack(), item.getCode(), quantity));
-            });
+                labelDataList.add(new LabelData(item.getDescription(), item.getPriceList().getSellingPack(), item.getCode(), quantity));                
+            }
             BixLP.print(333, labelDataList);
         }
     }//GEN-LAST:event_printBarcodesButtonActionPerformed
