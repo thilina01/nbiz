@@ -289,7 +289,7 @@ public final class PaymentReportTopComponent extends NTopComponent {
                 issuedCash.getPurchaseInvoice().getSupplier().getCode(),
                 issuedCash.getPurchaseInvoice().getSupplier().getName(),
                 issuedCash.getPurchaseInvoice().getPurchaseInvoicePK().getInvNo(),
-                issuedCash.getBank().getName(),
+                issuedCash.getBank() != null ? issuedCash.getBank().getName() : "",
                 nf2d.format(issuedCash.getAmount())
             };
             cashTableModel.addRow(row);

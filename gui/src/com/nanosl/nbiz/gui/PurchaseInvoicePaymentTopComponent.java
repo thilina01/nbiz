@@ -94,6 +94,8 @@ public final class PurchaseInvoicePaymentTopComponent extends NTopComponent {
         paymentTable = new javax.swing.JTable();
         bankComboBox = new javax.swing.JComboBox();
         jLabel9 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        accountComboBox = new javax.swing.JComboBox();
         processButton = new javax.swing.JButton();
         clearButton = new javax.swing.JButton();
 
@@ -241,11 +243,11 @@ public final class PurchaseInvoicePaymentTopComponent extends NTopComponent {
 
             },
             new String [] {
-                "Amount", "Cheque Number", "Banking Date", "Bank"
+                "Amount", "Cheque Number", "Banking Date", "Bank", "Account"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -264,6 +266,7 @@ public final class PurchaseInvoicePaymentTopComponent extends NTopComponent {
             paymentTable.getColumnModel().getColumn(1).setHeaderValue(org.openide.util.NbBundle.getMessage(PurchaseInvoicePaymentTopComponent.class, "PurchaseInvoicePaymentTopComponent.paymentTable.columnModel.title1")); // NOI18N
             paymentTable.getColumnModel().getColumn(2).setHeaderValue(org.openide.util.NbBundle.getMessage(PurchaseInvoicePaymentTopComponent.class, "PurchaseInvoicePaymentTopComponent.paymentTable.columnModel.title2")); // NOI18N
             paymentTable.getColumnModel().getColumn(3).setHeaderValue(org.openide.util.NbBundle.getMessage(PurchaseInvoicePaymentTopComponent.class, "PurchaseInvoicePaymentTopComponent.paymentTable.columnModel.title3")); // NOI18N
+            paymentTable.getColumnModel().getColumn(4).setHeaderValue(org.openide.util.NbBundle.getMessage(PurchaseInvoicePaymentTopComponent.class, "PurchaseInvoicePaymentTopComponent.paymentTable.columnModel.title4")); // NOI18N
         }
 
         bankComboBox.setName("bankComboBox"); // NOI18N
@@ -275,6 +278,15 @@ public final class PurchaseInvoicePaymentTopComponent extends NTopComponent {
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel9, org.openide.util.NbBundle.getMessage(PurchaseInvoicePaymentTopComponent.class, "PurchaseInvoicePaymentTopComponent.jLabel9.text")); // NOI18N
 
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel10, org.openide.util.NbBundle.getMessage(PurchaseInvoicePaymentTopComponent.class, "PurchaseInvoicePaymentTopComponent.jLabel10.text")); // NOI18N
+
+        accountComboBox.setName("accountComboBox"); // NOI18N
+        accountComboBox.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                accountComboBoxKeyPressed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -282,25 +294,29 @@ public final class PurchaseInvoicePaymentTopComponent extends NTopComponent {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 442, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 505, Short.MAX_VALUE)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel6)
-                            .addComponent(jLabel5))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(paymentAmountTextField)
-                            .addComponent(chequeNumbertField, javax.swing.GroupLayout.DEFAULT_SIZE, 109, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(jLabel7)
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel6)
+                                    .addComponent(jLabel5))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(bankingDatePicker, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(paymentAmountTextField)
+                                    .addComponent(chequeNumbertField, javax.swing.GroupLayout.DEFAULT_SIZE, 109, Short.MAX_VALUE)))
                             .addGroup(jPanel3Layout.createSequentialGroup()
                                 .addComponent(jLabel9)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(bankComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                                .addComponent(bankComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel7)
+                            .addComponent(jLabel10))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(accountComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(bankingDatePicker, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
@@ -314,12 +330,16 @@ public final class PurchaseInvoicePaymentTopComponent extends NTopComponent {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
-                    .addComponent(paymentAmountTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(bankComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel9))
+                    .addComponent(paymentAmountTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(bankComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel9)
+                    .addComponent(jLabel10)
+                    .addComponent(accountComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(33, 33, 33))
         );
 
         org.openide.awt.Mnemonics.setLocalizedText(processButton, org.openide.util.NbBundle.getMessage(PurchaseInvoicePaymentTopComponent.class, "PurchaseInvoicePaymentTopComponent.processButton.text")); // NOI18N
@@ -431,7 +451,13 @@ public final class PurchaseInvoicePaymentTopComponent extends NTopComponent {
     private void clearButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearButtonActionPerformed
         clearAll();
     }//GEN-LAST:event_clearButtonActionPerformed
+
+    private void accountComboBoxKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_accountComboBoxKeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_accountComboBoxKeyPressed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox accountComboBox;
     private javax.swing.JTextField amountField;
     private javax.swing.JComboBox bankComboBox;
     private org.jdesktop.swingx.JXDatePicker bankingDatePicker;
@@ -441,6 +467,7 @@ public final class PurchaseInvoicePaymentTopComponent extends NTopComponent {
     private javax.swing.JTextField invoiceNumberField;
     private javax.swing.JTable invoiceTable;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -515,14 +542,28 @@ public final class PurchaseInvoicePaymentTopComponent extends NTopComponent {
         if (purchaseInvoice == null) {
             return;
         }
+        
+        Object bankObject= bankComboBox.getSelectedItem();
+        if (bankObject == null) {
+            showError("Bank Required");
+            return;
+        }
+        
+        Object accountObject= accountComboBox.getSelectedItem();
+        if (accountObject == null) {
+            showError("Account Required");
+            return;
+        }
+        
         try {
             double paymentAmount = Double.valueOf(paymentAmountTextField.getText().trim());
             if (paymentAmount > 0) {
                 String chequeNumber = chequeNumbertField.getText().trim();
                 Date bankingDate = bankingDatePicker.getDate();
-                Bank bank = (Bank) bankComboBox.getSelectedItem();
+                Bank bank = (Bank) bankObject;
+                Account account = (Account) accountObject;
 
-                Object[] row = {nf2d.format(paymentAmount), chequeNumber, yyyy_MM_dd.format(bankingDate), bank.getCode()};
+                Object[] row = {nf2d.format(paymentAmount), chequeNumber, yyyy_MM_dd.format(bankingDate), bank.getCode(), account};
                 fillPaymentTable(row);
                 clearPaymentFields();
                 calcRemaining();
@@ -570,6 +611,7 @@ public final class PurchaseInvoicePaymentTopComponent extends NTopComponent {
         paymentDtm.setRowCount(0);
         fillInvoiceTable();
         Combo.fillBanks(bankComboBox);
+        Combo.fillAccounts(accountComboBox);
     }
 
     private void process() {
@@ -582,7 +624,7 @@ public final class PurchaseInvoicePaymentTopComponent extends NTopComponent {
             for (int i = 0; i < rowCount; i++) {
                 Object o = paymentTable.getValueAt(i, 1);
                 String chequeNumber = o == null ? "" : o.toString().trim();
-                Account account = (Account) paymentTable.getValueAt(i, 3);
+                Account account = (Account) paymentTable.getValueAt(i, 4);
                 double amount = Double.valueOf(paymentTable.getValueAt(i, 0).toString());
                 Date date = yyyy_MM_dd.parse(paymentTable.getValueAt(i, 2).toString());
                 if (chequeNumber.equals("")) {
