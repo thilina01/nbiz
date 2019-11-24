@@ -1541,8 +1541,16 @@ public final class POSTopComponent extends NTopComponent {
         item = searchItemDialog.getItem();
 //        if (item != null) {
         //itemComboBox.setSelectedItem(item);
-        onItemSelect();
-        quantityField.requestFocus();
+        if (item == null) {
+            if (employeeComboBox.isVisible()) {
+                employeeComboBox.requestFocus();
+            } else {
+                totalDiscountField.requestFocus();
+            }
+        } else {
+            onItemSelect();
+            quantityField.requestFocus();
+        }
 //        } 
 //        else {
 //            // itemComboBox.requestFocus();            
@@ -2096,23 +2104,29 @@ public final class POSTopComponent extends NTopComponent {
 
     private void printPOS(String invoiceOrQuotationId) {
         try {
-            URL url = getClass().getResource("/com/nanos/nbiz/pos/jrxml/PosInvoiceMin.jasper");
+
+            String printFormat = "";
+            Map<String, Object> params = Data.getParams();
+            if (quotationCheckBox.isSelected()) {
+                params.put("quotation", invoiceOrQuotationId);
+                printFormat = "PosQuotationMin";
+            } else {
+                params.put("invoice", invoiceOrQuotationId);
+                printFormat = "PosInvoiceMin";
+            }
+            Config config = manager.find(Config.class, "MinPos");
+            boolean minPosStatus = (config != null && config.getConfigValue().equalsIgnoreCase("true"));
+            params.put("min", minPosStatus);//this will remove invoice date, time, number and powerd by info
+
+            URL url = getClass().getResource("/com/nanos/nbiz/pos/jrxml/" + printFormat + ".jasper");
             Object object = JRLoader.loadObject(url);//"src/com/nanosl/nbiz/gui/jrxml/report1.jasper"
             if (object == null) {
                 showError("Unable to print");
                 return;
             }
 
-            Config config = manager.find(Config.class, "MinPos");
-            boolean minPosStatus = (config != null && config.getConfigValue().equalsIgnoreCase("true"));
             JasperReport report = (JasperReport) object;
-            Map<String, Object> params = Data.getParams();
-            if (quotationCheckBox.isSelected()) {
-                params.put("quotation", invoiceOrQuotationId);
-            } else {
-                params.put("invoice", invoiceOrQuotationId);
-            }
-            params.put("min", minPosStatus);//this will remove invoice date, time, number and powerd by info
+
             Printer.printPosInvoice(report, params);
         } catch (JRException ex) {
             Exceptions.printStackTrace(ex);
