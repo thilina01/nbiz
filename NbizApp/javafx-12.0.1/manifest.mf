@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+AutoUpdate-Show-In-Client: true
+OpenIDE-Module: com.nanosl.javafx
+OpenIDE-Module-Localizing-Bundle: com/nanosl/javafx/Bundle.properties
+OpenIDE-Module-Specification-Version: 1.0
+
