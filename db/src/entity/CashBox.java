@@ -40,6 +40,8 @@ public class CashBox implements Serializable, Comparable<CashBox> {
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "balance")
     private Double balance;
+    @Column(name = "max_limit")
+    private Double maxLimit;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "cashBox")
     private Collection<CashLog> cashLogCollection;
 
@@ -81,7 +83,15 @@ public class CashBox implements Serializable, Comparable<CashBox> {
     public void setCashLogCollection(Collection<CashLog> cashLogCollection) {
         this.cashLogCollection = cashLogCollection;
     }
+    
+    public Double getMaxLimit() {
+        return maxLimit;
+    }
 
+    public void setMaxLimit(Double maxLimit) {
+        this.maxLimit = maxLimit;
+    }
+    
     @Override
     public int hashCode() {
         int hash = 0;
