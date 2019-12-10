@@ -77,6 +77,8 @@ public final class ConfigTopComponent extends NTopComponent {
         jPanel2 = new javax.swing.JPanel();
         minPosCheckBox = new javax.swing.JCheckBox();
         forceEmployeeSelectionCheckBox = new javax.swing.JCheckBox();
+        printEnabledByDefaultCheckBox = new javax.swing.JCheckBox();
+        autoBackupOnPosCheckBox = new javax.swing.JCheckBox();
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(org.openide.util.NbBundle.getMessage(ConfigTopComponent.class, "ConfigTopComponent.jPanel1.border.title"))); // NOI18N
 
@@ -203,6 +205,22 @@ public final class ConfigTopComponent extends NTopComponent {
             }
         });
 
+        org.openide.awt.Mnemonics.setLocalizedText(printEnabledByDefaultCheckBox, org.openide.util.NbBundle.getMessage(ConfigTopComponent.class, "ConfigTopComponent.text")); // NOI18N
+        printEnabledByDefaultCheckBox.setName(""); // NOI18N
+        printEnabledByDefaultCheckBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                printEnabledByDefaultCheckBoxActionPerformed(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(autoBackupOnPosCheckBox, org.openide.util.NbBundle.getMessage(ConfigTopComponent.class, "ConfigTopComponent.autoBackupOnPosCheckBox.text")); // NOI18N
+        autoBackupOnPosCheckBox.setName(""); // NOI18N
+        autoBackupOnPosCheckBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                autoBackupOnPosCheckBoxActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -211,7 +229,9 @@ public final class ConfigTopComponent extends NTopComponent {
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(minPosCheckBox)
-                    .addComponent(forceEmployeeSelectionCheckBox))
+                    .addComponent(forceEmployeeSelectionCheckBox)
+                    .addComponent(printEnabledByDefaultCheckBox)
+                    .addComponent(autoBackupOnPosCheckBox))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
@@ -221,6 +241,10 @@ public final class ConfigTopComponent extends NTopComponent {
                 .addComponent(minPosCheckBox)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(forceEmployeeSelectionCheckBox)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(printEnabledByDefaultCheckBox)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(autoBackupOnPosCheckBox)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -302,12 +326,31 @@ public final class ConfigTopComponent extends NTopComponent {
         manager.update(config);
     }//GEN-LAST:event_forceEmployeeSelectionCheckBoxActionPerformed
 
+    private void printEnabledByDefaultCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_printEnabledByDefaultCheckBoxActionPerformed
+        Config config = manager.find(Config.class, "printEnabledByDefault");
+        if (config == null) {
+            config = new Config("printEnabledByDefault");
+        }
+        config.setConfigValue(printEnabledByDefaultCheckBox.isSelected() + "");
+        manager.update(config);
+    }//GEN-LAST:event_printEnabledByDefaultCheckBoxActionPerformed
+
+    private void autoBackupOnPosCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_autoBackupOnPosCheckBoxActionPerformed
+        Config config = manager.find(Config.class, "autoBackupOnPos");
+        if (config == null) {
+            config = new Config("autoBackupOnPos");
+        }
+        config.setConfigValue(autoBackupOnPosCheckBox.isSelected() + "");
+        manager.update(config);
+    }//GEN-LAST:event_autoBackupOnPosCheckBoxActionPerformed
+
     private void setForceEmployeeSelectionStatus() {
         Config config = manager.find(Config.class, "forceEmployeeSelection");
         boolean forceEmployeeSelectionStatus = (config != null && config.getConfigValue().equalsIgnoreCase("true"));
         forceEmployeeSelectionCheckBox.setSelected(forceEmployeeSelectionStatus);
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JCheckBox autoBackupOnPosCheckBox;
     private javax.swing.JList classList;
     private javax.swing.JList fieldList;
     private javax.swing.JCheckBox forceEmployeeSelectionCheckBox;
@@ -322,6 +365,7 @@ public final class ConfigTopComponent extends NTopComponent {
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JCheckBox minPosCheckBox;
     private javax.swing.JTextField patternTextField;
+    private javax.swing.JCheckBox printEnabledByDefaultCheckBox;
     private javax.swing.JButton reloadButton;
     private javax.swing.JTextField sampleTextField;
     // End of variables declaration//GEN-END:variables
@@ -331,6 +375,8 @@ public final class ConfigTopComponent extends NTopComponent {
         fillClassList();
         setMinPosStatus();
         setForceEmployeeSelectionStatus();
+        setPrintEnabledByDefaultStatus();
+        setAutoBackupOnPosStatus();                
     }
 
     @Override
@@ -422,5 +468,17 @@ public final class ConfigTopComponent extends NTopComponent {
         Config config = manager.find(Config.class, "MinPos");
         boolean minPosStatus = (config != null && config.getConfigValue().equalsIgnoreCase("true"));
         minPosCheckBox.setSelected(minPosStatus);
+    }
+
+    private void setPrintEnabledByDefaultStatus() {
+        Config config = manager.find(Config.class, "printEnabledByDefault");
+        boolean printEnabledByDefaultStatus = (config != null && config.getConfigValue().equalsIgnoreCase("true"));
+        printEnabledByDefaultCheckBox.setSelected(printEnabledByDefaultStatus);
+    }
+
+    private void setAutoBackupOnPosStatus() {
+        Config config = manager.find(Config.class, "autoBackupOnPos");
+        boolean autoBackupOnPosStatus = (config != null && config.getConfigValue().equalsIgnoreCase("true"));
+        autoBackupOnPosCheckBox.setSelected(autoBackupOnPosStatus);
     }
 }

@@ -4,6 +4,7 @@
  */
 package com.nanos.nbiz.pos;
 
+import com.nanosl.lib.db.Manager;
 import com.nanosl.nbiz.util.search.SearchItemDialog;
 import com.nanosl.nbiz.util.search.SearchInvoiceDialog;
 import com.nanosl.nbiz.util.search.SearchCustomerDialog;
@@ -1285,6 +1286,11 @@ public final class POSTopComponent extends NTopComponent {
 //        KeyAdapter();
         tableModel = (DefaultTableModel) table.getModel();
         table.setDefaultRenderer(Object.class, coloredCellRenderer);
+
+        Config printEnabledByDefaultConfig = manager.find(Config.class, "printEnabledByDefault");
+        boolean printEnabledByDefault = (printEnabledByDefaultConfig != null && printEnabledByDefaultConfig.getConfigValue().equalsIgnoreCase("true"));
+        printCheckBox.setSelected(printEnabledByDefault);
+
     }
 
     private void setComboBoxKeyAdapters(JComboBox<? extends Object> comboBox) {
@@ -2070,6 +2076,12 @@ public final class POSTopComponent extends NTopComponent {
             clear();
             lastInvoiceNumberField.setText(invoiceNumber);
 //            com.nanosl.nbiz.util.Data.updateSales(); 
+
+            Config autoBackupOnPosConfig = manager.find(Config.class, "autoBackupOnPos");
+            boolean autoBackupOnPos = (autoBackupOnPosConfig != null && autoBackupOnPosConfig.getConfigValue().equalsIgnoreCase("true"));
+            if (autoBackupOnPos) {
+                backup();
+            }
         } else {
             showError("Update failed");
         }
@@ -2178,5 +2190,14 @@ public final class POSTopComponent extends NTopComponent {
                 }
                 break;
         }
+    }
+
+    private void backup() {
+        new Thread() {
+            @Override
+            public void run() {
+                String path = Manager.getInstance().backup();
+            }
+        }.start();
     }
 }

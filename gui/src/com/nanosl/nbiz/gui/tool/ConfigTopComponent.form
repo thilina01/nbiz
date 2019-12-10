@@ -249,6 +249,8 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="minPosCheckBox" alignment="0" min="-2" max="-2" attributes="0"/>
                       <Component id="forceEmployeeSelectionCheckBox" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="printEnabledByDefaultCheckBox" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="autoBackupOnPosCheckBox" alignment="0" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="32767" attributes="0"/>
               </Group>
@@ -261,6 +263,10 @@
                   <Component id="minPosCheckBox" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Component id="forceEmployeeSelectionCheckBox" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="printEnabledByDefaultCheckBox" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="autoBackupOnPosCheckBox" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
@@ -285,6 +291,28 @@
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="forceEmployeeSelectionCheckBoxActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JCheckBox" name="printEnabledByDefaultCheckBox">
+          <Properties>
+            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+              <ResourceString bundle="com/nanosl/nbiz/gui/tool/Bundle.properties" key="ConfigTopComponent.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+            </Property>
+            <Property name="name" type="java.lang.String" value="" noResource="true"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="printEnabledByDefaultCheckBoxActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JCheckBox" name="autoBackupOnPosCheckBox">
+          <Properties>
+            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+              <ResourceString bundle="com/nanosl/nbiz/gui/tool/Bundle.properties" key="ConfigTopComponent.autoBackupOnPosCheckBox.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+            </Property>
+            <Property name="name" type="java.lang.String" value="" noResource="true"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="autoBackupOnPosCheckBoxActionPerformed"/>
           </Events>
         </Component>
       </SubComponents>
