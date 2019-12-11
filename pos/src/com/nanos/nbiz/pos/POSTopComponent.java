@@ -2082,6 +2082,10 @@ public final class POSTopComponent extends NTopComponent {
             if (autoBackupOnPos) {
                 backup();
             }
+            
+            if(cashBox.getBalance()>cashBox.getMaxLimit()){
+                showMessage("Cash limit exceeded!");
+            }
         } else {
             showError("Update failed");
         }

@@ -83,15 +83,15 @@ public class CashBox implements Serializable, Comparable<CashBox> {
     public void setCashLogCollection(Collection<CashLog> cashLogCollection) {
         this.cashLogCollection = cashLogCollection;
     }
-    
+
     public Double getMaxLimit() {
-        return maxLimit;
+        return maxLimit != null ? maxLimit : 0;
     }
 
     public void setMaxLimit(Double maxLimit) {
         this.maxLimit = maxLimit;
     }
-    
+
     @Override
     public int hashCode() {
         int hash = 0;
