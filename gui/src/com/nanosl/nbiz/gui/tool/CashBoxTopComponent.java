@@ -65,6 +65,8 @@ public final class CashBoxTopComponent extends NTopComponent {
         deleteButton = new javax.swing.JButton();
         codeLabel1 = new javax.swing.JLabel();
         balanceField = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
+        maxLimitField = new javax.swing.JTextField();
 
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
@@ -74,14 +76,14 @@ public final class CashBoxTopComponent extends NTopComponent {
 
             },
             new String [] {
-                "#", "ID", "Description", "Balance"
+                "#", "ID", "Description", "Balance", "Max Limit"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class
+                java.lang.Object.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -116,6 +118,9 @@ public final class CashBoxTopComponent extends NTopComponent {
             masterTable.getColumnModel().getColumn(3).setPreferredWidth(50);
             masterTable.getColumnModel().getColumn(3).setHeaderValue(org.openide.util.NbBundle.getMessage(CashBoxTopComponent.class, "CashBoxTopComponent.masterTable.columnModel.title3")); // NOI18N
             masterTable.getColumnModel().getColumn(3).setCellRenderer(rightAlignCell);
+            masterTable.getColumnModel().getColumn(4).setPreferredWidth(50);
+            masterTable.getColumnModel().getColumn(4).setHeaderValue(org.openide.util.NbBundle.getMessage(CashBoxTopComponent.class, "CashBoxTopComponent.masterTable.columnModel.title4_1")); // NOI18N
+            masterTable.getColumnModel().getColumn(4).setCellRenderer(rightAlignCell);
         }
 
         org.openide.awt.Mnemonics.setLocalizedText(codeLabel, org.openide.util.NbBundle.getMessage(CashBoxTopComponent.class, "CashBoxTopComponent.codeLabel.text")); // NOI18N
@@ -163,6 +168,15 @@ public final class CashBoxTopComponent extends NTopComponent {
             }
         });
 
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(CashBoxTopComponent.class, "CashBoxTopComponent.jLabel1.text")); // NOI18N
+
+        maxLimitField.setText(org.openide.util.NbBundle.getMessage(CashBoxTopComponent.class, "CashBoxTopComponent.maxLimitField.text")); // NOI18N
+        maxLimitField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                maxLimitFieldActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -173,25 +187,32 @@ public final class CashBoxTopComponent extends NTopComponent {
                         .addContainerGap()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(codeLabel)
-                            .addComponent(nameLabel)
                             .addComponent(codeLabel1))
+                        .addGap(22, 22, 22)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(balanceField, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(updateButton)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(deleteButton)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(clearButton))))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(67, 67, 67)
-                        .addComponent(descriptionField, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(67, 67, 67)
-                        .addComponent(idField, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(clearButton))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(idField, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(nameLabel))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(balanceField, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jLabel1)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(descriptionField, javax.swing.GroupLayout.DEFAULT_SIZE, 199, Short.MAX_VALUE)
+                                    .addComponent(maxLimitField)))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(10, 10, 10)
-                        .addComponent(masterScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 415, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(masterScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 619, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -205,16 +226,16 @@ public final class CashBoxTopComponent extends NTopComponent {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(codeLabel)
-                    .addComponent(idField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(idField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(nameLabel)
                     .addComponent(descriptionField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(codeLabel1)
-                    .addComponent(balanceField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(balanceField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1)
+                    .addComponent(maxLimitField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(clearButton)
                     .addComponent(deleteButton)
@@ -275,8 +296,12 @@ public final class CashBoxTopComponent extends NTopComponent {
     }//GEN-LAST:event_deleteButtonActionPerformed
 
     private void balanceFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_balanceFieldActionPerformed
-        update();
+        maxLimitField.requestFocus();
     }//GEN-LAST:event_balanceFieldActionPerformed
+
+    private void maxLimitFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_maxLimitFieldActionPerformed
+       update();
+    }//GEN-LAST:event_maxLimitFieldActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField balanceField;
@@ -286,9 +311,11 @@ public final class CashBoxTopComponent extends NTopComponent {
     private javax.swing.JButton deleteButton;
     private javax.swing.JTextField descriptionField;
     private javax.swing.JTextField idField;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane masterScrollPane;
     private javax.swing.JTable masterTable;
+    private javax.swing.JTextField maxLimitField;
     private javax.swing.JLabel nameLabel;
     private javax.swing.JButton updateButton;
     // End of variables declaration//GEN-END:variables
@@ -305,7 +332,7 @@ public final class CashBoxTopComponent extends NTopComponent {
         tableModel.setRowCount(0);
         int i = 0;
         for (CashBox cashBox : cashBoxes) {
-            Object[] row = {++i, cashBox.getId(), cashBox.getDescription(), nf2d.format(cashBox.getBalance())};
+            Object[] row = {++i, cashBox.getId(), cashBox.getDescription(), nf2d.format(cashBox.getBalance()), nf2d.format(cashBox.getMaxLimit())};
             tableModel.addRow(row);
         }
     }
@@ -340,11 +367,23 @@ public final class CashBoxTopComponent extends NTopComponent {
                 return;
             }
         }
+        
+        String maxLimitText = maxLimitField.getText().trim();
+        double maxLimit = 0;
+        if (!maxLimitText.equals("")) {
+            try {
+                maxLimit = Double.parseDouble(maxLimitText);
+            } catch (NumberFormatException numberFormatException) {
+                maxLimitField.requestFocus();
+                return;
+            }
+        }
 
         CashBox cashBox = manager.find(CashBox.class, id);
         cashBox = cashBox != null ? cashBox : new CashBox(id);
         cashBox.setDescription(description);
         cashBox.setBalance(balance);
+        cashBox.setMaxLimit(maxLimit);
         if (manager.update(cashBox)) {
             clear();
             idField.requestFocus();
@@ -378,6 +417,7 @@ public final class CashBoxTopComponent extends NTopComponent {
                 idField.setText(id);
                 descriptionField.setText(cashBox.getDescription());
                 balanceField.setText(nf2d.format(cashBox.getBalance()));
+                maxLimitField.setText(nf2d.format(cashBox.getMaxLimit()));
             }
         }
     }
@@ -387,6 +427,7 @@ public final class CashBoxTopComponent extends NTopComponent {
         idField.setText("");
         descriptionField.setText("");
         balanceField.setText("");
+        maxLimitField.setText("");
     }
 
     @Override

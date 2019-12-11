@@ -52,11 +52,10 @@
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="codeLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="nameLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                               <Component id="codeLabel1" alignment="0" min="-2" max="-2" attributes="0"/>
                           </Group>
+                          <EmptySpace min="-2" pref="22" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="balanceField" linkSize="1" alignment="0" min="-2" pref="92" max="-2" attributes="0"/>
                               <Group type="102" alignment="0" attributes="0">
                                   <Component id="updateButton" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
@@ -64,19 +63,30 @@
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Component id="clearButton" min="-2" max="-2" attributes="0"/>
                               </Group>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Group type="102" alignment="0" attributes="0">
+                                          <Component id="idField" linkSize="1" min="-2" pref="92" max="-2" attributes="0"/>
+                                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                                          <Component id="nameLabel" min="-2" max="-2" attributes="0"/>
+                                      </Group>
+                                      <Group type="102" alignment="0" attributes="0">
+                                          <Component id="balanceField" linkSize="1" min="-2" pref="92" max="-2" attributes="0"/>
+                                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                                          <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
+                                      </Group>
+                                  </Group>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                      <Component id="descriptionField" linkSize="1" pref="199" max="32767" attributes="0"/>
+                                      <Component id="maxLimitField" max="32767" attributes="0"/>
+                                  </Group>
+                              </Group>
                           </Group>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
-                          <EmptySpace min="67" pref="67" max="-2" attributes="0"/>
-                          <Component id="descriptionField" linkSize="1" min="-2" pref="199" max="-2" attributes="0"/>
-                      </Group>
-                      <Group type="102" alignment="0" attributes="0">
-                          <EmptySpace min="67" pref="67" max="-2" attributes="0"/>
-                          <Component id="idField" linkSize="1" min="-2" pref="92" max="-2" attributes="0"/>
-                      </Group>
-                      <Group type="102" attributes="0">
-                          <EmptySpace min="10" pref="10" max="-2" attributes="0"/>
-                          <Component id="masterScrollPane" min="-2" pref="415" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
+                          <Component id="masterScrollPane" min="-2" pref="619" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                   <EmptySpace max="32767" attributes="0"/>
@@ -92,9 +102,6 @@
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="codeLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="idField" alignment="3" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="nameLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="descriptionField" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
@@ -102,8 +109,10 @@
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="codeLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="balanceField" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="maxLimitField" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace max="-2" attributes="0"/>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="clearButton" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="deleteButton" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -126,11 +135,12 @@
               <Properties>
                 <Property name="autoCreateRowSorter" type="boolean" value="true"/>
                 <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                  <Table columnCount="4" rowCount="0">
+                  <Table columnCount="5" rowCount="0">
                     <Column editable="false" title="#" type="java.lang.Object"/>
                     <Column editable="false" title="ID" type="java.lang.String"/>
                     <Column editable="false" title="Description" type="java.lang.String"/>
                     <Column editable="false" title="Balance" type="java.lang.Object"/>
+                    <Column editable="false" title="Max Limit" type="java.lang.Object"/>
                   </Table>
                 </Property>
                 <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
@@ -159,6 +169,15 @@
                     <Column maxWidth="-1" minWidth="-1" prefWidth="50" resizable="true">
                       <Title editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                         <ResourceString bundle="com/nanosl/nbiz/gui/tool/Bundle.properties" key="CashBoxTopComponent.masterTable.columnModel.title3" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                      </Title>
+                      <Editor/>
+                      <Renderer editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                        <Connection code="rightAlignCell" type="code"/>
+                      </Renderer>
+                    </Column>
+                    <Column maxWidth="-1" minWidth="-1" prefWidth="50" resizable="true">
+                      <Title editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                        <ResourceString bundle="com/nanosl/nbiz/gui/tool/Bundle.properties" key="CashBoxTopComponent.masterTable.columnModel.title4_1" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                       </Title>
                       <Editor/>
                       <Renderer editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
@@ -259,6 +278,23 @@
         <Component class="javax.swing.JTextField" name="balanceField">
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="balanceFieldActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JLabel" name="jLabel1">
+          <Properties>
+            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+              <ResourceString bundle="com/nanosl/nbiz/gui/tool/Bundle.properties" key="CashBoxTopComponent.jLabel1.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+            </Property>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JTextField" name="maxLimitField">
+          <Properties>
+            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+              <ResourceString bundle="com/nanosl/nbiz/gui/tool/Bundle.properties" key="CashBoxTopComponent.maxLimitField.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+            </Property>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="maxLimitFieldActionPerformed"/>
           </Events>
         </Component>
       </SubComponents>
