@@ -171,6 +171,7 @@ public class Fixer {
     static String addSvatContactPersonToSupplier = "ALTER TABLE `supplier` ADD COLUMN `svat_contact_person` VARCHAR(50) NULL;";
     static String addSvatContactEmailToSupplier = "ALTER TABLE `supplier` ADD COLUMN `svat_contact_email` VARCHAR(50) NULL;";
     static String addSvatContactPhoneToSupplier = "ALTER TABLE `supplier` ADD COLUMN `svat_contact_phone` VARCHAR(50) NULL;";
+    static String addMaxLimitToCashBox = "ALTER TABLE `cash_box` ADD COLUMN IF NOT EXISTS `max_limit` DOUBLE;";
 
     public static void applyFix() {
         Map<String, String> queryMap = new HashMap();
@@ -204,17 +205,18 @@ public class Fixer {
 //        queryMap.put("addAccountBankCodeToIssuedCheque", addAccountBankCodeToIssuedCheque);
 //        queryMap.put("CREATE_TABLE_item_category", CREATE_TABLE_item_category);
 //        queryMap.put("addItemCategoryCategoryToItemType", addItemCategoryCategoryToItemType);
-        queryMap.put("addAccountNumberToSupplier", addAccountNumberToSupplier);
-        queryMap.put("addBankCodeToSupplier", addBankCodeToSupplier);
-        queryMap.put("addBankNameToSupplier", addBankNameToSupplier);
-        queryMap.put("addBankBranchCodeToSupplier", addBankBranchCodeToSupplier);
-        queryMap.put("addBankBranchNameToSupplier", addBankBranchNameToSupplier);
-        queryMap.put("addFinanceContactPersonToSupplier", addFinanceContactPersonToSupplier);
-        queryMap.put("addFinanceContactEmailToSupplier", addFinanceContactEmailToSupplier);
-        queryMap.put("addFinanceContactPhoneToSupplier", addFinanceContactPhoneToSupplier);
-        queryMap.put("addSvatContactPersonToSupplier", addSvatContactPersonToSupplier);
-        queryMap.put("addSvatContactEmailToSupplier", addSvatContactEmailToSupplier);
-        queryMap.put("addSvatContactPhoneToSupplier", addSvatContactPhoneToSupplier);
+//        queryMap.put("addAccountNumberToSupplier", addAccountNumberToSupplier);
+//        queryMap.put("addBankCodeToSupplier", addBankCodeToSupplier);
+//        queryMap.put("addBankNameToSupplier", addBankNameToSupplier);
+//        queryMap.put("addBankBranchCodeToSupplier", addBankBranchCodeToSupplier);
+//        queryMap.put("addBankBranchNameToSupplier", addBankBranchNameToSupplier);
+//        queryMap.put("addFinanceContactPersonToSupplier", addFinanceContactPersonToSupplier);
+//        queryMap.put("addFinanceContactEmailToSupplier", addFinanceContactEmailToSupplier);
+//        queryMap.put("addFinanceContactPhoneToSupplier", addFinanceContactPhoneToSupplier);
+//        queryMap.put("addSvatContactPersonToSupplier", addSvatContactPersonToSupplier);
+//        queryMap.put("addSvatContactEmailToSupplier", addSvatContactEmailToSupplier);
+//        queryMap.put("addSvatContactPhoneToSupplier", addSvatContactPhoneToSupplier);
+          queryMap.put("addMaxLimitToCashBox", addMaxLimitToCashBox);
         List<Fix> fixs = Manager.getInstance().find(Fix.class);
         for (Fix next : fixs) {
             queryMap.remove(next.getFixId());
